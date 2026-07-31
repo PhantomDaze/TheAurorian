@@ -92,6 +92,9 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.crystal.get());
             this.dropSelf(BlockRegistry.darkstone_stairs.get());
             this.dropSelf(BlockRegistry.moon_gem.get());
+            this.add(BlockRegistry.mushroom.get(), block -> createSingleItemTable(BlockRegistry.mushroom_small.get().asItem()));
+            this.add(BlockRegistry.mushroom_stem.get(), block -> createSingleItemTable(BlockRegistry.mushroom_small.get().asItem()));
+            this.dropSelf(BlockRegistry.mushroom_small.get());
             this.dropSelf(BlockRegistry.moonlight_forge.get());
             this.dropSelf(BlockRegistry.moon_temple_bars.get());
             this.dropSelf(BlockRegistry.umbra_stone_roof_stairs.get());
@@ -123,6 +126,16 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.silentwood_log.get());
             this.dropSelf(BlockRegistry.silentwood_sapling.get());
             this.dropSelf(BlockRegistry.silentwood_stairs.get());
+            this.add(BlockRegistry.weeping_willow_leaves.get(), block -> LootTable.lootTable()
+                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                            .add(applyExplosionCondition(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(BlockRegistry.weeping_willow_leaves.get()))))
+                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                            .when(HAS_NO_SHEARS_OR_SILK_TOUCH)
+                            .add(applyExplosionDecay(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.weeping_willow_sap.get()))
+                                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05F, 0.0625F, 0.083333336F, 0.1F)))));
+            this.dropSelf(BlockRegistry.weeping_willow_log.get());
+            this.dropSelf(BlockRegistry.weeping_willow_sapling.get());
+            this.dropSelf(BlockRegistry.weeping_willow_stairs.get());
             this.dropSelf(BlockRegistry.aurorian_deepslate_wall.get());
             this.dropSelf(BlockRegistry.aurorian_cobblestone_wall.get());
             // ! dont forget to add to function below too <3
@@ -161,6 +174,10 @@ public class DataGenBlocksLoot extends LootTableProvider {
             gen.add(BlockRegistry.moon_glass.get());
             gen.add(BlockRegistry.moon_glass_pane.get());
             gen.add(BlockRegistry.moon_gem.get());
+            gen.add(BlockRegistry.mushroom.get());
+            gen.add(BlockRegistry.mushroom_crystal.get());
+            gen.add(BlockRegistry.mushroom_small.get());
+            gen.add(BlockRegistry.mushroom_stem.get());
             gen.add(BlockRegistry.moon_sand.get());
             gen.add(BlockRegistry.moon_torch.get());
             gen.add(BlockRegistry.moonlight_forge.get());
@@ -189,6 +206,10 @@ public class DataGenBlocksLoot extends LootTableProvider {
             gen.add(BlockRegistry.umbra_stone_cracked.get());
             gen.add(BlockRegistry.umbra_stone_roof_tiles.get());
             gen.add(BlockRegistry.umbra_stone_roof_stairs.get());
+            gen.add(BlockRegistry.weeping_willow_leaves.get());
+            gen.add(BlockRegistry.weeping_willow_log.get());
+            gen.add(BlockRegistry.weeping_willow_sapling.get());
+            gen.add(BlockRegistry.weeping_willow_stairs.get());
             gen.add(BlockRegistry.aurorian_farm_tile.get());
             gen.add(BlockRegistry.aurorian_coal_block.get());
             gen.add(BlockRegistry.aurorian_steel_block.get());

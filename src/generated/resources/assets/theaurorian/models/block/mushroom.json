@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "theaurorian:block/mushroom_bottom",
+    "side": "theaurorian:block/mushroom_side",
+    "top": "theaurorian:block/mushroom_side"
+  }
+}

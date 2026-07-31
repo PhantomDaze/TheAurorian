@@ -75,7 +75,9 @@
       "theaurorian:ore_moonstone",
       "theaurorian:ore_cerulean",
       "theaurorian:ore_geode",
-      "theaurorian:ore_coal"
+      "theaurorian:ore_coal",
+      "theaurorian:mushroom_cave",
+      "theaurorian:bright_bulb_patch"
     ],
     [
       "theaurorian:forest_rock"

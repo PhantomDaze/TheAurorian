@@ -4,7 +4,11 @@
   "biomes": [
     "theaurorian:aurorian_forest",
     "theaurorian:aurorian_plains",
-    "theaurorian:aurorian_rough_forest"
+    "theaurorian:aurorian_rough_forest",
+    "theaurorian:weeping_willow_forest",
+    "theaurorian:aurorian_forest_hills",
+    "theaurorian:aurorian_lakes",
+    "theaurorian:aurorian_overgrowth"
   ],
   "step": "surface_structures",
   "spawn_overrides": {},

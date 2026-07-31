@@ -1,0 +1,87 @@
+{
+  "temperature": 0.7,
+  "downfall": 0.8,
+  "precipitation": "none",
+  "effects": {
+    "sky_color": 7972607,
+    "fog_color": 12638463,
+    "water_color": 16777215,
+    "water_fog_color": 10131862
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "theaurorian:hollow",
+        "maxCount": 6,
+        "minCount": 4,
+        "weight": 100
+      },
+      {
+        "type": "theaurorian:disturbed_hollow",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 95
+      },
+      {
+        "type": "theaurorian:crystalline_sprite",
+        "maxCount": 2,
+        "minCount": 2,
+        "weight": 65
+      },
+      {
+        "type": "theaurorian:moon_acolyte",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 35
+      }
+    ],
+    "creature": [
+      {
+        "type": "theaurorian:aurorian_pig",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "theaurorian:aurorian_rabbit",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 12
+      },
+      {
+        "type": "theaurorian:aurorian_sheep",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 12
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [
+      "theaurorian:ore_moonstone",
+      "theaurorian:ore_cerulean",
+      "theaurorian:ore_geode",
+      "theaurorian:ore_coal",
+      "theaurorian:mushroom_cave",
+      "theaurorian:bright_bulb_patch"
+    ],
+    [
+      "theaurorian:silentwood_tree"
+    ],
+    [
+      "theaurorian:aurorian_grass_patch",
+      "theaurorian:aurorian_plants"
+    ],
+    [
+      "theaurorian:urn"
+    ]
+  ]
+}

@@ -44,6 +44,7 @@ public class TheAurorian {
         EnchantRegistry.ENCHANTMENTS.register(bus);
         POIRegistry.POIS.register(bus);
         StructureRegistry.register(bus);
+        FeatureRegistry.register(bus);
     }
 
 }

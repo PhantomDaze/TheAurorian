@@ -7,6 +7,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -24,7 +25,9 @@ import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlock;
 import shiroroku.theaurorian.Blocks.SilentwoodCraftingTable.SilentwoodCraftingTableBlock;
 import shiroroku.theaurorian.TheAurorian;
 import shiroroku.theaurorian.Util.TooltipUtil;
+import shiroroku.theaurorian.World.Feature.MushroomTreeGrower;
 import shiroroku.theaurorian.World.Feature.SilentwoodTreeFeature;
+import shiroroku.theaurorian.World.Feature.WeepingWillowTreeGrower;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -86,6 +89,13 @@ public class BlockRegistry {
     public static final RegistryObject<Block> silentwood_slab = regBlockItemWithBurntime(BLOCKS, "silentwood_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(BlockRegistry.silentwood_planks.get())), 150);
     public static final RegistryObject<Block> silentwood_stairs = regBlockItemWithBurntime(BLOCKS, "silentwood_stairs", () -> new StairBlock(() -> silentwood_planks.get().defaultBlockState(), BlockBehaviour.Properties.copy(silentwood_planks.get())), 300);
 
+    // Weeping willow (Phase 9)
+    public static final RegistryObject<Block> weeping_willow_leaves = regBlockItem(BLOCKS, "weeping_willow_leaves", () -> new WeepingWillowLeavesBlock(BlockBehaviour.Properties.copy(Blocks.JUNGLE_LEAVES)));
+    public static final RegistryObject<Block> weeping_willow_log = regBlockItemWithBurntime(BLOCKS, "weeping_willow_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.JUNGLE_LOG)), 300);
+    public static final RegistryObject<Block> weeping_willow_planks = regBlockItemWithBurntime(BLOCKS_GEN, "weeping_willow_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.JUNGLE_PLANKS)), 300);
+    public static final RegistryObject<Block> weeping_willow_sapling = regBlockItemWithBurntime(BLOCKS_GEN_NL_PLANT, "weeping_willow_sapling", () -> new SaplingBlock(new WeepingWillowTreeGrower(), BlockBehaviour.Properties.copy(Blocks.JUNGLE_SAPLING)), 100);
+    public static final RegistryObject<Block> weeping_willow_stairs = regBlockItemWithBurntime(BLOCKS, "weeping_willow_stairs", () -> new StairBlock(() -> weeping_willow_planks.get().defaultBlockState(), BlockBehaviour.Properties.copy(weeping_willow_planks.get())), 300);
+
     // Plants
     public static final RegistryObject<Block> aurorian_tallgrass = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass", () -> new TallGrassBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
     public static final RegistryObject<Block> bright_bulb = regBlockItem(BLOCKS_GEN_NL_PLANT, "bright_bulb", () -> new BushBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS).lightLevel((state) -> 10)));
@@ -126,8 +136,11 @@ public class BlockRegistry {
     // Phase 1: Urn (ruins/dungeon decor, drops block loot)
     public static final RegistryObject<Block> urn = regBlockItem(BLOCKS_GEN_NL, "urn", () -> new UrnBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)));
 
-    // Phase 9 stub: small mushroom (referenced by darkstone loot; full mushroom behaviour in Phase 9)
-    public static final RegistryObject<Block> mushroom_small = regBlockItem(BLOCKS_GEN, "mushroom_small", () -> new Block(BlockBehaviour.Properties.copy(Blocks.MUSHROOM_STEM).strength(0.5F).sound(net.minecraft.world.level.block.SoundType.WOOD)));
+    // Mushrooms (Phase 9): small mushroom grows into a full mushroom tree
+    public static final RegistryObject<Block> mushroom_small = regBlockItem(BLOCKS_GEN_NL_PLANT, "mushroom_small", () -> new SaplingBlock(new MushroomTreeGrower(), BlockBehaviour.Properties.copy(Blocks.BROWN_MUSHROOM)));
+    public static final RegistryObject<Block> mushroom = regBlockItem(BLOCKS, "mushroom", () -> new IndigoMushroomBlock(BlockBehaviour.Properties.copy(Blocks.MUSHROOM_STEM).strength(1.0F).sound(SoundType.SLIME_BLOCK)));
+    public static final RegistryObject<Block> mushroom_crystal = regBlockItem(BLOCKS_GEN, "mushroom_crystal", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.5F).sound(SoundType.STONE).lightLevel((state) -> 15)));
+    public static final RegistryObject<Block> mushroom_stem = regBlockItem(BLOCKS, "mushroom_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.MUSHROOM_STEM).strength(1.0F).sound(SoundType.SLIME_BLOCK)));
 
     // Phase 1: Material storage blocks
     public static final RegistryObject<Block> aurorian_coal_block = regBlockItem(BLOCKS_GEN, "aurorian_coal_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK)));

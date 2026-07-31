@@ -95,6 +95,12 @@ BLOCK_REMAP: dict[str, str] = {
     "theaurorian:lavenderplant": "theaurorian:lavender_block",
     "theaurorian:petuniaplant": "theaurorian:petunia",
     "theaurorian:silkberryplant": "theaurorian:silkberry_block",
+    # weeping willow (Phase 9)
+    "theaurorian:weepingwillowleaves": "theaurorian:weeping_willow_leaves",
+    "theaurorian:weepingwillowlog": "theaurorian:weeping_willow_log",
+    "theaurorian:weepingwillowplanks": "theaurorian:weeping_willow_planks",
+    "theaurorian:weepingwillowsapling": "theaurorian:weeping_willow_sapling",
+    "theaurorian:weepingwillowstairs": "theaurorian:weeping_willow_stairs",
     "theaurorian:urn": "theaurorian:urn",
     # boss spawners → unified block (BE boss tag still needs care)
     "theaurorian:bossspawnerkeeper": "theaurorian:boss_spawner",

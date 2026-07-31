@@ -1,3 +1,6 @@
 {
-  "parent": "theaurorian:block/mushroom_small"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "theaurorian:block/mushroom_small"
+  }
 }

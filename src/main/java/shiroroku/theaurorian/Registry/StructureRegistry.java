@@ -11,6 +11,7 @@ import shiroroku.theaurorian.TheAurorian;
 import shiroroku.theaurorian.World.Structure.DarkstoneDungeonStructure;
 import shiroroku.theaurorian.World.Structure.IgnoreBlockStructureProcessor;
 import shiroroku.theaurorian.World.Structure.MoonTempleStructure;
+import shiroroku.theaurorian.World.Structure.ReplaceAirStructureProcessor;
 import shiroroku.theaurorian.World.Structure.SingleTemplateStructure;
 
 public class StructureRegistry {
@@ -29,6 +30,7 @@ public class StructureRegistry {
     public static final RegistryObject<StructurePieceType> SINGLE_TEMPLATE_PIECE = PIECE_TYPES.register("single_template", () -> SingleTemplateStructure.SingleTemplatePiece::load);
 
     public static final RegistryObject<StructureProcessorType<IgnoreBlockStructureProcessor>> IGNORE_BLOCK = PROCESSOR_TYPES.register("ignore_block", () -> () -> IgnoreBlockStructureProcessor.CODEC);
+    public static final RegistryObject<StructureProcessorType<ReplaceAirStructureProcessor>> REPLACE_AIR = PROCESSOR_TYPES.register("replace_air", () -> () -> ReplaceAirStructureProcessor.CODEC);
 
     public static void register(IEventBus bus) {
         STRUCTURE_TYPES.register(bus);

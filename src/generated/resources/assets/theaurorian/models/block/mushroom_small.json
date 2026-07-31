@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
   "textures": {
-    "all": "theaurorian:block/mushroom_small"
+    "cross": "theaurorian:block/mushroom_small"
   }
 }

@@ -406,24 +406,21 @@
         }
       },
       {
-        "type": "minecraft:sequence",
-        "sequence": [
-          {
-            "type": "minecraft:condition",
-            "if_true": {
-              "type": "minecraft:not",
-              "invert": {
-                "type": "minecraft:water",
-                "offset": 0,
-                "surface_depth_multiplier": 0,
-                "add_stone_depth": false
-              }
-            },
-            "then_run": {
+        "type": "minecraft:condition",
+        "if_true": {
+          "type": "minecraft:water",
+          "offset": 0,
+          "surface_depth_multiplier": 0,
+          "add_stone_depth": false
+        },
+        "then_run": {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
               "type": "minecraft:condition",
               "if_true": {
                 "type": "minecraft:stone_depth",
-                "offset": 3,
+                "offset": 0,
                 "surface_type": "floor",
                 "add_surface_depth": false,
                 "secondary_depth_range": 0
@@ -431,58 +428,97 @@
               "then_run": {
                 "type": "minecraft:block",
                 "result_state": {
-                  "Name": "minecraft:sand"
+                  "Name": "theaurorian:aurorian_grass"
+                }
+              }
+            },
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:stone_depth",
+                "offset": 4,
+                "surface_type": "floor",
+                "add_surface_depth": false,
+                "secondary_depth_range": 0
+              },
+              "then_run": {
+                "type": "minecraft:block",
+                "result_state": {
+                  "Name": "theaurorian:aurorian_dirt"
                 }
               }
             }
-          },
-          {
-            "type": "minecraft:condition",
-            "if_true": {
-              "type": "minecraft:water",
-              "offset": 0,
-              "surface_depth_multiplier": 0,
-              "add_stone_depth": false
-            },
-            "then_run": {
-              "type": "minecraft:sequence",
-              "sequence": [
-                {
-                  "type": "minecraft:condition",
-                  "if_true": {
-                    "type": "minecraft:stone_depth",
-                    "offset": 0,
-                    "surface_type": "floor",
-                    "add_surface_depth": false,
-                    "secondary_depth_range": 0
+          ]
+        }
+      },
+      {
+        "type": "minecraft:condition",
+        "if_true": {
+          "type": "minecraft:not",
+          "invert": {
+            "type": "minecraft:water",
+            "offset": 0,
+            "surface_depth_multiplier": 0,
+            "add_stone_depth": false
+          }
+        },
+        "then_run": {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:stone_depth",
+                "offset": 0,
+                "surface_type": "floor",
+                "add_surface_depth": false,
+                "secondary_depth_range": 0
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:biome",
+                      "biome_is": [
+                        "theaurorian:weeping_willow_forest"
+                      ]
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "theaurorian:aurorian_grass_light"
+                      }
+                    }
                   },
-                  "then_run": {
+                  {
                     "type": "minecraft:block",
                     "result_state": {
                       "Name": "theaurorian:aurorian_grass"
                     }
                   }
-                },
-                {
-                  "type": "minecraft:condition",
-                  "if_true": {
-                    "type": "minecraft:stone_depth",
-                    "offset": 4,
-                    "surface_type": "floor",
-                    "add_surface_depth": false,
-                    "secondary_depth_range": 0
-                  },
-                  "then_run": {
-                    "type": "minecraft:block",
-                    "result_state": {
-                      "Name": "theaurorian:aurorian_dirt"
-                    }
-                  }
+                ]
+              }
+            },
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:stone_depth",
+                "offset": 1,
+                "surface_type": "floor",
+                "add_surface_depth": false,
+                "secondary_depth_range": 0
+              },
+              "then_run": {
+                "type": "minecraft:block",
+                "result_state": {
+                  "Name": "theaurorian:aurorian_dirt"
                 }
-              ]
+              }
             }
-          }
-        ]
+          ]
+        }
       },
       {
         "type": "minecraft:condition",
@@ -500,9 +536,7 @@
           "type": "minecraft:block",
           "result_state": {
             "Name": "theaurorian:aurorian_deepslate",
-            "Properties": {
-              "axis": "y"
-            }
+            "axis": "y"
           }
         }
       }

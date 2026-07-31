@@ -43,6 +43,14 @@ public class DataGenBlocks extends BlockStateProvider {
 
         // CUSTOM
         axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get(), modLoc("block/silentwood_log_end"), modLoc("block/silentwood_log_side"));
+        axisBlock((RotatedPillarBlock) BlockRegistry.weeping_willow_log.get(), modLoc("block/weeping_willow_log_top"), modLoc("block/weeping_willow_log_side"));
+        axisBlock((RotatedPillarBlock) BlockRegistry.mushroom_stem.get(), modLoc("block/mushroom_stem_top"), modLoc("block/mushroom_stem_side"));
+        ModelFile mushroom = models().cubeBottomTop(blockTexture(BlockRegistry.mushroom.get()).getPath(), modLoc("block/mushroom_side"), modLoc("block/mushroom_bottom"), modLoc("block/mushroom_side"));
+        simpleBlock(BlockRegistry.mushroom.get(), mushroom);
+        simpleBlockItem(BlockRegistry.mushroom.get());
+        ModelFile willowLeaves = models().cubeAll(blockTexture(BlockRegistry.weeping_willow_leaves.get()).getPath(), blockTexture(BlockRegistry.weeping_willow_leaves.get())).renderType("cutout_mipped");
+        simpleBlock(BlockRegistry.weeping_willow_leaves.get(), willowLeaves);
+        simpleBlockItem(BlockRegistry.weeping_willow_leaves.get(), "cutout_mipped");
         barsBlock(BlockRegistry.runestone_bars.get());
         barsBlock(BlockRegistry.moon_temple_bars.get());
         glassPaneBlock(BlockRegistry.aurorian_glass_pane.get(), blockTexture(BlockRegistry.aurorian_glass.get()));
@@ -65,6 +73,7 @@ public class DataGenBlocks extends BlockStateProvider {
         stairsBlock(BlockRegistry.peridotite_smooth_stairs.get(), blockTexture(BlockRegistry.peridotite_smooth.get()));
         stairsBlock(BlockRegistry.aurorian_stone_brick_stairs.get(), blockTexture(BlockRegistry.aurorian_stone_brick.get()));
         stairsBlock(BlockRegistry.aurorian_stone_stairs.get(), blockTexture(BlockRegistry.aurorian_stone.get()));
+        stairsBlock(BlockRegistry.weeping_willow_stairs.get(), blockTexture(BlockRegistry.weeping_willow_planks.get()));
         wallBlock(BlockRegistry.aurorian_cobblestone_wall.get(), blockTexture(BlockRegistry.aurorian_cobblestone.get()));
         wallBlock(BlockRegistry.aurorian_deepslate_wall.get(), blockTexture(BlockRegistry.aurorian_deepslate.get()));
         torchBlock(BlockRegistry.silentwood_torch.get(), blockTexture(BlockRegistry.silentwood_torch.get()));
