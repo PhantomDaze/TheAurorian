@@ -135,6 +135,7 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(DUNGEON_BRICKS).add(BlockRegistry.runestone_stairs.get());
         this.tag(DUNGEON_GATES).add(BlockRegistry.darkstone_gate.get());
         this.tag(DUNGEON_GATES).add(BlockRegistry.moon_temple_gate.get());
+        this.tag(DUNGEON_GATES).add(BlockRegistry.moon_temple_interior_gate.get());
         this.tag(DUNGEON_GATES).add(BlockRegistry.runestone_gate.get());
         this.tag(MOONSTONE_ORE).add(BlockRegistry.deepslate_moonstone_ore.get());
         this.tag(MOONSTONE_ORE).add(BlockRegistry.moonstone_ore.get());

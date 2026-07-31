@@ -1,0 +1,9 @@
+{
+  "icon": "theaurorian:moon_temple_bricks",
+  "x": 40,
+  "y": 40,
+  "border": "BLUE",
+  "children": [
+    "theaurorian:crystalline"
+  ]
+}

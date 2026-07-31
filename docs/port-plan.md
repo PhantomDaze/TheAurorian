@@ -584,12 +584,12 @@ shiroroku.theaurorian
 
 | ID | 缺口 | 现状 | 原因 | 关闭条件 | 目标 Phase | 状态 |
 |----|------|------|------|----------|------------|------|
-| D1 | Darkstone 地牢整包 | 仅有方块与钥匙 | 未实施 | §4 Phase 3 完成标准 | 3 | open |
-| D2 | Moon Temple 整包 | 仅有方块与钥匙 | 未实施 | Phase 4 完成标准 | 4 | open |
-| D3 | Moon Queen | 无 | 未实施 | 实体+AI+spawner+loot | 2+4 | open |
-| D4 | Dungeon Spider + Spiderling | 无 | 未实施 | 实体+AI+spawner+loot | 2+3 | open |
+| D1 | Darkstone 地牢整包 | 仅有方块与钥匙 | 自定义 char-map Structure 复刻上游 5×5×2 迷宫 + 入口/楼梯/Boss 房；14 NBT remap 完成；chest→`darkstone/{low,med,high}`；Boss spawner→dungeon_spider；`darkstone_gate`+keyhole 接线；Mirror `dungeon_darkstone` 节点有效 | 待游戏内 /locate + 钥匙 + Boss 击杀验证 | §4 Phase 3 完成标准 | 3 | closed |
+| D2 | Moon Temple 整包 | 仅有方块与钥匙 | `MoonTempleStructure`（terrain+island+path+v2 房）+ 11 NBT；chest→`moontemple/{low,med,high}`（structure block metadata）；双塔 fragment→钥匙→Boss 房；`moon_temple_gate(_interior)`+keyhole 接线；Mirror `dungeon_moon_temple`+`crystalline` 节点已补 | 待游戏内验证 | Phase 4 完成标准 | 4 | closed |
+| D3 | Moon Queen | 无 | 实体+AI+spawner+loot 已移植（Phase 2） | 完成 | 实体+AI+spawner+loot | 2+4 | closed |
+| D4 | Dungeon Spider + Spiderling | 无 | 实体+AI+spawner+loot 已移植（Phase 2，含挂顶/吐丝/扑击 AI） | 完成 | 实体+AI+spawner+loot | 2+3 | closed |
 | D5 | Boss 武器与 Trophy + MF 合成线 | 三 trophy 均掉落（Keeper 已补 `trophy_keeper`）；`keepers_bow`/`queens_chipper`/`moon_shield` 已注册并实现能力；三条 `moonlight_forge` 配方已建（moonstone_shield+trophy_moon_queen→moon_shield、aurorian_steel_pickaxe+trophy_moon_queen→queens_chipper、silentwood_bow+trophy_keeper→keepers_bow） | 完成 | 三 trophy 掉落 + 三 MF 武器配方 + 能力 | 5 | closed |
-| D6 | 全实体 loot 表 | 已迁 12 表 JSON（含 dungeon_keeper）；缺物品 ID 的条目待实体/物品注册后生效 | 管线已建，掉落物未齐 | 每实体一表且引用物品均已注册；Keeper 已接通 JSON | 2–5 | open |
+| D6 | 全实体 loot 表 | 每实体一表 JSON（Keeper/Slime/Spider/Spiderling/MoonQueen/Acolyte/Sprite/Spirit/Hollow/DisturbedHollow/Knight/被动）；引用物品均已注册；Keeper 已接通 `trophy_keeper` | 完成 | 每实体一表且引用物品均已注册 | 2–5 | closed |
 | D7 | Umbra Tower | `single_template` + `umbratower/umbratower.nbt`（16×32×16）+ structure_set 40/34；config `enable_umbra_tower` | 代码完成，待游戏内 /locate 验证 | Phase 6.1 | 6 | open |
 | D8 | Ruins/Graveyard 扩展 | `ruins_1`/`ruins_2`/`graveyard` 均建 single_template 结构 + structure_set；NBT 已 remap（旧 ID 清零）；与上游一致空 chest | 代码完成，待游戏内验证 | 上游 3 NBT 均生成 | 6 | open |
 | D9 | Dungeon Locator | `DungeonLocatorItem` 已实现：潜行切换 Runestone/Darkstone/MoonTemple，右键 `findNearestMapStructure` 定位，耐久 30 | 代码完成，待游戏内验证 | Phase 6.3 | 6 | open |
@@ -615,9 +615,9 @@ shiroroku.theaurorian
 | D29 | Keepers Bow / Chipper / Moon Shield 获取 | 三件均已注册 + MF 配方（输入基底 + trophy catalyst），能力：Keeper's Bow 拉满射 3 箭、Queen's Chipper 右键拆地牢方块、Moon's Shield 格挡蓄力冲刺 + 冷却击飞 | 完成 | 经 trophy→MF 可合成（对等上游） | 5 | closed |
 | D31 | Silentwood Stick 点门/生火 | 未核对是否进 portal_lighters | 已进 `portal_lighters` tag；双手逻辑生火（双持各消耗 1） | 与上游 stick 双手逻辑对等 | 8 | closed |
 | D32 | 被动仅 silkberry 繁殖 | 无被动 | Pig/Rabbit/Sheep 均以 silkberry 为诱惑/食物，`getBreedOffspring` 产出对应 aurorian 变体 | Phase 7 | 7 | closed |
-| D33 | Crystalline Sprite 神殿生成 | 无 | 未实施 | Temple 内/地牢石生成规则 | 2+4 | open |
-| D34 | Urn 世界生成器 | 无 | 未实施 | 对等 `UrnsWorldGenerator` feature | 1+9 | open |
-| D30 | 结构 NBT remap 全表 | `docs/asset-remap.md` + `scripts/remap_structure_nbt.py`（**完整 NBT 解析/重序列化**，修正长度前缀）；55 NBT 全部 remap 通过完整性校验；boss spawner `containedboss→boss` 已转换 | 依赖 Phase 2/7/9 方块与实体 | 游戏内无空气洞；全部旧 ID 清零 | 0+1 | open |
+| D33 | Crystalline Sprite 神殿生成 | 无 | 已入 3 群系 monster spawn（weight 65，对等上游 base biome 列表），另补 spirit(2)/moon_acolyte(35)/disturbed_hollow(95) | 群系可刷 | 2+4 | closed |
+| D34 | Urn 世界生成器 | 无 | `urn` configured+placed feature（aurorian_stone 上 + ≥2 相邻石，对等 `UrnsWorldGenerator`），已入 3 群系；urn loot 表有效 | 地表散布 urn 且掉落正常 | 1+9 | closed |
+| D30 | 结构 NBT remap 全表 | `docs/asset-remap.md` + `scripts/remap_structure_nbt.py`（**完整 NBT 解析/重序列化**，修正长度前缀）；55 NBT 全部 remap 通过完整性校验；boss spawner `containedboss→boss` 已转换 | 全部旧 ID 清零；结构方块/chest metadata/loot 引用经校验 | 游戏内无空气洞（待 playtest 复核） | 0+1 | closed |
 | D35 | Boss 模型网格 | MoonQueen 用 vanilla Humanoid、DungeonSpider 用 vanilla Spider 模型 + 上游贴图 | 1.19 尚未有对应 java 网格 | 视觉对等（可选 Gecko） | 2 | open |
 | D36 | Moon Queen 冲刺格挡盾 | `moon_shield` 已实现（格挡 50t 后前冲 + 冷却击飞 + 粒子）；MF 合成已接 | 完成 | Phase 5 换 `moon_shield` | 5 | closed |
 

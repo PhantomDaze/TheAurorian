@@ -15,6 +15,30 @@
         "maxCount": 6,
         "minCount": 4,
         "weight": 100
+      },
+      {
+        "type": "theaurorian:disturbed_hollow",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 95
+      },
+      {
+        "type": "theaurorian:crystalline_sprite",
+        "maxCount": 2,
+        "minCount": 2,
+        "weight": 65
+      },
+      {
+        "type": "theaurorian:spirit",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 2
+      },
+      {
+        "type": "theaurorian:moon_acolyte",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 35
       }
     ],
     "creature": [
@@ -64,6 +88,9 @@
       "theaurorian:lavender_patch",
       "theaurorian:aurorian_grass_patch",
       "theaurorian:aurorian_plants"
+    ],
+    [
+      "theaurorian:urn"
     ]
   ]
 }
