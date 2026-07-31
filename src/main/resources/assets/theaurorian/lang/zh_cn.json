@@ -354,5 +354,17 @@
   "mirror_of_guidance.theaurorian.boss_loot.name": "Boss 装备",
   "mirror_of_guidance.theaurorian.boss_loot.desc": "每个地牢的 Boss 都会掉落一个奖杯。把它和对应的物品一起放进月光熔炉，就能打造强力装备，比如守卫之弓或女皇之凿！\n\n地牢宝箱里也藏着独特的装备：暗石武库的 Umbra 武器，以及月宫的月凝晶工具。",
   "mirror_of_guidance.theaurorian.locator.name": "地牢定位器",
-  "mirror_of_guidance.theaurorian.locator.desc": "迷路了吗？地牢定位器会指引方向！\n\n潜行右键可切换要定位的地牢，再右键即可朝向最近的一座。"
+  "mirror_of_guidance.theaurorian.locator.desc": "迷路了吗？地牢定位器会指引方向！\n\n潜行右键可切换要定位的地牢，再右键即可朝向最近的一座。",
+  "mirror_of_guidance.theaurorian.aurorian_steel.name": "极光钢",
+  "mirror_of_guidance.theaurorian.aurorian_steel.desc": "极光钢是极光幽境的终极合金。\n\n在月光熔炉中把 Aurorianite、Umbra 与 Crystalline 材料锻成。极光钢工具与护甲会在使用中积累经验，并最终自行升级附魔！",
+  "mirror_of_guidance.theaurorian.crafting.name": "合成与机器",
+  "mirror_of_guidance.theaurorian.crafting.desc": "从谧木工作台起步，然后建造极光熔炉（可选烟囱提升燃料效率）、月光熔炉与拆解器。\n\n月光熔炉只能在开阔月光下工作。拆解器能把地牢战利品拆成碎片，再重锻成锭。",
+  "mirror_of_guidance.theaurorian.ore_cerulean.name": "晶蓝",
+  "mirror_of_guidance.theaurorian.ore_cerulean.desc": "晶蓝矿在极光土壤下很常见。\n\n冶炼成锭可制作中阶护甲与盾。晶蓝箭与粒在整个进度中都很实用。",
+  "mirror_of_guidance.theaurorian.ore_moonstone.name": "月石",
+  "mirror_of_guidance.theaurorian.ore_moonstone.desc": "月石矿遍布地下。\n\n月石工具在夜间更耐用、白天更易损耗，是进入地牢前从极光石装备升级的稳妥选择。",
+  "mirror_of_guidance.theaurorian.ore_geode.name": "晶簇",
+  "mirror_of_guidance.theaurorian.ore_geode.desc": "晶簇是稀有的地下晶体簇。\n\n敲开可获得水晶，用于机器、箭矢与多种魔法配方。",
+  "mirror_of_guidance.theaurorian.umbra.name": "暗影",
+  "mirror_of_guidance.theaurorian.umbra.desc": "Umbra 装备是暗石武库的奖励。\n\n在暗石宝箱中寻找 Umbra 工具与武器。Umbra 镐可锁定单一方块类型，Umbra 防具则以机动换耐久。"
 }

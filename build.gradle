@@ -94,6 +94,10 @@ dependencies {
 
     // Mixin
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // Unit / resource tests (no full game bootstrap required)
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 
@@ -151,4 +155,31 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+// ---- Automated tests -------------------------------------------------------
+// 1) validateResources — pure Python datapack/asset integrity gate (fast, CI-friendly)
+// 2) test — JUnit 5 unit tests + resource/datapack smoke tests
+
+tasks.register('validateResources', Exec) {
+    group = 'verification'
+    description = 'Validate datapack/asset integrity (lang, loot, structures, mirror, advancements, registries).'
+    workingDir = project.projectDir
+    commandLine 'python3', 'scripts/validate_resources.py'
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+    // Resource integrity also runs via ResourceIntegrityTest; keep explicit task for CI scripts.
+    dependsOn tasks.named('validateResources')
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+        showStandardStreams = true
+    }
+}
+
+// Make `check` (and therefore a careful `build`) run the resource gate even if tests are skipped later.
+tasks.named('check').configure {
+    dependsOn tasks.named('validateResources')
 }

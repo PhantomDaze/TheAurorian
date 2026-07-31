@@ -354,5 +354,17 @@
   "mirror_of_guidance.theaurorian.boss_loot.name": "Boss Equipment",
   "mirror_of_guidance.theaurorian.boss_loot.desc": "Every dungeon boss drops a Trophy. Bring it to the Moonlight Forge together with the right item to craft powerful equipment, like the Keeper’s Bow or the Queen’s Chipper!\n\nDungeon chests also hold unique gear: Umbra weapons from the Darkstone Armory, and Crystalline tools from the Moon Temple.",
   "mirror_of_guidance.theaurorian.locator.name": "Dungeon Locator",
-  "mirror_of_guidance.theaurorian.locator.desc": "Lost? The Dungeon Locator points the way!\n\nSneak right-click to cycle which dungeon to locate, then right-click to face the nearest one."
+  "mirror_of_guidance.theaurorian.locator.desc": "Lost? The Dungeon Locator points the way!\n\nSneak right-click to cycle which dungeon to locate, then right-click to face the nearest one.",
+  "mirror_of_guidance.theaurorian.aurorian_steel.name": "Aurorian Steel",
+  "mirror_of_guidance.theaurorian.aurorian_steel.desc": "Aurorian Steel is the ultimate alloy of the Aurorian.\n\nCombine Aurorianite, Umbra, and Crystalline materials at the Moonlight Forge to create it. Tools and armor made from Aurorian Steel gain XP as you use them, and will eventually upgrade their enchantments on their own!",
+  "mirror_of_guidance.theaurorian.crafting.name": "Crafting & Machines",
+  "mirror_of_guidance.theaurorian.crafting.desc": "Start with a Silentwood Crafting Table, then build the Aurorian Furnace (and optional Chimney stacks for fuel efficiency), the Moonlight Forge, and the Scrapper.\n\nThe Moonlight Forge works only under open moonlight. The Scrapper breaks dungeon loot down into scraps you can reforge into ingots.",
+  "mirror_of_guidance.theaurorian.ore_cerulean.name": "Cerulean",
+  "mirror_of_guidance.theaurorian.ore_cerulean.desc": "Cerulean Ore is common under Aurorian soil.\n\nSmelt it into ingots for mid-tier armor and shields. Cerulean arrows and nuggets are useful utility items throughout progression.",
+  "mirror_of_guidance.theaurorian.ore_moonstone.name": "Moonstone",
+  "mirror_of_guidance.theaurorian.ore_moonstone.desc": "Moonstone Ore is common underground.\n\nMoonstone tools waste less durability at night and more during the day. They are a solid step up from Aurorian Stone gear before you dive into dungeons.",
+  "mirror_of_guidance.theaurorian.ore_geode.name": "Geode",
+  "mirror_of_guidance.theaurorian.ore_geode.desc": "Geodes are rare crystal clusters found underground.\n\nBreak them for Crystal, used in machines, arrows, and several magical recipes.",
+  "mirror_of_guidance.theaurorian.umbra.name": "Umbra",
+  "mirror_of_guidance.theaurorian.umbra.desc": "Umbra gear is the reward of the Darkstone Armory.\n\nLook for Umbra tools and weapons in Darkstone chests. The Umbra Pickaxe can lock onto a single block type, and Umbra defenses trade mobility for durability."
 }
