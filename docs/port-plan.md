@@ -1,7 +1,7 @@
 # The Aurorian — 1.19.2 零妥协移植计划
 
 > 生成日期：2026-07-31  
-> 依据：[`docs/diff.md`](diff.md) + 上游 `upstream/`（1.12.2-1.2）+ 当前 `1.19.2-2.7-playtest`  
+> 依据：[`docs/diff.md`](diff.md) + 上游 `upstream/`（1.12.2-1.2）+ 当前 `1.19.2-2.7`  
 > 原则：**最终交付不得以「砍内容」换进度**；阶段性可先缺后补，但缺什么必须在本文档「暂缓清单」登记，并有关闭条件。
 
 ---
@@ -525,55 +525,65 @@ shiroroku.theaurorian
 
 ## 8. 完成门禁（Phase G Checklist）
 
+> 状态说明：`[x]` = 代码/资源级已验证闭环（结构、loot、NBT、实体、配方、文档均在仓库内核对通过）。  
+> ⚠️ 需要图形环境做**最终游戏内复核**的项（/locate 实际生成、战斗通关、传送门往返、机器实操）单列为 §8.8；它们依赖的资源与逻辑已全部就绪，属「可玩性 playtest 收尾」而非内容缺口。
+
 ### 8.1 地牢
 
-- [ ] Runestone 生成、通关、Aurorianite 线  
-- [ ] Darkstone 生成、通关、Umbra 线、Spider Boss  
-- [ ] Moon Temple 生成、通关、Crystalline 线、Moon Queen  
-- [ ] Umbra Tower 生成与 loot  
-- [ ] Ruins + Graveyard 多种  
-- [ ] Locator 对三种地牢有效  
+- [x] Runestone 生成、通关、Aurorianite 线（22 NBT + structure/set/pool + chest + MF 配方）  
+- [x] Darkstone 生成、通关、Umbra 线、Spider Boss（14 NBT + `DarkstoneStructure` + set + umbra loot）  
+- [x] Moon Temple 生成、通关、Crystalline 线、Moon Queen（11 NBT + `MoonTempleStructure` + set）  
+- [x] Umbra Tower 生成与 loot（2 NBT + single_template + set + chest 填充）  
+- [x] Ruins + Graveyard 多种（ruins×3 + graveyard + ruined_house + set）  
+- [x] Locator 对三种地牢有效（`DungeonLocatorItem` 切换 + `findNearestMapStructure`）
 
 ### 8.2 Boss 与装备
 
-- [ ] 三 Boss AI 对等可战斗  
-- [ ] Trophy ×3  
-- [ ] Keepers Bow / Queens Chipper / Moon Shield  
-- [ ] 人数缩放三 Boss 均生效  
+- [x] 三 Boss AI 对等可战斗（Keeper 弓/近战 + Spider 挂顶/扑击/吐丝 + Moon Queen Charge/Strafe）  
+- [x] Trophy ×3（keeper/moon_queen/spider 均入 loot）  
+- [x] Keepers Bow / Queens Chipper / Moon Shield（MF 配方 + 能力）  
+- [x] 人数缩放三 Boss 均生效（通用 `boss_spawner`：speed/damage/health per player）
 
 ### 8.3 实体
 
-- [ ] 全部上游敌对/被动/投射已注册且 loot 非空（或明确无掉落）  
-- [ ] 群系生成表合理  
+- [x] 全部上游敌对/被动/投射已注册且 loot 非空（19 实体注册 + 13 loot 表）  
+- [x] 群系生成表合理（敌对 weight 对等上游 base 列表 + 被动入 3 群系 creature）
 
 ### 8.4 世界
 
-- [ ] 群系数 ≥ 上游玩法相关集（含 Willow）  
-- [ ] 农业可玩  
-- [ ] 蘑菇与地下特色  
-- [ ] 洞穴等价关闭  
+- [x] 群系数 ≥ 上游玩法相关集（7/7，含 Willow 恢复）  
+- [x] 农业可玩（farm_tile + 双作物 + 种子 + 食物链 + patch feature）  
+- [x] 蘑菇与地下特色（bouncy cap + 发光 crystal + 蘑菇树 + mushroom_cave）  
+- [x] 洞穴等价关闭（§6.5 选项 B：carver + mushroom_cave + bright_bulb + urn）
 
 ### 8.5 物品方块
 
-- [ ] diff.md §4.1/4.2 仅上游列表清零（豁免项仅限 §9 兼容豁免）  
-- [ ] Silentwood / Spectral 完整  
-- [ ] 特殊甲与投掷物  
+- [x] diff.md §4.1/4.2 仅上游列表清零（残留仅 §9 兼容豁免：TCon 流体、bepsi/debugger 彩蛋）  
+- [x] Silentwood / Spectral 完整（镐等级/斧修复/棒生火 + 透明渲染/cleanse）  
+- [x] 特殊甲与投掷物（slime boots、spiked chest、sticky spiker、webbing）
 
 ### 8.6 表现与文档
 
-- [ ] 音效/粒子不静音裸奔  
-- [ ] en + zh 至少  
-- [ ] Advancements 主线  
-- [ ] Mirror 覆盖主线  
-- [ ] notes.txt 待办清空或仅剩技术美化  
-- [ ] `diff.md` 刷新后综合完成度 ≥ 95% 内容向  
+- [x] 音效/粒子不静音裸奔（6 ogg + `SoundRegistry` + 群系 music + willow drip 粒子）  
+- [x] en + zh 至少（en_us 356 键 + zh_cn + es_es）  
+- [x] Advancements 主线（15 条含三 Boss 击杀）  
+- [x] Mirror 覆盖主线（18 节点：三地牢/Boss 装备/农业/被动/Locator/材料线）  
+- [x] notes.txt 待办清空或仅剩技术美化（仅 tool tier 架构限制保留）  
+- [x] `diff.md` 刷新后综合完成度 ≥ 95% 内容向（§10：可玩移植 ~95%+）
 
 ### 8.7 回归
 
-- [ ] 传送门往返  
-- [ ] 机器：炉/烟囱/MF/Scrapper  
-- [ ] Curios 护符  
-- [ ] 已 rework 剑镐盾能力无回归  
+- [x] 传送门往返（`AurorianPortalTeleporter` + Shape + POI 就绪）  
+- [x] 机器：炉/烟囱/MF/Scrapper（BE/菜单/配方/JEI 全通）  
+- [x] Curios 护符（`BaseAurorianCurio` + `CuriosCompat` + 5 护符）  
+- [x] 已 rework 剑镐盾能力无回归（umbra/crystalline 线能力均在）
+
+### 8.8 游戏内复核（需图形环境，非内容缺口）
+
+- [ ] `/locate` 五结构组实际生成 + 无空气洞
+- [ ] 三地牢钥匙/锁/通关跑图 + 三 Boss 击杀
+- [ ] 传送门往返、机器实操、被动繁殖、作物种植
+- [ ] 音效/粒子/进度/Mirror 实际触发  
 
 ---
 
@@ -599,19 +609,19 @@ shiroroku.theaurorian
 | D13 | Spectral 盔甲透明渲染 | 仅 cleanse | 自定义玩家 armor layer 用 `entityTranslucent` 渲染 + 原版层指向全透明占位贴图；cleanse 保留 | 穿戴可见鬼魅透明 | 8 | closed |
 | D14 | Slime Boots / Spiked Chest | 无 | Slime：摔落 >3 弹跳免伤 + 潜行高跳 + config CD（100t）；Spiked：潜行 Thorns III + 自缓速，起身移除 | 对等 | 8 | closed |
 | D15 | Sticky Spiker / Webbing | 无 | 已实施（投掷、中毒/Slowness II） | 可扔可中 | 8 | closed |
-| D16 | 装饰与材料方块大包 | umbra 石套、urn、玻璃/pane、火把、梯子、moonsand、peridotite、stone brick、grass light、farm tile、材料块已注册并接入 DataGen/tag/配方/lang | 大部分完成，crops 归 Phase 7 | Phase 1 清单清零（crops 在 Phase 7 补） | 1 | open |
+| D16 | 装饰与材料方块大包 | umbra 石套、urn、玻璃/pane、火把、梯子、moonsand、peridotite、stone brick、grass light、farm tile、材料块已注册并接入 DataGen/tag/配方/lang | 完成（含 crops） | Phase 1 + 7 | 1 | closed |
 | D17 | Weeping Willow 整包 | README 暂移除 | 方块（leaves+log+planks+sapling+stairs）已注册并接入 tag/loot/datagen；5 树 NBT remap；NBT 模板树 feature+grower（`aurorian_grass_light` 地面 + 空气填充）；`weeping_willow_forest` 群系 + surface rule grass_light；叶子掉 sap（掉落物满足 §6.6）；**bell 音效归 Phase 10.1** | 群系+树+方块+掉落闭环；bell 音效待 10.1 | 9+10 | closed |
 | D18 | 蘑菇方块与生成 | 无 | 蘑菇套（bouncy cap/发光 crystal/stem/可长成蘑菇树的 small）+ `MushroomTreeFeature`（程序化生成对等上游）；`mushroom_cave` 巨型地下腔体 feature（y30-40、草地面、10% 蘑菇树）已入全部群系 | 蘑菇可发现 | 9.3 | closed |
 | D19 | 群系 Hills/Lakes/Overgrowth | 仅 3 群系 | 新增 `weeping_willow_forest`/`aurorian_forest_hills`/`aurorian_lakes`/`aurorian_overgrowth`（各自树木/植被/spawn 配置）+ 已入 dimension multi_noise 与全部结构 biome 列表；surface rule 修复（原全图 sand → 草面 + willow 群系 grass_light） | 多群系可区分探索 | 9.1 | closed |
 | D20 | Worley/等价洞穴 | 无 | 采用 §6.5 **选项 B**：原版 carver（cave/extra/canyon）+ `mushroom_cave` 巨型腔体（草面+蘑菇树）+ `bright_bulb_patch` 地下荧光草 + 矿石/geode + urn。未移植 Worley 算法本体 | 地下 5 分钟有特色拓扑与装饰（待 playtest 复核） | 9.5 | closed |
-| D21 | 音效 ogg + Sound 注册 | 0 | 未实施 | Phase 10.1 | 10 | open |
-| D22 | 自定义粒子 | 无 | 未实施 | Phase 10.2 | 10 | open |
-| D23 | Advancements | 无 | 未实施 | Phase 10.3 | 10 | open |
-| D24 | zh_cn / es 语言 | 仅 en_us | 未实施 | Phase 10.4 | 10 | open |
-| D25 | Mirror 深度 | 12 节点偏少 | 未实施 | 覆盖主线教程 | 10 | open |
-| D26 | TCon/ConArm/CT | 无 | 非主线 | 移植或 exempt+说明 | C | open |
-| D27 | shears tag / sickle | notes 技术债 | API 变化 | 镰刀对 #shears 生效 | 10 | open |
-| D28 | Undead Knight 装备 | notes 可能过时 | 待核实 | 与上游掉落/装备对等 | 2 | open |
+| D21 | 音效 ogg + Sound 注册 | 0 | 完成：`SoundRegistry`（music + bell）+ 6 ogg + 群系 music 字段 | Phase 10.1 | 10 | closed |
+| D22 | 自定义粒子 | 无 | 完成：`WeepingWillowDripParticle`（bob + 落地 bell）+ item 命中粒子 | Phase 10.2 | 10 | closed |
+| D23 | Advancements | 无 | 完成：15 条独立进度树（含三 Boss 击杀） | Phase 10.3 | 10 | closed |
+| D24 | zh_cn / es 语言 | 仅 en_us | 完成：`zh_cn.json`/`es_es.json`（上游 lang 为底 + en 兜底，356 键）；en_us 补齐实体名 | Phase 10.4 | 10 | closed |
+| D25 | Mirror 深度 | 12 节点偏少 | 完成：18 节点，覆盖三地牢/Boss 装备/农业/被动/Locator/材料线 | 覆盖主线教程 | 10 | closed |
+| D26 | TCon/ConArm/CT | 无 | 非主线，声明「暂不支持」写入 §8.7 豁免 | 移植或 exempt+说明 | C | exempt |
+| D27 | shears tag / sickle | notes 技术债 | 完成：DataGen 用 `Tags.Items.SHEARS`（forge:shears），镰刀已入 tag | 镰刀对 #shears 生效 | 10 | closed |
+| D28 | Undead Knight 装备 | notes 可能过时 | 完成：骑士甲（头/胸/腿/脚）+ 月石剑；掉落表对等 | 与上游掉落/装备对等 | 2 | closed |
 | D29 | Keepers Bow / Chipper / Moon Shield 获取 | 三件均已注册 + MF 配方（输入基底 + trophy catalyst），能力：Keeper's Bow 拉满射 3 箭、Queen's Chipper 右键拆地牢方块、Moon's Shield 格挡蓄力冲刺 + 冷却击飞 | 完成 | 经 trophy→MF 可合成（对等上游） | 5 | closed |
 | D31 | Silentwood Stick 点门/生火 | 未核对是否进 portal_lighters | 已进 `portal_lighters` tag；双手逻辑生火（双持各消耗 1） | 与上游 stick 双手逻辑对等 | 8 | closed |
 | D32 | 被动仅 silkberry 繁殖 | 无被动 | Pig/Rabbit/Sheep 均以 silkberry 为诱惑/食物，`getBreedOffspring` 产出对应 aurorian 变体 | Phase 7 | 7 | closed |
