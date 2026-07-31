@@ -47,6 +47,17 @@ import shiroroku.theaurorian.Entities.StickySpiker.StickySpikerEntity;
 import shiroroku.theaurorian.Entities.StickySpiker.StickySpikerEntityRender;
 import shiroroku.theaurorian.Entities.Webbing.WebbingEntity;
 import shiroroku.theaurorian.Entities.Webbing.WebbingEntityRender;
+import shiroroku.theaurorian.Entities.Passive.AurorianPigEntity;
+import shiroroku.theaurorian.Entities.Passive.AurorianPigEntityModel;
+import shiroroku.theaurorian.Entities.Passive.AurorianPigEntityRender;
+import shiroroku.theaurorian.Entities.Passive.AurorianRabbitEntity;
+import shiroroku.theaurorian.Entities.Passive.AurorianRabbitEntityModel;
+import shiroroku.theaurorian.Entities.Passive.AurorianRabbitEntityRender;
+import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntity;
+import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityLayer;
+import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityModel1;
+import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityModel2;
+import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityRender;
 import shiroroku.theaurorian.TheAurorian;
 
 public class EntityRegistry {
@@ -71,6 +82,10 @@ public class EntityRegistry {
     public static final RegistryObject<EntityType<StickySpikerEntity>> sticky_spiker = ENTITIES.register("sticky_spiker", () -> EntityType.Builder.<StickySpikerEntity>of(StickySpikerEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).setUpdateInterval(10).build("sticky_spiker"));
     public static final RegistryObject<EntityType<WebbingEntity>> webbing = ENTITIES.register("webbing", () -> EntityType.Builder.<WebbingEntity>of(WebbingEntity::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(4).setUpdateInterval(10).build("webbing"));
 
+    public static final RegistryObject<EntityType<AurorianPigEntity>> aurorian_pig = ENTITIES.register("aurorian_pig", () -> EntityType.Builder.<AurorianPigEntity>of(AurorianPigEntity::new, MobCategory.CREATURE).sized(0.9F, 0.9F).clientTrackingRange(8).build("aurorian_pig"));
+    public static final RegistryObject<EntityType<AurorianRabbitEntity>> aurorian_rabbit = ENTITIES.register("aurorian_rabbit", () -> EntityType.Builder.<AurorianRabbitEntity>of(AurorianRabbitEntity::new, MobCategory.CREATURE).sized(0.4F, 0.5F).clientTrackingRange(8).build("aurorian_rabbit"));
+    public static final RegistryObject<EntityType<AurorianSheepEntity>> aurorian_sheep = ENTITIES.register("aurorian_sheep", () -> EntityType.Builder.<AurorianSheepEntity>of(AurorianSheepEntity::new, MobCategory.CREATURE).sized(0.9F, 1.3F).clientTrackingRange(8).build("aurorian_sheep"));
+
     public static void entityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(EntityRegistry.dungeon_keeper.get(), DungeonKeeperEntity.createAttributes().build());
         event.put(EntityRegistry.dungeon_slime.get(), DungeonSlimeEntity.createAttributes().build());
@@ -83,6 +98,9 @@ public class EntityRegistry {
         event.put(EntityRegistry.crystalline_sprite.get(), CrystallineSpriteEntity.createAttributes().build());
         event.put(EntityRegistry.spirit.get(), SpiritEntity.createAttributes().build());
         event.put(EntityRegistry.disturbed_hollow.get(), DisturbedHollowEntity.createAttributes().build());
+        event.put(EntityRegistry.aurorian_pig.get(), AurorianPigEntity.createAttributes().build());
+        event.put(EntityRegistry.aurorian_rabbit.get(), AurorianRabbitEntity.createAttributes().build());
+        event.put(EntityRegistry.aurorian_sheep.get(), AurorianSheepEntity.createAttributes().build());
     }
 
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -92,6 +110,9 @@ public class EntityRegistry {
         event.register(EntityRegistry.crystalline_sprite.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CrystallineSpriteEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
         event.register(EntityRegistry.spirit.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpiritEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
         event.register(EntityRegistry.disturbed_hollow.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DisturbedHollowEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(EntityRegistry.aurorian_pig.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AurorianPigEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(EntityRegistry.aurorian_rabbit.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AurorianRabbitEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(EntityRegistry.aurorian_sheep.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AurorianSheepEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -114,6 +135,9 @@ public class EntityRegistry {
         event.registerEntityRenderer(EntityRegistry.disturbed_hollow.get(), DisturbedHollowEntityRender::new);
         event.registerEntityRenderer(EntityRegistry.sticky_spiker.get(), StickySpikerEntityRender::new);
         event.registerEntityRenderer(EntityRegistry.webbing.get(), WebbingEntityRender::new);
+        event.registerEntityRenderer(EntityRegistry.aurorian_pig.get(), AurorianPigEntityRender::new);
+        event.registerEntityRenderer(EntityRegistry.aurorian_rabbit.get(), AurorianRabbitEntityRender::new);
+        event.registerEntityRenderer(EntityRegistry.aurorian_sheep.get(), AurorianSheepEntityRender::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -127,6 +151,12 @@ public class EntityRegistry {
         // Living
         event.registerLayerDefinition(DungeonSlimeModel.MODEL_LAYER_LOCATION, DungeonSlimeModel::createLayer);
         event.registerLayerDefinition(DungeonSlimeModel.MODEL_LAYER_LOCATION_OUTER, DungeonSlimeModel::createOuterLayer);
+
+        // Passive
+        event.registerLayerDefinition(AurorianPigEntityModel.MODEL_LAYER_LOCATION, AurorianPigEntityModel::createBodyLayer);
+        event.registerLayerDefinition(AurorianRabbitEntityModel.MODEL_LAYER_LOCATION, AurorianRabbitEntityModel::createBodyLayer);
+        event.registerLayerDefinition(AurorianSheepEntityModel1.MODEL_LAYER_LOCATION, AurorianSheepEntityModel1::createBodyLayer);
+        event.registerLayerDefinition(AurorianSheepEntityModel2.MODEL_LAYER_LOCATION, AurorianSheepEntityModel2::createBodyLayer);
     }
 
 }

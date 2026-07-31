@@ -1,4 +1,4 @@
-// 1.19.2	2026-07-31T23:06:04.40309569	LootTables
+// 1.19.2	2026-07-31T23:30:46.118502819	LootTables
 b91ae03273a0b13caaead43ed7656a81a2239729 data/theaurorian/loot_tables/blocks/aurorian_coal_block.json
 a51a687ced84a16c646af8c74ece31bba237c0c8 data/theaurorian/loot_tables/blocks/aurorian_coal_ore.json
 3454003c9e54aba310c93ea27e5ec39d993ff312 data/theaurorian/loot_tables/blocks/aurorian_cobblestone.json
@@ -57,6 +57,7 @@ da568f20b4fb9397adb0afcdc732d3da49ae3eca data/theaurorian/loot_tables/blocks/moo
 23f6d4e375186cc4df88bed2010299fed43e311d data/theaurorian/loot_tables/blocks/moonlight_forge.json
 6984dc87641d23dd2d970e6f22b5df70c964bcda data/theaurorian/loot_tables/blocks/moonstone_block.json
 efb5fb282d359dcf547f0b781bd6e79ccf7ae90a data/theaurorian/loot_tables/blocks/moonstone_ore.json
+688278e0cd9096476ee37260d283b2dda7ff4045 data/theaurorian/loot_tables/blocks/mushroom_small.json
 7012d17a7ea250c04e28ea2cddc3bbf0a61dbd45 data/theaurorian/loot_tables/blocks/peridotite.json
 348aa4cf1e7e0f7acc05084d93b9e7ea2d04ba60 data/theaurorian/loot_tables/blocks/peridotite_smooth.json
 d18566d0b7054ff93f8fcaa0aadfcc2f9a19a5d0 data/theaurorian/loot_tables/blocks/peridotite_smooth_stairs.json

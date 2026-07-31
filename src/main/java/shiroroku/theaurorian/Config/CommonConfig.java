@@ -19,6 +19,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> cystalline_sword_beam_damage;
     public static final ForgeConfigSpec.ConfigValue<Double> cystalline_sword_beam_velocity;
     public static final ForgeConfigSpec.ConfigValue<Double> moonstone_damage_chance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> slime_boots_cooldown;
     public static final ForgeConfigSpec.ConfigValue<Double> scrapper_crystal_break_chance;
     public static final ForgeConfigSpec.ConfigValue<Double> scrapper_crystal_speed_discount;
     public static final ForgeConfigSpec.ConfigValue<Double> spectral_armor_cleanse_chance;
@@ -44,6 +45,7 @@ public class CommonConfig {
         cystalline_sword_beam_damage = builder.defineInRange("cystalline_sword_beam_damage", 8f, 1f, Integer.MAX_VALUE);
         cystalline_sword_beam_velocity = builder.defineInRange("cystalline_sword_beam_damage", 2f, 0.25f, Integer.MAX_VALUE);
         moonstone_damage_chance = builder.comment("% to take damage, day adds +1 damage to this after, night does not").defineInRange("moonstone_damage_chance", 0.5, 0, 1);
+        slime_boots_cooldown = builder.comment("Ticks between sneaking slime boot high jumps").defineInRange("slime_boots_cooldown", 100, 0, Integer.MAX_VALUE);
         spectral_armor_cleanse_chance = builder.comment("+% per armor piece to cleanse negative effects when attacking").defineInRange("spectral_armor_cleanse_chance", 0.06, 0, 0.25);
         umbra_pickaxe_selection_cost = builder.defineInRange("umbra_pickaxe_selection_cost", 15, 0, Integer.MAX_VALUE);
         umbra_pickaxe_speed_multiplier = builder.defineInRange("umbra_pickaxe_selection_speed_multiplier", 1.5f, 1, Integer.MAX_VALUE);

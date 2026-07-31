@@ -1,4 +1,4 @@
-// 1.19.2	2026-07-31T23:06:04.401692867	Block States: theaurorian
+// 1.19.2	2026-07-31T23:30:46.119124049	Block States: theaurorian
 3606a70755139a7a4eed6e7c8f7dd578a74b0472 assets/theaurorian/blockstates/aurorian_coal_block.json
 c01aff19f2d274ab755738d0fb047b9418591068 assets/theaurorian/blockstates/aurorian_coal_ore.json
 73eebd33213159360bcff329b9ddcb72695242c1 assets/theaurorian/blockstates/aurorian_cobblestone.json
@@ -52,6 +52,7 @@ a2edf47e8207f5075e95f4f33178f494d26fda95 assets/theaurorian/blockstates/moon_tem
 361ad11bc64833204eba1e03ca3d6326413a5a5f assets/theaurorian/blockstates/moon_torch.json
 7ce98de6c6c10ab57bf36af8553b941bfad5e93d assets/theaurorian/blockstates/moonstone_block.json
 5676ab877f64605298a4e4d252f1ca5dd75df0ca assets/theaurorian/blockstates/moonstone_ore.json
+135637874fbc6b1de0d3dbe0b5610d00a69345f0 assets/theaurorian/blockstates/mushroom_small.json
 57dcaa6654e143923aa84c0a317d52467fe1ef9b assets/theaurorian/blockstates/peridotite.json
 894cf60c19925b930b0a056b9188900be5089857 assets/theaurorian/blockstates/peridotite_smooth.json
 25c2b39cedc1599d0e811310e6cf389d0ef3f054 assets/theaurorian/blockstates/peridotite_smooth_stairs.json
@@ -166,6 +167,7 @@ ea01a4b162eecbdbdc18575f7351733f00acf785 assets/theaurorian/models/block/moon_te
 7a39716764a0f075ad80b8cd5e2d0b3d16fb1834 assets/theaurorian/models/block/moon_torch.json
 3e98dcd793fa19932f14b588286d629df3445678 assets/theaurorian/models/block/moonstone_block.json
 53bfce253da6d6f3ac8e66b9d3b13ba12af93b22 assets/theaurorian/models/block/moonstone_ore.json
+bca36f9ec1212d5251b4fd5cc9dd86db082ee1ee assets/theaurorian/models/block/mushroom_small.json
 1d086fa426b8758bfda22924c9db4486f0be7fe5 assets/theaurorian/models/block/peridotite.json
 b9ca9c7291472882abe78a8884dce54d4fde1694 assets/theaurorian/models/block/peridotite_smooth.json
 88292c10bb6754c9f5e6439cedd7f71c8114784c assets/theaurorian/models/block/peridotite_smooth_stairs.json
@@ -267,6 +269,7 @@ dbfb808e33ab8c2beddf8580e601b33fe3306191 assets/theaurorian/models/item/moon_tem
 507d4d7eea0fa00ec260ab1c7dee321b0ee7fa83 assets/theaurorian/models/item/moon_torch.json
 f3bbb23061a4bbda1c730d51fb4b7474494cf7d8 assets/theaurorian/models/item/moonstone_block.json
 5d591d8357177069654817a1500809925614a93d assets/theaurorian/models/item/moonstone_ore.json
+21dc86f048f54de2738324519c636eae1cd669db assets/theaurorian/models/item/mushroom_small.json
 7b4f6f37c248832b88fb5936b42c28d89456cf82 assets/theaurorian/models/item/peridotite.json
 4701417f87b80a4eb71191fa76eee3f26e423597 assets/theaurorian/models/item/peridotite_smooth.json
 50828fc72eb82ae5e7cb80834fd95e531ee432d0 assets/theaurorian/models/item/peridotite_smooth_stairs.json

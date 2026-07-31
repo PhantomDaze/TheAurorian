@@ -1,4 +1,4 @@
-// 1.19.2	2026-07-31T23:06:04.400362796	Item Models: theaurorian
+// 1.19.2	2026-07-31T23:30:46.117549913	Item Models: theaurorian
 a95bbdcaf10620b09f246c54e853176b212124ff assets/theaurorian/models/item/absorption_orb.json
 62c111d018dba8b55fb88600325394b94342d085 assets/theaurorian/models/item/amulet_of_chroma.json
 a178fdd548fd537c98a6c0fe556c7104a08583a8 assets/theaurorian/models/item/aurorian_bacon.json
@@ -98,6 +98,7 @@ c9962dcea43a8b267cbc41a1e3754a8b57b13be9 assets/theaurorian/models/item/silkberr
 4f90e2de7bc920354a0019207d80f8b396299263 assets/theaurorian/models/item/silkberry_seeds.json
 7e09bf354060aeaa4f14aa8908e4ba0dc336874b assets/theaurorian/models/item/silkberry_tea.json
 163679f1639af9f4bc27a6e7e284801785efa3da assets/theaurorian/models/item/silkshroom_stew.json
+bfa1a599254ce33818d82f2943bc49c8747cb59c assets/theaurorian/models/item/slime_boots.json
 d7435e1a0eddaca5fa96fce170b0221fe2ddeff2 assets/theaurorian/models/item/soulless_flesh.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/theaurorian/models/item/spawn_egg_dungeon_keeper.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/theaurorian/models/item/spawn_egg_dungeon_slime.json

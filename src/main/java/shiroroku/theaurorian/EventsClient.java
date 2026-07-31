@@ -4,9 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +33,7 @@ import shiroroku.theaurorian.Blocks.Scrapper.ScrapperScreen;
 import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockRenderer;
 import shiroroku.theaurorian.Items.BaseAurorianTea;
 import shiroroku.theaurorian.Items.Loot.UmbraPickaxe;
+import shiroroku.theaurorian.Items.Spectral.SpectralArmorLayer;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
@@ -85,6 +90,22 @@ public class EventsClient {
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         EntityRegistry.registerLayerDefinitions(event);
+    }
+
+    /**
+     * Adds the translucent spectral armor layer to every player renderer skin.
+     */
+    @SubscribeEvent
+    public static void onAddLayers(EntityRenderersEvent.AddLayers event) {
+        for (String skin : event.getSkins()) {
+            PlayerRenderer renderer = event.getSkin(skin);
+            if (renderer != null) {
+                EntityModelSet models = event.getEntityModels();
+                renderer.addLayer(new SpectralArmorLayer<>(renderer,
+                        new HumanoidModel<>(models.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
+                        new HumanoidModel<>(models.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
+            }
+        }
     }
 
     /**

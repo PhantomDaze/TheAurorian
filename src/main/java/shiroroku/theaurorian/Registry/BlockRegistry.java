@@ -126,6 +126,9 @@ public class BlockRegistry {
     // Phase 1: Urn (ruins/dungeon decor, drops block loot)
     public static final RegistryObject<Block> urn = regBlockItem(BLOCKS_GEN_NL, "urn", () -> new UrnBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)));
 
+    // Phase 9 stub: small mushroom (referenced by darkstone loot; full mushroom behaviour in Phase 9)
+    public static final RegistryObject<Block> mushroom_small = regBlockItem(BLOCKS_GEN, "mushroom_small", () -> new Block(BlockBehaviour.Properties.copy(Blocks.MUSHROOM_STEM).strength(0.5F).sound(net.minecraft.world.level.block.SoundType.WOOD)));
+
     // Phase 1: Material storage blocks
     public static final RegistryObject<Block> aurorian_coal_block = regBlockItem(BLOCKS_GEN, "aurorian_coal_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK)));
     public static final RegistryObject<Block> aurorian_steel_block = regBlockItem(BLOCKS_GEN, "aurorian_steel_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));

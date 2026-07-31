@@ -28,6 +28,8 @@ public class MaterialTiers {
     public static final ArmorMaterial CERULEAN_ARMOR = armorBuilder(CERULEAN, "cerulean", 20, new int[]{3, 6, 5, 3}, SoundEvents.ARMOR_EQUIP_DIAMOND, 1.0F, 0.0F);
     public static final ArmorMaterial KNIGHT_ARMOR = armorBuilder("knight", 20, new int[]{3, 6, 5, 3}, 5, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> Ingredient.EMPTY);
     public static final ArmorMaterial SPECTRAL_ARMOR = armorBuilder("spectral", 20, new int[]{4, 6, 6, 4}, 25, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(ItemRegistry.spectral_silk.get()));
+    public static final ArmorMaterial SLIME_ARMOR = armorBuilder("aurorian_slime", 120, new int[]{1, 2, 3, 1}, 20, SoundEvents.SLIME_SQUISH, 0.0F, 0.0F, () -> Ingredient.of(ItemRegistry.aurorian_slime_ball.get()));
+    public static final ArmorMaterial SPIKED_ARMOR = armorBuilder("spiked", 65, new int[]{3, 6, 5, 3}, 15, SoundEvents.ARMOR_EQUIP_IRON, 1.0F, 0.0F, () -> Ingredient.of(ItemRegistry.umbra_ingot.get()));
     public static final ArmorMaterial UMBRA_ARMOR = armorBuilder(UMBRA, "umbra", 20, new int[]{4, 6, 6, 4}, SoundEvents.ARMOR_EQUIP_DIAMOND, 0.0F, 0.2F);
 
     private static final int[] ARMOR_BASE_DURABILITIES = new int[]{13, 15, 16, 11};

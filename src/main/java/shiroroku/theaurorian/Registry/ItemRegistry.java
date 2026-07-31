@@ -26,6 +26,8 @@ import shiroroku.theaurorian.Items.*;
 import shiroroku.theaurorian.Items.Loot.*;
 import shiroroku.theaurorian.Items.MirrorOfGuidance.MirrorOGItem;
 import shiroroku.theaurorian.Items.Moonstone.*;
+import shiroroku.theaurorian.Items.Silentwood.*;
+import shiroroku.theaurorian.Items.SlimeBoots.SlimeBootsItem;
 import shiroroku.theaurorian.Items.Spectral.SpectralArmor;
 import shiroroku.theaurorian.TheAurorian;
 
@@ -66,7 +68,12 @@ public class ItemRegistry {
     public static final RegistryObject<Item> plant_fiber = ITEMS_GEN.register("plant_fiber", basicItem());
     public static final RegistryObject<Item> runestone_key = ITEMS_GEN_KEY.register("runestone_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> runestone_loot_key = ITEMS_GEN_KEY.register("runestone_loot_key", basicItem(defaultProp().durability(1).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> silentwood_stick = ITEMS_GEN_HANDHELD.register("silentwood_stick", basicItemWithBurntime(defaultProp(), 100));
+    public static final RegistryObject<Item> silentwood_stick = ITEMS_GEN_HANDHELD.register("silentwood_stick", () -> new SilentwoodStick(defaultProp().tab(TheAurorian.CREATIVETAB)) {
+        @Override
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+            return 100;
+        }
+    });
     public static final RegistryObject<Item> spectral_silk = ITEMS_GEN.register("spectral_silk", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> umbra_ingot = ITEMS_GEN.register("umbra_ingot", basicItem());
     public static final RegistryObject<Item> umbra_scrap = ITEMS_GEN.register("umbra_scrap", basicItem());
@@ -112,7 +119,8 @@ public class ItemRegistry {
     // real behaviours land in Phase 8.
     public static final RegistryObject<Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> webbing = ITEMS_GEN.register("webbing", basicItem(defaultProp()));
-    public static final RegistryObject<Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new BaseAurorianArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.CHEST, defaultProp().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new SpikedChestplate(MaterialTiers.SPIKED_ARMOR, defaultProp().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> slime_boots = ITEMS_GEN.register("slime_boots", () -> new SlimeBootsItem(MaterialTiers.SLIME_ARMOR, defaultProp().rarity(Rarity.EPIC)));
 
     // Tools
     public static final RegistryObject<Item> aurorian_steel_hoe = ITEMS_GEN_HANDHELD.register("aurorian_steel_hoe", () -> new AurorianSteelHoe(MaterialTiers.AURORIAN_STEEL, -3, 0.0F, defaultProp().rarity(Rarity.EPIC)));
@@ -133,10 +141,10 @@ public class ItemRegistry {
     public static final RegistryObject<Item> moonstone_shovel = ITEMS_GEN_HANDHELD.register("moonstone_shovel", () -> new MoonstoneShovel(MaterialTiers.MOONSTONE, 1.5F, -3.0F, defaultProp()));
     public static final RegistryObject<Item> moonstone_sickle = ITEMS_GEN_HANDHELD.register("moonstone_sickle", () -> new MoonstoneSickle(MaterialTiers.MOONSTONE, defaultProp()));
     public static final RegistryObject<Item> moonstone_sword = ITEMS_GEN_HANDHELD.register("moonstone_sword", () -> new MoonstoneSword(MaterialTiers.MOONSTONE, 3, -2.4F, defaultProp()));
-    public static final RegistryObject<Item> silentwood_axe = ITEMS_GEN_HANDHELD.register("silentwood_axe", () -> new BaseAurorianAxe(MaterialTiers.SILENTWOOD, 6.0F, -3.2F, defaultProp(), 200));
+    public static final RegistryObject<Item> silentwood_axe = ITEMS_GEN_HANDHELD.register("silentwood_axe", () -> new SilentwoodAxe(MaterialTiers.SILENTWOOD, 6.0F, -3.2F, defaultProp(), 200));
     public static final RegistryObject<Item> silentwood_bow = ITEMS.register("silentwood_bow", () -> new BaseAurorianBow(MaterialTiers.SILENTWOOD, defaultProp().durability(150), 200));
     public static final RegistryObject<Item> silentwood_hoe = ITEMS_GEN_HANDHELD.register("silentwood_hoe", () -> new BaseAurorianHoe(MaterialTiers.SILENTWOOD, 0, -3.0F, defaultProp(), 200));
-    public static final RegistryObject<Item> silentwood_pickaxe = ITEMS_GEN_HANDHELD.register("silentwood_pickaxe", () -> new BaseAurorianPickaxe(MaterialTiers.SILENTWOOD, 1, -2.8F, defaultProp(), 200));
+    public static final RegistryObject<Item> silentwood_pickaxe = ITEMS_GEN_HANDHELD.register("silentwood_pickaxe", () -> new SilentwoodPickaxe(MaterialTiers.SILENTWOOD, 1, -2.8F, defaultProp(), 200));
     public static final RegistryObject<Item> silentwood_shovel = ITEMS_GEN_HANDHELD.register("silentwood_shovel", () -> new BaseAurorianShovel(MaterialTiers.SILENTWOOD, 1.5F, -3.0F, defaultProp(), 200));
     public static final RegistryObject<Item> silentwood_sickle = ITEMS_GEN_HANDHELD.register("silentwood_sickle", () -> new BaseAurorianSickle(MaterialTiers.SILENTWOOD, defaultProp(), 200));
     public static final RegistryObject<Item> silentwood_sword = ITEMS_GEN_HANDHELD.register("silentwood_sword", () -> new BaseAurorianSword(MaterialTiers.SILENTWOOD, 3, -2.4F, defaultProp(), 200));

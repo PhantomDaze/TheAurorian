@@ -1,6 +1,6 @@
-// 1.19.2	2026-07-31T23:06:04.399318087	Tags for minecraft:item
-43e69fd2854424b3f652227b88a6e29f40cf59e3 data/forge/tags/items/armors/boots.json
-90a2ba48331af73e933481383f7eae9a4787de94 data/forge/tags/items/armors/chestplates.json
+// 1.19.2	2026-07-31T23:30:46.116557965	Tags for minecraft:item
+d849c1e4280da3e4a9a65504bb810da8b9655df0 data/forge/tags/items/armors/boots.json
+f7d44669971eeced6f05917f1db315ace689c6b6 data/forge/tags/items/armors/chestplates.json
 84e3942f69f9c083562172fe3b20e7e9ae307151 data/forge/tags/items/armors/helmets.json
 cf27326d1fdc68acf6b003bcc0998c6a84d9d589 data/forge/tags/items/armors/leggings.json
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/forge/tags/items/chests.json
@@ -29,7 +29,7 @@ aa10960d590cbb00738b837fc1795e3ba65b39e3 data/theaurorian/tags/items/cerulean_or
 ca836ecf6d43594ba23bfcac607554ed3e81e25b data/theaurorian/tags/items/keys.json
 b9be800558c6cd2dcd4d1ab3458903f1a58713f5 data/theaurorian/tags/items/lightning_immune.json
 78b36be4690e71b1073a4f225396c12d9c737c09 data/theaurorian/tags/items/moonstone_ore.json
-ea5453bb23292a045408ae8581a1bcde5230ac72 data/theaurorian/tags/items/portal_lighters.json
+89a89a79d8334a168bcee2c40f979c427cf63f2e data/theaurorian/tags/items/portal_lighters.json
 237ad8f7a5d7d094905f4a04725fc91775692a0d data/theaurorian/tags/items/scrap.json
 7d3a33b9e178f66ab781b76ae6e85bb8c20f2eae data/theaurorian/tags/items/spectral_armor.json
 ec35f0665826b196d36f84ab9bb2b2fe29dd6ed7 data/theaurorian/tags/items/tea.json

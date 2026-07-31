@@ -61,13 +61,14 @@ public class DataGenItemsTags extends TagsProvider<Item> {
         this.tag(MOONSTONE_ORE).add(BlockRegistry.deepslate_moonstone_ore.get().asItem());
         this.tag(MOONSTONE_ORE).add(BlockRegistry.moonstone_ore.get().asItem());
         this.tag(PORTAL_LIGHTERS).add(Items.FLINT_AND_STEEL);
+        this.tag(PORTAL_LIGHTERS).add(ItemRegistry.silentwood_stick.get());
         this.tag(SCRAP).add(ItemRegistry.aurorianite_scrap.get());
         this.tag(SCRAP).add(ItemRegistry.crystalline_scrap.get());
         this.tag(SCRAP).add(ItemRegistry.umbra_scrap.get());
         this.tag(SPECTRAL_ARMOR).add(ItemRegistry.spectral_helmet.get(), ItemRegistry.spectral_chestplate.get(), ItemRegistry.spectral_leggings.get(), ItemRegistry.spectral_boots.get());
         this.tag(TEA).add(ItemRegistry.bright_bulb_tea.get(), ItemRegistry.lavender_tea.get(), ItemRegistry.petunia_tea.get(), ItemRegistry.silkberry_tea.get());
-        this.tag(Tags.Items.ARMORS_BOOTS).add(ItemRegistry.cerulean_boots.get(), ItemRegistry.spectral_boots.get(), ItemRegistry.aurorian_steel_boots.get());
-        this.tag(Tags.Items.ARMORS_CHESTPLATES).add(ItemRegistry.cerulean_chestplate.get(), ItemRegistry.spectral_chestplate.get(), ItemRegistry.umbra_chestplate.get(), ItemRegistry.aurorian_steel_chestplate.get());
+        this.tag(Tags.Items.ARMORS_BOOTS).add(ItemRegistry.cerulean_boots.get(), ItemRegistry.spectral_boots.get(), ItemRegistry.aurorian_steel_boots.get(), ItemRegistry.slime_boots.get());
+        this.tag(Tags.Items.ARMORS_CHESTPLATES).add(ItemRegistry.cerulean_chestplate.get(), ItemRegistry.spectral_chestplate.get(), ItemRegistry.umbra_chestplate.get(), ItemRegistry.aurorian_steel_chestplate.get(), ItemRegistry.spiked_chestplate.get());
         this.tag(Tags.Items.ARMORS_HELMETS).add(ItemRegistry.cerulean_helmet.get(), ItemRegistry.spectral_helmet.get(), ItemRegistry.spectral_helmet.get());
         this.tag(Tags.Items.ARMORS_LEGGINGS).add(ItemRegistry.cerulean_leggings.get(), ItemRegistry.spectral_leggings.get(), ItemRegistry.aurorian_steel_leggings.get());
         this.tag(Tags.Items.CHESTS).add(BlockRegistry.silentwood_chest.get().asItem());
