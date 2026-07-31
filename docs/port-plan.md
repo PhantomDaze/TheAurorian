@@ -590,9 +590,9 @@ shiroroku.theaurorian
 | D4 | Dungeon Spider + Spiderling | 无 | 实体+AI+spawner+loot 已移植（Phase 2，含挂顶/吐丝/扑击 AI） | 完成 | 实体+AI+spawner+loot | 2+3 | closed |
 | D5 | Boss 武器与 Trophy + MF 合成线 | 三 trophy 均掉落（Keeper 已补 `trophy_keeper`）；`keepers_bow`/`queens_chipper`/`moon_shield` 已注册并实现能力；三条 `moonlight_forge` 配方已建（moonstone_shield+trophy_moon_queen→moon_shield、aurorian_steel_pickaxe+trophy_moon_queen→queens_chipper、silentwood_bow+trophy_keeper→keepers_bow） | 完成 | 三 trophy 掉落 + 三 MF 武器配方 + 能力 | 5 | closed |
 | D6 | 全实体 loot 表 | 每实体一表 JSON（Keeper/Slime/Spider/Spiderling/MoonQueen/Acolyte/Sprite/Spirit/Hollow/DisturbedHollow/Knight/被动）；引用物品均已注册；Keeper 已接通 `trophy_keeper` | 完成 | 每实体一表且引用物品均已注册 | 2–5 | closed |
-| D7 | Umbra Tower | `single_template` + `umbratower/umbratower.nbt`（16×32×16）+ structure_set 40/34；config `enable_umbra_tower` | 代码完成，待游戏内 /locate 验证 | Phase 6.1 | 6 | open |
-| D8 | Ruins/Graveyard 扩展 | `ruins_1`/`ruins_2`/`graveyard` 均建 single_template 结构 + structure_set；NBT 已 remap（旧 ID 清零）；与上游一致空 chest | 代码完成，待游戏内验证 | 上游 3 NBT 均生成 | 6 | open |
-| D9 | Dungeon Locator | `DungeonLocatorItem` 已实现：潜行切换 Runestone/Darkstone/MoonTemple，右键 `findNearestMapStructure` 定位，耐久 30 | 代码完成，待游戏内验证 | Phase 6.3 | 6 | open |
+| D7 | Umbra Tower | `single_template` + `umbratower/umbratower.nbt`（16×32×16）+ structure_set 40/34；config `enable_umbra_tower`；chest 现由 piece 填 `chests/ruins/common`（对等上游） | 待游戏内 /locate 验证 | Phase 6.1 | 6 | closed |
+| D8 | Ruins/Graveyard 扩展 | `ruins_1`/`ruins_2`/`graveyard` 均建 single_template 结构 + structure_set；NBT 已 remap；chest 统一填 `chests/ruins/common`；graveyard spawner 携带合法 `SpawnData{id:spirit}` NBT | 待游戏内验证 | 上游 3 NBT 均生成 | 6 | closed |
+| D9 | Dungeon Locator | `DungeonLocatorItem` 已实现：潜行切换 Runestone/Darkstone/MoonTemple，右键 `findNearestMapStructure` 定位，耐久 30；crafting recipe 已补（cerulean/moonstone nugget + aurorian glass，对等上游） | 待游戏内验证 | Phase 6.3 | 6 | closed |
 | D10 | 被动 Pig/Rabbit/Sheep | 无 | 已移植 Pig/Rabbit/Sheep（silkberry 诱惑、aurorian 维度生成检查、自定义 wool layer、loot）；模型复用 vanilla 网格对等上游 | 生成接入待 Phase 9 群系 spawn 表 | 7 | closed |
 | D11 | 农业 farmtile+crops | 无 | farm tile + 双作物（AGE 7、种子、loot）已接；lavender/silkberry 野外随机 patch feature 已建并入群系；食物链：物品全注册，补充 silkshroom_stew / soulless_flesh→rotten_flesh 配方；被动生成已入 3 群系 creature spawn | 不依赖地牢可建农场 | 7 | closed |
 | D12 | Silentwood 特殊能力 | 无 | 镐：耐久损耗提升 harvest 0→3（NBT `currentharvestlevel` + 动态 `isCorrectToolForDrops`）；斧：破坏 `silentwood_log` 75% 修复 1 耐久 | 对等 | 8 | closed |

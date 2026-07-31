@@ -8,7 +8,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -21,6 +24,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import shiroroku.theaurorian.Registry.StructureRegistry;
+import shiroroku.theaurorian.TheAurorian;
 
 import java.util.Optional;
 
@@ -114,6 +118,14 @@ public class SingleTemplateStructure extends Structure {
                     .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
                     .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
             loaded.placeInWorld(level, this.pos, this.pos, settings, random, 2);
+
+            // Umbra tower, ruins and graveyard all stock their chests from the shared ruins table
+            for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
+                BlockEntity te = level.getBlockEntity(info.pos);
+                if (te instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(new ResourceLocation(TheAurorian.MODID, "chests/ruins/common"), random.nextLong());
+                }
+            }
         }
     }
 }
