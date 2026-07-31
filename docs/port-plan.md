@@ -600,10 +600,10 @@ shiroroku.theaurorian
 | D14 | Slime Boots / Spiked Chest | 无 | Slime：摔落 >3 弹跳免伤 + 潜行高跳 + config CD（100t）；Spiked：潜行 Thorns III + 自缓速，起身移除 | 对等 | 8 | closed |
 | D15 | Sticky Spiker / Webbing | 无 | 已实施（投掷、中毒/Slowness II） | 可扔可中 | 8 | closed |
 | D16 | 装饰与材料方块大包 | umbra 石套、urn、玻璃/pane、火把、梯子、moonsand、peridotite、stone brick、grass light、farm tile、材料块已注册并接入 DataGen/tag/配方/lang | 大部分完成，crops 归 Phase 7 | Phase 1 清单清零（crops 在 Phase 7 补） | 1 | open |
-| D17 | Weeping Willow 整包 | README 暂移除 | 有意推迟 | Phase 9.2 回归 | 9 | open |
-| D18 | 蘑菇方块与生成 | 无 | 未实施 | Phase 9.3 | 9 | open |
-| D19 | 群系 Hills/Lakes/Overgrowth | 仅 3 群系 | 未实施 | Phase 9.1 | 9 | open |
-| D20 | Worley/等价洞穴 | 无 | 未实施 | §6.5 关闭条件 | 9 | open |
+| D17 | Weeping Willow 整包 | README 暂移除 | 方块（leaves+log+planks+sapling+stairs）已注册并接入 tag/loot/datagen；5 树 NBT remap；NBT 模板树 feature+grower（`aurorian_grass_light` 地面 + 空气填充）；`weeping_willow_forest` 群系 + surface rule grass_light；叶子掉 sap（掉落物满足 §6.6）；**bell 音效归 Phase 10.1** | 群系+树+方块+掉落闭环；bell 音效待 10.1 | 9+10 | closed |
+| D18 | 蘑菇方块与生成 | 无 | 蘑菇套（bouncy cap/发光 crystal/stem/可长成蘑菇树的 small）+ `MushroomTreeFeature`（程序化生成对等上游）；`mushroom_cave` 巨型地下腔体 feature（y30-40、草地面、10% 蘑菇树）已入全部群系 | 蘑菇可发现 | 9.3 | closed |
+| D19 | 群系 Hills/Lakes/Overgrowth | 仅 3 群系 | 新增 `weeping_willow_forest`/`aurorian_forest_hills`/`aurorian_lakes`/`aurorian_overgrowth`（各自树木/植被/spawn 配置）+ 已入 dimension multi_noise 与全部结构 biome 列表；surface rule 修复（原全图 sand → 草面 + willow 群系 grass_light） | 多群系可区分探索 | 9.1 | closed |
+| D20 | Worley/等价洞穴 | 无 | 采用 §6.5 **选项 B**：原版 carver（cave/extra/canyon）+ `mushroom_cave` 巨型腔体（草面+蘑菇树）+ `bright_bulb_patch` 地下荧光草 + 矿石/geode + urn。未移植 Worley 算法本体 | 地下 5 分钟有特色拓扑与装饰（待 playtest 复核） | 9.5 | closed |
 | D21 | 音效 ogg + Sound 注册 | 0 | 未实施 | Phase 10.1 | 10 | open |
 | D22 | 自定义粒子 | 无 | 未实施 | Phase 10.2 | 10 | open |
 | D23 | Advancements | 无 | 未实施 | Phase 10.3 | 10 | open |
