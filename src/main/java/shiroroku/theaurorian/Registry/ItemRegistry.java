@@ -82,6 +82,38 @@ public class ItemRegistry {
     public static final RegistryObject<Item> silkberry_tea = ITEMS_GEN_TEA.register("silkberry_tea", () -> new BaseAurorianTea(new Color(71, 193, 249), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1F).build())));
     public static final RegistryObject<Item> strange_meat = ITEMS_GEN.register("strange_meat", () -> new StrangeMeat(defaultProp().durability(10).food(new FoodProperties.Builder().nutrition(8).saturationMod(0.9F).build())));
 
+    // Phase 1: Foods & drops referenced by entity/chest loot (upstream FoodItem values)
+    public static final RegistryObject<Item> aurorian_pork = ITEMS_GEN.register("aurorian_pork", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3F).meat().build())));
+    public static final RegistryObject<Item> aurorian_bacon = ITEMS_GEN.register("aurorian_bacon", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.8F).fast().meat().build())));
+    public static final RegistryObject<Item> cooked_aurorian_pork = ITEMS_GEN.register("cooked_aurorian_pork", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(8).saturationMod(0.8F).meat().build())));
+    public static final RegistryObject<Item> aurorian_slime_ball = ITEMS_GEN.register("aurorian_slime_ball", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2F).build())));
+    public static final RegistryObject<Item> silkshroom_stew = ITEMS_GEN.register("silkshroom_stew", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(6).saturationMod(1.0F).build())));
+    public static final RegistryObject<Item> soulless_flesh = ITEMS_GEN.register("soulless_flesh", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).meat().build())));
+    public static final RegistryObject<Item> weeping_willow_sap = ITEMS_GEN.register("weeping_willow_sap", () -> new WeepingWillowSap(defaultProp()));
+
+    // Phase 7: crop seeds (register early so crop blocks/loot stay valid)
+    public static final RegistryObject<Item> lavender_seeds = ITEMS_GEN.register("lavender_seeds", () -> new SeedItem(() -> BlockRegistry.lavender_crop.get(), defaultProp()));
+    public static final RegistryObject<Item> silkberry_seeds = ITEMS_GEN.register("silkberry_seeds", () -> new SeedItem(() -> BlockRegistry.silkberry_crop.get(), defaultProp()));
+
+    // Phase 1: Boss trophies (decorative; MoonlightForge weapon recipes in Phase 5)
+    public static final RegistryObject<Item> trophy_keeper = ITEMS_GEN.register("trophy_keeper", basicItem(defaultProp().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> trophy_moon_queen = ITEMS_GEN.register("trophy_moon_queen", basicItem(defaultProp().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> trophy_spider = ITEMS_GEN.register("trophy_spider", basicItem(defaultProp().rarity(Rarity.RARE)));
+
+    // Phase 5: Boss weapons (crafted with trophies in the Moonlight Forge)
+    public static final RegistryObject<Item> keepers_bow = ITEMS.register("keepers_bow", () -> new KeepersBowItem(defaultProp().durability(512).rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> queens_chipper = ITEMS_GEN_HANDHELD.register("queens_chipper", () -> new QueensChipperItem(MaterialTiers.AURORIAN_STEEL, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> moon_shield = ITEMS_GEN_SHIELD.register("moon_shield", () -> new MoonShieldItem(MaterialTiers.MOON_SHIELD, defaultProp().rarity(Rarity.RARE)));
+
+    // Phase 1: Darkstone-line amulet from Dungeon Spider (Phase 2 wires drops)
+    public static final RegistryObject<Item> dark_amulet = ITEMS_GEN.register("dark_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADDITION, 1.0D));
+
+    // Phase 1: Throwables & armor registered so darkstone chest loot stays valid;
+    // real behaviours land in Phase 8.
+    public static final RegistryObject<Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> webbing = ITEMS_GEN.register("webbing", basicItem(defaultProp()));
+    public static final RegistryObject<Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new BaseAurorianArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.CHEST, defaultProp().rarity(Rarity.RARE)));
+
     // Tools
     public static final RegistryObject<Item> aurorian_steel_hoe = ITEMS_GEN_HANDHELD.register("aurorian_steel_hoe", () -> new AurorianSteelHoe(MaterialTiers.AURORIAN_STEEL, -3, 0.0F, defaultProp().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> aurorian_steel_leggings = ITEMS_GEN.register("aurorian_steel_leggings", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.LEGS, defaultProp().rarity(Rarity.EPIC)));
@@ -134,6 +166,7 @@ public class ItemRegistry {
     public static final RegistryObject<Item> aurorianite_sword = ITEMS_GEN_HANDHELD.register("aurorianite_sword", () -> new AurorianiteSword(MaterialTiers.AURORIANITE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> aurorianite_shovel = ITEMS_GEN_HANDHELD.register("aurorianite_shovel", () -> new AurorianiteShovel(MaterialTiers.AURORIANITE, 1.5F, -3.0F, defaultProp().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> living_divining_rod = ITEMS_GEN_HANDHELD.register("living_divining_rod", () -> new LivingDiviningRod(defaultProp().durability(100).rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> dungeon_locator = ITEMS_GEN_HANDHELD.register("dungeon_locator", () -> new DungeonLocatorItem(defaultProp()));
 
     // Umbra
     public static final RegistryObject<Item> umbra_chestplate = ITEMS_GEN.register("umbra_chestplate", () -> new UmbraChestplate(MaterialTiers.UMBRA_ARMOR, defaultProp().rarity(Rarity.RARE)));
@@ -164,6 +197,8 @@ public class ItemRegistry {
     public static final RegistryObject<Item> spawn_egg_dungeon_slime = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_slime", () -> new ForgeSpawnEggItem(EntityRegistry.dungeon_slime, 8117755, 3363951, defaultProp()));
     public static final RegistryObject<Item> spawn_egg_hollow = ITEMS_SPAWN_EGGS.register("spawn_egg_hollow", () -> new ForgeSpawnEggItem(EntityRegistry.hollow, 8117755, 3363951, defaultProp()));
     public static final RegistryObject<Item> spawn_egg_undead_knight = ITEMS_SPAWN_EGGS.register("spawn_egg_undead_knight", () -> new ForgeSpawnEggItem(EntityRegistry.undead_knight, 8117755, 3363951, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_moon_queen = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_queen", () -> new ForgeSpawnEggItem(EntityRegistry.moon_queen, 0xE69AC7, 0x4A2A5A, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_dungeon_spider = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_spider", () -> new ForgeSpawnEggItem(EntityRegistry.dungeon_spider, 0x2B2433, 0x7A5F8A, defaultProp()));
 
     public static final RegistryObject<Item> cerulean_arrow = ITEMS_GEN.register("cerulean_arrow", () -> new BaseAurorianArrow(defaultProp()) {
         @Override

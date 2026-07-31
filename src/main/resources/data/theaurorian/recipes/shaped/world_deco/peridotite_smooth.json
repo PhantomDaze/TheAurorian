@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "theaurorian:peridotite"
+    }
+  },
+  "result": {
+    "item": "theaurorian:peridotite_smooth",
+    "count": 4
+  }
+}

@@ -19,7 +19,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -82,22 +81,8 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
         // we do this ourselves
     }
 
-    @Override
-    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
-        super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
-        ItemEntity amulet = this.spawnAtLocation(ItemRegistry.keepers_amulet.get());
-        ItemEntity key = this.spawnAtLocation(ItemRegistry.darkstone_key.get());
-        ItemEntity loot_key = this.spawnAtLocation(ItemRegistry.runestone_loot_key.get());
-        if (amulet != null) {
-            amulet.setExtendedLifetime();
-        }
-        if (key != null) {
-            key.setExtendedLifetime();
-        }
-        if (loot_key != null) {
-            loot_key.setExtendedLifetime();
-        }
-    }
+    // Drops: data/theaurorian/loot_tables/entities/dungeon_keeper.json
+    // (keepers_amulet, runestone_loot_key, darkstone_key; trophy_keeper in Phase 5)
 
     @Override
     public void remove(RemovalReason pReason) {

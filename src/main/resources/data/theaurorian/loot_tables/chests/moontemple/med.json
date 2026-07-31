@@ -1,0 +1,238 @@
+{
+  "pools": [
+    {
+      "rolls": {
+        "min": 0,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:lavender_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:petunia_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkberry_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkberry",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:aurorian_bacon",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkberry_jam",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:lavender_bread",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silentwood_torch",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:sticky_spiker",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:cerulean_arrow",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 8
+              }
+            }
+          ],
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystal",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:moonstone_nugget",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:aurorian_coal_nugget",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:cerulean_nugget",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 6
+              }
+            }
+          ],
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_scrap",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ],
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_pickaxe",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:absorption_orb",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_shield",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_sword",
+          "weight": 10
+        }
+      ]
+    }
+  ]
+}

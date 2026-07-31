@@ -32,15 +32,21 @@ public class DataGenBlocks extends BlockStateProvider {
             simpleBlock(block);
             simpleBlockItem(block);
         });
-        BlockRegistry.BLOCKS_GEN_NL_PLANT.getEntries().stream().map(Supplier::get).forEach(block -> {
-            getVariantBuilder(block).partialState().setModels(new ConfiguredModel(models().cross(blockTexture(block).getPath(), blockTexture(block)).renderType("cutout")));
-            itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", blockTexture(block));
-        });
+        BlockRegistry.BLOCKS_GEN_NL_PLANT.getEntries().stream().map(Supplier::get)
+                .filter(block -> block != BlockRegistry.lavender_crop.get() && block != BlockRegistry.silkberry_crop.get())
+                .forEach(block -> {
+                    getVariantBuilder(block).partialState().setModels(new ConfiguredModel(models().cross(blockTexture(block).getPath(), blockTexture(block)).renderType("cutout")));
+                    itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", blockTexture(block));
+                });
+        cropBlock(BlockRegistry.lavender_crop.get(), "lavender_crop");
+        cropBlock(BlockRegistry.silkberry_crop.get(), "silkberry_crop");
 
         // CUSTOM
-        axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get());
+        axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get(), modLoc("block/silentwood_log_end"), modLoc("block/silentwood_log_side"));
         barsBlock(BlockRegistry.runestone_bars.get());
         barsBlock(BlockRegistry.moon_temple_bars.get());
+        glassPaneBlock(BlockRegistry.aurorian_glass_pane.get(), blockTexture(BlockRegistry.aurorian_glass.get()));
+        glassPaneBlock(BlockRegistry.moon_glass_pane.get(), blockTexture(BlockRegistry.moon_glass.get()));
         fenceBlock(BlockRegistry.silentwood_fence.get(), blockTexture(BlockRegistry.silentwood_planks.get()));
         simpleBlockItem(BlockRegistry.boss_spawner.get());
         simpleBlockItem(BlockRegistry.fog_wall.get());
@@ -55,8 +61,45 @@ public class DataGenBlocks extends BlockStateProvider {
         stairsBlock(BlockRegistry.runestone_stairs.get(), blockTexture(BlockRegistry.runestone.get()));
         stairsBlock(BlockRegistry.moon_temple_stairs.get(), blockTexture(BlockRegistry.moon_temple_bricks.get()));
         stairsBlock(BlockRegistry.silentwood_stairs.get(), blockTexture(BlockRegistry.silentwood_planks.get()));
+        stairsBlock(BlockRegistry.umbra_stone_roof_stairs.get(), blockTexture(BlockRegistry.umbra_stone_roof_tiles.get()));
+        stairsBlock(BlockRegistry.peridotite_smooth_stairs.get(), blockTexture(BlockRegistry.peridotite_smooth.get()));
+        stairsBlock(BlockRegistry.aurorian_stone_brick_stairs.get(), blockTexture(BlockRegistry.aurorian_stone_brick.get()));
+        stairsBlock(BlockRegistry.aurorian_stone_stairs.get(), blockTexture(BlockRegistry.aurorian_stone.get()));
         wallBlock(BlockRegistry.aurorian_cobblestone_wall.get(), blockTexture(BlockRegistry.aurorian_cobblestone.get()));
         wallBlock(BlockRegistry.aurorian_deepslate_wall.get(), blockTexture(BlockRegistry.aurorian_deepslate.get()));
+        torchBlock(BlockRegistry.silentwood_torch.get(), blockTexture(BlockRegistry.silentwood_torch.get()));
+        torchBlock(BlockRegistry.moon_torch.get(), blockTexture(BlockRegistry.moon_torch.get()));
+        ladderBlock(BlockRegistry.silentwood_ladder.get(), blockTexture(BlockRegistry.silentwood_ladder.get()));
+    }
+
+    private void cropBlock(Block block, String name) {
+        // 4 upstream stage textures reused for the 8 age stages
+        for (int age = 0; age <= 7; age++) {
+            int stage = Math.min(age, 3);
+            ModelFile model = models().cross(name + "_stage" + stage, modLoc("block/" + name + "_stage" + stage)).renderType("cutout");
+            getVariantBuilder(block).partialState().with(net.minecraft.world.level.block.CropBlock.AGE, age).modelForState().modelFile(model).addModel();
+        }
+    }
+
+    private void torchBlock(Block parent, ResourceLocation texture) {
+        ModelFile torch = models().torch(ForgeRegistries.BLOCKS.getKey(parent).getPath(), texture).renderType("cutout");
+        getVariantBuilder(parent).partialState().modelForState().modelFile(torch).addModel();
+        itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(parent).getPath()).parent(torch);
+    }
+
+    private void ladderBlock(Block parent, ResourceLocation texture) {
+        ResourceLocation location = ForgeRegistries.BLOCKS.getKey(parent);
+        ModelFile ladder = models().withExistingParent(location.getPath(), mcLoc("block/ladder")).texture("texture", texture).texture("particle", texture).renderType("cutout");
+        getVariantBuilder(parent).forAllStates(state -> {
+            int yRot = switch (state.getValue(LadderBlock.FACING)) {
+                case EAST -> 90;
+                case SOUTH -> 180;
+                case WEST -> 270;
+                default -> 0;
+            };
+            return ConfiguredModel.builder().modelFile(ladder).rotationY(yRot).build();
+        });
+        itemModels().getBuilder(location.getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", texture);
     }
 
     private void wallBlock(Block parent, ResourceLocation texture) {
@@ -90,6 +133,12 @@ public class DataGenBlocks extends BlockStateProvider {
         ResourceLocation texture = blockTexture(block);
         this.paneBlockWithRenderType((IronBarsBlock) block, texture, texture, "cutout");
         itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", texture);
+    }
+
+    private void glassPaneBlock(Block block, ResourceLocation glassTexture) {
+        ResourceLocation pane = modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath() + "_top");
+        this.paneBlockWithRenderType((IronBarsBlock) block, glassTexture, pane, "translucent");
+        itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", glassTexture);
     }
 
     private void slabBlock(Block block, ResourceLocation texture) {

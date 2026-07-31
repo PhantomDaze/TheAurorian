@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DD",
+    "DD"
+  ],
+  "key": {
+    "D": {
+      "item": "theaurorian:aurorian_dirt"
+    }
+  },
+  "result": {
+    "item": "theaurorian:aurorian_farm_tile",
+    "count": 4
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "theaurorian:moonstone_ingot"
+    }
+  },
+  "result": {
+    "item": "theaurorian:moonstone_block",
+    "count": 1
+  }
+}

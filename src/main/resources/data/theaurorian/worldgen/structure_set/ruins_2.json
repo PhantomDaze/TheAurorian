@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "theaurorian:ruins_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 991235,
+    "spacing": 30,
+    "separation": 22
+  }
+}

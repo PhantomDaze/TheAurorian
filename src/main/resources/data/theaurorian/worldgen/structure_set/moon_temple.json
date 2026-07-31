@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "theaurorian:moon_temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 19623331,
+    "spacing": 40,
+    "separation": 32
+  }
+}

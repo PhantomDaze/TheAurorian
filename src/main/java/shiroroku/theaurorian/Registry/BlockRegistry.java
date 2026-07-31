@@ -117,11 +117,61 @@ public class BlockRegistry {
     public static final RegistryObject<Block> fog_wall = regBlockItem(BLOCKS, "fog_wall", () -> new FogWallBlock(BlockBehaviour.Properties.copy(runestone.get()).noCollission().noOcclusion().lightLevel((state) -> 10)));
     public static final RegistryObject<Block> moon_gem = regBlockItem(BLOCKS, "moon_gem", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
 
+    // Phase 1: Umbra stone set (Darkstone line)
+    public static final RegistryObject<Block> umbra_stone = regBlockItem(BLOCKS_GEN, "umbra_stone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0F)));
+    public static final RegistryObject<Block> umbra_stone_cracked = regBlockItem(BLOCKS_GEN, "umbra_stone_cracked", () -> new Block(BlockBehaviour.Properties.copy(umbra_stone.get())));
+    public static final RegistryObject<Block> umbra_stone_roof_tiles = regBlockItem(BLOCKS_GEN, "umbra_stone_roof_tiles", () -> new Block(BlockBehaviour.Properties.copy(umbra_stone.get())));
+    public static final RegistryObject<Block> umbra_stone_roof_stairs = regBlockItem(BLOCKS, "umbra_stone_roof_stairs", () -> new StairBlock(() -> umbra_stone_roof_tiles.get().defaultBlockState(), BlockBehaviour.Properties.copy(umbra_stone_roof_tiles.get())));
+
+    // Phase 1: Urn (ruins/dungeon decor, drops block loot)
+    public static final RegistryObject<Block> urn = regBlockItem(BLOCKS_GEN_NL, "urn", () -> new UrnBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)));
+
+    // Phase 1: Material storage blocks
+    public static final RegistryObject<Block> aurorian_coal_block = regBlockItem(BLOCKS_GEN, "aurorian_coal_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK)));
+    public static final RegistryObject<Block> aurorian_steel_block = regBlockItem(BLOCKS_GEN, "aurorian_steel_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final RegistryObject<Block> cerulean_block = regBlockItem(BLOCKS_GEN, "cerulean_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final RegistryObject<Block> moonstone_block = regBlockItem(BLOCKS_GEN, "moonstone_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+
+    // Phase 1: Glass (no normal drops, silk touch only — datagen block loot)
+    public static final RegistryObject<Block> aurorian_glass = regBlockItem(BLOCKS_GEN_NL, "aurorian_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)));
+    public static final RegistryObject<Block> moon_glass = regBlockItem(BLOCKS_GEN_NL, "moon_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)));
+    public static final RegistryObject<Block> aurorian_glass_pane = regBlockItem(BLOCKS, "aurorian_glass_pane", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.GLASS_PANE)));
+    public static final RegistryObject<Block> moon_glass_pane = regBlockItem(BLOCKS, "moon_glass_pane", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.GLASS_PANE)));
+
+    // Phase 1: Torches + ladder
+    public static final RegistryObject<Block> silentwood_torch = regBlockItem(BLOCKS, "silentwood_torch", () -> new AurorianTorchBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).lightLevel((state) -> 15)));
+    public static final RegistryObject<Block> moon_torch = regBlockItem(BLOCKS, "moon_torch", () -> new AurorianTorchBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).lightLevel((state) -> 15)));
+    public static final RegistryObject<Block> silentwood_ladder = regBlockItem(BLOCKS, "silentwood_ladder", () -> new LadderBlock(BlockBehaviour.Properties.copy(Blocks.LADDER)));
+
+    // Phase 1: Moonsand + Peridotite
+    public static final RegistryObject<Block> moon_sand = regBlockItem(BLOCKS_GEN, "moon_sand", () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
+    public static final RegistryObject<Block> peridotite = regBlockItem(BLOCKS_GEN, "peridotite", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0F)));
+    public static final RegistryObject<Block> peridotite_smooth = regBlockItem(BLOCKS_GEN, "peridotite_smooth", () -> new Block(BlockBehaviour.Properties.copy(peridotite.get())));
+    public static final RegistryObject<Block> peridotite_smooth_stairs = regBlockItem(BLOCKS, "peridotite_smooth_stairs", () -> new StairBlock(() -> peridotite_smooth.get().defaultBlockState(), BlockBehaviour.Properties.copy(peridotite_smooth.get())));
+
+    // Phase 1: Aurorian stone brick
+    public static final RegistryObject<Block> aurorian_stone_brick = regBlockItem(BLOCKS_GEN, "aurorian_stone_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).strength(2.0F)));
+    public static final RegistryObject<Block> aurorian_stone_brick_stairs = regBlockItem(BLOCKS, "aurorian_stone_brick_stairs", () -> new StairBlock(() -> aurorian_stone_brick.get().defaultBlockState(), BlockBehaviour.Properties.copy(aurorian_stone_brick.get())));
+    public static final RegistryObject<Block> aurorian_stone_stairs = regBlockItem(BLOCKS, "aurorian_stone_stairs", () -> new StairBlock(() -> aurorian_stone.get().defaultBlockState(), BlockBehaviour.Properties.copy(aurorian_stone.get())));
+
+    // Phase 1: Light grass variants
+    public static final RegistryObject<Block> aurorian_grass_light = regBlockItem(BLOCKS_GEN, "aurorian_grass_light", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK)));
+    public static final RegistryObject<Block> aurorian_tallgrass_light = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass_light", () -> new TallGrassBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
+
+    // Phase 1: Farm tile + Phase 7 crops (registered early so loot/remap stay valid).
+    // Crops are registered WITHOUT a block item — the seed item plants them.
+    public static final RegistryObject<Block> aurorian_farm_tile = regBlockItem(BLOCKS_GEN, "aurorian_farm_tile", () -> new AurorianFarmTile(BlockBehaviour.Properties.copy(Blocks.FARMLAND)));
+    public static final RegistryObject<Block> lavender_crop = BLOCKS_GEN_NL_PLANT.register("lavender_crop", () -> new AurorianCropBlock(() -> ItemRegistry.lavender_seeds.get(), BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static final RegistryObject<Block> silkberry_crop = BLOCKS_GEN_NL_PLANT.register("silkberry_crop", () -> new AurorianCropBlock(() -> ItemRegistry.silkberry_seeds.get(), BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+
     public static void register(IEventBus bus) {
-        // The order of these matter because some blocks copy from previous register
+        // The order of these matter because some blocks copy from previous register.
+        // BLOCKS must fire before BLOCKS_GEN_NL_PLANT because the sapling's
+        // SilentwoodTreeFeature resolves silentwood_log/silentwood_leaves at class load,
+        // and after BLOCKS_GEN_NL because e.g. aurorian_stone_stairs copies aurorian_stone.
         BLOCKS_GEN.register(bus);
-        BLOCKS.register(bus);
         BLOCKS_GEN_NL.register(bus);
+        BLOCKS.register(bus);
         BLOCKS_GEN_NL_PLANT.register(bus);
     }
 

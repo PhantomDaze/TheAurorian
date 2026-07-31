@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "theaurorian:darkstone_dungeon",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 76457881,
+    "spacing": 26,
+    "separation": 20
+  }
+}

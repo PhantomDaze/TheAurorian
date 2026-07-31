@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:silkberry"
+    },
+    {
+      "item": "theaurorian:silkberry"
+    },
+    {
+      "item": "theaurorian:silkberry"
+    },
+    {
+      "item": "theaurorian:silkberry"
+    }
+  ],
+  "result": {
+    "item": "theaurorian:silkberry_jam",
+    "count": 1
+  }
+}

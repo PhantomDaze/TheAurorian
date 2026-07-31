@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -28,6 +30,7 @@ import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockRenderer
 import shiroroku.theaurorian.Items.BaseAurorianTea;
 import shiroroku.theaurorian.Items.Loot.UmbraPickaxe;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
+import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.Registry.MenuRegistry;
@@ -41,12 +44,25 @@ public class EventsClient {
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
+            // RENDER LAYERS (translucent glass / cutout torches & ladder)
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_glass.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_glass.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_glass_pane.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_glass_pane.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_torch.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_torch.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_ladder.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_tallgrass_light.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.urn.get(), RenderType.cutout());
+
             // ITEM PROPERTIES
             ItemRegistry.ITEMS_GEN_SHIELD.getEntries().stream().map(Supplier::get).forEach((shield) -> ItemProperties.register(shield, new ResourceLocation("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F));
             ItemProperties.register(ItemRegistry.crystalline_sword.get(), new ResourceLocation("charge"), (stack, level, entity, i) -> entity == null || entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
             ItemProperties.register(ItemRegistry.crystalline_sword.get(), new ResourceLocation("charging"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             ItemProperties.register(ItemRegistry.silentwood_bow.get(), new ResourceLocation("pull"), (stack, level, entity, i) -> entity == null || entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
             ItemProperties.register(ItemRegistry.silentwood_bow.get(), new ResourceLocation("pulling"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+            ItemProperties.register(ItemRegistry.keepers_bow.get(), new ResourceLocation("pull"), (stack, level, entity, i) -> entity == null || entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
+            ItemProperties.register(ItemRegistry.keepers_bow.get(), new ResourceLocation("pulling"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 
             // MENU SCREENS
             MenuScreens.register(MenuRegistry.moonlight_forge.get(), MoonlightForgeScreen::new);

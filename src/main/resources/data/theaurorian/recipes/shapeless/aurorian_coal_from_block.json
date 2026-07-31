@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:aurorian_coal_block"
+    }
+  ],
+  "result": {
+    "item": "theaurorian:aurorian_coal",
+    "count": 9
+  }
+}

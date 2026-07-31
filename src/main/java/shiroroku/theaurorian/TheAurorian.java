@@ -43,6 +43,7 @@ public class TheAurorian {
         EntityRegistry.ENTITIES.register(bus);
         EnchantRegistry.ENCHANTMENTS.register(bus);
         POIRegistry.POIS.register(bus);
+        StructureRegistry.register(bus);
     }
 
 }

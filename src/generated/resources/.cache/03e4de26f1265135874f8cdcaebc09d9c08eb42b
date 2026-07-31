@@ -1,4 +1,4 @@
-// 1.19.2	2024-11-26T15:08:52.965565907	Tags for minecraft:item
+// 1.19.2	2026-07-31T23:06:04.399318087	Tags for minecraft:item
 43e69fd2854424b3f652227b88a6e29f40cf59e3 data/forge/tags/items/armors/boots.json
 90a2ba48331af73e933481383f7eae9a4787de94 data/forge/tags/items/armors/chestplates.json
 84e3942f69f9c083562172fe3b20e7e9ae307151 data/forge/tags/items/armors/helmets.json
@@ -16,7 +16,7 @@ aa5d03ab212b15001009fc1bd01f1d249b7b937b data/forge/tags/items/tools/axes.json
 9fc18dace72f063d48d73181fb1b1a84bf9e0977 data/forge/tags/items/tools/bows.json
 340b18e3ceafc8a8c6762954a0425651ce7f28d4 data/forge/tags/items/tools/hoes.json
 a6b40ce726a6374e7205eb4b56af3f178d15abe5 data/forge/tags/items/tools/pickaxes.json
-1ce68a1a314cdfc0b2c1823dcdcd412f8cc3adc2 data/forge/tags/items/tools/shields.json
+654230ad412b146251d27170f0cdaf3e3ed73a2b data/forge/tags/items/tools/shields.json
 b233969b309a9137c9432123a0fabe0a912dbe25 data/forge/tags/items/tools/shovels.json
 7501745f62d385c7daeb05203be1a9cdbddc347c data/forge/tags/items/tools/swords.json
 1a523c54854a12ed15e76951cb1079936b7fab43 data/minecraft/tags/items/arrows.json

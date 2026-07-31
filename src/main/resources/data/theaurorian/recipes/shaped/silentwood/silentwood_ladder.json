@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I#I",
+    "I#I",
+    "I#I"
+  ],
+  "key": {
+    "#": {
+      "item": "theaurorian:plant_fiber"
+    },
+    "I": {
+      "item": "theaurorian:silentwood_stick"
+    }
+  },
+  "result": {
+    "item": "theaurorian:silentwood_ladder",
+    "count": 3
+  }
+}

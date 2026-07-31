@@ -2,6 +2,10 @@
   "values": [
     "theaurorian:aurorian_cobblestone_stairs",
     "theaurorian:aurorian_deepslate_stairs",
-    "theaurorian:runestone_stairs"
+    "theaurorian:aurorian_stone_brick_stairs",
+    "theaurorian:aurorian_stone_stairs",
+    "theaurorian:peridotite_smooth_stairs",
+    "theaurorian:runestone_stairs",
+    "theaurorian:umbra_stone_roof_stairs"
   ]
 }

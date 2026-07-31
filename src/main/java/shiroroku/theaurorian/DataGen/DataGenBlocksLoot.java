@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.loot.LootTableProvider;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -71,7 +73,12 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.add(BlockRegistry.aurorian_deepslate_slab.get(), BlockLoot::createSlabItemTable);
             this.add(BlockRegistry.aurorian_grass.get(), block -> createSingleItemTableWithSilkTouch(block, BlockRegistry.aurorian_dirt.get()));
             this.add(BlockRegistry.aurorian_stone.get(), block-> createSingleItemTableWithSilkTouch(block, BlockRegistry.aurorian_cobblestone.get()));
+            this.add(BlockRegistry.aurorian_glass.get(), BlockLoot::createSilkTouchOnlyTable);
+            this.add(BlockRegistry.moon_glass.get(), BlockLoot::createSilkTouchOnlyTable);
+            this.add(BlockRegistry.aurorian_glass_pane.get(), BlockLoot::createSilkTouchOnlyTable);
+            this.add(BlockRegistry.moon_glass_pane.get(), BlockLoot::createSilkTouchOnlyTable);
             this.add(BlockRegistry.aurorian_tallgrass.get(), dropWithSickleOrShears(ItemRegistry.plant_fiber.get()));
+            this.add(BlockRegistry.aurorian_tallgrass_light.get(), dropWithSickleOrShears(ItemRegistry.plant_fiber.get()));
             this.add(BlockRegistry.bright_bulb.get(), dropWithSickleOrShears(BlockRegistry.bright_bulb.get()));
             this.add(BlockRegistry.geode.get(), block -> createOreDrop(block, BlockRegistry.crystal.get().asItem()));
             this.add(BlockRegistry.lavender_block.get(), dropWithSickleOrShears(ItemRegistry.lavender.get()));
@@ -86,12 +93,24 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.darkstone_stairs.get());
             this.dropSelf(BlockRegistry.moon_gem.get());
             this.dropSelf(BlockRegistry.moonlight_forge.get());
+            this.dropSelf(BlockRegistry.moon_temple_bars.get());
+            this.dropSelf(BlockRegistry.umbra_stone_roof_stairs.get());
+            this.dropSelf(BlockRegistry.peridotite_smooth_stairs.get());
+            this.dropSelf(BlockRegistry.aurorian_stone_brick_stairs.get());
+            this.dropSelf(BlockRegistry.aurorian_stone_stairs.get());
             this.dropSelf(BlockRegistry.runestone_bars.get());
             this.dropSelf(BlockRegistry.runestone_stairs.get());
             this.dropSelf(BlockRegistry.scrapper.get());
             this.dropSelf(BlockRegistry.silentwood_chest.get());
             this.dropSelf(BlockRegistry.silentwood_crafting_table.get());
             this.dropSelf(BlockRegistry.silentwood_fence.get());
+            this.dropSelf(BlockRegistry.silentwood_torch.get());
+            this.dropSelf(BlockRegistry.moon_torch.get());
+            this.dropSelf(BlockRegistry.silentwood_ladder.get());
+            this.add(BlockRegistry.lavender_crop.get(), BlockLoot.createCropDrops(BlockRegistry.lavender_crop.get(), ItemRegistry.lavender_seeds.get(), ItemRegistry.lavender.get(),
+                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(BlockRegistry.lavender_crop.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));
+            this.add(BlockRegistry.silkberry_crop.get(), BlockLoot.createCropDrops(BlockRegistry.silkberry_crop.get(), ItemRegistry.silkberry_seeds.get(), ItemRegistry.silkberry.get(),
+                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(BlockRegistry.silkberry_crop.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));
             this.add(BlockRegistry.silentwood_leaves.get(), block -> createSelfDropDispatchTable(BlockRegistry.silentwood_leaves.get(), HAS_SHEARS_OR_SILK_TOUCH,
                     applyExplosionCondition(BlockRegistry.silentwood_leaves.get(), LootItem.lootTableItem(BlockRegistry.silentwood_sapling.get()))
                             .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05F, 0.0625F, 0.083333336F, 0.1F)))
@@ -123,17 +142,32 @@ public class DataGenBlocksLoot extends LootTableProvider {
             gen.add(BlockRegistry.aurorian_deepslate_stairs.get());
             gen.add(BlockRegistry.aurorian_deepslate_wall.get());
             gen.add(BlockRegistry.aurorian_furnace.get());
+            gen.add(BlockRegistry.aurorian_glass.get());
+            gen.add(BlockRegistry.aurorian_glass_pane.get());
             gen.add(BlockRegistry.aurorian_grass.get());
+            gen.add(BlockRegistry.aurorian_grass_light.get());
             gen.add(BlockRegistry.aurorian_stone.get());
+            gen.add(BlockRegistry.aurorian_stone_brick.get());
+            gen.add(BlockRegistry.aurorian_stone_brick_stairs.get());
+            gen.add(BlockRegistry.aurorian_stone_stairs.get());
             gen.add(BlockRegistry.aurorian_tallgrass.get());
+            gen.add(BlockRegistry.aurorian_tallgrass_light.get());
             gen.add(BlockRegistry.bright_bulb.get());
             gen.add(BlockRegistry.chimney.get());
             gen.add(BlockRegistry.crystal.get());
             gen.add(BlockRegistry.darkstone_stairs.get());
             gen.add(BlockRegistry.geode.get());
             gen.add(BlockRegistry.lavender_block.get());
+            gen.add(BlockRegistry.moon_glass.get());
+            gen.add(BlockRegistry.moon_glass_pane.get());
             gen.add(BlockRegistry.moon_gem.get());
+            gen.add(BlockRegistry.moon_sand.get());
+            gen.add(BlockRegistry.moon_torch.get());
             gen.add(BlockRegistry.moonlight_forge.get());
+            gen.add(BlockRegistry.moon_temple_bars.get());
+            gen.add(BlockRegistry.peridotite.get());
+            gen.add(BlockRegistry.peridotite_smooth.get());
+            gen.add(BlockRegistry.peridotite_smooth_stairs.get());
             gen.add(BlockRegistry.petunia.get());
             gen.add(BlockRegistry.runestone_bars.get());
             gen.add(BlockRegistry.runestone_stairs.get());
@@ -146,7 +180,20 @@ public class DataGenBlocksLoot extends LootTableProvider {
             gen.add(BlockRegistry.silentwood_sapling.get());
             gen.add(BlockRegistry.silentwood_slab.get());
             gen.add(BlockRegistry.silentwood_stairs.get());
+            gen.add(BlockRegistry.silentwood_torch.get());
+            gen.add(BlockRegistry.silentwood_ladder.get());
             gen.add(BlockRegistry.silkberry_block.get());
+            gen.add(BlockRegistry.lavender_crop.get());
+            gen.add(BlockRegistry.silkberry_crop.get());
+            gen.add(BlockRegistry.umbra_stone.get());
+            gen.add(BlockRegistry.umbra_stone_cracked.get());
+            gen.add(BlockRegistry.umbra_stone_roof_tiles.get());
+            gen.add(BlockRegistry.umbra_stone_roof_stairs.get());
+            gen.add(BlockRegistry.aurorian_farm_tile.get());
+            gen.add(BlockRegistry.aurorian_coal_block.get());
+            gen.add(BlockRegistry.aurorian_steel_block.get());
+            gen.add(BlockRegistry.cerulean_block.get());
+            gen.add(BlockRegistry.moonstone_block.get());
             return gen;
         }
 

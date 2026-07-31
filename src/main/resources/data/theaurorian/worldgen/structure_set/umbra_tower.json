@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "theaurorian:umbra_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 991237,
+    "spacing": 40,
+    "separation": 34
+  }
+}

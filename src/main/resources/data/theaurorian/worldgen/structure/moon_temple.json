@@ -1,0 +1,11 @@
+{
+  "type": "theaurorian:moon_temple",
+  "biomes": [
+    "theaurorian:aurorian_forest",
+    "theaurorian:aurorian_plains",
+    "theaurorian:aurorian_rough_forest"
+  ],
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

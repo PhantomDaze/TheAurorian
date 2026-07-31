@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "theaurorian:block/peridotite_smooth",
+    "side": "theaurorian:block/peridotite_smooth",
+    "top": "theaurorian:block/peridotite_smooth"
+  }
+}

@@ -27,6 +27,10 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> chimney_max;
     public static final ForgeConfigSpec.ConfigValue<Integer> scrapper_base_craft_duration;
     public static final ForgeConfigSpec.ConfigValue<Integer> umbra_pickaxe_selection_cost;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> enable_darkstone_dungeon;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> enable_moon_temple;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> enable_ruins;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> enable_umbra_tower;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -57,6 +61,12 @@ public class CommonConfig {
         boss_damage_per_player = builder.defineInRange("boss_damage_per_player", 0.2, 0, Integer.MAX_VALUE);
         boss_health_per_player = builder.defineInRange("boss_health_per_player", 0.75, 0, Integer.MAX_VALUE);
         boss_speed_per_player = builder.defineInRange("boss_speed_per_player", 0.2, 0, Integer.MAX_VALUE);
+        builder.pop();
+        builder.push("World Gen").comment("Toggles for Aurorian structure generation. The Runestone dungeon and ruined house are jigsaw structures driven by their datapack structure sets (see data/theaurorian/worldgen/structure_set/); the spacing of every structure is configured there as well.");
+        enable_darkstone_dungeon = builder.define("enable_darkstone_dungeon", true);
+        enable_moon_temple = builder.define("enable_moon_temple", true);
+        enable_ruins = builder.define("enable_ruins", true);
+        enable_umbra_tower = builder.define("enable_umbra_tower", true);
         builder.pop();
         builder.pop();
         config = builder.build();

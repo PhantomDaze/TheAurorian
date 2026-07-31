@@ -20,6 +20,7 @@ public class MaterialTiers {
     public static final ForgeTier CERULEAN = new ForgeTier(2, 150, 7, 2.5f, 20, BlockTags.NEEDS_IRON_TOOL, () -> Ingredient.of(ItemRegistry.cerulean_ingot.get()));
     public static final ForgeTier CRYSTALLINE = new ForgeTier(3, 500, 8f, 3f, 20, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.crystalline_ingot.get()));
     public static final ForgeTier MOONSTONE = new ForgeTier(2, 300, 7, 2.5f, 14, BlockTags.NEEDS_IRON_TOOL, () -> Ingredient.of(ItemRegistry.moonstone_ingot.get()));
+    public static final ForgeTier MOON_SHIELD = new ForgeTier(2, 512, 7, 2.5f, 14, BlockTags.NEEDS_IRON_TOOL, () -> Ingredient.of(ItemRegistry.moonstone_ingot.get()));
     public static final ForgeTier SILENTWOOD = new ForgeTier(0, 59, 3, 0, 20, Tags.Blocks.NEEDS_WOOD_TOOL, () -> Ingredient.of(BlockRegistry.silentwood_planks.get()));
     public static final ForgeTier UMBRA = new ForgeTier(3, 500, 8f, 3f, 20, BlockTags.NEEDS_DIAMOND_TOOL, () -> Ingredient.of(ItemRegistry.umbra_ingot.get()));
 

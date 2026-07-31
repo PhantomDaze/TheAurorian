@@ -1,0 +1,224 @@
+{
+  "pools": [
+    {
+      "rolls": {
+        "min": 0,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:lavender_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:petunia_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkberry_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkberry",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:aurorian_bacon",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkberry_jam",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silkshroom_stew",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:silentwood_torch",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:weeping_willow_sap",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:cerulean_arrow",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystal",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:moonstone_nugget",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:umbra_scrap",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:spectral_silk",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:spiked_chestplate",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:umbra_greatsword",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:umbra_shield",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:umbra_pickaxe",
+          "weight": 20
+        }
+      ]
+    }
+  ]
+}

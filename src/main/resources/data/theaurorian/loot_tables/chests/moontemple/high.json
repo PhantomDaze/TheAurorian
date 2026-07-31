@@ -1,0 +1,177 @@
+{
+  "pools": [
+    {
+      "rolls": {
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystal",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 6
+              }
+            }
+          ],
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:moonstone_ingot",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_shield",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_sword",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:crystalline_pickaxe",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 10,
+                "max": 20
+              }
+            }
+          ],
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 1,
+        "max": 4
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:strange_meat",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:moonstone_pickaxe",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ],
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:moonstone_sword",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ],
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "theaurorian:moonstone_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          ],
+          "weight": 20
+        }
+      ]
+    }
+  ]
+}

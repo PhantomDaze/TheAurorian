@@ -1,14 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "III"
+    "###"
   ],
   "key": {
-    "I": {
+    "#": {
       "item": "theaurorian:lavender"
     }
   },
   "result": {
-    "item": "theaurorian:lavender_bread"
+    "item": "theaurorian:lavender_bread",
+    "count": 1
   }
 }
