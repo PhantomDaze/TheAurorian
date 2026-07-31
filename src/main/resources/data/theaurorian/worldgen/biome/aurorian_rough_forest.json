@@ -16,6 +16,26 @@
         "minCount": 4,
         "weight": 100
       }
+    ],
+    "creature": [
+      {
+        "type": "theaurorian:aurorian_pig",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "theaurorian:aurorian_rabbit",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      },
+      {
+        "type": "theaurorian:aurorian_sheep",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 12
+      }
     ]
   },
   "spawn_costs": {},
@@ -40,6 +60,7 @@
       "theaurorian:silentwood_tree"
     ],
     [
+      "theaurorian:silkberry_patch",
       "theaurorian:lavender_patch",
       "theaurorian:aurorian_grass_patch",
       "theaurorian:aurorian_plants"

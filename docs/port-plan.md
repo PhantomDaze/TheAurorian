@@ -593,12 +593,12 @@ shiroroku.theaurorian
 | D7 | Umbra Tower | `single_template` + `umbratower/umbratower.nbt`（16×32×16）+ structure_set 40/34；config `enable_umbra_tower` | 代码完成，待游戏内 /locate 验证 | Phase 6.1 | 6 | open |
 | D8 | Ruins/Graveyard 扩展 | `ruins_1`/`ruins_2`/`graveyard` 均建 single_template 结构 + structure_set；NBT 已 remap（旧 ID 清零）；与上游一致空 chest | 代码完成，待游戏内验证 | 上游 3 NBT 均生成 | 6 | open |
 | D9 | Dungeon Locator | `DungeonLocatorItem` 已实现：潜行切换 Runestone/Darkstone/MoonTemple，右键 `findNearestMapStructure` 定位，耐久 30 | 代码完成，待游戏内验证 | Phase 6.3 | 6 | open |
-| D10 | 被动 Pig/Rabbit/Sheep | 无 | 未实施 | Phase 7.1 | 7 | open |
-| D11 | 农业 farmtile+crops | 无 | 未实施 | Phase 7.2 | 7 | open |
-| D12 | Silentwood 特殊能力 | 无 | 未实施 | Phase 8 | 8 | open |
-| D13 | Spectral 盔甲透明渲染 | 仅 cleanse | 未实施 | 半透明渲染 | 8 | open |
-| D14 | Slime Boots / Spiked Chest | 无 | 未实施 | Phase 8 | 8 | open |
-| D15 | Sticky Spiker / Webbing | 无 | 未实施 | Phase 8 | 8 | open |
+| D10 | 被动 Pig/Rabbit/Sheep | 无 | 已移植 Pig/Rabbit/Sheep（silkberry 诱惑、aurorian 维度生成检查、自定义 wool layer、loot）；模型复用 vanilla 网格对等上游 | 生成接入待 Phase 9 群系 spawn 表 | 7 | closed |
+| D11 | 农业 farmtile+crops | 无 | farm tile + 双作物（AGE 7、种子、loot）已接；lavender/silkberry 野外随机 patch feature 已建并入群系；食物链：物品全注册，补充 silkshroom_stew / soulless_flesh→rotten_flesh 配方；被动生成已入 3 群系 creature spawn | 不依赖地牢可建农场 | 7 | closed |
+| D12 | Silentwood 特殊能力 | 无 | 镐：耐久损耗提升 harvest 0→3（NBT `currentharvestlevel` + 动态 `isCorrectToolForDrops`）；斧：破坏 `silentwood_log` 75% 修复 1 耐久 | 对等 | 8 | closed |
+| D13 | Spectral 盔甲透明渲染 | 仅 cleanse | 自定义玩家 armor layer 用 `entityTranslucent` 渲染 + 原版层指向全透明占位贴图；cleanse 保留 | 穿戴可见鬼魅透明 | 8 | closed |
+| D14 | Slime Boots / Spiked Chest | 无 | Slime：摔落 >3 弹跳免伤 + 潜行高跳 + config CD（100t）；Spiked：潜行 Thorns III + 自缓速，起身移除 | 对等 | 8 | closed |
+| D15 | Sticky Spiker / Webbing | 无 | 已实施（投掷、中毒/Slowness II） | 可扔可中 | 8 | closed |
 | D16 | 装饰与材料方块大包 | umbra 石套、urn、玻璃/pane、火把、梯子、moonsand、peridotite、stone brick、grass light、farm tile、材料块已注册并接入 DataGen/tag/配方/lang | 大部分完成，crops 归 Phase 7 | Phase 1 清单清零（crops 在 Phase 7 补） | 1 | open |
 | D17 | Weeping Willow 整包 | README 暂移除 | 有意推迟 | Phase 9.2 回归 | 9 | open |
 | D18 | 蘑菇方块与生成 | 无 | 未实施 | Phase 9.3 | 9 | open |
@@ -613,8 +613,8 @@ shiroroku.theaurorian
 | D27 | shears tag / sickle | notes 技术债 | API 变化 | 镰刀对 #shears 生效 | 10 | open |
 | D28 | Undead Knight 装备 | notes 可能过时 | 待核实 | 与上游掉落/装备对等 | 2 | open |
 | D29 | Keepers Bow / Chipper / Moon Shield 获取 | 三件均已注册 + MF 配方（输入基底 + trophy catalyst），能力：Keeper's Bow 拉满射 3 箭、Queen's Chipper 右键拆地牢方块、Moon's Shield 格挡蓄力冲刺 + 冷却击飞 | 完成 | 经 trophy→MF 可合成（对等上游） | 5 | closed |
-| D31 | Silentwood Stick 点门/生火 | 未核对是否进 portal_lighters | 可能已部分覆盖 | 与上游 stick 双手逻辑对等 | 8 | open |
-| D32 | 被动仅 silkberry 繁殖 | 无被动 | 未实施 | Phase 7 | 7 | open |
+| D31 | Silentwood Stick 点门/生火 | 未核对是否进 portal_lighters | 已进 `portal_lighters` tag；双手逻辑生火（双持各消耗 1） | 与上游 stick 双手逻辑对等 | 8 | closed |
+| D32 | 被动仅 silkberry 繁殖 | 无被动 | Pig/Rabbit/Sheep 均以 silkberry 为诱惑/食物，`getBreedOffspring` 产出对应 aurorian 变体 | Phase 7 | 7 | closed |
 | D33 | Crystalline Sprite 神殿生成 | 无 | 未实施 | Temple 内/地牢石生成规则 | 2+4 | open |
 | D34 | Urn 世界生成器 | 无 | 未实施 | 对等 `UrnsWorldGenerator` feature | 1+9 | open |
 | D30 | 结构 NBT remap 全表 | `docs/asset-remap.md` + `scripts/remap_structure_nbt.py`（**完整 NBT 解析/重序列化**，修正长度前缀）；55 NBT 全部 remap 通过完整性校验；boss spawner `containedboss→boss` 已转换 | 依赖 Phase 2/7/9 方块与实体 | 游戏内无空气洞；全部旧 ID 清零 | 0+1 | open |
