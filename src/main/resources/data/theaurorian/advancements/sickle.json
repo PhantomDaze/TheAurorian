@@ -1,0 +1,32 @@
+{
+  "parent": "theaurorian:root",
+  "display": {
+    "icon": {
+      "item": "theaurorian:aurorian_stone_sickle"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.sickle.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.sickle.description"
+    }
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:aurorian_stone_sickle"
+          },
+          {
+            "item": "theaurorian:silentwood_sickle"
+          },
+          {
+            "item": "theaurorian:moonstone_sickle"
+          }
+        ]
+      }
+    }
+  }
+}

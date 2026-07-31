@@ -6,6 +6,8 @@
   "children": [
     "theaurorian:dungeons",
     "theaurorian:ores",
-    "theaurorian:crafting"
+    "theaurorian:crafting",
+    "theaurorian:agriculture",
+    "theaurorian:passives"
   ]
 }

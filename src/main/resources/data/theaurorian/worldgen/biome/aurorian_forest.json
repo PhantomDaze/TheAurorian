@@ -6,7 +6,15 @@
     "sky_color": 7972607,
     "fog_color": 12638463,
     "water_color": 16777215,
-    "water_fog_color": 10131862
+    "water_fog_color": 10131862,
+    "music": {
+      "replace_current_music": false,
+      "max_delay": 3600,
+      "min_delay": 1200,
+      "event": {
+        "sound": "theaurorian:music"
+      }
+    }
   },
   "spawners": {
     "monster": [

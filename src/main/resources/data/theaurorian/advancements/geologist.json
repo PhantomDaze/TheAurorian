@@ -1,0 +1,35 @@
+{
+  "parent": "theaurorian:root",
+  "display": {
+    "icon": {
+      "item": "theaurorian:moonstone_pickaxe"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.geologist.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.geologist.description"
+    }
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:cerulean_ingot"
+          },
+          {
+            "item": "theaurorian:aurorian_coal"
+          },
+          {
+            "item": "theaurorian:moonstone_ingot"
+          },
+          {
+            "item": "theaurorian:crystal"
+          }
+        ]
+      }
+    }
+  }
+}

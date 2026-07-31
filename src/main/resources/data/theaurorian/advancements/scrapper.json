@@ -1,0 +1,33 @@
+{
+  "parent": "theaurorian:geologist",
+  "display": {
+    "icon": {
+      "item": "theaurorian:aurorianite_ingot"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.scrapper.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.scrapper.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:aurorianite_ingot"
+          },
+          {
+            "item": "theaurorian:crystalline_ingot"
+          },
+          {
+            "item": "theaurorian:umbra_ingot"
+          }
+        ]
+      }
+    }
+  }
+}

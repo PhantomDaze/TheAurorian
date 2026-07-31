@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,11 +35,13 @@ import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockRenderer
 import shiroroku.theaurorian.Items.BaseAurorianTea;
 import shiroroku.theaurorian.Items.Loot.UmbraPickaxe;
 import shiroroku.theaurorian.Items.Spectral.SpectralArmorLayer;
+import shiroroku.theaurorian.Particles.WeepingWillowDripParticle;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.Registry.MenuRegistry;
+import shiroroku.theaurorian.Registry.ParticleRegistry;
 
 import java.awt.*;
 import java.util.function.Supplier;
@@ -149,6 +152,11 @@ public class EventsClient {
             RenderSystem.applyModelViewMatrix();
             return true;
         });
+    }
+
+    @SubscribeEvent
+    public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+        event.register(ParticleRegistry.WEEPING_WILLOW_DRIP.get(), WeepingWillowDripParticle.Provider::new);
     }
 
     @SuppressWarnings("deprecation")

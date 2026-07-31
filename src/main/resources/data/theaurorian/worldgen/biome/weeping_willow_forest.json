@@ -9,7 +9,15 @@
     "water_fog_color": 10131862,
     "grass_color_modifier": "swamp",
     "grass_color": 9470285,
-    "foliage_color": 9470285
+    "foliage_color": 9470285,
+    "music": {
+      "replace_current_music": false,
+      "max_delay": 3600,
+      "min_delay": 1200,
+      "event": {
+        "sound": "theaurorian:music"
+      }
+    }
   },
   "spawners": {
     "monster": [

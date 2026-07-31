@@ -1,0 +1,27 @@
+{
+  "parent": "theaurorian:exterminated",
+  "display": {
+    "icon": {
+      "item": "theaurorian:moon_temple_key"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.moontemplekey.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.moontemplekey.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:moon_temple_key"
+          }
+        ]
+      }
+    }
+  }
+}

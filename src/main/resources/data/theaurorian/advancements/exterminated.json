@@ -1,0 +1,41 @@
+{
+  "parent": "theaurorian:darkstonekey",
+  "display": {
+    "icon": {
+      "item": "theaurorian:dark_amulet"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.exterminated.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.exterminated.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "theaurorian:dungeon_spider"
+        }
+      }
+    },
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:dark_amulet"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "kill",
+      "inv"
+    ]
+  ]
+}

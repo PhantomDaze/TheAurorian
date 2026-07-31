@@ -1,0 +1,35 @@
+{
+  "parent": "theaurorian:sickle",
+  "display": {
+    "icon": {
+      "item": "theaurorian:lavender_tea"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.tea.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.tea.description"
+    }
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:silkberry_tea"
+          },
+          {
+            "item": "theaurorian:lavender_tea"
+          },
+          {
+            "item": "theaurorian:bright_bulb_tea"
+          },
+          {
+            "item": "theaurorian:petunia_tea"
+          }
+        ]
+      }
+    }
+  }
+}

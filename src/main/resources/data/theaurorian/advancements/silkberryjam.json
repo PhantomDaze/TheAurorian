@@ -1,0 +1,26 @@
+{
+  "parent": "theaurorian:sickle",
+  "display": {
+    "icon": {
+      "item": "theaurorian:silkberry_jam"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.silkberryjam.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.silkberryjam.description"
+    }
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:silkberry_jam"
+          }
+        ]
+      }
+    }
+  }
+}

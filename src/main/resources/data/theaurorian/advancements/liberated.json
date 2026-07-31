@@ -1,0 +1,41 @@
+{
+  "parent": "theaurorian:lockpicks",
+  "display": {
+    "icon": {
+      "item": "theaurorian:keepers_amulet"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.liberated.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.liberated.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "theaurorian:dungeon_keeper"
+        }
+      }
+    },
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:keepers_amulet"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "kill",
+      "inv"
+    ]
+  ]
+}

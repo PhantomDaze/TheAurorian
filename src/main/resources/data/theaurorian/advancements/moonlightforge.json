@@ -1,0 +1,26 @@
+{
+  "parent": "theaurorian:scrapper",
+  "display": {
+    "icon": {
+      "item": "theaurorian:moonlight_forge"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.moonlightforge.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.moonlightforge.description"
+    }
+  },
+  "criteria": {
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:moonlight_forge"
+          }
+        ]
+      }
+    }
+  }
+}

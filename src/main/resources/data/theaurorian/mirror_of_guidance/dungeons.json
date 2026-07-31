@@ -4,6 +4,8 @@
   "y": 40,
   "children": [
     "theaurorian:dungeon_runestone",
-    "theaurorian:dungeon_moon_temple"
+    "theaurorian:dungeon_moon_temple",
+    "theaurorian:boss_loot",
+    "theaurorian:locator"
   ]
 }

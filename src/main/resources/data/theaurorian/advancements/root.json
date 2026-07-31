@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "theaurorian:silentwood_sapling"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.root.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.root.description"
+    },
+    "background": "theaurorian:textures/block/aurorian_stone.png"
+  },
+  "criteria": {
+    "arrived": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "dimension": "theaurorian:the_aurorian"
+      }
+    }
+  }
+}

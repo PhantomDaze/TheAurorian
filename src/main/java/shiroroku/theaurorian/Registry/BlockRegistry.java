@@ -2,6 +2,7 @@ package shiroroku.theaurorian.Registry;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -22,6 +23,7 @@ import shiroroku.theaurorian.Blocks.Crystal.CrystalBlock;
 import shiroroku.theaurorian.Blocks.MoonlightForge.MoonlightForgeBlock;
 import shiroroku.theaurorian.Blocks.Scrapper.ScrapperBlock;
 import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlock;
+import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockItem;
 import shiroroku.theaurorian.Blocks.SilentwoodCraftingTable.SilentwoodCraftingTableBlock;
 import shiroroku.theaurorian.TheAurorian;
 import shiroroku.theaurorian.Util.TooltipUtil;
@@ -116,7 +118,7 @@ public class BlockRegistry {
     public static final RegistryObject<Block> boss_spawner = regBlockItem(BLOCKS, "boss_spawner", () -> new BossSpawnerBlock(BlockBehaviour.Properties.copy(Blocks.SPAWNER)));
     public static final RegistryObject<Block> moonlight_forge = regBlockItem(BLOCKS, "moonlight_forge", () -> new MoonlightForgeBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
     public static final RegistryObject<Block> scrapper = regBlockItem(BLOCKS, "scrapper", () -> new ScrapperBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
-    public static final RegistryObject<Block> silentwood_chest = regBlockItem(BLOCKS, "silentwood_chest", () -> new SilentwoodChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST)));
+    public static final RegistryObject<Block> silentwood_chest = regBlockItemCustom(BLOCKS, "silentwood_chest", () -> new SilentwoodChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST)), SilentwoodChestBlockItem::new);
     public static final RegistryObject<Block> silentwood_crafting_table = regBlockItem(BLOCKS, "silentwood_crafting_table", () -> new SilentwoodCraftingTableBlock(BlockBehaviour.Properties.copy(Blocks.CRAFTING_TABLE)));
 
     // Other
@@ -196,6 +198,15 @@ public class BlockRegistry {
      */
     private static <I extends Block> RegistryObject<I> regBlockItem(DeferredRegister<Block> registry, final String id, final Supplier<? extends I> supplier) {
         return regBlockItemWithBurntime(registry, id, supplier, 0);
+    }
+
+    /**
+     * Registers a BlockItem built by the given factory (e.g. a subclass with a custom client renderer).
+     */
+    private static <I extends Block> RegistryObject<I> regBlockItemCustom(DeferredRegister<Block> registry, final String id, final Supplier<? extends I> supplier, java.util.function.BiFunction<Block, Item.Properties, Item> itemFactory) {
+        RegistryObject<I> createdBlock = registry.register(id, supplier);
+        ItemRegistry.ITEMS.register(id, () -> itemFactory.apply(createdBlock.get(), ItemRegistry.defaultProp()));
+        return createdBlock;
     }
 
     private static <I extends Block> RegistryObject<I> regBlockItemWithBurntime(DeferredRegister<Block> registry, final String id, final Supplier<? extends I> supplier, int burnTime) {

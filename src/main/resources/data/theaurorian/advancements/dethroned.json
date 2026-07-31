@@ -1,0 +1,41 @@
+{
+  "parent": "theaurorian:moontemplekey",
+  "display": {
+    "icon": {
+      "item": "theaurorian:trophy_moon_queen"
+    },
+    "title": {
+      "translate": "advancement.theaurorian.dethroned.title"
+    },
+    "description": {
+      "translate": "advancement.theaurorian.dethroned.description"
+    },
+    "frame": "challenge"
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "theaurorian:moon_queen"
+        }
+      }
+    },
+    "inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "theaurorian:trophy_moon_queen"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "kill",
+      "inv"
+    ]
+  ]
+}

@@ -1,11 +1,11 @@
 package shiroroku.theaurorian.Blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import shiroroku.theaurorian.Registry.ParticleRegistry;
 
 /**
  * Weeping willow leaves. Occasionally drips water particles from their
@@ -25,7 +25,7 @@ public class WeepingWillowLeavesBlock extends LeavesBlock {
             double x = pPos.getX() + pRandom.nextDouble();
             double y = pPos.getY() - 0.2D;
             double z = pPos.getZ() + pRandom.nextDouble();
-            pLevel.addParticle(ParticleTypes.DRIPPING_WATER, x, y, z, 0, 0, 0);
+            pLevel.addParticle(ParticleRegistry.WEEPING_WILLOW_DRIP.get(), x, y, z, 0, 0, 0);
         }
     }
 }

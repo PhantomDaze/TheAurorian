@@ -1,17 +1,21 @@
+gotchas / tech debt (kept as documentation):
+    - tool tier settings arent possible anymore, config registers after item registry -> tiers are hardcoded in MaterialTiers; accepted limitation
+    - 1.19.3 added DatapackBuiltinEntriesProvider for worldgen, so for now its manual >.> -> worldgen is hand-written JSON under data/theaurorian; accepted
 
-    - loot tables use item shears instead of shears tag, meaning sickles wont work fully as shears anymore, though i fixed it for aurorian stuff (leaves, plants)
-    - tool tier settings arent possible anymore, config registers after item registry
-    - 1.19.3 added DatapackBuiltinEntriesProvider for worldgen, so for now its manual >.>
-    - why does my chest not show as a block in inventories ;-; (using a 2d sprite for now)
+    (closed) loot tables used the shears ITEM instead of the shears TAG, so sickles didnt work as shears -> datagen now uses Tags.Items.SHEARS (forge:shears) and the sickles are added to the tag
+    (closed) why does my chest not show as a block in inventories ;-; (using a 2d sprite for now) -> added SilentwoodChestItemRenderer (BlockEntityWithoutLevelRenderer) so the item renders the 3D chest model
 
-    to do:
-    - silentwood abilities
-    - spectral armor transparency
-    - dark stone dungeon and mobs
-    - moon temple dungeon and mobs
-    - ruin structures
-    - farming
-    - dungeon locator and boss weapons
-    - aurorian portal
-    - undead knights missing gear
-    - probably lots more im forgetting...
+    done:
+    - silentwood abilities (silentwood pickaxe harvest levels, axe auto-repair, stick flint&steel) - Phase 8
+    - spectral armor transparency - Phase 8
+    - dark stone dungeon and mobs (dungeon_spider, spiderling, boss) - Phase 3
+    - moon temple dungeon and mobs (moon_acolyte, crystalline_sprite, moon_queen) - Phase 4
+    - ruin structures (ruins + umbra tower) - Phase 6
+    - farming (lavender / silkberry crops, teas, foods) - Phase 7
+    - dungeon locator and boss weapons (locator, moonlight forge boss gear, trophies) - Phase 6 / 5
+    - aurorian portal - Phase 0 / 1
+    - undead knights missing gear (knight armor + moonstone sword) - Phase 2
+    - sounds & particles (music, weeping willow drip, item hit particles) - Phase 10
+    - advancements (15, incl. 3 boss kills) - Phase 10
+    - lang zh_cn / es_es (upstream lang as base, English fallback) - Phase 10
+    - mirror of guidance nodes (agriculture, wildlife, boss equipment, locator added) - Phase 10

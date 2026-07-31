@@ -45,6 +45,8 @@ public class TheAurorian {
         POIRegistry.POIS.register(bus);
         StructureRegistry.register(bus);
         FeatureRegistry.register(bus);
+        SoundRegistry.register(bus);
+        ParticleRegistry.register(bus);
     }
 
 }
