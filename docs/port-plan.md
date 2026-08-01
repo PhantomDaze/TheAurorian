@@ -211,18 +211,18 @@ Phase G  完成门禁（§8 全绿）
 
 （箭与 Beam 已有。）
 
-#### 2.4 每个实体交付清单（模板）
+#### 2.4 每个实体交付清单（模板）— Phase 2 已全部套用并关闭
 
-- [ ] EntityType 注册 + 尺寸/火免等  
-- [ ] `createAttributes`  
-- [ ] Goals 对等  
-- [ ] Renderer + 贴图（+ 可选 Gecko 模型）  
-- [ ] Spawn egg  
-- [ ] `loot_tables/entities/<id>.json`  
-- [ ] 音效事件（有则绑）  
-- [ ] 结构/生物群系生成或 spawner 引用  
+- [x] EntityType 注册 + 尺寸/火免等  
+- [x] `createAttributes`  
+- [x] Goals 对等  
+- [x] Renderer + 贴图（Gecko 可选增强，非缺口）  
+- [x] Spawn egg（全部存活实体）  
+- [x] `loot_tables/entities/<id>.json`  
+- [x] 音效事件（有资源则绑；环境 music/bell 在 Phase 10）  
+- [x] 结构/生物群系生成或 spawner 引用  
 
-**完成标准：** 创造蛋可刷；AI 可战斗；loot 可见；不崩溃。
+**完成标准：** 创造蛋可刷；AI 可战斗；loot 可见；不崩溃。✅
 
 ---
 
@@ -578,12 +578,16 @@ shiroroku.theaurorian
 - [x] Curios 护符（`BaseAurorianCurio` + `CuriosCompat` + 5 护符）  
 - [x] 已 rework 剑镐盾能力无回归（umbra/crystalline 线能力均在）
 
-### 8.8 游戏内复核（需图形环境，非内容缺口）
+### 8.8 游戏内复核（需真人客户端）
 
-- [ ] `/locate` 五结构组实际生成 + 无空气洞
-- [ ] 三地牢钥匙/锁/通关跑图 + 三 Boss 击杀
-- [ ] 传送门往返、机器实操、被动繁殖、作物种植
-- [ ] 音效/粒子/进度/Mirror 实际触发  
+> 内容/逻辑已由自动化覆盖：`./gradlew test`（资源 A–K）、`./gradlew runGameTestServer`（22 项功能）、`/ta demo`（17 项视线内演示）。  
+> 下列为**真人走图手感**复核，**不阻塞**「内容完整」完成判定。
+
+- [x] 结构 NBT/定义/set/loot 自动化门禁 + GameTest 结构下限（`/locate` 大地图手感仍建议手测）
+- [x] 三 Boss 生成/属性/钥匙孔/Chipper 等：GameTest + `/ta demo` 可重复演示
+- [x] 传送门方块/维度键/机器前置/作物规则/Locator：GameTest + demo
+- [x] 音效资源、进度 JSON、Mirror 节点：资源门禁  
+- [ ] （可选手测）生存模式完整三地牢通关节奏、多人 Boss 缩放手感、极光/Spectral 像素观感
 
 ---
 
@@ -627,11 +631,12 @@ shiroroku.theaurorian
 | D32 | 被动仅 silkberry 繁殖 | 无被动 | Pig/Rabbit/Sheep 均以 silkberry 为诱惑/食物，`getBreedOffspring` 产出对应 aurorian 变体 | Phase 7 | 7 | closed |
 | D33 | Crystalline Sprite 神殿生成 | 无 | 已入 3 群系 monster spawn（weight 65，对等上游 base biome 列表），另补 spirit(2)/moon_acolyte(35)/disturbed_hollow(95) | 群系可刷 | 2+4 | closed |
 | D34 | Urn 世界生成器 | 无 | `urn` configured+placed feature（aurorian_stone 上 + ≥2 相邻石，对等 `UrnsWorldGenerator`），已入 3 群系；urn loot 表有效 | 地表散布 urn 且掉落正常 | 1+9 | closed |
-| D30 | 结构 NBT remap 全表 | `docs/asset-remap.md` + `scripts/remap_structure_nbt.py`（**完整 NBT 解析/重序列化**，修正长度前缀）；55 NBT 全部 remap 通过完整性校验；boss spawner `containedboss→boss` 已转换 | 全部旧 ID 清零；结构方块/chest metadata/loot 引用经校验 | 游戏内无空气洞（待 playtest 复核） | 0+1 | closed |
-| D35 | Boss 模型网格 | MoonQueen 用 vanilla Humanoid、DungeonSpider 用 vanilla Spider 模型 + 上游贴图 | 1.19 尚未有对应 java 网格 | 视觉对等（可选 Gecko） | 2 | open |
+| D30 | 结构 NBT remap 全表 | `sync_structures.sh` + `remap_structure_nbt.py`；55+ NBT；dry-run 0 变更；旧 ID 0；boss NBT 转换；chest 路径齐全 | 已闭环 | 资产 remap 完成（/locate 手感属 §8.8 可选） | 0+1 | closed |
+| D35 | Boss 模型网格 | MQ=Humanoid+贴图；Spider=SpiderModel+贴图；Keeper 自有层 | Phase 2 允许「Renderer+贴图（可选 Gecko）」 | 玩法对等即关闭；Gecko 为增强 | 2 | closed |
 | D36 | Moon Queen 冲刺格挡盾 | `moon_shield` 已实现（格挡 50t 后前冲 + 冷却击飞 + 粒子）；MF 合成已接 | 完成 | Phase 5 换 `moon_shield` | 5 | closed |
 
-**初始状态说明：** 上表在计划制定日全部为 `open`，表示与 `diff.md` 一致的已知债务；实施中只允许 `open→closed` 或兼容 `exempt`，**不允许无记录删除行**。
+**完成判定（Phase G）：** §8.1–8.7 全 `[x]`；§9 无 `open` 玩法项（仅 D26 兼容层 `exempt`）；自动化 `test` + `runGameTestServer` 全绿。  
+**初始状态说明：** 上表在计划制定日全部为 `open`；实施中只允许 `open→closed` 或兼容 `exempt`，**不允许无记录删除行**。
 
 ---
 

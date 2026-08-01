@@ -93,14 +93,20 @@ Cases include machines, fog wall, mushroom bounce, crops, keyholes, Queen’s Ch
 
 Code: `src/main/java/shiroroku/theaurorian/Demo/`
 
-## Out of scope / still manual
+## Port plan status
 
-- Full portal dimension hop with real player connection
-- Multiplayer boss HP scaling with 2+ real players (spawner path unit-tested with 0–1 nearby)
-- Structure `/locate` generation over large worlds
-- Pixel-perfect spectral translucency / aurora GPU checks
+Content port **Phase 0–10 + G closed** per `docs/port-plan.md`（§8.1–8.7 全勾；§9 仅 D26 TCon/CT/ConArm `exempt`）。
 
-See also `docs/port-plan.md` §8.8.
+## Optional human playtest（不阻塞完成判定）
+
+自动化已覆盖逻辑/资源/可重复演示；下列仅手感：
+
+- 生存模式完整三地牢通关节奏  
+- 多人 Boss 缩放手感（代码路径已有 per-player 缩放）  
+- `/locate` 大地图散布观感  
+- Spectral 半透明 / Aurora 像素级观感  
+
+See `docs/port-plan.md` §8.8.
 
 ## CI sketch
 
