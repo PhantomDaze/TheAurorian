@@ -74,12 +74,31 @@ GameTest is a dedicated server. The following were split so the mod loads withou
 - `SilentwoodChestBlockItem` — BEWLR via `SilentwoodChestClientExt` (client only)
 - Client-only mods (AppleSkin / Neat / Effortless Building) → `compileOnly` so they are not on the GameTest classpath
 
+## Layer 3 — Visible client demo (watchable)
+
+Not headless. You stand in the world, look forward, and run:
+
+```text
+/ta demo              # full playlist (~17 cases), stage builds in front of you
+/ta demo pause 100    # slower (~5s between cases); default 80t ≈ 4s
+/ta demo next         # skip the current wait
+/ta demo stop         # abort and clean the stage
+/ta demo from 5       # start at case index 5
+```
+
+Requirements: op/permission 2, singleplayer or server with cheats.  
+Each case: title card → build stage in your view cone → action → pass/fail subtitle → long pause while the camera stays locked on the focus.
+
+Cases include machines, fog wall, mushroom bounce, crops, keyholes, Queen’s Chipper, 3 bosses, living parade, scrapper/MF, silentwood pick levels, locator cycle, slime boots, portal frame.
+
+Code: `src/main/java/shiroroku/theaurorian/Demo/`
+
 ## Out of scope / still manual
 
 - Full portal dimension hop with real player connection
 - Multiplayer boss HP scaling with 2+ real players (spawner path unit-tested with 0–1 nearby)
 - Structure `/locate` generation over large worlds
-- Client-only rendering (spectral translucency, aurora)
+- Pixel-perfect spectral translucency / aurora GPU checks
 
 See also `docs/port-plan.md` §8.8.
 
