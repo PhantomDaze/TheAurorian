@@ -366,5 +366,20 @@
   "mirror_of_guidance.theaurorian.ore_geode.name": "Geode",
   "mirror_of_guidance.theaurorian.ore_geode.desc": "Geodes are rare crystal clusters found underground.\n\nBreak them for Crystal, used in machines, arrows, and several magical recipes.",
   "mirror_of_guidance.theaurorian.umbra.name": "Umbra",
-  "mirror_of_guidance.theaurorian.umbra.desc": "Umbra gear is the reward of the Darkstone Armory.\n\nLook for Umbra tools and weapons in Darkstone chests. The Umbra Pickaxe can lock onto a single block type, and Umbra defenses trade mobility for durability."
+  "mirror_of_guidance.theaurorian.umbra.desc": "Umbra gear is the reward of the Darkstone Armory.\n\nLook for Umbra tools and weapons in Darkstone chests. The Umbra Pickaxe can lock onto a single block type, and Umbra defenses trade mobility for durability.",
+  "entity.theaurorian.cerulean_arrow": "Cerulean Arrow",
+  "entity.theaurorian.crystal_arrow": "Crystal Arrow",
+  "entity.theaurorian.crystalline_beam": "Crystalline Beam",
+  "entity.theaurorian.sticky_spiker": "Sticky Spiker",
+  "entity.theaurorian.webbing": "Webbing",
+  "item.theaurorian.spawn_egg_moon_queen": "Moon Queen Spawn Egg",
+  "item.theaurorian.spawn_egg_dungeon_spider": "Spider Mother Spawn Egg",
+  "item.theaurorian.spawn_egg_spiderling": "Spiderling Spawn Egg",
+  "item.theaurorian.spawn_egg_moon_acolyte": "Moon Acolyte Spawn Egg",
+  "item.theaurorian.spawn_egg_crystalline_sprite": "Crystalline Sprite Spawn Egg",
+  "item.theaurorian.spawn_egg_spirit": "Spirit Spawn Egg",
+  "item.theaurorian.spawn_egg_disturbed_hollow": "Disturbed Hollow Spawn Egg",
+  "item.theaurorian.spawn_egg_aurorian_pig": "Aurorian Pig Spawn Egg",
+  "item.theaurorian.spawn_egg_aurorian_rabbit": "Aurorian Rabbit Spawn Egg",
+  "item.theaurorian.spawn_egg_aurorian_sheep": "Aurorian Sheep Spawn Egg"
 }

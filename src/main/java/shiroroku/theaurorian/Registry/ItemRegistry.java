@@ -207,6 +207,14 @@ public class ItemRegistry {
     public static final RegistryObject<Item> spawn_egg_undead_knight = ITEMS_SPAWN_EGGS.register("spawn_egg_undead_knight", () -> new ForgeSpawnEggItem(EntityRegistry.undead_knight, 8117755, 3363951, defaultProp()));
     public static final RegistryObject<Item> spawn_egg_moon_queen = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_queen", () -> new ForgeSpawnEggItem(EntityRegistry.moon_queen, 0xE69AC7, 0x4A2A5A, defaultProp()));
     public static final RegistryObject<Item> spawn_egg_dungeon_spider = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_spider", () -> new ForgeSpawnEggItem(EntityRegistry.dungeon_spider, 0x2B2433, 0x7A5F8A, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_spiderling = ITEMS_SPAWN_EGGS.register("spawn_egg_spiderling", () -> new ForgeSpawnEggItem(EntityRegistry.spiderling, 0x3A2F45, 0x9B7AAD, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_moon_acolyte = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_acolyte", () -> new ForgeSpawnEggItem(EntityRegistry.moon_acolyte, 0xC8B0D8, 0x5A4068, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_crystalline_sprite = ITEMS_SPAWN_EGGS.register("spawn_egg_crystalline_sprite", () -> new ForgeSpawnEggItem(EntityRegistry.crystalline_sprite, 0xA8E6FF, 0x4A90B8, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_spirit = ITEMS_SPAWN_EGGS.register("spawn_egg_spirit", () -> new ForgeSpawnEggItem(EntityRegistry.spirit, 0xD0E8FF, 0x6A8AAA, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_disturbed_hollow = ITEMS_SPAWN_EGGS.register("spawn_egg_disturbed_hollow", () -> new ForgeSpawnEggItem(EntityRegistry.disturbed_hollow, 0x5A6A5A, 0x2A3A2A, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_aurorian_pig = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_pig", () -> new ForgeSpawnEggItem(EntityRegistry.aurorian_pig, 0x7A9BB8, 0x3A5A78, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_aurorian_rabbit = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_rabbit", () -> new ForgeSpawnEggItem(EntityRegistry.aurorian_rabbit, 0xB0C8E0, 0x607888, defaultProp()));
+    public static final RegistryObject<Item> spawn_egg_aurorian_sheep = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_sheep", () -> new ForgeSpawnEggItem(EntityRegistry.aurorian_sheep, 0xC0D8F0, 0x708898, defaultProp()));
 
     public static final RegistryObject<Item> cerulean_arrow = ITEMS_GEN.register("cerulean_arrow", () -> new BaseAurorianArrow(defaultProp()) {
         @Override

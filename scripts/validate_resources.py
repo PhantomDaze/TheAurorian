@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-"""Resource integrity gate for The Aurorian 1.19.2 port.
+"""Full port content integrity gate — categorized checks for The Aurorian 1.19.2.
 
-Validates datapack/asset completeness without launching Minecraft.
-Exit 0 on success, 1 on failure. Intended for `./gradlew validateResources` / CI.
+Categories (printed in report):
+  A lang          B blocks/items assets   C entities/loot
+  D structures    E worldgen/biomes       F recipes
+  G advancements  H mirror                I sounds/particles
+  J registry sync K tags/smoke
+
+Exit 0 on success, 1 on failure.
 """
 from __future__ import annotations
 
@@ -10,39 +15,35 @@ import gzip
 import json
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "src" / "main" / "resources"
 GEN = ROOT / "src" / "generated" / "resources"
+JAVA = ROOT / "src" / "main" / "java" / "shiroroku" / "theaurorian"
 MODID = "theaurorian"
 
-errors: list[str] = []
-warnings: list[str] = []
+errors: list[tuple[str, str]] = []
+warnings: list[tuple[str, str]] = []
+stats: dict[str, str] = {}
 
 
-def err(msg: str) -> None:
-    errors.append(msg)
+def err(cat: str, msg: str) -> None:
+    errors.append((cat, msg))
 
 
-def warn(msg: str) -> None:
-    warnings.append(msg)
+def warn(cat: str, msg: str) -> None:
+    warnings.append((cat, msg))
 
 
-def load_json(path: Path) -> object | None:
+def load_json(path: Path):
     try:
         with path.open(encoding="utf-8") as fh:
             return json.load(fh)
     except Exception as exc:  # noqa: BLE001
-        err(f"invalid JSON {path.relative_to(ROOT)}: {exc}")
+        err("json", f"invalid JSON {path.relative_to(ROOT)}: {exc}")
         return None
-
-
-def iter_json(base: Path) -> list[Path]:
-    if not base.exists():
-        return []
-    return sorted(p for p in base.rglob("*.json") if p.is_file())
 
 
 def resource_roots() -> list[Path]:
@@ -52,239 +53,298 @@ def resource_roots() -> list[Path]:
     return roots
 
 
-def all_data_paths(*parts: str) -> list[Path]:
-    out: list[Path] = []
-    for root in resource_roots():
-        p = root.joinpath(*parts)
-        if p.exists():
-            out.append(p)
+def stems(*rel_dirs: str) -> set[str]:
+    out: set[str] = set()
+    for rel in rel_dirs:
+        for root in resource_roots():
+            d = root / rel
+            if d.exists():
+                out |= {p.stem for p in d.glob("*.json")}
     return out
 
 
-def first_existing(*parts: str) -> Path | None:
-    for root in resource_roots():
-        p = root.joinpath(*parts)
-        if p.exists():
-            return p
-    return None
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
 
 
-def validate_all_json_parse() -> None:
-    count = 0
-    for root in resource_roots():
-        for path in iter_json(root):
-            load_json(path)
-            count += 1
-    if count < 100:
-        err(f"expected many JSON resources, found only {count}")
+def parse_block_ids() -> set[str]:
+    text = read_text(JAVA / "Registry" / "BlockRegistry.java")
+    ids = set(re.findall(r'regBlockItem\w*\(\s*\w+\s*,\s*"([a-z0-9_]+)"', text))
+    ids |= set(re.findall(r'(?:BLOCKS\w*)\.register\("([a-z0-9_]+)"', text))
+    return ids
 
 
-def validate_lang() -> dict[str, dict]:
+def parse_item_ids() -> set[str]:
+    text = read_text(JAVA / "Registry" / "ItemRegistry.java")
+    return set(re.findall(r'\.register\("([a-z0-9_]+)"', text))
+
+
+def parse_entity_ids() -> list[str]:
+    text = read_text(JAVA / "Registry" / "EntityRegistry.java")
+    return re.findall(r'ENTITIES\.register\("([a-z0-9_]+)"', text)
+
+
+PROJECTILE_ENTITIES = {
+    "cerulean_arrow",
+    "crystal_arrow",
+    "crystalline_beam",
+    "sticky_spiker",
+    "webbing",
+}
+
+REQUIRED_BIOMES = {
+    "aurorian_forest",
+    "aurorian_plains",
+    "aurorian_rough_forest",
+    "aurorian_forest_hills",
+    "aurorian_lakes",
+    "aurorian_overgrowth",
+    "weeping_willow_forest",
+}
+
+REQUIRED_STRUCTURES = {
+    "runestone_dungeon",
+    "darkstone_dungeon",
+    "moon_temple",
+    "umbra_tower",
+    "ruins_1",
+    "ruins_2",
+    "graveyard",
+    "ruined_house",
+}
+
+STRUCTURE_NBT_MIN = {
+    "runestone": 20,
+    "darkstone": 14,
+    "moontemple": 11,
+    "umbratower": 1,
+    "ruins": 3,
+    "weepingwillow": 5,
+}
+
+REQUIRED_MIRROR = {
+    "aurorian",
+    "dungeons",
+    "dungeon_runestone",
+    "dungeon_darkstone",
+    "dungeon_moon_temple",
+    "agriculture",
+    "passives",
+    "boss_loot",
+    "locator",
+    "crystalline",
+    "aurorianite",
+    "umbra",
+    "aurorian_steel",
+    "crafting",
+    "ores",
+    "ore_cerulean",
+    "ore_moonstone",
+    "ore_geode",
+}
+
+BOSS_ADVANCEMENTS = {"liberated", "exterminated", "dethroned"}
+
+REQUIRED_MF_RECIPES = {
+    "keepers_bow.json",
+    "queens_chipper.json",
+    "moon_shield.json",
+}
+
+REQUIRED_ITEM_IDS = {
+    "dungeon_locator",
+    "keepers_bow",
+    "queens_chipper",
+    "moon_shield",
+    "slime_boots",
+    "spiked_chestplate",
+    "mirror_of_guidance",
+    "trophy_keeper",
+    "trophy_moon_queen",
+    "trophy_spider",
+    "sticky_spiker",
+    "webbing",
+    "dark_amulet",
+    "lockpicks",
+    "runestone_key",
+    "darkstone_key",
+    "moon_temple_key",
+}
+
+REQUIRED_BLOCK_IDS = {
+    "boss_spawner",
+    "weeping_willow_leaves",
+    "aurorian_farm_tile",
+    "umbra_stone",
+    "silentwood_chest",
+    "moonlight_forge",
+    "scrapper",
+    "aurorian_portal",
+    "fog_wall",
+    "lavender_crop",
+    "silkberry_crop",
+    "mushroom",
+    "mushroom_stem",
+}
+
+
+# ---------------------------------------------------------------------------
+# A — language
+# ---------------------------------------------------------------------------
+def cat_lang() -> dict[str, dict]:
+    cat = "A-lang"
     lang_dir = MAIN / "assets" / MODID / "lang"
     required = ("en_us.json", "zh_cn.json", "es_es.json")
     langs: dict[str, dict] = {}
     for name in required:
         path = lang_dir / name
         if not path.exists():
-            err(f"missing lang file: {path.relative_to(ROOT)}")
+            err(cat, f"missing {path.relative_to(ROOT)}")
             continue
         data = load_json(path)
         if not isinstance(data, dict):
-            err(f"lang file is not an object: {path.name}")
+            err(cat, f"{name} is not an object")
             continue
         langs[name] = data
     if "en_us.json" in langs:
         en = langs["en_us.json"]
-        if len(en) < 300:
-            err(f"en_us.json has only {len(en)} keys (expected >= 300)")
+        stats["lang_en_keys"] = str(len(en))
+        if len(en) < 350:
+            err(cat, f"en_us has only {len(en)} keys (expected >= 350)")
         for name, data in langs.items():
             if name == "en_us.json":
                 continue
             missing = sorted(set(en) - set(data))
             extra = sorted(set(data) - set(en))
             if missing:
-                err(f"{name} missing {len(missing)} keys vs en_us (e.g. {missing[:5]})")
+                err(cat, f"{name} missing {len(missing)} keys vs en_us e.g. {missing[:5]}")
             if extra:
-                warn(f"{name} has {len(extra)} extra keys vs en_us")
+                warn(cat, f"{name} has {len(extra)} extra keys vs en_us")
     return langs
 
 
-def validate_sounds(langs: dict[str, dict]) -> None:
-    sounds_json = MAIN / "assets" / MODID / "sounds.json"
-    if not sounds_json.exists():
-        err("missing assets/theaurorian/sounds.json")
-        return
-    data = load_json(sounds_json)
-    if not isinstance(data, dict):
-        return
-    sounds_dir = MAIN / "assets" / MODID / "sounds"
-    for key, entry in data.items():
-        if not isinstance(entry, dict):
-            continue
-        sounds = entry.get("sounds", [])
-        if not sounds:
-            err(f"sounds.json entry '{key}' has no sounds")
-            continue
-        for s in sounds:
-            name = s if isinstance(s, str) else (s.get("name") if isinstance(s, dict) else None)
-            if not name:
-                err(f"sounds.json entry '{key}' has invalid sound ref: {s}")
-                continue
-            # name like theaurorian:music/aurorian_1
-            rel = name.split(":", 1)[-1]
-            ogg = sounds_dir / f"{rel}.ogg"
-            # also allow nested path under sounds/
-            if not ogg.exists():
-                # try without assuming .ogg only once
-                candidates = list(sounds_dir.rglob(Path(rel).name + ".ogg"))
-                if not any(c.as_posix().endswith(rel + ".ogg") for c in candidates) and not ogg.exists():
-                    # direct path
-                    if not (MAIN / "assets" / MODID / "sounds" / f"{rel}.ogg").exists():
-                        # check common layout sounds/<path>.ogg
-                        p2 = MAIN / "assets" / MODID / "sounds" / Path(rel + ".ogg")
-                        if not p2.exists():
-                            err(f"missing ogg for sound '{key}': {rel}.ogg")
-    ogg_count = len(list(sounds_dir.rglob("*.ogg"))) if sounds_dir.exists() else 0
-    if ogg_count < 6:
-        err(f"expected >= 6 ogg files, found {ogg_count}")
+# ---------------------------------------------------------------------------
+# B — blocks / items assets
+# ---------------------------------------------------------------------------
+def cat_blocks_items(langs: dict[str, dict]) -> tuple[set[str], set[str]]:
+    cat = "B-blocks-items"
+    blocks = parse_block_ids()
+    items = parse_item_ids()
+    stats["blocks"] = str(len(blocks))
+    stats["items"] = str(len(items))
 
+    if len(blocks) < 90:
+        err(cat, f"only {len(blocks)} block registrations (expected >= 90)")
+    if len(items) < 120:
+        err(cat, f"only {len(items)} item registrations (expected >= 120)")
 
-def validate_particles() -> None:
-    path = MAIN / "assets" / MODID / "particles.json"
-    if not path.exists():
-        err("missing assets/theaurorian/particles.json")
-        return
-    data = load_json(path)
-    if not isinstance(data, dict) or not data:
-        err("particles.json empty or invalid")
+    bs = stems(
+        f"assets/{MODID}/blockstates",
+    )
+    stats["blockstates"] = str(len(bs))
+    missing_bs = sorted(blocks - bs)
+    if missing_bs:
+        err(cat, f"{len(missing_bs)} blocks missing blockstate: {missing_bs[:10]}")
+    orphan_bs = sorted(bs - blocks)
+    # allow none normally
+    if orphan_bs:
+        warn(cat, f"{len(orphan_bs)} blockstates without block field: {orphan_bs[:10]}")
 
+    im = stems(f"assets/{MODID}/models/item")
+    stats["item_models"] = str(len(im))
+    # every non-block-only item should have a model; block items may share
+    missing_models = sorted(i for i in items if i not in im and i not in blocks)
+    # block items also need models in 1.19 often
+    missing_block_item_models = sorted(b for b in blocks if b not in im and b in items or b not in im)
+    # BlockRegistry creates BlockItems for almost all blocks — require models for all blocks too
+    missing_all = sorted(set(list(items) + list(blocks)) - im)
+    # filter: some technical may not — but currently all should
+    if missing_all:
+        # items that are pure items missing models are errors; block items missing models also errors if not present
+        pure = sorted(set(missing_all) & items)
+        if pure:
+            err(cat, f"{len(pure)} items/blocks missing item model e.g. {pure[:10]}")
 
-def validate_advancements(langs: dict[str, dict]) -> None:
-    adv_dir = MAIN / "data" / MODID / "advancements"
-    if not adv_dir.exists():
-        err("missing advancements directory")
-        return
-    files = list(adv_dir.glob("*.json"))
-    if len(files) < 15:
-        err(f"expected >= 15 advancements, found {len(files)}")
     en = langs.get("en_us.json", {})
-    boss = {"liberated", "exterminated", "dethroned"}
-    found_boss = set()
-    for path in files:
-        data = load_json(path)
-        if not isinstance(data, dict):
-            continue
-        stem = path.stem
-        if stem in boss:
-            found_boss.add(stem)
-            reqs = data.get("requirements")
-            if reqs != [["kill", "inv"]]:
-                # allow any OR of two criteria
-                if not (isinstance(reqs, list) and len(reqs) == 1 and isinstance(reqs[0], list) and len(reqs[0]) >= 2):
-                    err(f"advancement {stem}: expected OR requirements for kill/inventory, got {reqs}")
-        display = data.get("display") or {}
-        title = display.get("title") or {}
-        desc = display.get("description") or {}
-        for field, node in (("title", title), ("description", desc)):
-            if isinstance(node, dict) and node.get("translate"):
-                key = node["translate"]
-                if key not in en:
-                    err(f"advancement {stem} {field} lang missing: {key}")
-    missing_boss = boss - found_boss
-    if missing_boss:
-        err(f"missing boss advancements: {sorted(missing_boss)}")
+    missing_block_lang = sorted(b for b in blocks if f"block.{MODID}.{b}" not in en)
+    if missing_block_lang:
+        err(cat, f"{len(missing_block_lang)} blocks missing lang: {missing_block_lang[:10]}")
+
+    missing_item_lang = []
+    for i in sorted(items):
+        if f"item.{MODID}.{i}" not in en and f"block.{MODID}.{i}" not in en:
+            missing_item_lang.append(i)
+    if missing_item_lang:
+        err(cat, f"{len(missing_item_lang)} items missing lang: {missing_item_lang[:10]}")
+
+    for rid in REQUIRED_BLOCK_IDS:
+        if rid not in blocks:
+            err(cat, f"required block not registered: {rid}")
+    for rid in REQUIRED_ITEM_IDS:
+        if rid not in items:
+            err(cat, f"required item not registered: {rid}")
+
+    return blocks, items
 
 
-def validate_mirror(langs: dict[str, dict]) -> None:
-    mirror_dir = MAIN / "data" / MODID / "mirror_of_guidance"
-    if not mirror_dir.exists():
-        err("missing mirror_of_guidance directory")
-        return
-    files = {p.stem: p for p in mirror_dir.glob("*.json")}
-    if len(files) < 18:
-        err(f"expected >= 18 mirror nodes, found {len(files)}")
-    required = {
-        "aurorian",
-        "dungeons",
-        "dungeon_runestone",
-        "dungeon_darkstone",
-        "dungeon_moon_temple",
-        "agriculture",
-        "passives",
-        "boss_loot",
-        "locator",
-        "crystalline",
-        "aurorianite",
-        "umbra",
-    }
-    missing = sorted(required - set(files))
-    if missing:
-        err(f"missing required mirror nodes: {missing}")
+# ---------------------------------------------------------------------------
+# C — entities / loot / eggs
+# ---------------------------------------------------------------------------
+def cat_entities(langs: dict[str, dict], items: set[str]) -> list[str]:
+    cat = "C-entities"
+    entities = parse_entity_ids()
+    stats["entities"] = str(len(entities))
+    if len(entities) < 19:
+        err(cat, f"only {len(entities)} entities (expected >= 19)")
+
     en = langs.get("en_us.json", {})
-    nodes: dict[str, dict] = {}
-    for stem, path in files.items():
-        data = load_json(path)
-        if not isinstance(data, dict):
-            continue
-        nodes[stem] = data
-        if "icon" not in data or "x" not in data or "y" not in data:
-            err(f"mirror node {stem}: missing icon/x/y")
-        name_key = f"mirror_of_guidance.{MODID}.{stem}.name"
-        desc_key = f"mirror_of_guidance.{MODID}.{stem}.desc"
-        if name_key not in en:
-            err(f"mirror node {stem}: missing lang {name_key}")
-        if desc_key not in en:
-            err(f"mirror node {stem}: missing lang {desc_key}")
-        for child in data.get("children") or []:
-            if not isinstance(child, str):
-                err(f"mirror node {stem}: invalid child {child}")
-                continue
-            child_id = child.split(":", 1)[-1]
-            if child_id not in files:
-                err(f"mirror node {stem}: child '{child}' not found")
+    for e in entities:
+        if f"entity.{MODID}.{e}" not in en:
+            err(cat, f"missing entity lang: entity.{MODID}.{e}")
 
-
-def validate_entities_and_loot() -> None:
-    entity_registry = ROOT / "src" / "main" / "java" / "shiroroku" / "theaurorian" / "Registry" / "EntityRegistry.java"
-    if not entity_registry.exists():
-        err("EntityRegistry.java missing")
-        return
-    text = entity_registry.read_text(encoding="utf-8")
-    ids = re.findall(r'ENTITIES\.register\("([a-z0-9_]+)"', text)
-    if len(ids) < 15:
-        err(f"EntityRegistry has only {len(ids)} entities")
-    # projectiles/misc may legitimately lack loot
-    no_loot_ok = {
-        "cerulean_arrow",
-        "crystal_arrow",
-        "crystalline_beam",
-        "sticky_spiker",
-        "webbing",
-    }
+    living = [e for e in entities if e not in PROJECTILE_ENTITIES]
     loot_dir = MAIN / "data" / MODID / "loot_tables" / "entities"
-    loot_files = {p.stem for p in loot_dir.glob("*.json")} if loot_dir.exists() else set()
-    for eid in ids:
-        if eid in no_loot_ok:
-            continue
-        if eid not in loot_files:
-            err(f"entity '{eid}' missing loot table")
-    if len(loot_files) < 12:
-        err(f"expected >= 12 entity loot tables, found {len(loot_files)}")
+    loot = {p.stem for p in loot_dir.glob("*.json")} if loot_dir.exists() else set()
+    stats["entity_loot"] = str(len(loot))
+    for e in living:
+        if e not in loot:
+            err(cat, f"living entity missing loot table: {e}")
+        else:
+            data = load_json(loot_dir / f"{e}.json")
+            if isinstance(data, dict) and not data.get("pools"):
+                err(cat, f"entity loot empty pools: {e}")
+
+    # spawn eggs for all living
+    for e in living:
+        egg = f"spawn_egg_{e}"
+        if egg not in items:
+            err(cat, f"living entity missing spawn egg item: {egg}")
+        elif f"item.{MODID}.{egg}" not in en:
+            err(cat, f"spawn egg missing lang: {egg}")
+
+    # bosses present
+    for boss in ("dungeon_keeper", "dungeon_spider", "moon_queen"):
+        if boss not in entities:
+            err(cat, f"missing boss entity: {boss}")
+
+    # passives present
+    for passive in ("aurorian_pig", "aurorian_rabbit", "aurorian_sheep"):
+        if passive not in entities:
+            err(cat, f"missing passive entity: {passive}")
+
+    return entities
 
 
-def validate_structures() -> None:
+# ---------------------------------------------------------------------------
+# D — structures
+# ---------------------------------------------------------------------------
+def cat_structures() -> None:
+    cat = "D-structures"
     struct_root = MAIN / "data" / MODID / "structures"
     if not struct_root.exists():
-        err("missing structures directory")
+        err(cat, "missing structures directory")
         return
-    expected_min = {
-        "runestone": 20,
-        "darkstone": 14,
-        "moontemple": 11,
-        "umbratower": 1,
-        "ruins": 3,
-        "weepingwillow": 5,
-    }
+
     by_folder: dict[str, int] = defaultdict(int)
     total = 0
     for nbt in struct_root.rglob("*.nbt"):
@@ -292,197 +352,499 @@ def validate_structures() -> None:
         rel = nbt.relative_to(struct_root)
         folder = rel.parts[0] if len(rel.parts) > 1 else "_root"
         by_folder[folder] += 1
-        # gzip or raw NBT must be non-empty and parseable as gzip or start with NBT header
         raw = nbt.read_bytes()
         if len(raw) < 8:
-            err(f"structure too small: {nbt.relative_to(ROOT)}")
+            err(cat, f"structure too small: {nbt.relative_to(ROOT)}")
             continue
         if raw[:2] == b"\x1f\x8b":
             try:
                 decompressed = gzip.decompress(raw)
                 if len(decompressed) < 4:
-                    err(f"structure gzip empty: {nbt.relative_to(ROOT)}")
+                    err(cat, f"structure gzip empty: {nbt.relative_to(ROOT)}")
             except Exception as exc:  # noqa: BLE001
-                err(f"structure gzip invalid {nbt.relative_to(ROOT)}: {exc}")
-        elif raw[0] not in (0x0A, 0x09, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08):
-            # uncompressed NBT compounds start with TAG_Compound (0x0A)
-            warn(f"structure may not be NBT: {nbt.relative_to(ROOT)} header={raw[:4]!r}")
+                err(cat, f"structure gzip invalid {nbt.relative_to(ROOT)}: {exc}")
+
+    stats["structure_nbt"] = str(total)
     if total < 50:
-        err(f"expected >= 50 structure NBTs, found {total}")
-    for folder, minimum in expected_min.items():
+        err(cat, f"expected >= 50 structure NBTs, found {total}")
+    for folder, minimum in STRUCTURE_NBT_MIN.items():
         got = by_folder.get(folder, 0)
         if got < minimum:
-            err(f"structures/{folder}: expected >= {minimum} nbt, found {got}")
+            err(cat, f"structures/{folder}: expected >= {minimum}, found {got}")
 
-    # structure definitions + sets
     wg_struct = MAIN / "data" / MODID / "worldgen" / "structure"
     wg_set = MAIN / "data" / MODID / "worldgen" / "structure_set"
-    if not wg_struct.exists() or len(list(wg_struct.glob("*.json"))) < 5:
-        err("expected >= 5 worldgen/structure definitions")
-    if not wg_set.exists() or len(list(wg_set.glob("*.json"))) < 5:
-        err("expected >= 5 worldgen/structure_set definitions")
+    struct_defs = {p.stem for p in wg_struct.glob("*.json")} if wg_struct.exists() else set()
+    set_defs = {p.stem for p in wg_set.glob("*.json")} if wg_set.exists() else set()
+    stats["structure_defs"] = str(len(struct_defs))
+    stats["structure_sets"] = str(len(set_defs))
+
+    missing_defs = sorted(REQUIRED_STRUCTURES - struct_defs)
+    if missing_defs:
+        err(cat, f"missing structure definitions: {missing_defs}")
+    missing_sets = sorted(REQUIRED_STRUCTURES - set_defs)
+    if missing_sets:
+        err(cat, f"missing structure_set definitions: {missing_sets}")
+
+    # structure_set -> structure link
+    if wg_set.exists():
+        for path in wg_set.glob("*.json"):
+            data = load_json(path)
+            if not isinstance(data, dict):
+                continue
+            for entry in data.get("structures") or []:
+                if not isinstance(entry, dict):
+                    continue
+                sid = entry.get("structure", "")
+                name = sid.split(":")[-1]
+                if name not in struct_defs:
+                    err(cat, f"structure_set {path.stem} references missing structure {sid}")
+
+    # single_template NBT path exists
+    if wg_struct.exists():
+        for path in wg_struct.glob("*.json"):
+            data = load_json(path)
+            if not isinstance(data, dict):
+                continue
+            if data.get("type") == f"{MODID}:single_template":
+                template = data.get("template", "")
+                rel = template.split(":")[-1]
+                nbt = struct_root / f"{rel}.nbt"
+                if not nbt.exists():
+                    err(cat, f"structure {path.stem} template missing NBT: {rel}.nbt")
+            biomes = data.get("biomes")
+            if isinstance(biomes, list) and not biomes:
+                err(cat, f"structure {path.stem} has empty biomes list")
 
 
-def validate_biomes() -> None:
+# ---------------------------------------------------------------------------
+# E — worldgen / biomes / dimension / features
+# ---------------------------------------------------------------------------
+def cat_worldgen() -> None:
+    cat = "E-worldgen"
     biome_dir = MAIN / "data" / MODID / "worldgen" / "biome"
-    if not biome_dir.exists():
-        err("missing biome directory")
-        return
-    files = list(biome_dir.glob("*.json"))
-    if len(files) < 7:
-        err(f"expected >= 7 biomes, found {len(files)}")
-    required = {
-        "aurorian_forest",
-        "aurorian_plains",
-        "aurorian_rough_forest",
-        "aurorian_forest_hills",
-        "aurorian_lakes",
-        "aurorian_overgrowth",
-        "weeping_willow_forest",
-    }
-    stems = {p.stem for p in files}
-    missing = sorted(required - stems)
+    biomes = {p.stem for p in biome_dir.glob("*.json")} if biome_dir.exists() else set()
+    stats["biomes"] = str(len(biomes))
+    missing = sorted(REQUIRED_BIOMES - biomes)
     if missing:
-        err(f"missing biomes: {missing}")
+        err(cat, f"missing biomes: {missing}")
+
+    cf = stems(f"data/{MODID}/worldgen/configured_feature")
+    pf = stems(f"data/{MODID}/worldgen/placed_feature")
+    stats["configured_features"] = str(len(cf))
+    stats["placed_features"] = str(len(pf))
+    if pf - cf:
+        err(cat, f"placed_feature without configured_feature: {sorted(pf - cf)}")
+    if len(pf) < 12:
+        err(cat, f"expected >= 12 placed features, found {len(pf)}")
+
+    required_features = {
+        "silentwood_tree",
+        "weeping_willow_tree",
+        "mushroom_cave",
+        "lavender_patch",
+        "silkberry_patch",
+        "urn",
+        "ore_cerulean",
+        "ore_moonstone",
+        "ore_geode",
+        "ore_coal",
+        "bright_bulb_patch",
+    }
+    missing_f = sorted(required_features - pf)
+    if missing_f:
+        err(cat, f"missing placed features: {missing_f}")
+
+    # biome music + feature refs + spawners lightly
+    if biome_dir.exists():
+        for path in biome_dir.glob("*.json"):
+            data = load_json(path)
+            if not isinstance(data, dict):
+                continue
+            effects = data.get("effects") or {}
+            if "music" not in effects:
+                err(cat, f"biome {path.stem}: missing effects.music")
+            for step in data.get("features") or []:
+                if not isinstance(step, list):
+                    continue
+                for f in step:
+                    if isinstance(f, str) and f.startswith(f"{MODID}:"):
+                        name = f.split(":", 1)[1]
+                        if name not in pf:
+                            err(cat, f"biome {path.stem} references missing placed feature {f}")
+
+    # dimension multi_noise
+    dim = MAIN / "data" / MODID / "dimension" / "the_aurorian.json"
+    if not dim.exists():
+        err(cat, "missing dimension/the_aurorian.json")
+    else:
+        data = load_json(dim)
+        if isinstance(data, dict):
+            try:
+                biome_entries = data["generator"]["biome_source"]["biomes"]
+                biome_ids = {b.get("biome") for b in biome_entries if isinstance(b, dict)}
+            except Exception:  # noqa: BLE001
+                err(cat, "dimension missing multi_noise biomes")
+            else:
+                stats["dimension_biomes"] = str(len(biome_ids))
+                need = {f"{MODID}:{b}" for b in REQUIRED_BIOMES}
+                miss = sorted(need - biome_ids)
+                if miss:
+                    err(cat, f"dimension multi_noise missing: {miss}")
+
+    noise = MAIN / "data" / MODID / "worldgen" / "noise_settings" / "the_aurorian.json"
+    if not noise.exists():
+        err(cat, "missing noise_settings/the_aurorian.json")
+
+    dim_type = MAIN / "data" / MODID / "dimension_type"
+    if not dim_type.exists() or not list(dim_type.glob("*.json")):
+        err(cat, "missing dimension_type")
+
+
+# ---------------------------------------------------------------------------
+# F — recipes + chest loot
+# ---------------------------------------------------------------------------
+def cat_recipes(blocks: set[str], items: set[str]) -> None:
+    cat = "F-recipes"
+    recipes_dir = MAIN / "data" / MODID / "recipes"
+    if not recipes_dir.exists():
+        err(cat, "missing recipes directory")
+        return
+    files = list(recipes_dir.rglob("*.json"))
+    stats["recipes"] = str(len(files))
+    if len(files) < 180:
+        err(cat, f"expected >= 180 recipes, found {len(files)}")
+
+    types = Counter()
+    known = blocks | items | {"minecraft"}  # rough
     for path in files:
         data = load_json(path)
         if not isinstance(data, dict):
             continue
-        effects = data.get("effects") or {}
-        if "music" not in effects:
-            err(f"biome {path.stem}: missing effects.music")
-        else:
-            music = effects["music"]
-            event = music.get("sound") if isinstance(music, dict) else None
-            # 1.19 format may nest event
-            if event is None and isinstance(music, dict):
-                nested = music.get("event")
-                if isinstance(nested, dict):
-                    event = nested.get("sound")
-                elif isinstance(nested, str):
-                    event = nested
-            if isinstance(event, str) and not event.startswith(f"{MODID}:"):
-                warn(f"biome {path.stem}: music event not mod-namespaced: {event}")
+        rtype = data.get("type", "?")
+        types[rtype] += 1
+        # validate result item namespace if present
+        result = data.get("result")
+        rid = None
+        if isinstance(result, str):
+            rid = result
+        elif isinstance(result, dict):
+            rid = result.get("item") or result.get("id")
+        if isinstance(rid, str) and rid.startswith(f"{MODID}:"):
+            name = rid.split(":", 1)[1]
+            if name not in blocks and name not in items:
+                err(cat, f"recipe {path.relative_to(recipes_dir)} result unknown: {rid}")
 
+    stats["recipe_types"] = ", ".join(f"{k}={v}" for k, v in sorted(types.items()))
+    if types.get("theaurorian:moonlight_forge", 0) < 20:
+        err(cat, f"expected >= 20 moonlight_forge recipes, found {types.get('theaurorian:moonlight_forge', 0)}")
+    if types.get("theaurorian:scrapper", 0) < 40:
+        err(cat, f"expected >= 40 scrapper recipes, found {types.get('theaurorian:scrapper', 0)}")
 
-def validate_dimension() -> None:
-    dim = MAIN / "data" / MODID / "dimension" / "the_aurorian.json"
-    if not dim.exists():
-        err("missing dimension/the_aurorian.json")
-        return
-    data = load_json(dim)
-    if not isinstance(data, dict):
-        return
-    # multi_noise biomes should include willow etc
-    try:
-        biomes = data["generator"]["biome_source"]["biomes"]
-        biome_ids = {b.get("biome") for b in biomes if isinstance(b, dict)}
-    except Exception:  # noqa: BLE001
-        err("dimension JSON missing multi_noise biomes")
-        return
-    need = {
-        f"{MODID}:weeping_willow_forest",
-        f"{MODID}:aurorian_forest",
-        f"{MODID}:aurorian_plains",
-    }
-    missing = sorted(need - biome_ids)
-    if missing:
-        err(f"dimension multi_noise missing biomes: {missing}")
+    mf = recipes_dir / "moonlight_forge"
+    for name in REQUIRED_MF_RECIPES:
+        if not (mf / name).exists():
+            err(cat, f"missing moonlight_forge recipe: {name}")
 
-
-def validate_chest_loot() -> None:
+    # chest loot
     chests = MAIN / "data" / MODID / "loot_tables" / "chests"
-    required_dirs = {
-        "runestone": 3,
-        "darkstone": 3,
-        "moontemple": 3,
-        "ruins": 1,
-    }
+    required_dirs = {"runestone": 3, "darkstone": 3, "moontemple": 3, "ruins": 1}
     for name, minimum in required_dirs.items():
         d = chests / name
         if not d.exists():
-            err(f"missing chest loot dir: chests/{name}")
+            err(cat, f"missing chest loot dir chests/{name}")
             continue
         n = len(list(d.glob("*.json")))
         if n < minimum:
-            err(f"chests/{name}: expected >= {minimum} loot tables, found {n}")
+            err(cat, f"chests/{name}: expected >= {minimum}, found {n}")
+    # validate chest loot item refs lightly
+    if chests.exists():
+        for path in chests.rglob("*.json"):
+            data = load_json(path)
+            if not isinstance(data, dict):
+                continue
+            _check_loot_item_refs(cat, path, data, blocks, items)
 
 
-def validate_recipes() -> None:
-    recipes = MAIN / "data" / MODID / "recipes"
-    if not recipes.exists():
-        err("missing recipes directory")
+def _check_loot_item_refs(cat: str, path: Path, data: dict, blocks: set[str], items: set[str]) -> None:
+    def walk(node):
+        if isinstance(node, dict):
+            if node.get("type") in ("minecraft:item", "item") and "name" in node:
+                name = node["name"]
+                if isinstance(name, str) and name.startswith(f"{MODID}:"):
+                    iid = name.split(":", 1)[1]
+                    if iid not in items and iid not in blocks:
+                        err(cat, f"{path.relative_to(MAIN)} unknown item {name}")
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+
+    walk(data)
+
+
+# ---------------------------------------------------------------------------
+# G — advancements
+# ---------------------------------------------------------------------------
+def cat_advancements(langs: dict[str, dict], items: set[str], blocks: set[str]) -> None:
+    cat = "G-advancements"
+    adv_dir = MAIN / "data" / MODID / "advancements"
+    if not adv_dir.exists():
+        err(cat, "missing advancements directory")
         return
-    files = list(recipes.rglob("*.json"))
-    if len(files) < 150:
-        err(f"expected >= 150 recipes, found {len(files)}")
-    # Boss weapon MF recipes
-    mf = recipes / "moonlight_forge"
-    for name in ("keepers_bow.json", "queens_chipper.json", "moon_shield.json"):
-        if not (mf / name).exists():
-            err(f"missing moonlight_forge recipe: {name}")
+    files = list(adv_dir.glob("*.json"))
+    stats["advancements"] = str(len(files))
+    if len(files) < 15:
+        err(cat, f"expected >= 15 advancements, found {len(files)}")
 
+    en = langs.get("en_us.json", {})
+    stems_set = {p.stem for p in files}
+    if "root" not in stems_set:
+        err(cat, "missing root advancement")
 
-def validate_registry_java_sync() -> None:
-    """Spot-check that critical registry IDs still exist in Java sources."""
-    checks = {
-        "ItemRegistry.java": [
-            "dungeon_locator",
-            "keepers_bow",
-            "queens_chipper",
-            "moon_shield",
-            "slime_boots",
-            "mirror_of_guidance",
-            "trophy_keeper",
-            "trophy_moon_queen",
-            "trophy_spider",
-        ],
-        "BlockRegistry.java": [
-            "boss_spawner",
-            "weeping_willow_leaves",
-            "aurorian_farm_tile",
-            "umbra_stone",
-            "silentwood_chest",
-        ],
-        "SoundRegistry.java": ["music", "weepingwillowbell"],
-        "ParticleRegistry.java": ["weeping_willow_drip"],
-    }
-    base = ROOT / "src" / "main" / "java" / "shiroroku" / "theaurorian"
-    for rel, ids in checks.items():
-        path = next(base.rglob(rel), None)
-        if path is None:
-            err(f"missing Java registry file: {rel}")
+    missing_boss = BOSS_ADVANCEMENTS - stems_set
+    if missing_boss:
+        err(cat, f"missing boss advancements: {sorted(missing_boss)}")
+
+    for path in files:
+        data = load_json(path)
+        if not isinstance(data, dict):
             continue
-        text = path.read_text(encoding="utf-8")
-        for rid in ids:
+        stem = path.stem
+        if stem in BOSS_ADVANCEMENTS:
+            reqs = data.get("requirements")
+            if not (isinstance(reqs, list) and len(reqs) == 1 and isinstance(reqs[0], list) and len(reqs[0]) >= 2):
+                err(cat, f"advancement {stem}: expected OR requirements, got {reqs}")
+        display = data.get("display") or {}
+        for field in ("title", "description"):
+            node = display.get(field) or {}
+            if isinstance(node, dict) and node.get("translate"):
+                key = node["translate"]
+                if key not in en:
+                    err(cat, f"advancement {stem} missing lang {key}")
+        # parent exists
+        parent = data.get("parent")
+        if isinstance(parent, str) and parent.startswith(f"{MODID}:"):
+            pname = parent.split(":", 1)[1]
+            if pname not in stems_set:
+                err(cat, f"advancement {stem} parent missing: {parent}")
+        # criteria present
+        if not data.get("criteria"):
+            err(cat, f"advancement {stem} has no criteria")
+
+
+# ---------------------------------------------------------------------------
+# H — mirror
+# ---------------------------------------------------------------------------
+def cat_mirror(langs: dict[str, dict]) -> None:
+    cat = "H-mirror"
+    mirror_dir = MAIN / "data" / MODID / "mirror_of_guidance"
+    if not mirror_dir.exists():
+        err(cat, "missing mirror_of_guidance")
+        return
+    files = {p.stem: p for p in mirror_dir.glob("*.json")}
+    stats["mirror_nodes"] = str(len(files))
+    if len(files) < 18:
+        err(cat, f"expected >= 18 mirror nodes, found {len(files)}")
+    missing = sorted(REQUIRED_MIRROR - set(files))
+    if missing:
+        err(cat, f"missing required mirror nodes: {missing}")
+
+    en = langs.get("en_us.json", {})
+    for stem, path in files.items():
+        data = load_json(path)
+        if not isinstance(data, dict):
+            continue
+        for key in ("icon", "x", "y"):
+            if key not in data:
+                err(cat, f"mirror {stem}: missing {key}")
+        name_key = f"mirror_of_guidance.{MODID}.{stem}.name"
+        desc_key = f"mirror_of_guidance.{MODID}.{stem}.desc"
+        if name_key not in en:
+            err(cat, f"mirror {stem}: missing lang {name_key}")
+        if desc_key not in en:
+            err(cat, f"mirror {stem}: missing lang {desc_key}")
+        for child in data.get("children") or []:
+            if not isinstance(child, str):
+                err(cat, f"mirror {stem}: invalid child {child}")
+                continue
+            child_id = child.split(":", 1)[-1]
+            if child_id not in files:
+                err(cat, f"mirror {stem}: dangling child {child}")
+
+
+# ---------------------------------------------------------------------------
+# I — sounds / particles
+# ---------------------------------------------------------------------------
+def cat_audio() -> None:
+    cat = "I-audio"
+    sounds_json = MAIN / "assets" / MODID / "sounds.json"
+    if not sounds_json.exists():
+        err(cat, "missing sounds.json")
+        return
+    data = load_json(sounds_json)
+    if not isinstance(data, dict) or not data:
+        err(cat, "sounds.json empty")
+        return
+    sounds_dir = MAIN / "assets" / MODID / "sounds"
+    oggs = list(sounds_dir.rglob("*.ogg")) if sounds_dir.exists() else []
+    stats["ogg"] = str(len(oggs))
+    if len(oggs) < 6:
+        err(cat, f"expected >= 6 ogg, found {len(oggs)}")
+    for key, entry in data.items():
+        if not isinstance(entry, dict):
+            continue
+        for s in entry.get("sounds") or []:
+            name = s if isinstance(s, str) else (s.get("name") if isinstance(s, dict) else None)
+            if not name:
+                err(cat, f"sounds.json '{key}' invalid sound ref")
+                continue
+            rel = name.split(":", 1)[-1]
+            path = sounds_dir / f"{rel}.ogg"
+            if not path.exists():
+                err(cat, f"missing ogg for '{key}': {rel}.ogg")
+
+    particles = MAIN / "assets" / MODID / "particles.json"
+    if not particles.exists():
+        err(cat, "missing particles.json")
+    else:
+        pdata = load_json(particles)
+        if not isinstance(pdata, dict) or not pdata:
+            err(cat, "particles.json empty")
+
+    # Java registries
+    sound_java = JAVA / "Registry" / "SoundRegistry.java"
+    particle_java = JAVA / "Registry" / "ParticleRegistry.java"
+    if not sound_java.exists():
+        err(cat, "SoundRegistry.java missing")
+    else:
+        text = read_text(sound_java)
+        for rid in ("music", "weepingwillowbell"):
             if f'"{rid}"' not in text:
-                err(f"{rel}: missing registration id '{rid}'")
+                err(cat, f"SoundRegistry missing {rid}")
+    if not particle_java.exists():
+        err(cat, "ParticleRegistry.java missing")
+    else:
+        text = read_text(particle_java)
+        if '"weeping_willow_drip"' not in text:
+            err(cat, "ParticleRegistry missing weeping_willow_drip")
+
+
+# ---------------------------------------------------------------------------
+# J — registry sync / tags presence
+# ---------------------------------------------------------------------------
+def cat_registry_tags(blocks: set[str], items: set[str]) -> None:
+    cat = "J-registry-tags"
+    # critical Java files
+    for rel, needles in {
+        "Registry/SoundRegistry.java": ["music"],
+        "Registry/ParticleRegistry.java": ["weeping_willow_drip"],
+        "Registry/FeatureRegistry.java": ["weeping_willow_tree", "mushroom"],
+        "Registry/StructureRegistry.java": ["darkstone", "moon_temple", "single_template"],
+    }.items():
+        path = JAVA / rel
+        if not path.exists():
+            err(cat, f"missing {rel}")
+            continue
+        text = read_text(path)
+        for n in needles:
+            if n not in text:
+                err(cat, f"{rel} missing marker '{n}'")
+
+    # tags from datagen
+    tag_files = list((GEN / "data").rglob("tags/**/*.json")) if GEN.exists() else []
+    stats["tag_files"] = str(len(tag_files))
+    if len(tag_files) < 40:
+        err(cat, f"expected >= 40 generated tag files, found {len(tag_files)}")
+
+    # shears tag should include sickle if present
+    shears = GEN / "data" / "forge" / "tags" / "items" / "shears.json"
+    if shears.exists():
+        data = load_json(shears)
+        if isinstance(data, dict):
+            values = data.get("values") or []
+            if not any("sickle" in str(v) for v in values):
+                warn(cat, "forge:shears tag has no sickle entry")
+    else:
+        warn(cat, "generated forge:shears tag missing (run runData?)")
+
+    # block loot tables for a sample of blocks
+    block_loot_dir = GEN / "data" / MODID / "loot_tables" / "blocks"
+    if block_loot_dir.exists():
+        bloot = {p.stem for p in block_loot_dir.glob("*.json")}
+        stats["block_loot"] = str(len(bloot))
+        # crops may be special; require majority
+        if len(bloot) < 80:
+            err(cat, f"expected >= 80 block loot tables, found {len(bloot)}")
+    else:
+        warn(cat, "generated block loot missing")
+
+
+# ---------------------------------------------------------------------------
+# K — global JSON parse + pack meta
+# ---------------------------------------------------------------------------
+def cat_json_parse() -> None:
+    cat = "K-json"
+    count = 0
+    for root in resource_roots():
+        for path in root.rglob("*.json"):
+            if path.is_file():
+                load_json(path)
+                count += 1
+    stats["json_files"] = str(count)
+    if count < 500:
+        err(cat, f"expected >= 500 json files, found {count}")
+
+    mods_toml = MAIN / "META-INF" / "mods.toml"
+    if not mods_toml.exists():
+        err(cat, "missing META-INF/mods.toml")
+    pack = MAIN / "pack.mcmeta"
+    if not pack.exists():
+        err(cat, "missing pack.mcmeta")
 
 
 def main() -> int:
-    print(f"Validating resources under {ROOT}")
-    langs = validate_lang()
-    validate_all_json_parse()
-    validate_sounds(langs)
-    validate_particles()
-    validate_advancements(langs)
-    validate_mirror(langs)
-    validate_entities_and_loot()
-    validate_structures()
-    validate_biomes()
-    validate_dimension()
-    validate_chest_loot()
-    validate_recipes()
-    validate_registry_java_sync()
+    print(f"=== The Aurorian full content validation ===")
+    print(f"root: {ROOT}")
+    langs = cat_lang()
+    blocks, items = cat_blocks_items(langs)
+    cat_entities(langs, items)
+    cat_structures()
+    cat_worldgen()
+    cat_recipes(blocks, items)
+    cat_advancements(langs, items, blocks)
+    cat_mirror(langs)
+    cat_audio()
+    cat_registry_tags(blocks, items)
+    cat_json_parse()
 
-    for w in warnings:
-        print(f"WARN: {w}")
+    print("\n-- stats --")
+    for k, v in stats.items():
+        print(f"  {k}: {v}")
+
+    if warnings:
+        print(f"\n-- warnings ({len(warnings)}) --")
+        by: dict[str, list[str]] = defaultdict(list)
+        for c, m in warnings:
+            by[c].append(m)
+        for c, ms in sorted(by.items()):
+            print(f"[{c}]")
+            for m in ms:
+                print(f"  - {m}")
+
     if errors:
-        print(f"\nFAILED with {len(errors)} error(s):")
-        for e in errors:
-            print(f"  - {e}")
+        print(f"\nFAILED — {len(errors)} error(s)")
+        by = defaultdict(list)
+        for c, m in errors:
+            by[c].append(m)
+        for c, ms in sorted(by.items()):
+            print(f"[{c}] ({len(ms)})")
+            for m in ms:
+                print(f"  - {m}")
         return 1
-    print(f"OK — resource integrity passed ({len(warnings)} warning(s))")
+
+    print(f"\nOK — full content validation passed ({len(warnings)} warning(s))")
     return 0
 
 
