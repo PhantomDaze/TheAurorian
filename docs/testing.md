@@ -1,70 +1,92 @@
-# Automated Tests — Full Port Content Gate
+# Automated Tests
 
-Fast, headless verification of the 1.12.2 → 1.19.2 port. **Does not** boot a Minecraft client/server.
+Two layers: **datapack integrity** (no game) and **in-world GameTests** (headless server).
 
-## Commands
+## Quick commands
 
 ```bash
-# Categorized resource / datapack integrity (Python)
-./gradlew validateResources
-# or
-python3 scripts/validate_resources.py
+# Use Java 17 (required; system Java 26 breaks Gradle 8.1)
+export JAVA_HOME=/usr/lib/jvm/zulu-17   # or your JDK 17 path
+export PATH="$JAVA_HOME/bin:$PATH"
 
-# Full suite: validateResources + JUnit (logic + categorized content)
+# 1) Datapack / asset gate + JUnit unit tests
 ./gradlew test
 
-# Verification lifecycle
-./gradlew check
+# 2) In-world functional GameTests (Forge GameTest server)
+./gradlew runGameTestServer
+
+# Both
+./gradlew test runGameTestServer
 ```
 
-After adding blocks/items/entities, regenerate assets if needed:
+After adding blocks/items/entities:
 
 ```bash
 ./gradlew runData
-./gradlew test
+./gradlew test runGameTestServer
 ```
 
-## Categories
+## Layer 1 — Content integrity (no Minecraft)
 
 | ID | Category | Checks |
 |----|----------|--------|
-| **A** | Language | `en_us` / `zh_cn` / `es_es` present; key sets identical; ≥350 en keys |
-| **B** | Blocks & items | ≥90 blocks / ≥120 items; every block has blockstate + lang; items have models + lang; required IDs (portal, farm tile, MF, locator, trophies, boss weapons…) |
-| **C** | Entities | ≥19 entities; all have lang; living have loot + spawn egg + egg lang; 3 bosses + 3 passives present |
-| **D** | Structures | NBT minima (runestone≥20, darkstone≥14, moontemple≥11, …); 8 structure defs + sets; set→structure links; single_template NBT exists |
-| **E** | Worldgen | 7 biomes + music; placed↔configured features; biome feature refs; dimension multi_noise includes all biomes; noise_settings |
-| **F** | Recipes & chest loot | ≥180 recipes; ≥20 MF + ≥40 scrapper; boss MF recipes; chest dirs; recipe results + loot item IDs resolve |
-| **G** | Advancements | ≥15; root; boss OR-requirements; parent links; display lang keys |
-| **H** | Mirror | ≥18 nodes; required mainline nodes; icon/x/y; name/desc lang; no dangling children |
-| **I** | Sounds & particles | sounds.json + ≥6 ogg; particles.json; SoundRegistry / ParticleRegistry IDs |
-| **J** | Tags & generated | ≥40 tag files; ≥80 block loot; Feature/Structure registry markers |
-| **K** | JSON / pack | all JSON parse; mods.toml + pack.mcmeta |
+| A | Language | en/zh/es key parity |
+| B | Blocks & items | registrations, blockstates, models, lang, required IDs |
+| C | Entities | lang, loot, spawn eggs for living |
+| D | Structures | NBT minima, structure/set links, templates |
+| E | Worldgen | biomes+music, features, dimension multi_noise |
+| F | Recipes & chests | volume, MF/scrapper, item ID refs |
+| G | Advancements | tree, boss OR-logic, lang |
+| H | Mirror | nodes, graph, lang |
+| I | Sounds & particles | ogg + registries |
+| J | Tags & generated | tag/loot volume |
+| K | JSON / pack | parse-all, mods.toml |
 
-## Code layout
+- Script: `scripts/validate_resources.py` (`./gradlew validateResources`)
+- JUnit: `src/test/java/.../content/PortContentCategoriesTest.java`
 
-| Path | Role |
-|------|------|
-| `scripts/validate_resources.py` | Full categorized gate (source of truth for CI stats) |
-| `src/test/.../content/PortContentCategoriesTest.java` | Same categories as nested JUnit tests |
-| `src/test/.../content/ContentTestSupport.java` | Shared path/JSON/registry parsers |
-| `src/test/.../DatapackSmokeTest.java` | Lightweight smoke subset |
-| `src/test/.../ResourceIntegrityTest.java` | JUnit bridge → Python script |
-| `src/test/.../Util/*Test.java` | Pure logic (`SimpleTimer`, `ModUtil.wave`, mouse hitbox) |
+## Layer 2 — In-world GameTests (functional)
 
-## Gaps this suite already fixed
+Run configuration: `gameTestServer` in `build.gradle`  
+Entry: `src/main/java/shiroroku/theaurorian/GameTests/AurorianGameTests.java`  
+Templates: `data/theaurorian/structures/gametest/*.nbt`
 
-- Missing `disturbed_hollow` entity loot
-- Missing Mirror lang (`aurorian_steel`, `crafting`, `ore_*`, `umbra`)
-- Missing spawn eggs for spiderling / acolyte / sprite / spirit / disturbed hollow / passives (+ lang + datagen models)
-- Projectile entity lang keys
+| Batch | Coverage |
+|-------|----------|
+| **blocks** | Core machines place + BE; fog wall repel math; mushroom bounce |
+| **agriculture** | Crops require aurorian farm tile + sky; silkberry same |
+| **dungeon** | Keyhole opens gates with correct key; rejects wrong key; Queen’s Chipper breaks dungeon blocks only |
+| **boss** | Boss spawner spawns Keeper / Moon Queen / Spider and consumes block; boss combat attributes |
+| **entities** | All living types spawn; undead knight livable |
+| **machines** | Scrapper prereqs (crystal+input) + recipe registry; Moonlight Forge moon/day gate + recipe registry |
+| **items** | Silentwood pickaxe harvest levels 0→3; locator dungeon cycle; Keeper’s Bow type; slime boots cancel fall>3 + bounce |
+| **portal** | Portal + frame place; dimension key present |
+| **registry** | Critical items/blocks resolve in-world |
 
-## Out of scope (needs game)
+**22 required tests** — last run: all passed.
 
-See `docs/port-plan.md` §8.8: `/locate`, boss fights, portal round-trips, machine GUI playtest.  
-Optional later: Forge GameTest world harness.
+### Server-safe loading fixes (needed for GameTest)
 
-## CI
+GameTest is a dedicated server. The following were split so the mod loads without client classes:
+
+- `EntityRegistry` — no renderer imports; client registration in `EntityClientRegistry` (`Dist.CLIENT`)
+- `MirrorOGItem` — opens UI via `DistExecutor` + `MirrorOGClient`
+- `SilentwoodChestBlockItem` — BEWLR via `SilentwoodChestClientExt` (client only)
+- Client-only mods (AppleSkin / Neat / Effortless Building) → `compileOnly` so they are not on the GameTest classpath
+
+## Out of scope / still manual
+
+- Full portal dimension hop with real player connection
+- Multiplayer boss HP scaling with 2+ real players (spawner path unit-tested with 0–1 nearby)
+- Structure `/locate` generation over large worlds
+- Client-only rendering (spectral translucency, aurora)
+
+See also `docs/port-plan.md` §8.8.
+
+## CI sketch
 
 ```yaml
-- run: ./gradlew test --no-daemon
+- uses: actions/setup-java@v4
+  with: { distribution: temurin, java-version: 17 }
+- run: ./gradlew test runGameTestServer --no-daemon
 ```

@@ -1,6 +1,5 @@
 package shiroroku.theaurorian.Blocks.SilentwoodChest;
 
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +16,9 @@ import java.util.function.Consumer;
 /**
  * Block item for the silentwood chest. Uses the 3D chest renderer so the item
  * shows the actual chest model instead of a flat sprite.
+ * <p>
+ * Client renderer types are only referenced from {@link #initializeClient}, which
+ * Forge invokes on the client distribution only.
  */
 public class SilentwoodChestBlockItem extends BlockItem {
 
@@ -31,11 +33,6 @@ public class SilentwoodChestBlockItem extends BlockItem {
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return SilentwoodChestItemRenderer.INSTANCE;
-            }
-        });
+        consumer.accept(SilentwoodChestClientExt.INSTANCE);
     }
 }

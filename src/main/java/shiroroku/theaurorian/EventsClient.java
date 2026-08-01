@@ -38,7 +38,6 @@ import shiroroku.theaurorian.Items.Spectral.SpectralArmorLayer;
 import shiroroku.theaurorian.Particles.WeepingWillowDripParticle;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
 import shiroroku.theaurorian.Registry.BlockRegistry;
-import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.Registry.MenuRegistry;
 import shiroroku.theaurorian.Registry.ParticleRegistry;
@@ -85,15 +84,7 @@ public class EventsClient {
         });
     }
 
-    @SubscribeEvent
-    public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
-        EntityRegistry.registerRenderers(event);
-    }
-
-    @SubscribeEvent
-    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        EntityRegistry.registerLayerDefinitions(event);
-    }
+    // Entity renderers / layer definitions: EntityClientRegistry (Dist.CLIENT)
 
     /**
      * Adds the translucent spectral armor layer to every player renderer skin.

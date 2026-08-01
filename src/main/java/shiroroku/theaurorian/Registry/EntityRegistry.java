@@ -1,65 +1,41 @@
 package shiroroku.theaurorian.Registry;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockRenderer;
 import shiroroku.theaurorian.Entities.AurorianArrow.AurorianArrowEntity;
-import shiroroku.theaurorian.Entities.AurorianArrow.AurorianArrowRenderer;
 import shiroroku.theaurorian.Entities.AurorianArrow.CeruleanArrowEntity;
 import shiroroku.theaurorian.Entities.AurorianArrow.CrystalArrowEntity;
-import shiroroku.theaurorian.Entities.CrystallineBeam.CrystallineBeamEntity;
-import shiroroku.theaurorian.Entities.CrystallineBeam.CrystallineBeamModel;
-import shiroroku.theaurorian.Entities.CrystallineBeam.CrystallineBeamRenderer;
 import shiroroku.theaurorian.Entities.Boss.DungeonSpiderEntity;
-import shiroroku.theaurorian.Entities.Boss.DungeonSpiderRenderer;
 import shiroroku.theaurorian.Entities.Boss.MoonQueenEntity;
-import shiroroku.theaurorian.Entities.Boss.MoonQueenRenderer;
-import shiroroku.theaurorian.Entities.DungeonKeeper.DungeonKeeperEntity;
-import shiroroku.theaurorian.Entities.DungeonKeeper.DungeonKeeperRenderer;
-import shiroroku.theaurorian.Entities.DungeonSlime.DungeonSlimeEntity;
-import shiroroku.theaurorian.Entities.DungeonSlime.DungeonSlimeModel;
-import shiroroku.theaurorian.Entities.DungeonSlime.DungeonSlimeRenderer;
-import shiroroku.theaurorian.Entities.Hollow.HollowEntity;
-import shiroroku.theaurorian.Entities.Hollow.HollowRenderer;
-import shiroroku.theaurorian.Entities.UndeadKnight.UndeadKnightEntity;
-import shiroroku.theaurorian.Entities.UndeadKnight.UndeadKnightRenderer;
-import shiroroku.theaurorian.Entities.Spiderling.SpiderlingEntity;
-import shiroroku.theaurorian.Entities.Spiderling.SpiderlingEntityModel;
-import shiroroku.theaurorian.Entities.Spiderling.SpiderlingEntityRender;
-import shiroroku.theaurorian.Entities.MoonAcolyte.MoonAcolyteEntity;
-import shiroroku.theaurorian.Entities.MoonAcolyte.MoonAcolyteEntityRender;
+import shiroroku.theaurorian.Entities.CrystallineBeam.CrystallineBeamEntity;
 import shiroroku.theaurorian.Entities.CrystallineSprite.CrystallineSpriteEntity;
-import shiroroku.theaurorian.Entities.CrystallineSprite.CrystallineSpriteEntityRender;
-import shiroroku.theaurorian.Entities.Spirit.SpiritEntity;
-import shiroroku.theaurorian.Entities.Spirit.SpiritEntityRender;
 import shiroroku.theaurorian.Entities.DisturbedHollow.DisturbedHollowEntity;
-import shiroroku.theaurorian.Entities.DisturbedHollow.DisturbedHollowEntityRender;
-import shiroroku.theaurorian.Entities.StickySpiker.StickySpikerEntity;
-import shiroroku.theaurorian.Entities.StickySpiker.StickySpikerEntityRender;
-import shiroroku.theaurorian.Entities.Webbing.WebbingEntity;
-import shiroroku.theaurorian.Entities.Webbing.WebbingEntityRender;
+import shiroroku.theaurorian.Entities.DungeonKeeper.DungeonKeeperEntity;
+import shiroroku.theaurorian.Entities.DungeonSlime.DungeonSlimeEntity;
+import shiroroku.theaurorian.Entities.Hollow.HollowEntity;
+import shiroroku.theaurorian.Entities.MoonAcolyte.MoonAcolyteEntity;
 import shiroroku.theaurorian.Entities.Passive.AurorianPigEntity;
-import shiroroku.theaurorian.Entities.Passive.AurorianPigEntityModel;
-import shiroroku.theaurorian.Entities.Passive.AurorianPigEntityRender;
 import shiroroku.theaurorian.Entities.Passive.AurorianRabbitEntity;
-import shiroroku.theaurorian.Entities.Passive.AurorianRabbitEntityModel;
-import shiroroku.theaurorian.Entities.Passive.AurorianRabbitEntityRender;
 import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntity;
-import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityLayer;
-import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityModel1;
-import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityModel2;
-import shiroroku.theaurorian.Entities.Passive.AurorianSheepEntityRender;
+import shiroroku.theaurorian.Entities.Spiderling.SpiderlingEntity;
+import shiroroku.theaurorian.Entities.Spirit.SpiritEntity;
+import shiroroku.theaurorian.Entities.StickySpiker.StickySpikerEntity;
+import shiroroku.theaurorian.Entities.UndeadKnight.UndeadKnightEntity;
+import shiroroku.theaurorian.Entities.Webbing.WebbingEntity;
 import shiroroku.theaurorian.TheAurorian;
 
+/**
+ * Server-safe entity type registry. Renderer registration lives in
+ * {@link shiroroku.theaurorian.EventsClient} so dedicated/GameTest servers do not
+ * classload client-only renderer types.
+ */
 public class EntityRegistry {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TheAurorian.MODID);
@@ -114,49 +90,4 @@ public class EntityRegistry {
         event.register(EntityRegistry.aurorian_rabbit.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AurorianRabbitEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
         event.register(EntityRegistry.aurorian_sheep.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AurorianSheepEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
     }
-
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        // Misc
-        event.registerEntityRenderer(EntityRegistry.cerulean_arrow.get(), (ctx) -> new AurorianArrowRenderer(ctx, new ResourceLocation(TheAurorian.MODID, "textures/entity/cerulean_arrow.png")));
-        event.registerEntityRenderer(EntityRegistry.crystal_arrow.get(), (ctx) -> new AurorianArrowRenderer(ctx, new ResourceLocation(TheAurorian.MODID, "textures/entity/crystal_arrow.png")));
-        event.registerEntityRenderer(EntityRegistry.crystalline_beam.get(), CrystallineBeamRenderer::new);
-
-        // Living
-        event.registerEntityRenderer(EntityRegistry.dungeon_keeper.get(), DungeonKeeperRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.dungeon_slime.get(), DungeonSlimeRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.hollow.get(), HollowRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.undead_knight.get(), UndeadKnightRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.moon_queen.get(), MoonQueenRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.dungeon_spider.get(), DungeonSpiderRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.spiderling.get(), SpiderlingEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.moon_acolyte.get(), MoonAcolyteEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.crystalline_sprite.get(), CrystallineSpriteEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.spirit.get(), SpiritEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.disturbed_hollow.get(), DisturbedHollowEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.sticky_spiker.get(), StickySpikerEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.webbing.get(), WebbingEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.aurorian_pig.get(), AurorianPigEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.aurorian_rabbit.get(), AurorianRabbitEntityRender::new);
-        event.registerEntityRenderer(EntityRegistry.aurorian_sheep.get(), AurorianSheepEntityRender::new);
-    }
-
-    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        // Misc
-        event.registerLayerDefinition(CrystallineBeamModel.MODEL_LAYER_LOCATION, CrystallineBeamModel::createLayer);
-        event.registerLayerDefinition(SpiderlingEntityModel.MODEL_LAYER_LOCATION, SpiderlingEntityModel::createLayer);
-        event.registerLayerDefinition(SilentwoodChestBlockRenderer.MODEL_LAYER_DOUBLE_LEFT, SilentwoodChestBlockRenderer::createDoubleBodyLeftLayer);
-        event.registerLayerDefinition(SilentwoodChestBlockRenderer.MODEL_LAYER_DOUBLE_RIGHT, SilentwoodChestBlockRenderer::createDoubleBodyRightLayer);
-        event.registerLayerDefinition(SilentwoodChestBlockRenderer.MODEL_LAYER_NORMAL, SilentwoodChestBlockRenderer::createSingleBodyLayer);
-
-        // Living
-        event.registerLayerDefinition(DungeonSlimeModel.MODEL_LAYER_LOCATION, DungeonSlimeModel::createLayer);
-        event.registerLayerDefinition(DungeonSlimeModel.MODEL_LAYER_LOCATION_OUTER, DungeonSlimeModel::createOuterLayer);
-
-        // Passive
-        event.registerLayerDefinition(AurorianPigEntityModel.MODEL_LAYER_LOCATION, AurorianPigEntityModel::createBodyLayer);
-        event.registerLayerDefinition(AurorianRabbitEntityModel.MODEL_LAYER_LOCATION, AurorianRabbitEntityModel::createBodyLayer);
-        event.registerLayerDefinition(AurorianSheepEntityModel1.MODEL_LAYER_LOCATION, AurorianSheepEntityModel1::createBodyLayer);
-        event.registerLayerDefinition(AurorianSheepEntityModel2.MODEL_LAYER_LOCATION, AurorianSheepEntityModel2::createBodyLayer);
-    }
-
 }

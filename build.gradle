@@ -40,6 +40,19 @@ minecraft {
         data {
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
+
+        // Headless in-world GameTest server (functional tests)
+        gameTestServer {
+            workingDirectory project.file('run/gametest')
+            property 'forge.enabledGameTestNamespaces', mod_id
+            property 'forge.enableGameTest', 'true'
+            property 'forge.gameTestServer', 'true'
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
@@ -79,18 +92,15 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
-    // AppleSkin
-    implementation fg.deobf("curse.maven:appleskin-248787:3872808")
+    // Client-only QoL mods: compileOnly so dedicated / GameTest servers do not load them.
+    // Add back as runtimeOnly when launching the client run configuration if needed.
+    compileOnly fg.deobf("curse.maven:appleskin-248787:3872808")
+    compileOnly fg.deobf("curse.maven:neat-238372:3878735")
+    compileOnly fg.deobf("curse.maven:effortless-building-302113:4810762")
 
-    // Neat
-    implementation fg.deobf("curse.maven:neat-238372:3878735")
-
-	// Enchantment Descriptions
-	implementation fg.deobf("curse.maven:bookshelf-228525:4556697")
+    // Enchantment Descriptions (Bookshelf is a common dep used by enchdesc)
+    implementation fg.deobf("curse.maven:bookshelf-228525:4556697")
     implementation fg.deobf("curse.maven:enchantment-descriptions-250419:5015022")
-
-    // Effortless building (for making stuctures)
-    implementation fg.deobf("curse.maven:effortless-building-302113:4810762")
 
     // Mixin
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
