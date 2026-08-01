@@ -705,13 +705,14 @@ def cat_audio() -> None:
             if not path.exists():
                 err(cat, f"missing ogg for '{key}': {rel}.ogg")
 
-    particles = MAIN / "assets" / MODID / "particles.json"
-    if not particles.exists():
-        err(cat, "missing particles.json")
+    particle_dir = MAIN / "assets" / MODID / "particles"
+    drip = particle_dir / "weeping_willow_drip.json"
+    if not drip.exists():
+        err(cat, "missing particles/weeping_willow_drip.json")
     else:
-        pdata = load_json(particles)
-        if not isinstance(pdata, dict) or not pdata:
-            err(cat, "particles.json empty")
+        pdata = load_json(drip)
+        if not isinstance(pdata, dict) or "textures" not in pdata:
+            err(cat, "weeping_willow_drip.json invalid (need textures)")
 
     # Java registries
     sound_java = JAVA / "Registry" / "SoundRegistry.java"

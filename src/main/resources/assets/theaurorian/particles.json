@@ -1,9 +1,0 @@
-{
-  "weeping_willow_drip": {
-    "textures": [
-      "minecraft:particle/drip_hang",
-      "minecraft:particle/drip_fall",
-      "minecraft:particle/drip_land"
-    ]
-  }
-}

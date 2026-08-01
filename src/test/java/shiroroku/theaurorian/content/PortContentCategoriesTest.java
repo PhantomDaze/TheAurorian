@@ -423,8 +423,8 @@ class PortContentCategoriesTest {
                     assertTrue(Files.isRegularFile(soundsDir.resolve(rel + ".ogg")), "missing ogg " + rel);
                 }
             }
-            JsonObject particles = ContentTestSupport.readObject(MAIN.resolve("assets/" + MODID + "/particles.json"));
-            assertFalse(particles.entrySet().isEmpty());
+            JsonObject particles = ContentTestSupport.readObject(MAIN.resolve("assets/" + MODID + "/particles/weeping_willow_drip.json"));
+            assertTrue(particles.has("textures"));
             String soundJava = Files.readString(JAVA.resolve("Registry/SoundRegistry.java"), StandardCharsets.UTF_8);
             assertTrue(soundJava.contains("\"music\""));
             assertTrue(soundJava.contains("\"weepingwillowbell\""));
