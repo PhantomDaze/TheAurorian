@@ -3,7 +3,7 @@ package shiroroku.theaurorian.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.ForgeTier;
@@ -32,6 +32,7 @@ public class MaterialTiers {
     public static final ArmorMaterial SPIKED_ARMOR = armorBuilder("spiked", 65, new int[]{3, 6, 5, 3}, 15, SoundEvents.ARMOR_EQUIP_IRON, 1.0F, 0.0F, () -> Ingredient.of(ItemRegistry.umbra_ingot.get()));
     public static final ArmorMaterial UMBRA_ARMOR = armorBuilder(UMBRA, "umbra", 20, new int[]{4, 6, 6, 4}, SoundEvents.ARMOR_EQUIP_DIAMOND, 0.0F, 0.2F);
 
+    // order: BOOTS, LEGGINGS, CHESTPLATE, HELMET (ArmorItem.Type ordinal)
     private static final int[] ARMOR_BASE_DURABILITIES = new int[]{13, 15, 16, 11};
 
     private static ArmorMaterial armorBuilder(ForgeTier pTier, String pName, int pDurabilityMultiplier, int[] pSlotProtections, SoundEvent pSound, float pToughness, float pKnockbackResistance) {
@@ -39,15 +40,27 @@ public class MaterialTiers {
     }
 
     private static ArmorMaterial armorBuilder(String pName, int pDurabilityMultiplier, int[] pSlotProtections, int pEnchantmentValue, SoundEvent pSound, float pToughness, float pKnockbackResistance, Supplier<Ingredient> pRepairIngredient) {
+        // pSlotProtections is boots,legs,chest,helmet matching EquipmentSlot indices 0-3 historically
+        // ArmorItem.Type: HELMET=0, CHESTPLATE=1, LEGGINGS=2, BOOTS=3 for getDurability / defense arrays in vanilla
+        // Our array is [boots, legs, chest, helmet] = EquipmentSlot index order
         return new ArmorMaterial() {
-            @Override
-            public int getDurabilityForSlot(EquipmentSlot pSlot) {
-                return ARMOR_BASE_DURABILITIES[pSlot.getIndex()] * pDurabilityMultiplier;
+            private int index(ArmorItem.Type type) {
+                return switch (type) {
+                    case BOOTS -> 0;
+                    case LEGGINGS -> 1;
+                    case CHESTPLATE -> 2;
+                    case HELMET -> 3;
+                };
             }
 
             @Override
-            public int getDefenseForSlot(EquipmentSlot pSlot) {
-                return pSlotProtections[pSlot.getIndex()];
+            public int getDurabilityForType(ArmorItem.Type type) {
+                return ARMOR_BASE_DURABILITIES[index(type)] * pDurabilityMultiplier;
+            }
+
+            @Override
+            public int getDefenseForType(ArmorItem.Type type) {
+                return pSlotProtections[index(type)];
             }
 
             @Override

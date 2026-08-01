@@ -40,9 +40,9 @@ public class WebbingEntity extends ThrowableProjectile {
 
     @Override
     public void handleEntityEvent(byte pId) {
-        if (pId == 3 && this.level.isClientSide) {
+        if (pId == 3 && this.level().isClientSide) {
             for (int i = 0; i < 8; ++i) {
-                this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ItemRegistry.webbing.get())), this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ItemRegistry.webbing.get())), this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -50,16 +50,16 @@ public class WebbingEntity extends ThrowableProjectile {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         if (pResult.getEntity() instanceof LivingEntity e && e != this.getOwner()) {
-            e.hurt(DamageSource.thrown(this, this.getOwner()), 0.5F);
+            e.hurt(this.damageSources().thrown(this, this.getOwner()), 0.5F);
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
         }
-        this.level.broadcastEntityEvent(this, (byte) 3);
+        this.level().broadcastEntityEvent(this, (byte) 3);
         this.discard();
     }
 
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
-        this.level.broadcastEntityEvent(this, (byte) 3);
+        this.level().broadcastEntityEvent(this, (byte) 3);
         this.discard();
     }
 }

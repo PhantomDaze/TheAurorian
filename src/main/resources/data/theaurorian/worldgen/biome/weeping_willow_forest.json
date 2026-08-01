@@ -1,7 +1,6 @@
 {
   "temperature": 0.7,
   "downfall": 0.9,
-  "precipitation": "none",
   "effects": {
     "sky_color": 7972607,
     "fog_color": 12638463,
@@ -14,9 +13,7 @@
       "replace_current_music": false,
       "max_delay": 3600,
       "min_delay": 1200,
-      "event": {
-        "sound": "theaurorian:music"
-      }
+      "sound": "theaurorian:music"
     }
   },
   "spawners": {
@@ -79,5 +76,6 @@
       "theaurorian:aurorian_grass_patch",
       "theaurorian:aurorian_plants"
     ]
-  ]
+  ],
+  "has_precipitation": false
 }

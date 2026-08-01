@@ -59,7 +59,7 @@ public final class VisibleDemoRunner {
         if (session == null) {
             return false;
         }
-        cleanupStage(player.getLevel(), session);
+        cleanupStage(player.serverLevel(), session);
         title(player, "§cDemo stopped", "");
         return true;
     }
@@ -112,7 +112,7 @@ public final class VisibleDemoRunner {
         if (event.getEntity() instanceof ServerPlayer player) {
             Session session = SESSIONS.remove(player.getUUID());
             if (session != null) {
-                cleanupStage(player.getLevel(), session);
+                cleanupStage(player.serverLevel(), session);
             }
         }
     }
@@ -142,12 +142,12 @@ public final class VisibleDemoRunner {
             }
             case SETUP -> {
                 VisibleDemoCase demoCase = session.cases.get(session.index);
-                cleanupStage(player.getLevel(), session);
+                cleanupStage(player.serverLevel(), session);
                 Stage stage = buildStageInView(player, demoCase.stageDepth(), demoCase.stageWidth(), demoCase.stageHeight());
                 session.stage = stage;
                 session.trackedEntities.clear();
                 try {
-                    DemoContext ctx = new DemoContext(player, player.getLevel(), stage, session.trackedEntities);
+                    DemoContext ctx = new DemoContext(player, player.serverLevel(), stage, session.trackedEntities);
                     demoCase.setup(ctx);
                     session.focus = ctx.focusOrCenter();
                     lookAt(player, session.focus);
@@ -160,7 +160,7 @@ public final class VisibleDemoRunner {
             case RUN -> {
                 VisibleDemoCase demoCase = session.cases.get(session.index);
                 try {
-                    DemoContext ctx = new DemoContext(player, player.getLevel(), session.stage, session.trackedEntities);
+                    DemoContext ctx = new DemoContext(player, player.serverLevel(), session.stage, session.trackedEntities);
                     ctx.focus = session.focus;
                     demoCase.run(ctx);
                     session.focus = ctx.focusOrCenter();
@@ -203,7 +203,7 @@ public final class VisibleDemoRunner {
     }
 
     private static void finish(ServerPlayer player, Session session, Iterator<?> it) {
-        cleanupStage(player.getLevel(), session);
+        cleanupStage(player.serverLevel(), session);
         String summary = "§b[TA Demo]§r Done — §a" + session.passed + " passed§r, §c" + session.failed + " failed§r / " + session.cases.size();
         player.sendSystemMessage(Component.literal(summary));
         title(player, session.failed == 0 ? "§aAll demos passed" : "§eDemo finished",
@@ -231,7 +231,7 @@ public final class VisibleDemoRunner {
      * always in front of the camera.
      */
     private static Stage buildStageInView(ServerPlayer player, int depth, int width, int height) {
-        ServerLevel level = player.getLevel();
+        ServerLevel level = player.serverLevel();
         Direction facing = player.getDirection(); // cardinal
         BlockPos feet = player.blockPosition();
         // origin = front-left corner of the stage floor

@@ -1,7 +1,7 @@
 package shiroroku.theaurorian;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.HumanoidModel;
@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -22,7 +21,6 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -129,37 +127,22 @@ public class EventsClient {
      */
     @SubscribeEvent
     public static void onRegisterItemDecorations(RegisterItemDecorationsEvent event) {
-        event.register(ItemRegistry.umbra_pickaxe.get(), (font, stack, xOffset, yOffset, blitOffset) -> {
+        event.register(ItemRegistry.umbra_pickaxe.get(), (graphics, font, stack, xOffset, yOffset) -> {
             Block selectedBlock = UmbraPickaxe.getSelectedBlock(stack);
             if (selectedBlock == null) {
                 return false;
             }
-            PoseStack poseStack = RenderSystem.getModelViewStack();
-            poseStack.pushPose();
-            poseStack.scale(0.5f, 0.5f, 1);
-            poseStack.translate(xOffset, yOffset + 8, 0);
-            Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(selectedBlock), xOffset, yOffset);
-            poseStack.popPose();
-            RenderSystem.applyModelViewMatrix();
+            graphics.pose().pushPose();
+            graphics.pose().scale(0.5f, 0.5f, 1);
+            graphics.pose().translate(xOffset, yOffset + 8, 0);
+            graphics.renderItem(new ItemStack(selectedBlock), xOffset, yOffset);
+            graphics.pose().popPose();
             return true;
         });
     }
 
     @SubscribeEvent
     public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
-        event.register(ParticleRegistry.WEEPING_WILLOW_DRIP.get(), WeepingWillowDripParticle.Provider::new);
+        event.registerSpriteSet(ParticleRegistry.WEEPING_WILLOW_DRIP.get(), WeepingWillowDripParticle.Provider::new);
     }
-
-    @SuppressWarnings("deprecation")
-    @SubscribeEvent
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-            return;
-        }
-        event.addSprite(MoonlightForgeBlockRenderer.RING_OVERLAY);
-        event.addSprite(SilentwoodChestBlockRenderer.DOUBLE_LEFT);
-        event.addSprite(SilentwoodChestBlockRenderer.DOUBLE_RIGHT);
-        event.addSprite(SilentwoodChestBlockRenderer.NORMAL);
-    }
-
 }

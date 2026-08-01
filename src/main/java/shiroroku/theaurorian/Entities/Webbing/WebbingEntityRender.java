@@ -1,10 +1,12 @@
 package shiroroku.theaurorian.Entities.Webbing;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -30,8 +32,8 @@ public class WebbingEntityRender extends EntityRenderer<WebbingEntity> {
         pPoseStack.pushPose();
         pPoseStack.scale(1.8F, 1.8F, 1.8F);
         pPoseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        pPoseStack.mulPose(new Quaternion(new Vector3f(0.0F, 1.0F, 0.0F), 180.0F, true));
-        this.itemRenderer.renderStatic(this.item, ItemTransforms.TransformType.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY, pPoseStack, pBuffer, 0);
+        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float)Math.toRadians(180.0F), 0.0F, 1.0F, 0.0F)));
+        this.itemRenderer.renderStatic(this.item, ItemDisplayContext.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY, pPoseStack, pBuffer, null, 0);
         pPoseStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
     }

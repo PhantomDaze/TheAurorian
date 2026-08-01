@@ -21,6 +21,7 @@ import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -77,7 +78,7 @@ public class AurorianSheepEntity extends Sheep {
 
     @Override
     public void aiStep() {
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             this.sheepTimer = Math.max(0, this.sheepTimer - 1);
         }
         super.aiStep();
@@ -117,17 +118,17 @@ public class AurorianSheepEntity extends Sheep {
         DyeColor dyecolor = ((Sheep) pFather).getColor();
         DyeColor dyecolor1 = ((Sheep) pMother).getColor();
         CraftingContainer craftingcontainer = makeContainer(dyecolor, dyecolor1);
-        return this.level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingcontainer, this.level)
-                .map(p_29828_ -> p_29828_.assemble(craftingcontainer))
+        return this.level().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingcontainer, this.level())
+                .map(p_29828_ -> p_29828_.assemble(craftingcontainer, this.level().registryAccess()))
                 .map(ItemStack::getItem)
                 .filter(DyeItem.class::isInstance)
                 .map(DyeItem.class::cast)
                 .map(DyeItem::getDyeColor)
-                .orElseGet(() -> this.level.random.nextBoolean() ? dyecolor : dyecolor1);
+                .orElseGet(() -> this.level().random.nextBoolean() ? dyecolor : dyecolor1);
     }
 
     private static CraftingContainer makeContainer(DyeColor pFatherColor, DyeColor pMotherColor) {
-        CraftingContainer craftingcontainer = new CraftingContainer(new AbstractContainerMenu(null, -1) {
+        CraftingContainer craftingcontainer = new TransientCraftingContainer(new AbstractContainerMenu(null, -1) {
             @Override
             public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
                 return ItemStack.EMPTY;

@@ -51,7 +51,7 @@ public final class VisibleDemoCommand {
             return 0;
         }
         VisibleDemoRunner.start(player, fromIndex < 0 ? 0 : fromIndex);
-        source.sendSuccess(Component.literal(
+        source.sendSuccess(() -> Component.literal(
                 "§b[TA Demo]§r Starting visible feature demo — keep looking forward. " +
                         "Pause between cases: §e" + VisibleDemoRunner.getPauseTicks(player) + "t§r. " +
                         "§7(/ta demo stop | next | pause <ticks>)"), false);
@@ -64,7 +64,7 @@ public final class VisibleDemoCommand {
             return 0;
         }
         if (VisibleDemoRunner.stop(player)) {
-            source.sendSuccess(Component.literal("§b[TA Demo]§r Stopped."), false);
+            source.sendSuccess(() -> Component.literal("§b[TA Demo]§r Stopped."), false);
             return 1;
         }
         source.sendFailure(Component.literal("No demo running."));
@@ -77,7 +77,7 @@ public final class VisibleDemoCommand {
             return 0;
         }
         if (VisibleDemoRunner.skipWait(player)) {
-            source.sendSuccess(Component.literal("§b[TA Demo]§r Skipping to next case…"), false);
+            source.sendSuccess(() -> Component.literal("§b[TA Demo]§r Skipping to next case…"), false);
             return 1;
         }
         source.sendFailure(Component.literal("No demo running."));
@@ -90,7 +90,7 @@ public final class VisibleDemoCommand {
             return 0;
         }
         VisibleDemoRunner.setPauseTicks(player, ticks);
-        source.sendSuccess(Component.literal("§b[TA Demo]§r Pause between cases set to §e" + ticks + "t§r (~" + String.format("%.1f", ticks / 20.0) + "s)."), false);
+        source.sendSuccess(() -> Component.literal("§b[TA Demo]§r Pause between cases set to §e" + ticks + "t§r (~" + String.format("%.1f", ticks / 20.0) + "s)."), false);
         return 1;
     }
 }

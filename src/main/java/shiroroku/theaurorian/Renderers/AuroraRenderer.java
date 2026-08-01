@@ -2,9 +2,11 @@ package shiroroku.theaurorian.Renderers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
+import org.joml.Vector4f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
@@ -32,7 +34,7 @@ public class AuroraRenderer {
         Matrix4f matrix = pPoseStack.last().pose();
         BufferBuilder buf = Tesselator.getInstance().getBuilder();
         pPoseStack.pushPose();
-        pPoseStack.mulPose(Vector3f.XP.rotationDegrees(90));
+        pPoseStack.mulPose(Axis.XP.rotationDegrees(90));
         RenderSystem.enableBlend();
         RenderSystem.disableCull();
 
@@ -48,7 +50,7 @@ public class AuroraRenderer {
         pPoseStack.translate(0, 200, 0);
         renderAuroraStream(level, pPoseStack, buf, time);
 
-        RenderSystem.disableTexture();
+        // texture always on
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableBlend();
         RenderSystem.enableCull();

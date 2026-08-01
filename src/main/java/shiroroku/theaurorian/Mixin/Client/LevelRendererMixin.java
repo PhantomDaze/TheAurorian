@@ -3,8 +3,10 @@ package shiroroku.theaurorian.Mixin.Client;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -69,7 +71,7 @@ public class LevelRendererMixin {
             if (fogtype != FogType.POWDER_SNOW && fogtype != FogType.LAVA && !this.doesMobEffectBlockSky(pCamera)) {
 
                 BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-                RenderSystem.disableTexture();
+                // texture unit always enabled in 1.20+
                 FogRenderer.levelFogColor();
                 RenderSystem.depthMask(false);
                 Vec3 skyColor = this.level.getSkyColor(this.minecraft.gameRenderer.getMainCamera().getPosition(), pPartialTick);
@@ -84,12 +86,12 @@ public class LevelRendererMixin {
                 float[] sunriseColor = this.level.effects().getSunriseColor(this.level.getTimeOfDay(pPartialTick), pPartialTick);
                 if (sunriseColor != null) {
                     RenderSystem.setShader(GameRenderer::getPositionColorShader);
-                    RenderSystem.disableTexture();
+                    // texture unit always enabled in 1.20+
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     pPoseStack.pushPose();
-                    pPoseStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
-                    pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.sin(this.level.getSunAngle(pPartialTick)) < 0.0F ? 180.0F : 0.0F));
-                    pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(90.0F));
+                    pPoseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                    pPoseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(this.level.getSunAngle(pPartialTick)) < 0.0F ? 180.0F : 0.0F));
+                    pPoseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
                     Matrix4f matrix4f = pPoseStack.last().pose();
                     bufferbuilder.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
                     bufferbuilder.vertex(matrix4f, 0.0F, 100.0F, 0.0F).color(sunriseColor[0], sunriseColor[1], sunriseColor[2], sunriseColor[3]).endVertex();
@@ -103,13 +105,13 @@ public class LevelRendererMixin {
                     pPoseStack.popPose();
                 }
 
-                RenderSystem.enableTexture();
+                // texture unit always enabled in 1.20+
                 RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 pPoseStack.pushPose();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 float skyRotationSpeed = (this.level.getGameTime() + pPartialTick) * 0.02f;
-                pPoseStack.mulPose(Vector3f.YP.rotationDegrees(skyRotationSpeed));
-                pPoseStack.mulPose(Vector3f.XP.rotationDegrees(140 + ModUtil.wave(skyRotationSpeed, 0.05f, 60)));
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(skyRotationSpeed));
+                pPoseStack.mulPose(Axis.XP.rotationDegrees(140 + ModUtil.wave(skyRotationSpeed, 0.05f, 60)));
                 Matrix4f matrix4f1 = pPoseStack.last().pose();
                 float moonSize = 40.0F;
                 RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -127,7 +129,7 @@ public class LevelRendererMixin {
                 bufferbuilder.vertex(matrix4f1, moonSize, -100.0F, -moonSize).uv(u1, v1).endVertex();
                 bufferbuilder.vertex(matrix4f1, -moonSize, -100.0F, -moonSize).uv(u2, v1).endVertex();
                 BufferUploader.drawWithShader(bufferbuilder.end());
-                RenderSystem.disableTexture();
+                // texture unit always enabled in 1.20+
 
                 float starBrightness = this.level.getStarBrightness(pPartialTick);
                 RenderSystem.setShaderColor(starBrightness, starBrightness, starBrightness, starBrightness);
@@ -145,7 +147,7 @@ public class LevelRendererMixin {
                     AuroraRenderer.renderSky(level, pPoseStack, pProjectionMatrix, pPartialTick);
                 }
 
-                RenderSystem.disableTexture();
+                // texture unit always enabled in 1.20+
                 RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
                 double d0 = this.minecraft.player.getEyePosition(pPartialTick).y - this.level.getLevelData().getHorizonHeight(this.level);
                 if (d0 < 0.0D) {
@@ -158,7 +160,7 @@ public class LevelRendererMixin {
                 }
 
                 RenderSystem.setShaderColor((float) skyColor.x * 0.2F + 0.04F, (float) skyColor.y * 0.2F + 0.04F, (float) skyColor.z * 0.6F + 0.1F, 1.0F);
-                RenderSystem.enableTexture();
+                // texture unit always enabled in 1.20+
                 RenderSystem.depthMask(true);
 
             }

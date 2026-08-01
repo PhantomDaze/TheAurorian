@@ -23,7 +23,7 @@ public class ReplaceAirStructureProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader pLevel, BlockPos pPos, BlockPos pPivot, StructureTemplate.StructureBlockInfo pOriginalInfo, StructureTemplate.StructureBlockInfo pModifiedInfo, StructurePlaceSettings pSettings) {
-        return pLevel.getBlockState(pModifiedInfo.pos).isAir() ? pModifiedInfo : null;
+        return pLevel.getBlockState(pModifiedInfo.pos()).isAir() ? pModifiedInfo : null;
     }
 
     @Override

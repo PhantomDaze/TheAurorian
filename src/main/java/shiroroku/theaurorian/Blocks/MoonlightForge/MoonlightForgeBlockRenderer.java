@@ -2,9 +2,11 @@ package shiroroku.theaurorian.Blocks.MoonlightForge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -42,8 +44,8 @@ public class MoonlightForgeBlockRenderer implements BlockEntityRenderer<Moonligh
 
         stack.pushPose();
         stack.translate(0.5, 0.9, 0.5D);
-        stack.mulPose(Vector3f.ZP.rotationDegrees(rotation * multiplier * 3));
-        stack.mulPose(Vector3f.YP.rotationDegrees(rotation * multiplier * 3));
+        stack.mulPose(Axis.ZP.rotationDegrees(rotation * multiplier * 3));
+        stack.mulPose(Axis.YP.rotationDegrees(rotation * multiplier * 3));
         stack.translate(-scale * 0.5, -scale * 0.5, -scale * 0.5);
         stack.scale(scale, scale, scale);
         this.blockRenderer.renderSingleBlock(BlockRegistry.moon_gem.get().defaultBlockState(), stack, pBufferSource, pPackedLight, pPackedOverlay);
@@ -69,15 +71,15 @@ public class MoonlightForgeBlockRenderer implements BlockEntityRenderer<Moonligh
         float movement = ModUtil.wave(time, 0.15f, 0.1f);
         stack.scale(0.7f, 1, 0.7f);
         stack.translate(0, 0.9 + movement, 0D);
-        stack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        stack.mulPose(Axis.YP.rotationDegrees(rotation));
         renderRing(pBufferSource, stack);
         movement += multiplier * 1;
         stack.scale(0.95f * movement, 1, 0.95f * movement);
-        stack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        stack.mulPose(Axis.YP.rotationDegrees(rotation));
         stack.translate(0, 0.15, 0D);
         renderRing(pBufferSource, stack);
         stack.scale(0.95f * movement, 1, 0.95f * movement);
-        stack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        stack.mulPose(Axis.YP.rotationDegrees(rotation));
         stack.translate(0, 0.15, 0D);
         renderRing(pBufferSource, stack);
         stack.popPose();

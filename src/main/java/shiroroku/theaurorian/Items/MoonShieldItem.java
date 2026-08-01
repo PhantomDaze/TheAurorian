@@ -36,7 +36,7 @@ public class MoonShieldItem extends BaseAurorianShield {
         if (entity instanceof Player player) {
             if (player.getMainHandItem() == stack || player.getOffhandItem() == stack) {
                 if (level.isClientSide) {
-                    if (!player.isShiftKeyDown() && player.isOnGround() && player.tickCount % 4 == 0 && stack == player.getUseItem()) {
+                    if (!player.isShiftKeyDown() && player.onGround() && player.tickCount % 4 == 0 && stack == player.getUseItem()) {
                         double motionX = player.getRandom().nextGaussian() * 0.02D;
                         double motionY = player.getRandom().nextGaussian() * 0.1D;
                         double motionZ = player.getRandom().nextGaussian() * 0.02D;
@@ -65,7 +65,7 @@ public class MoonShieldItem extends BaseAurorianShield {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof Player player) {
-            if (!player.isShiftKeyDown() && player.isOnGround()) {
+            if (!player.isShiftKeyDown() && player.onGround()) {
                 double velx = Mth.sin(-player.getYRot() / 180.0F * (float) Math.PI) * Mth.cos(player.getXRot() / 180.0F * (float) Math.PI);
                 double velz = Mth.cos(player.getYRot() / 180.0F * (float) Math.PI) * Mth.cos(player.getXRot() / 180.0F * (float) Math.PI);
                 int distance = 4;

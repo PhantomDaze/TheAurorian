@@ -85,15 +85,15 @@ public class DungeonSpiderEntity extends Monster {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.level.isClientSide && this.tickCount % 2 == 0 && this.isWindingUpSpit()) {
+        if (this.level().isClientSide && this.tickCount % 2 == 0 && this.isWindingUpSpit()) {
             float distance = 1.6F;
             double sinx = Math.sin(-this.yHeadRot / 180.0F * (float) Math.PI) * Math.cos(this.getXRot() / 180.0F * (float) Math.PI) * distance;
             double cosz = Math.cos(this.yHeadRot / 180.0F * (float) Math.PI) * Math.cos(this.getXRot() / 180.0F * (float) Math.PI) * distance;
-            this.level.addParticle(net.minecraft.core.particles.ParticleTypes.CLOUD,
+            this.level().addParticle(net.minecraft.core.particles.ParticleTypes.CLOUD,
                     this.getX() + sinx, this.getY() + this.getEyeHeight() - 0.2F, this.getZ() + cosz,
                     this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.setBesideClimbableBlock(this.horizontalCollision);
         }
     }
@@ -107,8 +107,8 @@ public class DungeonSpiderEntity extends Monster {
                 for (int z = 0; z <= distance; z++) {
                     int offs = distance / 2;
                     var p = new net.minecraft.core.BlockPos(x + this.blockPosition().getX() - offs, y + this.blockPosition().getY() - offs, z + this.blockPosition().getZ() - offs);
-                    if (this.level.getBlockState(p).is(BlockRegistry.fog_wall.get())) {
-                        this.level.destroyBlock(p, false);
+                    if (this.level().getBlockState(p).is(BlockRegistry.fog_wall.get())) {
+                        this.level().destroyBlock(p, false);
                     }
                 }
             }

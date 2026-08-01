@@ -253,7 +253,7 @@ public class DarkstoneDungeonStructure extends Structure {
                 s.template.placeInWorld(level, s.pos, s.pos, settings, random, 2);
                 if (s.loot != null) {
                     for (StructureTemplate.StructureBlockInfo chest : s.template.filterBlocks(s.pos, settings, Blocks.CHEST)) {
-                        if (level.getBlockEntity(chest.pos) instanceof ChestBlockEntity chestEntity) {
+                        if (level.getBlockEntity(chest.pos()) instanceof ChestBlockEntity chestEntity) {
                             chestEntity.setLootTable(new ResourceLocation(s.loot), random.nextLong());
                         }
                     }

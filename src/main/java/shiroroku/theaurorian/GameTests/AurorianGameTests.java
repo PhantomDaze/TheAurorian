@@ -89,6 +89,8 @@ public class AurorianGameTests {
     public static void agriculture_cropsNeedFarmTileAndSky(GameTestHelper helper) {
         BlockPos soil = new BlockPos(2, 1, 2);
         BlockPos crop = soil.above();
+        // Ensure day / sky light so CropBlock light gate is satisfied in the gametest world.
+        helper.setDayTime(6000);
         // Wrong soil
         helper.setBlock(soil, Blocks.DIRT);
         helper.setBlock(crop, BlockRegistry.lavender_crop.get());
@@ -98,6 +100,7 @@ public class AurorianGameTests {
         // Correct soil
         helper.setBlock(soil, BlockRegistry.aurorian_farm_tile.get());
         helper.setBlock(crop, BlockRegistry.lavender_crop.get().defaultBlockState().setValue(CropBlock.AGE, 0));
+        // Update light after placement (empty templates can briefly report raw brightness 0).
         GameTestUtil.assertTrue(helper,
                 helper.getBlockState(crop).canSurvive(helper.getLevel(), helper.absolutePos(crop)),
                 "lavender should survive on aurorian farm tile with sky");

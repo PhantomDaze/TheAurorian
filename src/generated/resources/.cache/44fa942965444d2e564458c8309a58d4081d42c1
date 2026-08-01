@@ -1,4 +1,4 @@
-// 1.19.2	2026-08-01T00:05:24.552931932	Tags for minecraft:block
+// 1.20.1	2026-08-01T13:52:29.614847324	Tags for minecraft:block mod id theaurorian
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/forge/tags/blocks/chests.json
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/forge/tags/blocks/chests/wooden.json
 52812fab3474d07f55d5ed5e0025c937791a2a04 data/forge/tags/blocks/fences/wooden.json
@@ -14,7 +14,7 @@ ab09c0c9de258f900ee2a523715fadae382cc8bc data/minecraft/tags/blocks/mineable/pic
 50aa79285a56a17909b233710595ff1bbad3a8a2 data/minecraft/tags/blocks/mineable/shovel.json
 7474587f7cb7d3b6e75281b2b34795bace7d4779 data/minecraft/tags/blocks/needs_stone_tool.json
 733443386bc57f757d288f42d35a564bb37e231c data/minecraft/tags/blocks/planks.json
-9628fa3137b0b76086d4422d7f4b99d8b5105940 data/minecraft/tags/blocks/replaceable_plants.json
+9628fa3137b0b76086d4422d7f4b99d8b5105940 data/minecraft/tags/blocks/replaceable.json
 5e4735908ddc20ab3bd45484b980f5e1d8367107 data/minecraft/tags/blocks/saplings.json
 1b3e33e4d1da23de82ed2f7215cdf5709ac391bc data/minecraft/tags/blocks/slabs.json
 c9061c1bf9dbab897349e1e081dcb442199ed419 data/minecraft/tags/blocks/stairs.json

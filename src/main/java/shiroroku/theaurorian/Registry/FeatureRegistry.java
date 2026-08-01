@@ -1,6 +1,6 @@
 package shiroroku.theaurorian.Registry;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,7 +13,7 @@ import shiroroku.theaurorian.World.Feature.WeepingWillowTreeFeature;
 
 public class FeatureRegistry {
 
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registry.FEATURE_REGISTRY, TheAurorian.MODID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, TheAurorian.MODID);
 
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> WEEPING_WILLOW_TREE = FEATURES.register("weeping_willow_tree", () -> new WeepingWillowTreeFeature());
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> MUSHROOM_TREE = FEATURES.register("mushroom_tree", () -> new MushroomTreeFeature());

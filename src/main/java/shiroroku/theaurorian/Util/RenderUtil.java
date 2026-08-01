@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -16,23 +16,46 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Matrix4f;
 
 public class RenderUtil {
 
     public static void renderItem(ItemRenderer itemRenderer, PoseStack pPoseStack, Item item, int x, int y) {
-        PoseStack modelViewStack = RenderSystem.getModelViewStack();
-        modelViewStack.pushPose();
-        modelViewStack.mulPoseMatrix(pPoseStack.last().pose());
-        RenderSystem.enableDepthTest();
-        itemRenderer.renderAndDecorateFakeItem(new ItemStack(item), -8, -8);
-        modelViewStack.popPose();
-        RenderSystem.applyModelViewMatrix();
-        RenderSystem.enableBlend();
+        // Draw into the current PoseStack (used by Mirror of Guidance node graph).
+        MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+        pPoseStack.pushPose();
+        pPoseStack.translate(x, y, 100);
+        pPoseStack.scale(16f, -16f, 16f);
+        itemRenderer.renderStatic(new ItemStack(item), net.minecraft.world.item.ItemDisplayContext.GUI,
+                0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY,
+                pPoseStack, buffers, null, 0);
+        buffers.endBatch();
+        pPoseStack.popPose();
+    }
+
+    public static void renderItem(GuiGraphics graphics, Item item, int x, int y) {
+        graphics.renderItem(new ItemStack(item), x - 8, y - 8);
     }
 
     public static void blit(PoseStack pPoseStack, ResourceLocation atlas, int x, int y, float pUOffset, float pVOffset, int pWidth, int pHeight, int pTextureWidth, int pTextureHeight) {
         RenderSystem.setShaderTexture(0, atlas);
-        GuiComponent.blit(pPoseStack, x, y, pUOffset, pVOffset, pWidth, pHeight, pTextureWidth, pTextureHeight);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        Matrix4f matrix = pPoseStack.last().pose();
+        float u0 = pUOffset / (float) pTextureWidth;
+        float u1 = (pUOffset + pWidth) / (float) pTextureWidth;
+        float v0 = pVOffset / (float) pTextureHeight;
+        float v1 = (pVOffset + pHeight) / (float) pTextureHeight;
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(u0, v0).endVertex();
+        bufferbuilder.vertex(matrix, (float) x, (float) (y + pHeight), 0).uv(u0, v1).endVertex();
+        bufferbuilder.vertex(matrix, (float) (x + pWidth), (float) (y + pHeight), 0).uv(u1, v1).endVertex();
+        bufferbuilder.vertex(matrix, (float) (x + pWidth), (float) y, 0).uv(u1, v0).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
+    }
+
+    public static void blit(GuiGraphics graphics, ResourceLocation atlas, int x, int y, float pUOffset, float pVOffset, int pWidth, int pHeight, int pTextureWidth, int pTextureHeight) {
+        graphics.blit(atlas, x, y, pUOffset, pVOffset, pWidth, pHeight, pTextureWidth, pTextureHeight);
     }
 
     public static void blitRepeating(ResourceLocation atlas, int x, int y, int w, int h, float u, float v) {

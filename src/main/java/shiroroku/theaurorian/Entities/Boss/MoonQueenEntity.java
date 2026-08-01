@@ -50,7 +50,7 @@ public class MoonQueenEntity extends Monster {
         super(pEntityType, pLevel);
         this.xpReward = 500;
         this.fireImmune();
-        this.maxUpStep = 1.0F;
+        this.setMaxUpStep(1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -87,15 +87,15 @@ public class MoonQueenEntity extends Monster {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.level.isClientSide && this.tickCount % 2 == 0 && this.isWindingUpCharge()) {
+        if (this.level().isClientSide && this.tickCount % 2 == 0 && this.isWindingUpCharge()) {
             double mx = this.random.nextGaussian() * 0.02D;
             double my = this.random.nextGaussian() * 0.1D;
             double mz = this.random.nextGaussian() * 0.02D;
-            this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() + this.random.nextFloat(), this.getY() + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat(), mx, my, mz);
+            this.level().addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() + this.random.nextFloat(), this.getY() + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat(), mx, my, mz);
         }
 
         if (this.didChargeHit()) {
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 this.playSound(SoundEvents.ANVIL_PLACE, 1.0F, 1.5F);
             }
             this.setChargeHit(false);
@@ -122,15 +122,15 @@ public class MoonQueenEntity extends Monster {
                 for (int z = 0; z <= distance; z++) {
                     int offs = distance / 2;
                     var p = new net.minecraft.core.BlockPos(x + this.blockPosition().getX() - offs, y + this.blockPosition().getY() - offs, z + this.blockPosition().getZ() - offs);
-                    if (this.level.getBlockState(p).is(BlockRegistry.fog_wall.get())) {
-                        this.level.destroyBlock(p, false);
+                    if (this.level().getBlockState(p).is(BlockRegistry.fog_wall.get())) {
+                        this.level().destroyBlock(p, false);
                     }
                 }
             }
         }
 
-        this.level.setBlock(this.blockPosition(), Blocks.CHEST.defaultBlockState(), 2);
-        BlockEntity te = this.level.getBlockEntity(this.blockPosition());
+        this.level().setBlock(this.blockPosition(), Blocks.CHEST.defaultBlockState(), 2);
+        BlockEntity te = this.level().getBlockEntity(this.blockPosition());
         if (te instanceof ChestBlockEntity chest) {
             chest.setLootTable(new net.minecraft.resources.ResourceLocation(CHEST_LOOT), this.random.nextLong());
         } else {

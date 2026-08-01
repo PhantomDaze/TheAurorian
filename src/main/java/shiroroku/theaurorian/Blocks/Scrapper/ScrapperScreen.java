@@ -1,9 +1,9 @@
 package shiroroku.theaurorian.Blocks.Scrapper;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,45 +19,41 @@ public class ScrapperScreen extends AbstractContainerScreen<ScrapperMenu> {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-        RenderSystem.setShaderTexture(0, GUI);
+    protected void renderBg(GuiGraphics graphics, float pPartialTick, int pMouseX, int pMouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        this.blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 
         float rotation = (Minecraft.getInstance().level.getGameTime() + pPartialTick) * 4 * (this.menu.isCrafting() ? 1 : 0);
 
-        pPoseStack.pushPose();
-        pPoseStack.translate(relX + 69, relY + 37, 0);
-        pPoseStack.translate(8, 8, 0);
-        pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(rotation));
-        pPoseStack.translate(-8, -8, 0);
-        this.blit(pPoseStack, 0, 0, 176, 55, 16, 16);
-        pPoseStack.popPose();
+        graphics.pose().pushPose();
+        graphics.pose().translate(relX + 69, relY + 37, 0);
+        graphics.pose().translate(8, 8, 0);
+        graphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
+        graphics.pose().translate(-8, -8, 0);
+        graphics.blit(GUI, 0, 0, 176, 55, 16, 16);
+        graphics.pose().popPose();
 
-        pPoseStack.pushPose();
-        pPoseStack.translate(relX + 91, relY + 37, 0);
-        pPoseStack.translate(8, 8, 0);
-        pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(-rotation));
-        pPoseStack.translate(-8, -8, 0);
-        this.blit(pPoseStack, 0, 0, 176, 55, 16, 16);
-        pPoseStack.popPose();
-
+        graphics.pose().pushPose();
+        graphics.pose().translate(relX + 91, relY + 37, 0);
+        graphics.pose().translate(8, 8, 0);
+        graphics.pose().mulPose(Axis.ZP.rotationDegrees(-rotation));
+        graphics.pose().translate(-8, -8, 0);
+        graphics.blit(GUI, 0, 0, 176, 55, 16, 16);
+        graphics.pose().popPose();
 
         if (this.menu.isCrafting()) {
-            pPoseStack.pushPose();
-            pPoseStack.translate(relX + 86, relY + 35, 0);
-            this.blit(pPoseStack, 0, 0, 176, 0, 5, (int) (21 * this.menu.craftingProgress()));
-
-            pPoseStack.popPose();
+            graphics.pose().pushPose();
+            graphics.pose().translate(relX + 86, relY + 35, 0);
+            graphics.blit(GUI, 0, 0, 176, 0, 5, (int) (21 * this.menu.craftingProgress()));
+            graphics.pose().popPose();
         }
-
     }
 }

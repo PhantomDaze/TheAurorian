@@ -1,5 +1,6 @@
 package shiroroku.theaurorian.Items;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -57,7 +58,7 @@ public class DungeonLocatorItem extends Item {
             ResourceKey<Structure> key = structureKey(selected);
             if (key != null) {
                 ServerLevel server = (ServerLevel) pLevel;
-                Registry<Structure> registry = server.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
+                Registry<Structure> registry = server.registryAccess().registryOrThrow(Registries.STRUCTURE);
                 Holder<Structure> holder = registry.getHolderOrThrow(key);
                 var found = server.getChunkSource().getGenerator().findNearestMapStructure(server, HolderSet.direct(holder), pPlayer.blockPosition(), searchRadius(selected), false);
                 if (found != null) {
@@ -86,7 +87,7 @@ public class DungeonLocatorItem extends Item {
             case "Moontemple" -> "moon_temple";
             default -> "runestone_dungeon";
         };
-        return ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(TheAurorian.MODID, id));
+        return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(TheAurorian.MODID, id));
     }
 
     private static void spawnDirectionParticles(Level level, Player player, BlockPos dungeon) {

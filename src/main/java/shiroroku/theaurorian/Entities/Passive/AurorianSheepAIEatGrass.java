@@ -17,7 +17,7 @@ public class AurorianSheepAIEatGrass extends Goal {
 
     public AurorianSheepAIEatGrass(AurorianSheepEntity sheep) {
         this.sheep = sheep;
-        this.level = sheep.level;
+        this.level = sheep.level();
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
     }
 
@@ -27,14 +27,14 @@ public class AurorianSheepAIEatGrass extends Goal {
             return false;
         } else {
             BlockPos blockpos = this.sheep.blockPosition();
-            return this.level.getBlockState(blockpos.below()).is(BlockRegistry.aurorian_grass.get());
+            return this.sheep.level().getBlockState(blockpos.below()).is(BlockRegistry.aurorian_grass.get());
         }
     }
 
     @Override
     public void start() {
         this.eatingGrassTimer = 40;
-        this.level.broadcastEntityEvent(this.sheep, (byte) 10);
+        this.sheep.level().broadcastEntityEvent(this.sheep, (byte) 10);
         this.sheep.getNavigation().stop();
     }
 
@@ -58,11 +58,11 @@ public class AurorianSheepAIEatGrass extends Goal {
         if (this.eatingGrassTimer == 4) {
             BlockPos blockpos = this.sheep.blockPosition();
             BlockPos below = blockpos.below();
-            BlockState state = this.level.getBlockState(below);
+            BlockState state = this.sheep.level().getBlockState(below);
             if (state.is(BlockRegistry.aurorian_grass.get())) {
-                if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.sheep)) {
-                    this.level.levelEvent(2001, below, Block.getId(state));
-                    this.level.setBlock(below, BlockRegistry.aurorian_dirt.get().defaultBlockState(), 2);
+                if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.sheep.level(), this.sheep)) {
+                    this.sheep.level().levelEvent(2001, below, Block.getId(state));
+                    this.sheep.level().setBlock(below, BlockRegistry.aurorian_dirt.get().defaultBlockState(), 2);
                 }
                 this.sheep.ate();
             }

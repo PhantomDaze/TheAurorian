@@ -2,10 +2,12 @@ package shiroroku.theaurorian.Entities.CrystallineSprite;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -36,8 +38,8 @@ public class CrystallineSpriteEntityRender extends EntityRenderer<CrystallineSpr
         pPoseStack.scale(4.0F, 4.0F, 4.0F);
         float yaw = Mth.lerp(pPartialTick, pEntity.yRotO, pEntity.getYRot()) + 180.0F;
         float pitch = Mth.lerp(pPartialTick, pEntity.xRotO, pEntity.getXRot());
-        pPoseStack.mulPose(new Quaternion(new Vector3f(0.0F, 1.0F, 0.0F), -yaw, true));
-        pPoseStack.mulPose(new Quaternion(new Vector3f(1.0F, 0.0F, 0.0F), pitch, true));
+        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float)Math.toRadians(-yaw), 0.0F, 1.0F, 0.0F)));
+        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float)Math.toRadians(pitch), 1.0F, 0.0F, 0.0F)));
 
         int frame = (pEntity.tickCount / 3) % FRAME_COUNT;
         float v0 = frame / (float) FRAME_COUNT;

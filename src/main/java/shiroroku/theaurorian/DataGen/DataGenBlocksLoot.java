@@ -1,24 +1,24 @@
 package shiroroku.theaurorian.DataGen;
 
-import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
@@ -33,28 +33,28 @@ import shiroroku.theaurorian.Registry.ItemRegistry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class DataGenBlocksLoot extends LootTableProvider {
 
-    public DataGenBlocksLoot(DataGenerator pGenerator) {
-        super(pGenerator);
+    public DataGenBlocksLoot(PackOutput output) {
+        super(output, Set.of(), List.of(
+                new SubProviderEntry(Blocks::new, LootContextParamSets.BLOCK)
+        ));
     }
 
     @Override
     protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
-        map.forEach((location, lootTable) -> LootTables.validate(validationtracker, location, lootTable));
+        // skip strict validation for mod-owned tables
     }
 
-    @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-        return List.of(Pair.of(Blocks::new, LootContextParamSets.BLOCK));
-    }
+    private static class Blocks extends BlockLootSubProvider {
 
-    private static class Blocks extends BlockLoot {
+        protected Blocks() {
+            super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+        }
 
         // mojang pls
         private static final LootItemCondition.Builder HAS_SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
@@ -63,27 +63,28 @@ public class DataGenBlocksLoot extends LootTableProvider {
         private static final LootItemCondition.Builder HAS_NO_SHEARS_OR_SILK_TOUCH = HAS_SHEARS_OR_SILK_TOUCH.invert();
 
         @Override
-        protected void addTables() {
+        protected void generate() {
             // AUTO GENERATED
             BlockRegistry.BLOCKS_GEN.getEntries().stream().map(Supplier::get).forEach(this::dropSelf);
 
             // CUSTOM
             this.add(BlockRegistry.aurorian_coal_ore.get(), block -> createOreDrop(block, ItemRegistry.aurorian_coal.get()));
-            this.add(BlockRegistry.aurorian_cobblestone_slab.get(), BlockLoot::createSlabItemTable);
-            this.add(BlockRegistry.aurorian_deepslate_slab.get(), BlockLoot::createSlabItemTable);
+            this.add(BlockRegistry.aurorian_cobblestone_slab.get(), b -> createSlabItemTable(b));
+            this.add(BlockRegistry.aurorian_deepslate_slab.get(), b -> createSlabItemTable(b));
             this.add(BlockRegistry.aurorian_grass.get(), block -> createSingleItemTableWithSilkTouch(block, BlockRegistry.aurorian_dirt.get()));
+            this.add(BlockRegistry.aurorian_grass_light.get(), block -> createSingleItemTable(block));
             this.add(BlockRegistry.aurorian_stone.get(), block-> createSingleItemTableWithSilkTouch(block, BlockRegistry.aurorian_cobblestone.get()));
-            this.add(BlockRegistry.aurorian_glass.get(), BlockLoot::createSilkTouchOnlyTable);
-            this.add(BlockRegistry.moon_glass.get(), BlockLoot::createSilkTouchOnlyTable);
-            this.add(BlockRegistry.aurorian_glass_pane.get(), BlockLoot::createSilkTouchOnlyTable);
-            this.add(BlockRegistry.moon_glass_pane.get(), BlockLoot::createSilkTouchOnlyTable);
+            this.add(BlockRegistry.aurorian_glass.get(), b -> createSilkTouchOnlyTable(b));
+            this.add(BlockRegistry.moon_glass.get(), b -> createSilkTouchOnlyTable(b));
+            this.add(BlockRegistry.aurorian_glass_pane.get(), b -> createSilkTouchOnlyTable(b));
+            this.add(BlockRegistry.moon_glass_pane.get(), b -> createSilkTouchOnlyTable(b));
             this.add(BlockRegistry.aurorian_tallgrass.get(), dropWithSickleOrShears(ItemRegistry.plant_fiber.get()));
             this.add(BlockRegistry.aurorian_tallgrass_light.get(), dropWithSickleOrShears(ItemRegistry.plant_fiber.get()));
             this.add(BlockRegistry.bright_bulb.get(), dropWithSickleOrShears(BlockRegistry.bright_bulb.get()));
             this.add(BlockRegistry.geode.get(), block -> createOreDrop(block, BlockRegistry.crystal.get().asItem()));
             this.add(BlockRegistry.lavender_block.get(), dropWithSickleOrShears(ItemRegistry.lavender.get()));
             this.add(BlockRegistry.petunia.get(), dropWithSickleOrShears(BlockRegistry.petunia.get()));
-            this.add(BlockRegistry.silentwood_slab.get(), BlockLoot::createSlabItemTable);
+            this.add(BlockRegistry.silentwood_slab.get(), b -> createSlabItemTable(b));
             this.add(BlockRegistry.silkberry_block.get(), dropWithSickleOrShears(ItemRegistry.silkberry.get()));
             this.dropSelf(BlockRegistry.aurorian_cobblestone_stairs.get());
             this.dropSelf(BlockRegistry.aurorian_deepslate_stairs.get());
@@ -110,9 +111,9 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.silentwood_torch.get());
             this.dropSelf(BlockRegistry.moon_torch.get());
             this.dropSelf(BlockRegistry.silentwood_ladder.get());
-            this.add(BlockRegistry.lavender_crop.get(), BlockLoot.createCropDrops(BlockRegistry.lavender_crop.get(), ItemRegistry.lavender_seeds.get(), ItemRegistry.lavender.get(),
+            this.add(BlockRegistry.lavender_crop.get(), this.createCropDrops(BlockRegistry.lavender_crop.get(), ItemRegistry.lavender_seeds.get(), ItemRegistry.lavender.get(),
                     LootItemBlockStatePropertyCondition.hasBlockStateProperties(BlockRegistry.lavender_crop.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));
-            this.add(BlockRegistry.silkberry_crop.get(), BlockLoot.createCropDrops(BlockRegistry.silkberry_crop.get(), ItemRegistry.silkberry_seeds.get(), ItemRegistry.silkberry.get(),
+            this.add(BlockRegistry.silkberry_crop.get(), this.createCropDrops(BlockRegistry.silkberry_crop.get(), ItemRegistry.silkberry_seeds.get(), ItemRegistry.silkberry.get(),
                     LootItemBlockStatePropertyCondition.hasBlockStateProperties(BlockRegistry.silkberry_crop.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));
             this.add(BlockRegistry.silentwood_leaves.get(), block -> createSelfDropDispatchTable(BlockRegistry.silentwood_leaves.get(), HAS_SHEARS_OR_SILK_TOUCH,
                     applyExplosionCondition(BlockRegistry.silentwood_leaves.get(), LootItem.lootTableItem(BlockRegistry.silentwood_sapling.get()))

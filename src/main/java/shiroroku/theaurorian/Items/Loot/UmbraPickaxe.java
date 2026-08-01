@@ -66,7 +66,7 @@ public class UmbraPickaxe extends BaseAurorianPickaxe {
         if (getSelectedBlock(stack) != block) {
             stack.getOrCreateTag().putString("selected_block", ForgeRegistries.BLOCKS.getKey(block).toString());
             stack.hurtAndBreak(CommonConfig.umbra_pickaxe_selection_cost.get(), player, (p) -> p.broadcastBreakEvent(hand));
-            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1F, 2F);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1F, 2F);
         }
     }
 }

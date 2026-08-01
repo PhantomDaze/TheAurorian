@@ -18,7 +18,7 @@ public record ScrapperRecipe(ResourceLocation id, Ingredient input, ItemStack ou
     }
 
     @Override
-    public ItemStack assemble(Container pContainer) {
+    public ItemStack assemble(Container pContainer, net.minecraft.core.RegistryAccess access) {
         return this.output.copy();
     }
 
@@ -28,7 +28,7 @@ public record ScrapperRecipe(ResourceLocation id, Ingredient input, ItemStack ou
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(net.minecraft.core.RegistryAccess access) {
         return this.output.copy();
     }
 

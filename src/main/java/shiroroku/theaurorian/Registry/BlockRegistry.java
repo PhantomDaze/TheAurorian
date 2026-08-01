@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Registry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -173,7 +175,7 @@ public class BlockRegistry {
     public static final RegistryObject<Block> aurorian_stone_stairs = regBlockItem(BLOCKS, "aurorian_stone_stairs", () -> new StairBlock(() -> aurorian_stone.get().defaultBlockState(), BlockBehaviour.Properties.copy(aurorian_stone.get())));
 
     // Phase 1: Light grass variants
-    public static final RegistryObject<Block> aurorian_grass_light = regBlockItem(BLOCKS_GEN, "aurorian_grass_light", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK)));
+    public static final RegistryObject<Block> aurorian_grass_light = regBlockItem(BLOCKS, "aurorian_grass_light", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK).lightLevel((state) -> 5)));
     public static final RegistryObject<Block> aurorian_tallgrass_light = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass_light", () -> new TallGrassBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
 
     // Phase 1: Farm tile + Phase 7 crops (registered early so loot/remap stay valid).

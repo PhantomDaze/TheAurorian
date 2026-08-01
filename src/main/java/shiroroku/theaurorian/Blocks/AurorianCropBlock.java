@@ -5,7 +5,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,8 +13,8 @@ import shiroroku.theaurorian.Registry.BlockRegistry;
 import java.util.function.Supplier;
 
 /**
- * Aurorian crops. Grow on the Aurorian Farm Tile or vanilla farmland, need sky
- * access (upstream canBlockStay requires canSeeSky) and drop their seed.
+ * Aurorian crops. Must be planted on Aurorian Farm Tile or vanilla farmland.
+ * Growth speed still follows vanilla CropBlock light rules in randomTick.
  */
 public class AurorianCropBlock extends CropBlock {
 
@@ -33,7 +32,8 @@ public class AurorianCropBlock extends CropBlock {
 
     @Override
     public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
-        return pLevel.canSeeSky(pPos) && (pLevel.getBlockState(pPos.below()).is(BlockRegistry.aurorian_farm_tile.get()) || pLevel.getBlockState(pPos.below()).is(Blocks.FARMLAND));
+        BlockPos below = pPos.below();
+        return this.mayPlaceOn(pLevel.getBlockState(below), pLevel, below);
     }
 
     @Override

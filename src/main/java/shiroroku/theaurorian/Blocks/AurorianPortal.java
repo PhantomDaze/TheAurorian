@@ -40,20 +40,20 @@ public class AurorianPortal extends Block {
             if (pEntity.isOnPortalCooldown()) {
                 pEntity.setPortalCooldown();
             } else {
-                if (!pEntity.level.isClientSide && !pPos.equals(pEntity.portalEntrancePos)) {
+                if (!pEntity.level().isClientSide && !pPos.equals(pEntity.portalEntrancePos)) {
                     pEntity.portalEntrancePos = pPos.immutable();
                 }
-                Level entityWorld = pEntity.level;
+                Level entityWorld = pEntity.level();
                 if (entityWorld != null) {
                     MinecraftServer server = entityWorld.getServer();
-                    ResourceKey<Level> destination = pEntity.level.dimension() == TheAurorian.the_aurorian ? Level.OVERWORLD : TheAurorian.the_aurorian;
+                    ResourceKey<Level> destination = pEntity.level().dimension() == TheAurorian.the_aurorian ? Level.OVERWORLD : TheAurorian.the_aurorian;
                     if (server != null) {
                         ServerLevel destinationWorld = server.getLevel(destination);
                         if (destinationWorld != null && !pEntity.isPassenger()) {
-                            pEntity.level.getProfiler().push("aurorian_portal");
+                            pEntity.level().getProfiler().push("aurorian_portal");
                             pEntity.setPortalCooldown();
                             pEntity.changeDimension(destinationWorld, new AurorianPortalTeleporter(destinationWorld));
-                            pEntity.level.getProfiler().pop();
+                            pEntity.level().getProfiler().pop();
                         }
                     }
                 }

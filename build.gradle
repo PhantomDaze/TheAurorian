@@ -81,8 +81,8 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Geckolib
-    implementation fg.deobf("curse.maven:geckolib-388172:4407241")
+    // Geckolib 4.x for 1.20.1 (kept for future animated entities; not currently referenced in Java)
+    implementation fg.deobf("curse.maven:geckolib-388172:8285794")
 
     // Curios
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
@@ -91,16 +91,6 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-
-    // Client-only QoL mods: compileOnly so dedicated / GameTest servers do not load them.
-    // Add back as runtimeOnly when launching the client run configuration if needed.
-    compileOnly fg.deobf("curse.maven:appleskin-248787:3872808")
-    compileOnly fg.deobf("curse.maven:neat-238372:3878735")
-    compileOnly fg.deobf("curse.maven:effortless-building-302113:4810762")
-
-    // Enchantment Descriptions (Bookshelf is a common dep used by enchdesc)
-    implementation fg.deobf("curse.maven:bookshelf-228525:4556697")
-    implementation fg.deobf("curse.maven:enchantment-descriptions-250419:5015022")
 
     // Mixin
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

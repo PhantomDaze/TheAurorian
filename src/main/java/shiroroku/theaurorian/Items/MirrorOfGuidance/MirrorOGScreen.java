@@ -3,7 +3,10 @@ package shiroroku.theaurorian.Items.MirrorOfGuidance;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import net.minecraft.client.gui.GuiGraphics;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.GameNarrator;
@@ -62,8 +65,10 @@ public class MirrorOGScreen extends Screen {
         setSelectedNode(null);
     }
 
+
     @Override
-    public void render(PoseStack pose, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        PoseStack pose = graphics.pose();
         SoundTimer.tick(pPartialTick);
         LineTimer.tick(pPartialTick);
         LerpTimer.tick(pPartialTick);
@@ -91,12 +96,12 @@ public class MirrorOGScreen extends Screen {
         }
 
         // Game tint
-        this.renderBackground(pose);
+        this.renderBackground(graphics);
 
         // Setup
         RenderSystem.enableBlend();
         pose.pushPose();
-        enableScissor(x_gui_left, y_gui_top, x_gui_left + WIDTH - 5, y_gui_top + HEIGHT - 5);
+        graphics.enableScissor(x_gui_left, y_gui_top, x_gui_left + WIDTH - 5, y_gui_top + HEIGHT - 5);
 
         // BACKGROUND STARS
         RenderUtil.blitRepeating(BACKGROUND_1, x_gui_left, y_gui_top, 256, 256, (float) (-ViewX / 256) * 0.25f, (float) (-ViewY / 256) * 0.25f);
@@ -108,7 +113,7 @@ public class MirrorOGScreen extends Screen {
         pose.pushPose();
         pose.translate(x_gui_center, y_gui_center, 0); // align 0,0 with center
         pose.translate(ViewX * 0.2f, ViewY * 0.2f, 0); // move to view
-        pose.mulPose(Vector3f.ZP.rotationDegrees(ModUtil.wave(Util.getMillis(), 1f / 1000f, 15)));
+        pose.mulPose(Axis.ZP.rotationDegrees(ModUtil.wave(Util.getMillis(), 1f / 1000f, 15)));
         pose.scale(6, 6, 0);
         RenderSystem.setShaderColor(1, 1, 1, 0.2f);
         RenderUtil.blit(pose, WIDGETS, -4, -4, 32, 240, 8, 8, 256, 256);
@@ -117,11 +122,11 @@ public class MirrorOGScreen extends Screen {
         // NODE CONTENT
         float fade = selectedNode != null ? LerpTimer.getPercentageProgress() : 1 - LerpTimer.getPercentageProgress();
         RenderSystem.setShaderColor(1, 1, 1, fade);
-        this.fillGradient(pose, x_gui_left, y_gui_top, x_gui_left + WIDTH, y_gui_top + HEIGHT, new Color(39, 20, 138, 255).getRGB(), new Color(0, 0, 0, 0).getRGB());
+        graphics.fillGradient(x_gui_left, y_gui_top, x_gui_left + WIDTH, y_gui_top + HEIGHT, new Color(39, 20, 138, 255).getRGB(), new Color(0, 0, 0, 0).getRGB());
         if (selectedNode != null) {
             int fadeColor = new Color(1, 1, 1, Mth.clamp(fade, 0, 1)).getRGB();
-            this.font.draw(pose, selectedNode.name.copy().withStyle(ChatFormatting.ITALIC), x_gui_left + 42, y_gui_top + 14, fadeColor);
-            this.font.drawWordWrap(selectedNode.description, x_gui_left + 20, y_gui_top + 45, WIDTH - 20 * 2, fadeColor);
+            graphics.drawString(this.font, selectedNode.name.copy().withStyle(ChatFormatting.ITALIC), x_gui_left + 42, y_gui_top + 14, fadeColor);
+            graphics.drawWordWrap(this.font, selectedNode.description, x_gui_left + 20, y_gui_top + 45, WIDTH - 20 * 2, fadeColor);
         }
         RenderSystem.setShaderColor(1, 1, 1, 1);
 
@@ -130,15 +135,15 @@ public class MirrorOGScreen extends Screen {
         pose.translate(x_gui_center, y_gui_center, 0); // align 0,0 with center
         pose.translate(ViewX, ViewY, 0); // move to view
         if (selectedNode != null) {
-            selectedNode.render(itemRenderer, pose, pMouseX, pMouseY, pPartialTick);
+            selectedNode.render(this.minecraft.getItemRenderer(), pose, pMouseX, pMouseY, pPartialTick);
         } else {
             nodes.forEach(node -> node.renderLines(pose, LineTimer));
-            nodes.forEach(node -> node.render(itemRenderer, pose, pMouseX, pMouseY, pPartialTick));
+            nodes.forEach(node -> node.render(this.minecraft.getItemRenderer(), pose, pMouseX, pMouseY, pPartialTick));
         }
         pose.popPose();
 
         // End of content
-        disableScissor();
+        graphics.disableScissor();
 
 
         // BORDER
@@ -149,7 +154,7 @@ public class MirrorOGScreen extends Screen {
         if (selectedNode == null) {
             for (MirrorNode node : nodes) {
                 if (node.isMouseOver(mouse_x, mouse_y) && RenderUtil.isMouseOver(x_gui_left, y_gui_top, WIDTH - 8, HEIGHT, pMouseX, pMouseY)) {
-                    this.renderTooltip(pose, node.name, pMouseX, pMouseY);
+                    graphics.renderTooltip(this.font, node.name, pMouseX, pMouseY);
                 }
             }
             RenderSystem.enableBlend();
@@ -176,7 +181,7 @@ public class MirrorOGScreen extends Screen {
         // Cleanup
         RenderSystem.disableBlend();
         pose.popPose();
-        super.render(pose, pMouseX, pMouseY, pPartialTick);
+        super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
     /**

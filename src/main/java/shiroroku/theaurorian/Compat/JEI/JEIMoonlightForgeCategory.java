@@ -30,7 +30,7 @@ public class JEIMoonlightForgeCategory implements IRecipeCategory<MoonlightForge
     public void setRecipe(IRecipeLayoutBuilder builder, MoonlightForgeRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 4, 8).addIngredients(recipe.input());
         builder.addSlot(RecipeIngredientRole.INPUT, 66, 8).addIngredients(recipe.catalyst());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 124, 8).addIngredients(Ingredient.of(recipe.getResultItem()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 124, 8).addIngredients(Ingredient.of(recipe.getResultItem(net.minecraft.core.RegistryAccess.EMPTY)));
     }
 
     @Override

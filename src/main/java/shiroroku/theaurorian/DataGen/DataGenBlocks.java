@@ -1,6 +1,8 @@
 package shiroroku.theaurorian.DataGen;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -18,8 +20,8 @@ import java.util.function.Supplier;
 
 public class DataGenBlocks extends BlockStateProvider {
 
-    public DataGenBlocks(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, TheAurorian.MODID, existingFileHelper);
+    public DataGenBlocks(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, TheAurorian.MODID, existingFileHelper);
     }
 
     @Override
@@ -42,6 +44,18 @@ public class DataGenBlocks extends BlockStateProvider {
         cropBlock(BlockRegistry.silkberry_crop.get(), "silkberry_crop");
 
         // CUSTOM
+        // Light grass uses the upstream dirt bottom and separate light top/side textures.
+        ModelFile lightGrass = models().withExistingParent("aurorian_grass_light", mcLoc("block/cube"))
+                .texture("particle", modLoc("block/aurorian_dirt"))
+                .texture("down", modLoc("block/aurorian_dirt"))
+                .texture("up", modLoc("block/aurorian_grass_light_top"))
+                .texture("east", modLoc("block/aurorian_grass_light_side"))
+                .texture("west", modLoc("block/aurorian_grass_light_side"))
+                .texture("north", modLoc("block/aurorian_grass_light_side"))
+                .texture("south", modLoc("block/aurorian_grass_light_side"));
+        simpleBlock(BlockRegistry.aurorian_grass_light.get(), lightGrass);
+        simpleBlockItem(BlockRegistry.aurorian_grass_light.get());
+
         // axisBlock(block, side, end) — side = bark, end = rings/top
         axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get(), modLoc("block/silentwood_log_side"), modLoc("block/silentwood_log_end"));
         axisBlock((RotatedPillarBlock) BlockRegistry.weeping_willow_log.get(), modLoc("block/weeping_willow_log_side"), modLoc("block/weeping_willow_log_top"));

@@ -107,7 +107,7 @@ public class SpiritEntity extends Monster {
     @Override
     protected SoundEvent getAmbientSound() {
         if (this.random.nextBoolean()) {
-            return SoundEvents.AMBIENT_CAVE;
+            return SoundEvents.AMBIENT_CAVE.value();
         }
         return SoundEvents.VEX_AMBIENT;
     }

@@ -30,7 +30,7 @@ public class AurorianiteShovel extends BaseAurorianShovel {
             return super.mineBlock(pStack, pLevel, pState, pPos, pEntityLiving);
         }
 
-        HitResult hitResult = pEntityLiving.pick(((Player) pEntityLiving).getReachDistance(), 1, false);
+        HitResult hitResult = pEntityLiving.pick(((Player) pEntityLiving).getBlockReach(), 1, false);
         // Make sure we hit a block
         if (hitResult.getType() != HitResult.Type.BLOCK) {
             return super.mineBlock(pStack, pLevel, pState, pPos, pEntityLiving);

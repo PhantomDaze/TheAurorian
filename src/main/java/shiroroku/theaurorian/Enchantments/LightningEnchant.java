@@ -20,7 +20,7 @@ public class LightningEnchant extends Enchantment {
     }
 
     public static void handleOnDamage(LivingDamageEvent event) {
-        if (!event.getEntity().level.isClientSide && event.getSource().getEntity() instanceof LivingEntity attacker) {
+        if (!event.getEntity().level().isClientSide && event.getSource().getEntity() instanceof LivingEntity attacker) {
             int metal_armor_pieces = (int) StreamSupport.stream(event.getEntity().getArmorSlots().spliterator(), false).filter(
                     stack -> !stack.isEmpty() && !stack.is(DataGenItemsTags.LIGHTNING_IMMUNE) && !EnchantmentHelper.getEnchantments(stack).containsKey(EnchantRegistry.lightning_resistance.get())).count();
             Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(attacker.getItemInHand(InteractionHand.MAIN_HAND));

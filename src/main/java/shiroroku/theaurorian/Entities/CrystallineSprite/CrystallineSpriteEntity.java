@@ -74,7 +74,7 @@ public class CrystallineSpriteEntity extends Monster implements RangedAttackMob 
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        CrystallineBeamEntity beam = new CrystallineBeamEntity(this.level, this);
+        CrystallineBeamEntity beam = new CrystallineBeamEntity(this.level(), this);
         double d0 = target.getX() - this.getX();
         double d1 = target.getBoundingBox().minY + target.getBbHeight() / 3.0F - beam.getY();
         double d2 = target.getZ() - this.getZ();
@@ -83,12 +83,12 @@ public class CrystallineSpriteEntity extends Monster implements RangedAttackMob 
         Vec3 dir = new Vec3(d0, d1 + d3 * 0.2, d2).normalize();
         beam.setDeltaMovement(dir.x * 0.8, dir.y * 0.8, dir.z * 0.8);
         this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F / (this.random.nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(beam);
+        this.level().addFreshEntity(beam);
     }
 
     @Override
     public void tick() {
-        if (!this.isOnGround() && this.getDeltaMovement().y < 0.0D) {
+        if (!this.onGround() && this.getDeltaMovement().y < 0.0D) {
             Vec3 vel = this.getDeltaMovement();
             this.setDeltaMovement(vel.x, vel.y * 0.6D, vel.z);
         }

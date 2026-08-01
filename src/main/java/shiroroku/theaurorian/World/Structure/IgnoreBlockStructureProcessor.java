@@ -38,7 +38,7 @@ public class IgnoreBlockStructureProcessor extends StructureProcessor {
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader pLevel, BlockPos pPos, BlockPos pPivot, StructureTemplate.StructureBlockInfo pOriginalInfo, StructureTemplate.StructureBlockInfo pModifiedInfo, StructurePlaceSettings pSettings) {
         Block ignoredBlock = ignored.get();
-        if (ignoredBlock != null && pModifiedInfo.state.is(ignoredBlock)) {
+        if (ignoredBlock != null && pModifiedInfo.state().is(ignoredBlock)) {
             return null;
         }
         return pModifiedInfo;

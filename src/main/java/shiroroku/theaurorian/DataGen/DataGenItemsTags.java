@@ -1,13 +1,17 @@
 package shiroroku.theaurorian.DataGen;
 
-import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -15,9 +19,10 @@ import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.TheAurorian;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class DataGenItemsTags extends TagsProvider<Item> {
+public class DataGenItemsTags extends ItemTagsProvider {
 
     public static final TagKey<Item> ABSORPTION_ORB_REPAIRABLE = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "absorption_orb_repairable"));
     public static final TagKey<Item> AURORIAN_STONES = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "aurorian_stones"));
@@ -32,14 +37,13 @@ public class DataGenItemsTags extends TagsProvider<Item> {
     public static final TagKey<Item> SPECTRAL_ARMOR = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "spectral_armor"));
     public static final TagKey<Item> TEA = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "tea"));
 
-    @SuppressWarnings("deprecation")
-    protected DataGenItemsTags(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, Registry.ITEM, TheAurorian.MODID, existingFileHelper);
+    protected DataGenItemsTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
+        super(output, lookupProvider, blockTags, TheAurorian.MODID, existingFileHelper);
     }
 
-    @SuppressWarnings("unchecked")
+@SuppressWarnings("unchecked")
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider provider) {
         ItemRegistry.ITEMS_GEN_SHIELD.getEntries().stream().map(Supplier::get).forEach(shield -> this.tag(Tags.Items.TOOLS_SHIELDS).add(shield));
         ItemRegistry.ITEMS_GEN_KEY.getEntries().stream().map(Supplier::get).forEach(key -> this.tag(KEYS).add(key));
         this.tag(ABSORPTION_ORB_REPAIRABLE).addTags(Tags.Items.TOOLS, Tags.Items.ARMORS, Tags.Items.SHEARS);
@@ -91,34 +95,34 @@ public class DataGenItemsTags extends TagsProvider<Item> {
         this.tag(Tags.Items.SHEARS).add(ItemRegistry.moonstone_sickle.get());
         this.tag(Tags.Items.SHEARS).add(ItemRegistry.silentwood_sickle.get());
         this.tag(Tags.Items.STRING).add(ItemRegistry.plant_fiber.get());
-        this.tag(Tags.Items.TOOLS_AXES).add(ItemRegistry.aurorian_steel_axe.get());
-        this.tag(Tags.Items.TOOLS_AXES).add(ItemRegistry.aurorian_stone_axe.get());
-        this.tag(Tags.Items.TOOLS_AXES).add(ItemRegistry.aurorianite_axe.get());
-        this.tag(Tags.Items.TOOLS_AXES).add(ItemRegistry.moonstone_axe.get());
-        this.tag(Tags.Items.TOOLS_AXES).add(ItemRegistry.silentwood_axe.get());
+        this.tag(ItemTags.AXES).add(ItemRegistry.aurorian_steel_axe.get());
+        this.tag(ItemTags.AXES).add(ItemRegistry.aurorian_stone_axe.get());
+        this.tag(ItemTags.AXES).add(ItemRegistry.aurorianite_axe.get());
+        this.tag(ItemTags.AXES).add(ItemRegistry.moonstone_axe.get());
+        this.tag(ItemTags.AXES).add(ItemRegistry.silentwood_axe.get());
         this.tag(Tags.Items.TOOLS_BOWS).add(ItemRegistry.silentwood_bow.get());
-        this.tag(Tags.Items.TOOLS_HOES).add(ItemRegistry.aurorian_steel_hoe.get());
-        this.tag(Tags.Items.TOOLS_HOES).add(ItemRegistry.aurorian_stone_hoe.get());
-        this.tag(Tags.Items.TOOLS_HOES).add(ItemRegistry.moonstone_hoe.get());
-        this.tag(Tags.Items.TOOLS_HOES).add(ItemRegistry.silentwood_hoe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.aurorian_steel_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.aurorian_stone_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.aurorianite_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.crystalline_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.moonstone_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.silentwood_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_PICKAXES).add(ItemRegistry.umbra_pickaxe.get());
-        this.tag(Tags.Items.TOOLS_SHOVELS).add(ItemRegistry.aurorian_steel_shovel.get());
-        this.tag(Tags.Items.TOOLS_SHOVELS).add(ItemRegistry.aurorian_stone_shovel.get());
-        this.tag(Tags.Items.TOOLS_SHOVELS).add(ItemRegistry.moonstone_shovel.get());
-        this.tag(Tags.Items.TOOLS_SHOVELS).add(ItemRegistry.silentwood_shovel.get());
-        this.tag(Tags.Items.TOOLS_SHOVELS).add(ItemRegistry.aurorianite_shovel.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.aurorian_steel_sword.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.aurorian_stone_sword.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.aurorianite_sword.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.crystalline_sword.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.moonstone_sword.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.silentwood_sword.get());
-        this.tag(Tags.Items.TOOLS_SWORDS).add(ItemRegistry.umbra_greatsword.get());
+        this.tag(ItemTags.HOES).add(ItemRegistry.aurorian_steel_hoe.get());
+        this.tag(ItemTags.HOES).add(ItemRegistry.aurorian_stone_hoe.get());
+        this.tag(ItemTags.HOES).add(ItemRegistry.moonstone_hoe.get());
+        this.tag(ItemTags.HOES).add(ItemRegistry.silentwood_hoe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.aurorian_steel_pickaxe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.aurorian_stone_pickaxe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.aurorianite_pickaxe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.crystalline_pickaxe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.moonstone_pickaxe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.silentwood_pickaxe.get());
+        this.tag(ItemTags.PICKAXES).add(ItemRegistry.umbra_pickaxe.get());
+        this.tag(ItemTags.SHOVELS).add(ItemRegistry.aurorian_steel_shovel.get());
+        this.tag(ItemTags.SHOVELS).add(ItemRegistry.aurorian_stone_shovel.get());
+        this.tag(ItemTags.SHOVELS).add(ItemRegistry.moonstone_shovel.get());
+        this.tag(ItemTags.SHOVELS).add(ItemRegistry.silentwood_shovel.get());
+        this.tag(ItemTags.SHOVELS).add(ItemRegistry.aurorianite_shovel.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.aurorian_steel_sword.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.aurorian_stone_sword.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.aurorianite_sword.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.crystalline_sword.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.moonstone_sword.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.silentwood_sword.get());
+        this.tag(ItemTags.SWORDS).add(ItemRegistry.umbra_greatsword.get());
     }
 }

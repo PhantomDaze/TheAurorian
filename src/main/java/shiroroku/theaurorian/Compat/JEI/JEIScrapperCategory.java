@@ -30,7 +30,7 @@ public class JEIScrapperCategory implements IRecipeCategory<ScrapperRecipe> {
     public void setRecipe(IRecipeLayoutBuilder builder, ScrapperRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 18, 25).addIngredients(Ingredient.of(BlockRegistry.crystal.get().asItem()));
         builder.addSlot(RecipeIngredientRole.INPUT, 58, 5).addIngredients(recipe.input());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 46).addIngredients(Ingredient.of(recipe.getResultItem()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 46).addIngredients(Ingredient.of(recipe.getResultItem(net.minecraft.core.RegistryAccess.EMPTY)));
     }
 
     @Override

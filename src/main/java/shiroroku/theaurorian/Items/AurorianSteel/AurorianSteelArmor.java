@@ -1,8 +1,8 @@
 package shiroroku.theaurorian.Items.AurorianSteel;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -15,8 +15,8 @@ import java.util.function.Consumer;
 
 public class AurorianSteelArmor extends BaseAurorianArmor {
 
-    public AurorianSteelArmor(ArmorMaterial pMaterial, EquipmentSlot pSlot, Properties pProperties) {
-        super(pMaterial, pSlot, pProperties);
+    public AurorianSteelArmor(ArmorMaterial pMaterial, ArmorItem.Type pType, Properties pProperties) {
+        super(pMaterial, pType, pProperties);
     }
 
     @Override

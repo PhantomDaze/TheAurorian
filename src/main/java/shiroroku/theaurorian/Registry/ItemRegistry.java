@@ -1,8 +1,10 @@
 package shiroroku.theaurorian.Registry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -68,7 +70,7 @@ public class ItemRegistry {
     public static final RegistryObject<Item> plant_fiber = ITEMS_GEN.register("plant_fiber", basicItem());
     public static final RegistryObject<Item> runestone_key = ITEMS_GEN_KEY.register("runestone_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> runestone_loot_key = ITEMS_GEN_KEY.register("runestone_loot_key", basicItem(defaultProp().durability(1).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> silentwood_stick = ITEMS_GEN_HANDHELD.register("silentwood_stick", () -> new SilentwoodStick(defaultProp().tab(TheAurorian.CREATIVETAB)) {
+    public static final RegistryObject<Item> silentwood_stick = ITEMS_GEN_HANDHELD.register("silentwood_stick", () -> new SilentwoodStick(defaultProp()) {
         @Override
         public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
             return 100;
@@ -124,7 +126,7 @@ public class ItemRegistry {
 
     // Tools
     public static final RegistryObject<Item> aurorian_steel_hoe = ITEMS_GEN_HANDHELD.register("aurorian_steel_hoe", () -> new AurorianSteelHoe(MaterialTiers.AURORIAN_STEEL, -3, 0.0F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_leggings = ITEMS_GEN.register("aurorian_steel_leggings", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.LEGS, defaultProp().rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> aurorian_steel_leggings = ITEMS_GEN.register("aurorian_steel_leggings", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> aurorian_steel_pickaxe = ITEMS_GEN_HANDHELD.register("aurorian_steel_pickaxe", () -> new AurorianSteelPickaxe(MaterialTiers.AURORIAN_STEEL, 1, -2.8F, defaultProp().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> aurorian_steel_shovel = ITEMS_GEN_HANDHELD.register("aurorian_steel_shovel", () -> new AurorianSteelShovel(MaterialTiers.AURORIAN_STEEL, 1.5F, -3.0F, defaultProp().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> aurorian_steel_sword = ITEMS_GEN_HANDHELD.register("aurorian_steel_sword", () -> new AurorianSteelSword(MaterialTiers.AURORIAN_STEEL, 3, -2.4F, defaultProp().rarity(Rarity.EPIC)));
@@ -151,22 +153,22 @@ public class ItemRegistry {
 
     // Armor
     public static final RegistryObject<Item> aurorian_steel_axe = ITEMS_GEN_HANDHELD.register("aurorian_steel_axe", () -> new AurorianSteelAxe(MaterialTiers.AURORIAN_STEEL, 5.0F, -3.0F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_boots = ITEMS_GEN.register("aurorian_steel_boots", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.FEET, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_chestplate = ITEMS_GEN.register("aurorian_steel_chestplate", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.CHEST, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_helmet = ITEMS_GEN.register("aurorian_steel_helmet", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, EquipmentSlot.HEAD, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> cerulean_boots = ITEMS_GEN.register("cerulean_boots", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, EquipmentSlot.FEET, defaultProp()));
-    public static final RegistryObject<Item> cerulean_chestplate = ITEMS_GEN.register("cerulean_chestplate", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, EquipmentSlot.CHEST, defaultProp()));
-    public static final RegistryObject<Item> cerulean_helmet = ITEMS_GEN.register("cerulean_helmet", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, EquipmentSlot.HEAD, defaultProp()));
-    public static final RegistryObject<Item> cerulean_leggings = ITEMS_GEN.register("cerulean_leggings", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, EquipmentSlot.LEGS, defaultProp()));
+    public static final RegistryObject<Item> aurorian_steel_boots = ITEMS_GEN.register("aurorian_steel_boots", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.BOOTS, defaultProp().rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> aurorian_steel_chestplate = ITEMS_GEN.register("aurorian_steel_chestplate", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp().rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> aurorian_steel_helmet = ITEMS_GEN.register("aurorian_steel_helmet", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.HELMET, defaultProp().rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> cerulean_boots = ITEMS_GEN.register("cerulean_boots", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.BOOTS, defaultProp()));
+    public static final RegistryObject<Item> cerulean_chestplate = ITEMS_GEN.register("cerulean_chestplate", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp()));
+    public static final RegistryObject<Item> cerulean_helmet = ITEMS_GEN.register("cerulean_helmet", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.HELMET, defaultProp()));
+    public static final RegistryObject<Item> cerulean_leggings = ITEMS_GEN.register("cerulean_leggings", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp()));
     public static final RegistryObject<Item> cerulean_shield = ITEMS_GEN_SHIELD.register("cerulean_shield", () -> new BaseAurorianShield(MaterialTiers.CERULEAN, defaultProp()));
-    public static final RegistryObject<Item> knight_boots = ITEMS_GEN.register("knight_boots", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, EquipmentSlot.FEET, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> knight_chestplate = ITEMS_GEN.register("knight_chestplate", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, EquipmentSlot.CHEST, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> knight_helmet = ITEMS_GEN.register("knight_helmet", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, EquipmentSlot.HEAD, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> knight_leggings = ITEMS_GEN.register("knight_leggings", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, EquipmentSlot.LEGS, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_boots = ITEMS_GEN.register("spectral_boots", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, EquipmentSlot.FEET, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_chestplate = ITEMS_GEN.register("spectral_chestplate", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, EquipmentSlot.CHEST, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_helmet = ITEMS_GEN.register("spectral_helmet", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, EquipmentSlot.HEAD, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_leggings = ITEMS_GEN.register("spectral_leggings", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, EquipmentSlot.LEGS, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> knight_boots = ITEMS_GEN.register("knight_boots", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.BOOTS, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> knight_chestplate = ITEMS_GEN.register("knight_chestplate", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> knight_helmet = ITEMS_GEN.register("knight_helmet", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.HELMET, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> knight_leggings = ITEMS_GEN.register("knight_leggings", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> spectral_boots = ITEMS_GEN.register("spectral_boots", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.BOOTS, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> spectral_chestplate = ITEMS_GEN.register("spectral_chestplate", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> spectral_helmet = ITEMS_GEN.register("spectral_helmet", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.HELMET, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> spectral_leggings = ITEMS_GEN.register("spectral_leggings", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp().rarity(Rarity.UNCOMMON)));
 
     // Aurorianite
     public static final RegistryObject<Item> aurorianite_axe = ITEMS_GEN_HANDHELD.register("aurorianite_axe", () -> new AurorianiteAxe(MaterialTiers.AURORIANITE, 5.0F, -3.0F, defaultProp().rarity(Rarity.RARE)));
@@ -230,7 +232,7 @@ public class ItemRegistry {
     });
 
     public static Item.Properties defaultProp() {
-        return new Item.Properties().tab(TheAurorian.CREATIVETAB);
+        return new Item.Properties();
     }
 
     /**
@@ -245,7 +247,7 @@ public class ItemRegistry {
     }
 
     private static Supplier<Item> basicItemWithBurntime(Item.Properties properties, int burnTime) {
-        return () -> new BaseAurorianItem(properties.tab(TheAurorian.CREATIVETAB)) {
+        return () -> new BaseAurorianItem(properties) {
             @Override
             public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
                 return burnTime == 0 ? super.getBurnTime(itemStack, recipeType) : burnTime;

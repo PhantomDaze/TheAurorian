@@ -77,7 +77,7 @@ public class MoonlightForgeBlockEntity extends AbstractCrafterBlockEntity {
         // shrink inputs, and insert outputs
         getItemHandler().getStackInSlot(0).shrink(1);
         getItemHandler().getStackInSlot(1).shrink(1);
-        ModUtil.setAndMergeStack(getItemHandler(), 2, recipe.getResultItem());
+        ModUtil.setAndMergeStack(getItemHandler(), 2, recipe.getResultItem(this.level.registryAccess()));
         resetCrafting();
     }
 }

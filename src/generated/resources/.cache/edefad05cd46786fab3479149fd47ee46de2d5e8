@@ -1,4 +1,4 @@
-// 1.19.2	2026-08-01T10:16:17.753561926	Block States: theaurorian
+// 1.20.1	2026-08-01T14:51:22.287445433	Block States: theaurorian
 3606a70755139a7a4eed6e7c8f7dd578a74b0472 assets/theaurorian/blockstates/aurorian_coal_block.json
 c01aff19f2d274ab755738d0fb047b9418591068 assets/theaurorian/blockstates/aurorian_coal_ore.json
 73eebd33213159360bcff329b9ddcb72695242c1 assets/theaurorian/blockstates/aurorian_cobblestone.json
@@ -117,7 +117,7 @@ d07e9450dab105b6bd0a8370f3c3ea191e9132f5 assets/theaurorian/models/block/auroria
 8ba21a85e196b0550df04970d59a676e2f8e7968 assets/theaurorian/models/block/aurorian_glass_pane_post.json
 6c46c618102c3e2652092a8236a022076a186817 assets/theaurorian/models/block/aurorian_glass_pane_side.json
 53fab4506bf0fb179ca3816f2bac7978ff22776f assets/theaurorian/models/block/aurorian_glass_pane_side_alt.json
-d2c7cfdb7aae33322499aeaec178517a05edf97a assets/theaurorian/models/block/aurorian_grass_light.json
+3708a167e8a4e243913cb792fa6aad4b2d1fea28 assets/theaurorian/models/block/aurorian_grass_light.json
 02f3f7b5ebb592cb41e68412a44df5f3f6b1129f assets/theaurorian/models/block/aurorian_portal_frame.json
 e544130d9b1dda5ee3db873c47679c53052757f2 assets/theaurorian/models/block/aurorian_steel_block.json
 a91f9c54c396b639a3b5085756c5e4368ffe24d4 assets/theaurorian/models/block/aurorian_stone.json

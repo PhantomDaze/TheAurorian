@@ -1,11 +1,12 @@
 # The Aurorian
 
-**1.19.2 port status:** content complete (Phases 0–10 + G per `docs/port-plan.md`).  
-Optional later: TCon/ConArm/CT compat (exempt), custom Gecko boss meshes, freeplay polish.
+**1.20.1 port status:** Forge 1.20.1 (47.4.10) build compiles; resource gate + JUnit + all 22 GameTests pass.  
+Branched from the completed 1.19.2 content port (Phases 0–10 + G).  
+Optional later: TCon/ConArm/CT compat (exempt), custom Gecko boss meshes, freeplay polish, client smoke (`runClient` / `/ta demo`).
 
 A Minecraft mod that adds a new dimension with new bosses, tools, and other neat items to use and explore.
 
-### Major changes from 1.12 to 1.19
+### Major changes from 1.12 (via 1.19.2) to 1.20.1
 
 - Custom ingame guide, the Mirror of Guidance
 - Curios is a requirement, new wearables

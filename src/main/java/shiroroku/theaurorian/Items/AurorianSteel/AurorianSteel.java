@@ -57,7 +57,7 @@ public class AurorianSteel {
             held_enchantments.put(selected_enchant.get().getKey(), selected_enchant.get().getValue() + 1);
             EnchantmentHelper.setEnchantments(held_enchantments, stack);
             nextLevel(stack);
-            entity.level.playSound(null, entity, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1, 1);
+            entity.level().playSound(null, entity, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1, 1);
         }
 
         return amount;

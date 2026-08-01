@@ -19,6 +19,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.PlantType;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 
 /**
@@ -71,7 +73,7 @@ public class AurorianFarmTile extends Block {
         if (pEntity.isSuppressingBounce()) {
             super.fallOn(pLevel, pState, pPos, pEntity, pFallDistance);
         } else {
-            pEntity.causeFallDamage(pFallDistance, 1.0F, DamageSource.FALL);
+            pEntity.causeFallDamage(pFallDistance, 1.0F, pEntity.damageSources().fall());
         }
     }
 
@@ -92,4 +94,11 @@ public class AurorianFarmTile extends Block {
         }
         return net.minecraftforge.common.FarmlandWaterManager.hasBlockWaterTicket(pLevel, pPos);
     }
+
+    @Override
+    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
+        PlantType type = plantable.getPlantType(world, pos.relative(facing));
+        return type == PlantType.CROP || type == PlantType.PLAINS;
+    }
+
 }

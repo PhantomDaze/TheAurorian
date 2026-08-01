@@ -1,4 +1,4 @@
-// 1.19.2	2026-07-31T23:30:46.116557965	Tags for minecraft:item
+// 1.20.1	2026-08-01T13:52:29.616696952	Tags for minecraft:item mod id theaurorian
 d849c1e4280da3e4a9a65504bb810da8b9655df0 data/forge/tags/items/armors/boots.json
 f7d44669971eeced6f05917f1db315ace689c6b6 data/forge/tags/items/armors/chestplates.json
 84e3942f69f9c083562172fe3b20e7e9ae307151 data/forge/tags/items/armors/helmets.json
@@ -12,15 +12,15 @@ f6e1a78b078631f32c5563e4fbaf4743292194a6 data/forge/tags/items/ores.json
 7d30cac774d61a4d85a3e6edaf2817b87432f42f data/forge/tags/items/rods/wooden.json
 615a2932e612d0b2bc027151d0dc21b7c05983d5 data/forge/tags/items/shears.json
 257c9f2a81960bd93c735d22d56b5f6c6c5f4e64 data/forge/tags/items/string.json
-aa5d03ab212b15001009fc1bd01f1d249b7b937b data/forge/tags/items/tools/axes.json
 9fc18dace72f063d48d73181fb1b1a84bf9e0977 data/forge/tags/items/tools/bows.json
-340b18e3ceafc8a8c6762954a0425651ce7f28d4 data/forge/tags/items/tools/hoes.json
-a6b40ce726a6374e7205eb4b56af3f178d15abe5 data/forge/tags/items/tools/pickaxes.json
 654230ad412b146251d27170f0cdaf3e3ed73a2b data/forge/tags/items/tools/shields.json
-b233969b309a9137c9432123a0fabe0a912dbe25 data/forge/tags/items/tools/shovels.json
-7501745f62d385c7daeb05203be1a9cdbddc347c data/forge/tags/items/tools/swords.json
 1a523c54854a12ed15e76951cb1079936b7fab43 data/minecraft/tags/items/arrows.json
+aa5d03ab212b15001009fc1bd01f1d249b7b937b data/minecraft/tags/items/axes.json
 f49fb21472b2badd5154ef07d9d47a6eb78b241c data/minecraft/tags/items/coals.json
+340b18e3ceafc8a8c6762954a0425651ce7f28d4 data/minecraft/tags/items/hoes.json
+a6b40ce726a6374e7205eb4b56af3f178d15abe5 data/minecraft/tags/items/pickaxes.json
+b233969b309a9137c9432123a0fabe0a912dbe25 data/minecraft/tags/items/shovels.json
+7501745f62d385c7daeb05203be1a9cdbddc347c data/minecraft/tags/items/swords.json
 4c8d9e5ebf5557a2861347cf4be4ecd06d17189f data/theaurorian/tags/items/absorption_orb_repairable.json
 e0e15706e22e48e41fff0ccd1f4b29f615a0f743 data/theaurorian/tags/items/aurorian_stones.json
 aa10960d590cbb00738b837fc1795e3ba65b39e3 data/theaurorian/tags/items/cerulean_ore.json

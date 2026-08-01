@@ -1,6 +1,8 @@
 package shiroroku.theaurorian.DataGen;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -15,7 +17,7 @@ import java.util.function.Supplier;
 
 public class DataGenItems extends ItemModelProvider {
 
-    public DataGenItems(DataGenerator output, ExistingFileHelper existingFileHelper) {
+    public DataGenItems(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, TheAurorian.MODID, existingFileHelper);
     }
 

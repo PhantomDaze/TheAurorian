@@ -43,7 +43,7 @@ public class AurorianRabbitEntity extends Rabbit {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level));
+        this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(1, new AurorianRabbitPanicGoal(this, 2.2D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 0.8D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(ItemRegistry.silkberry.get()), false));
@@ -63,15 +63,15 @@ public class AurorianRabbitEntity extends Rabbit {
     public AurorianRabbitEntity getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         AurorianRabbitEntity rabbit = EntityRegistry.aurorian_rabbit.get().create(pLevel);
         if (rabbit != null) {
-            int i = this.getRabbitType();
+            Rabbit.Variant variant = this.getVariant();
             if (this.random.nextInt(20) != 0) {
-                if (pOtherParent instanceof Rabbit && this.random.nextBoolean()) {
-                    i = ((Rabbit) pOtherParent).getRabbitType();
+                if (pOtherParent instanceof Rabbit other && this.random.nextBoolean()) {
+                    variant = other.getVariant();
                 } else {
-                    i = this.getRabbitType();
+                    variant = this.getVariant();
                 }
             }
-            rabbit.setRabbitType(i);
+            rabbit.setVariant(variant);
         }
         return rabbit;
     }

@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "theaurorian:block/moonlight_forge_overlay"
+    }
+  ]
+}

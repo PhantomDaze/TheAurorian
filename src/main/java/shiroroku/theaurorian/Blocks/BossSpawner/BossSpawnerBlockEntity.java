@@ -58,7 +58,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         // Boss scaling
         int nearbyPlayers = level.getEntitiesOfClass(Player.class, new AABB(worldPosition, worldPosition.offset(1, 1, 1)).inflate(spawnDistance * 2)).size();
         TheAurorian.LOGGER.debug(nearbyPlayers);
-        LivingEntity boss = (LivingEntity) bossEntity.spawn((ServerLevel) this.level, null, null, null, worldPosition.above(), MobSpawnType.STRUCTURE, false, false);
+        LivingEntity boss = (LivingEntity) bossEntity.spawn((ServerLevel) this.level, (net.minecraft.nbt.CompoundTag) null, null, worldPosition.above(), MobSpawnType.STRUCTURE, false, false);
         if (nearbyPlayers > 1) {
             boss.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(boss.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * ((nearbyPlayers * CommonConfig.boss_speed_per_player.get()) + 1));
             boss.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(boss.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * ((nearbyPlayers * CommonConfig.boss_damage_per_player.get()) + 1));

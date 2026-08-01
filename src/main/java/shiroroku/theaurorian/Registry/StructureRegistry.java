@@ -1,6 +1,6 @@
 package shiroroku.theaurorian.Registry;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -16,9 +16,9 @@ import shiroroku.theaurorian.World.Structure.SingleTemplateStructure;
 
 public class StructureRegistry {
 
-    public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, TheAurorian.MODID);
-    public static final DeferredRegister<StructurePieceType> PIECE_TYPES = DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, TheAurorian.MODID);
-    public static final DeferredRegister<StructureProcessorType<?>> PROCESSOR_TYPES = DeferredRegister.create(Registry.STRUCTURE_PROCESSOR_REGISTRY, TheAurorian.MODID);
+    public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, TheAurorian.MODID);
+    public static final DeferredRegister<StructurePieceType> PIECE_TYPES = DeferredRegister.create(Registries.STRUCTURE_PIECE, TheAurorian.MODID);
+    public static final DeferredRegister<StructureProcessorType<?>> PROCESSOR_TYPES = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, TheAurorian.MODID);
 
     public static final RegistryObject<StructureType<DarkstoneDungeonStructure>> DARKSTONE_DUNGEON_TYPE = STRUCTURE_TYPES.register("darkstone_dungeon", () -> () -> DarkstoneDungeonStructure.CODEC);
     public static final RegistryObject<StructurePieceType> DARKSTONE_DUNGEON_PIECE = PIECE_TYPES.register("darkstone_dungeon", () -> DarkstoneDungeonStructure.DarkstoneDungeonPiece::load);

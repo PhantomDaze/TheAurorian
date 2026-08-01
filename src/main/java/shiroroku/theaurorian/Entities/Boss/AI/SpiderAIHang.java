@@ -41,7 +41,7 @@ public class SpiderAIHang extends Goal {
                 hangingZ = this.entity.getZ();
                 for (int y = minDistance; y <= maxDistance; y++) {
                     BlockPos up = new BlockPos((int) hangingX, (int) hangingY, (int) hangingZ).above(y);
-                    if (this.entity.level.getBlockState(up).isRedstoneConductor(this.entity.level, up)) {
+                    if (this.entity.level().getBlockState(up).isRedstoneConductor(this.entity.level(), up)) {
                         hangingY = hangingY + y - 3;
                         return true;
                     }
@@ -82,10 +82,10 @@ public class SpiderAIHang extends Goal {
         }
         if (hangTime == 100 || hangTime == 150) {
             for (int i = 0; i <= this.entity.getRandom().nextInt(5); i++) {
-                SpiderlingEntity spiderling = new SpiderlingEntity(this.entity.level);
+                SpiderlingEntity spiderling = new SpiderlingEntity(this.entity.level());
                 spiderling.setPos(this.entity.blockPosition().getX() - 0.5F, this.entity.blockPosition().getY() - 0.5F, this.entity.blockPosition().getZ() - 0.5F);
                 spiderling.setTarget(this.entity.getTarget());
-                this.entity.level.addFreshEntity(spiderling);
+                this.entity.level().addFreshEntity(spiderling);
             }
         }
         this.hangTime--;

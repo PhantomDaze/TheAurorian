@@ -1,7 +1,6 @@
 package shiroroku.theaurorian.Items;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -14,8 +13,8 @@ import java.util.List;
 
 public class BaseAurorianArmor extends ArmorItem {
 
-    public BaseAurorianArmor(ArmorMaterial pMaterial, EquipmentSlot pSlot, Properties pProperties) {
-        super(pMaterial, pSlot, pProperties);
+    public BaseAurorianArmor(ArmorMaterial pMaterial, ArmorItem.Type pType, Properties pProperties) {
+        super(pMaterial, pType, pProperties);
     }
 
     @Override

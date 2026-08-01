@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "theaurorian:block/aurorian_grass_light"
+    "down": "theaurorian:block/aurorian_dirt",
+    "east": "theaurorian:block/aurorian_grass_light_side",
+    "north": "theaurorian:block/aurorian_grass_light_side",
+    "particle": "theaurorian:block/aurorian_dirt",
+    "south": "theaurorian:block/aurorian_grass_light_side",
+    "up": "theaurorian:block/aurorian_grass_light_top",
+    "west": "theaurorian:block/aurorian_grass_light_side"
   }
 }

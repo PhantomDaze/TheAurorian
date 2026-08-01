@@ -2,7 +2,9 @@ package shiroroku.theaurorian.Items.MirrorOfGuidance;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.AxisAngle4f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -56,7 +58,7 @@ public class MirrorNode {
         RenderUtil.renderItem(itemRenderer, pose, icon, 0, 0);
         if (selected) {
             SpinTimer.tick(pPartialTick);
-            pose.mulPose(Vector3f.ZP.rotationDegrees(SpinTimer.getPercentageProgress() * 360));
+            pose.mulPose(Axis.ZP.rotationDegrees(SpinTimer.getPercentageProgress() * 360));
         }
 
         int u = 160;

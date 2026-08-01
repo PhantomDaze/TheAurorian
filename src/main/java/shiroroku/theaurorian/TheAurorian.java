@@ -1,10 +1,9 @@
 package shiroroku.theaurorian;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -22,13 +21,7 @@ public class TheAurorian {
     public static final String MODID = "theaurorian";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final ResourceKey<Level> the_aurorian = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(TheAurorian.MODID, "the_aurorian"));
-    public static final CreativeModeTab CREATIVETAB = new CreativeModeTab(MODID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(BlockRegistry.silentwood_sapling.get());
-        }
-    };
+    public static final ResourceKey<Level> the_aurorian = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(TheAurorian.MODID, "the_aurorian"));
 
     public TheAurorian() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -47,6 +40,7 @@ public class TheAurorian {
         FeatureRegistry.register(bus);
         SoundRegistry.register(bus);
         ParticleRegistry.register(bus);
+        CreativeTabRegistry.register(bus);
     }
 
 }

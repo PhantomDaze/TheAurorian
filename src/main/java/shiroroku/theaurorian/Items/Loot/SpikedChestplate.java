@@ -2,8 +2,8 @@ package shiroroku.theaurorian.Items.Loot;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class SpikedChestplate extends BaseAurorianArmor {
 
     public SpikedChestplate(ArmorMaterial pMaterial, Properties pProperties) {
-        super(pMaterial, EquipmentSlot.CHEST, pProperties);
+        super(pMaterial, ArmorItem.Type.CHESTPLATE, pProperties);
     }
 
     @Override

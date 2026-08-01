@@ -29,7 +29,7 @@ public class SpiderlingAILeap extends Goal {
             return false;
         }
         double d0 = this.entity.distanceToSqr(this.target);
-        return d0 >= minDistance && this.entity.isOnGround();
+        return d0 >= minDistance && this.entity.onGround();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SpiderlingAILeap extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.entity.isOnGround();
+        return !this.entity.onGround();
     }
 
     @Override

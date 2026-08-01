@@ -92,9 +92,9 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
                 for (int y = 0; y <= distance; y++) {
                     for (int z = 0; z <= distance; z++) {
                         int offs = distance / 2;
-                        BlockPos p = new BlockPos(x + this.position().x() - offs, y + this.position().y() - offs, z + this.position().z() - offs);
-                        if (this.level.getBlockState(p).getBlock() == BlockRegistry.fog_wall.get()) {
-                            this.level.destroyBlock(p, false);
+                        BlockPos p = BlockPos.containing(x + this.position().x() - offs, y + this.position().y() - offs, z + this.position().z() - offs);
+                        if (this.level().getBlockState(p).getBlock() == BlockRegistry.fog_wall.get()) {
+                            this.level().destroyBlock(p, false);
                         }
                     }
                 }
@@ -117,7 +117,7 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
 
     @Override
     public void checkDespawn() {
-        if (this.level.getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
+        if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
             this.discard();
         } else {
             this.noActionTime = 0;

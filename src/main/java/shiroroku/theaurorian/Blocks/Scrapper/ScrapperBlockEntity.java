@@ -83,7 +83,7 @@ public class ScrapperBlockEntity extends AbstractCrafterBlockEntity {
         getItemHandler().getStackInSlot(0).shrink(1);
         getItemHandler().getStackInSlot(1).shrink(1);
         if (discardChance == 0 || !ModUtil.randomChanceOf(this.level.getRandom(), (double) discardChance)) {
-            ModUtil.setAndMergeStack(getItemHandler(), 2, cachedRecipe.getResultItem());
+            ModUtil.setAndMergeStack(getItemHandler(), 2, cachedRecipe.getResultItem(this.level.registryAccess()));
         }
 
         if(level.getBlockState(getBlockPos().above()).is(BlockRegistry.crystal.get()) && ModUtil.randomChanceOf(this.level.getRandom(), CommonConfig.scrapper_crystal_break_chance.get())){

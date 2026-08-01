@@ -197,7 +197,7 @@ public class MoonTempleStructure extends Structure {
                 return;
             }
             for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.STRUCTURE_BLOCK)) {
-                String data = info.nbt != null ? info.nbt.getString("metadata") : "";
+                String data = info.nbt() != null ? info.nbt().getString("metadata") : "";
                 String loot = switch (data) {
                     case "chest_low" -> "theaurorian:chests/moontemple/low";
                     case "chest_med" -> "theaurorian:chests/moontemple/med";
@@ -206,8 +206,8 @@ public class MoonTempleStructure extends Structure {
                 if (loot == null) {
                     continue;
                 }
-                level.setBlock(info.pos, Blocks.AIR.defaultBlockState(), 3);
-                BlockEntity te = level.getBlockEntity(info.pos.below());
+                level.setBlock(info.pos(), Blocks.AIR.defaultBlockState(), 3);
+                BlockEntity te = level.getBlockEntity(info.pos().below());
                 if (te instanceof ChestBlockEntity chest) {
                     chest.setLootTable(new ResourceLocation(loot), random.nextLong());
                 }

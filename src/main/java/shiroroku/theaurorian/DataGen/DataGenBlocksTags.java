@@ -1,8 +1,8 @@
 package shiroroku.theaurorian.DataGen;
 
-import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -13,7 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.TheAurorian;
 
-public class DataGenBlocksTags extends TagsProvider<Block> {
+import java.util.concurrent.CompletableFuture;
+
+public class DataGenBlocksTags extends BlockTagsProvider {
 
     public static final TagKey<Block> CERULEAN_ORE = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "cerulean_ore"));
     public static final TagKey<Block> DUNGEON_BRICKS = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "dungeon_bricks"));
@@ -21,13 +23,12 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
     public static final TagKey<Block> AURORIAN_STONES = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "aurorian_stones"));
     public static final TagKey<Block> MOONSTONE_ORE = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "moonstone_ore"));
 
-    @SuppressWarnings("deprecation")
-    protected DataGenBlocksTags(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, Registry.BLOCK, TheAurorian.MODID, existingFileHelper);
+    protected DataGenBlocksTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        super(output, lookupProvider, TheAurorian.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags() {
+protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.DEEPSLATE_ORE_REPLACEABLES).add(BlockRegistry.aurorian_deepslate.get());
         this.tag(BlockTags.DIRT).add(BlockRegistry.aurorian_dirt.get());
         this.tag(BlockTags.DIRT).add(BlockRegistry.aurorian_grass.get());
@@ -93,8 +94,8 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.moonstone_ore.get());
         this.tag(BlockTags.PLANKS).add(BlockRegistry.silentwood_planks.get());
         this.tag(BlockTags.PLANKS).add(BlockRegistry.weeping_willow_planks.get());
-        this.tag(BlockTags.REPLACEABLE_PLANTS).add(BlockRegistry.aurorian_tallgrass.get());
-        this.tag(BlockTags.REPLACEABLE_PLANTS).add(BlockRegistry.lavender_block.get());
+        this.tag(BlockTags.REPLACEABLE).add(BlockRegistry.aurorian_tallgrass.get());
+        this.tag(BlockTags.REPLACEABLE).add(BlockRegistry.lavender_block.get());
         this.tag(BlockTags.SAPLINGS).add(BlockRegistry.silentwood_sapling.get());
         this.tag(BlockTags.SAPLINGS).add(BlockRegistry.weeping_willow_sapling.get());
         this.tag(BlockTags.SLABS).add(BlockRegistry.aurorian_cobblestone_slab.get());

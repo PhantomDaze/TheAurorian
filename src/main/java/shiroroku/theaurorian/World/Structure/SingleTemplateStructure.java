@@ -121,7 +121,7 @@ public class SingleTemplateStructure extends Structure {
 
             // Umbra tower, ruins and graveyard all stock their chests from the shared ruins table
             for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
-                BlockEntity te = level.getBlockEntity(info.pos);
+                BlockEntity te = level.getBlockEntity(info.pos());
                 if (te instanceof ChestBlockEntity chest) {
                     chest.setLootTable(new ResourceLocation(TheAurorian.MODID, "chests/ruins/common"), random.nextLong());
                 }

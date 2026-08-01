@@ -108,14 +108,14 @@ public class SpiderAISpit extends Goal {
     private void finishSpit(LivingEntity target) {
         this.spitCooldown = 30 - this.entity.getRandom().nextInt(10);
         if (target != null) {
-            WebbingEntity web = new WebbingEntity(this.entity.level, this.entity);
+            WebbingEntity web = new WebbingEntity(this.entity.level(), this.entity);
             double d0 = target.getX() - this.entity.getX();
             double d1 = target.getBoundingBox().minY + target.getBbHeight() / 3.0F - web.getY();
             double d2 = target.getZ() - this.entity.getZ();
             double d3 = Math.sqrt(d0 * d0 + d2 * d2);
             web.shoot(d0, d1 + d3 * 0.1D, d2, 1.0F, 0.0F);
-            this.entity.level.playSound(null, this.entity.getX(), this.entity.getY(), this.entity.getZ(), SoundEvents.CAT_HISS, SoundSource.HOSTILE, 0.8F, 0.8F / (this.entity.getRandom().nextFloat() * 0.4F + 0.8F));
-            this.entity.level.addFreshEntity(web);
+            this.entity.level().playSound(null, this.entity.getX(), this.entity.getY(), this.entity.getZ(), SoundEvents.CAT_HISS, SoundSource.HOSTILE, 0.8F, 0.8F / (this.entity.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.entity.level().addFreshEntity(web);
         }
         this.entity.setSpitting(false);
     }

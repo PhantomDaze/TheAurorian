@@ -20,7 +20,7 @@ public class UndeadKnightRenderer extends HumanoidMobRenderer<UndeadKnightEntity
 
     public UndeadKnightRenderer(EntityRendererProvider.Context context, ModelLayerLocation model, ModelLayerLocation innerArmor, ModelLayerLocation outerArmor) {
         super(context, new HumanoidModel<>(context.bakeLayer(model)), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel<>(context.bakeLayer(innerArmor)), new HumanoidModel<>(context.bakeLayer(outerArmor))));
+        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel<>(context.bakeLayer(innerArmor)), new HumanoidModel<>(context.bakeLayer(outerArmor)), context.getModelManager()));
     }
 
     @Override

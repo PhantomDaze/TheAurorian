@@ -19,7 +19,7 @@ public class Spectral {
     }
 
     public static void handleOnDamage(LivingDamageEvent event) {
-        if (!event.getEntity().level.isClientSide && event.getSource().getEntity() instanceof Player player) {
+        if (!event.getEntity().level().isClientSide && event.getSource().getEntity() instanceof Player player) {
             int spectralArmorPieces = (int) StreamSupport.stream(player.getArmorSlots().spliterator(), false).filter((a) -> a.is(DataGenItemsTags.SPECTRAL_ARMOR)).count();
             if (spectralArmorPieces == 0) {
                 return;

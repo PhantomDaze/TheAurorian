@@ -45,7 +45,7 @@ public class AurorianPortalTeleporter implements ITeleporter {
 
     @Override
     public PortalInfo getPortalInfo(Entity entity, ServerLevel level, Function<ServerLevel, PortalInfo> defaultPortalInfo) {
-        if (entity.level.dimension() != TheAurorian.the_aurorian && !(level.dimension() == TheAurorian.the_aurorian)) {
+        if (entity.level().dimension() != TheAurorian.the_aurorian && !(level.dimension() == TheAurorian.the_aurorian)) {
             return null;
         }
 
@@ -54,21 +54,21 @@ public class AurorianPortalTeleporter implements ITeleporter {
         double minZ = Math.max(-2.9999872E7D, border.getMinZ() + 16.0D);
         double maxX = Math.min(2.9999872E7D, border.getMaxX() - 16.0D);
         double maxZ = Math.min(2.9999872E7D, border.getMaxZ() - 16.0D);
-        double coordinateDifference = DimensionType.getTeleportationScale(entity.level.dimensionType(), level.dimensionType());
-        BlockPos blockPos = new BlockPos(Mth.clamp(entity.getX() * coordinateDifference, minX, maxX), entity.getY(), Mth.clamp(entity.getZ() * coordinateDifference, minZ, maxZ));
+        double coordinateDifference = DimensionType.getTeleportationScale(entity.level().dimensionType(), level.dimensionType());
+        BlockPos blockPos = BlockPos.containing(Mth.clamp(entity.getX() * coordinateDifference, minX, maxX), entity.getY(), Mth.clamp(entity.getZ() * coordinateDifference, minZ, maxZ));
         return this.getOrMakePortal(entity, blockPos).map((result) -> {
-            BlockState blockState = entity.level.getBlockState(entity.portalEntrancePos);
+            BlockState blockState = entity.level().getBlockState(entity.portalEntrancePos);
             Direction.Axis axis;
             Vec3 vector3d;
             if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
                 axis = blockState.getValue(BlockStateProperties.HORIZONTAL_AXIS);
-                BlockUtil.FoundRectangle rectangle = BlockUtil.getLargestRectangleAround(entity.portalEntrancePos, axis, 21, Direction.Axis.Y, 21, (pos) -> entity.level.getBlockState(pos) == blockState);
+                BlockUtil.FoundRectangle rectangle = BlockUtil.getLargestRectangleAround(entity.portalEntrancePos, axis, 21, Direction.Axis.Y, 21, (pos) -> entity.level().getBlockState(pos) == blockState);
                 vector3d = PortalShape.getRelativePosition(rectangle, axis, entity.position(), entity.getDimensions(entity.getPose()));
             } else {
                 axis = Direction.Axis.X;
                 vector3d = new Vec3(0.5D, 0.0D, 0.0D);
             }
-            return PortalShape.createPortalInfo(level, result, axis, vector3d, entity.getDimensions(entity.getPose()), entity.getDeltaMovement(), entity.getYRot(), entity.getXRot());
+            return PortalShape.createPortalInfo(level, result, axis, vector3d, entity, entity.getDeltaMovement(), entity.getYRot(), entity.getXRot());
         }).orElse(null);
     }
 
@@ -191,7 +191,7 @@ public class AurorianPortalTeleporter implements ITeleporter {
         for (int xz = -1; xz < 3; ++xz) {
             for (int y = -1; y < 4; ++y) {
                 pOffsetPos.setWithOffset(pOriginalPos, pDirection.getStepX() * xz + direction.getStepX() * pOffsetScale, y, pDirection.getStepZ() * xz + direction.getStepZ() * pOffsetScale);
-                if (y < 0 && !this.level.getBlockState(pOffsetPos).getMaterial().isSolid()) {
+                if (y < 0 && !this.level.getBlockState(pOffsetPos).isSolid()) {
                     return false;
                 }
                 if (y >= 0 && !this.level.isEmptyBlock(pOffsetPos)) {

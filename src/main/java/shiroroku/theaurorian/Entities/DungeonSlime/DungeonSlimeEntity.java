@@ -63,7 +63,7 @@ public class DungeonSlimeEntity extends Slime {
     protected void dealDamage(LivingEntity pLivingEntity) {
         if (this.isAlive()) {
             int i = this.getSize();
-            if (this.distanceToSqr(pLivingEntity) < 0.8D * (double) i * 0.8D * (double) i && this.hasLineOfSight(pLivingEntity) && pLivingEntity.hurt(DamageSource.mobAttack(this), this.getAttackDamage())) {
+            if (this.distanceToSqr(pLivingEntity) < 0.8D * (double) i * 0.8D * (double) i && this.hasLineOfSight(pLivingEntity) && pLivingEntity.hurt(this.damageSources().mobAttack(this), this.getAttackDamage())) {
                 this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 this.doEnchantDamageEffects(this, pLivingEntity);
             }
