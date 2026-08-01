@@ -23,10 +23,9 @@ public class KeepersBowItem extends BaseAurorianBow {
         super(pProperties);
     }
 
-    @Override
-    public int getUseDuration(ItemStack pStack) {
-        return 40;
-    }
+    // Keep vanilla bow use duration (72000). A short duration (e.g. 40) ends the
+    // use animation and restarts while the player still holds right-click, which
+    // makes the pull model loop back to the undrawn frame after a full draw.
 
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
@@ -36,6 +35,7 @@ public class KeepersBowItem extends BaseAurorianBow {
             if (i < 0) {
                 return;
             }
+            // getPowerForTime is charge-ticks/20 (full power at 20t), independent of use duration
             float f = getPowerForTime(i);
             if (f < 0.1D) {
                 return;

@@ -42,9 +42,10 @@ public class DataGenBlocks extends BlockStateProvider {
         cropBlock(BlockRegistry.silkberry_crop.get(), "silkberry_crop");
 
         // CUSTOM
-        axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get(), modLoc("block/silentwood_log_end"), modLoc("block/silentwood_log_side"));
-        axisBlock((RotatedPillarBlock) BlockRegistry.weeping_willow_log.get(), modLoc("block/weeping_willow_log_top"), modLoc("block/weeping_willow_log_side"));
-        axisBlock((RotatedPillarBlock) BlockRegistry.mushroom_stem.get(), modLoc("block/mushroom_stem_top"), modLoc("block/mushroom_stem_side"));
+        // axisBlock(block, side, end) — side = bark, end = rings/top
+        axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get(), modLoc("block/silentwood_log_side"), modLoc("block/silentwood_log_end"));
+        axisBlock((RotatedPillarBlock) BlockRegistry.weeping_willow_log.get(), modLoc("block/weeping_willow_log_side"), modLoc("block/weeping_willow_log_top"));
+        axisBlock((RotatedPillarBlock) BlockRegistry.mushroom_stem.get(), modLoc("block/mushroom_stem_side"), modLoc("block/mushroom_stem_top"));
         ModelFile mushroom = models().cubeBottomTop(blockTexture(BlockRegistry.mushroom.get()).getPath(), modLoc("block/mushroom_side"), modLoc("block/mushroom_bottom"), modLoc("block/mushroom_side"));
         simpleBlock(BlockRegistry.mushroom.get(), mushroom);
         simpleBlockItem(BlockRegistry.mushroom.get());
@@ -59,6 +60,8 @@ public class DataGenBlocks extends BlockStateProvider {
         simpleBlockItem(BlockRegistry.boss_spawner.get());
         simpleBlockItem(BlockRegistry.fog_wall.get());
         simpleBlockItem(BlockRegistry.silentwood_log.get());
+        simpleBlockItem(BlockRegistry.weeping_willow_log.get());
+        simpleBlockItem(BlockRegistry.mushroom_stem.get());
         simpleBlockItem(BlockRegistry.aurorian_portal.get());
         slabBlock(BlockRegistry.aurorian_cobblestone_slab.get(), blockTexture(BlockRegistry.aurorian_cobblestone.get()));
         slabBlock(BlockRegistry.aurorian_deepslate_slab.get(), blockTexture(BlockRegistry.aurorian_deepslate.get()));
