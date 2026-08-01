@@ -175,3 +175,16 @@ python3 scripts/remap_structure_nbt.py src/main/resources/data/theaurorian/struc
 - [ ] chest loot 路径从上游文件名迁到 `chests/{darkstone,moontemple}/`  
 
 D30 在 Phase 1+3 验证前保持 `open`。
+
+
+## 非交互同步（推荐）
+
+本机 zsh 常把 `cp` 别名为 `cp -iv`，覆盖时会卡在确认提示。请用：
+
+```bash
+bash scripts/sync_structures.sh           # /usr/bin/cp -f 复制上游 NBT + remap
+bash scripts/sync_structures.sh --dry-run # 只看计划
+bash scripts/sync_structures.sh --remap-only
+```
+
+映射逻辑仍在 `scripts/remap_structure_nbt.py`。
