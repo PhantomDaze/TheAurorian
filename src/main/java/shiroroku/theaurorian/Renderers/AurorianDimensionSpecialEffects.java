@@ -47,18 +47,22 @@ public class AurorianDimensionSpecialEffects extends DimensionSpecialEffects {
     }
 
     /**
-     * Lift lightmap sky contribution so outdoor areas match ~0.75 sunlight instead of midnight black.
+     * Cool moonlight lightmap cast.
+     * <p>
+     * {@link shiroroku.theaurorian.Mixin.Client.ClientLevelMixin} already floors
+     * {@code skyDarken} to {@link #MOONLIGHT_BRIGHTNESS}, so a "lift = 0.75 - skyDarken"
+     * term is always ~0 and would never run. Instead tint by sky-light level so outdoor
+     * blocks read as bright cool blue moonlight rather than flat grey night.
      */
     @Override
     public void adjustLightmapColors(ClientLevel level, float partialTicks, float skyDarken, float blockLightRedFlicker,
                                      float skyLight, int blockLightIndex, int skyLightIndex, Vector3f colors) {
-        float lift = Math.max(0.0F, MOONLIGHT_BRIGHTNESS - skyDarken);
-        if (lift <= 0.0F) {
+        float skyBase = LightTexture.getBrightness(level.dimensionType(), skyLightIndex);
+        if (skyBase <= 0.0F) {
             return;
         }
-        float skyBase = LightTexture.getBrightness(level.dimensionType(), skyLightIndex);
-        float add = skyBase * lift;
-        // Cool moonlight cast (slightly blue), matching the 1.12 sky palette
-        colors.add(add * 0.55F, add * 0.68F, add * 0.95F);
+        // Stronger on open sky; still a mild indoor skylight bleed
+        float moon = skyBase * 0.22F;
+        colors.add(moon * 0.45F, moon * 0.62F, moon * 1.05F);
     }
 }

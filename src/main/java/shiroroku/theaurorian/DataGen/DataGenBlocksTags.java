@@ -46,6 +46,9 @@ protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_slab.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_stairs.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_ladder.get());
+        // LadderBlock alone does not make a custom ladder climbable — must be in the tag.
+        this.tag(BlockTags.CLIMBABLE).add(BlockRegistry.silentwood_ladder.get());
+        this.tag(BlockTags.FALL_DAMAGE_RESETTING).add(BlockRegistry.silentwood_ladder.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_log.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_planks.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_stairs.get());

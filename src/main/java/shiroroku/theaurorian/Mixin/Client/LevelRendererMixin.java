@@ -147,6 +147,7 @@ public class LevelRendererMixin {
                     AuroraRenderer.renderSky(level, poseStack, projectionMatrix, partialTick);
                 }
 
+                // Void/horizon disc (below sea level). Must not leak this color into terrain.
                 RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
                 double d0 = this.minecraft.player.getEyePosition(partialTick).y - this.level.getLevelData().getHorizonHeight(this.level);
                 if (d0 < 0.0D) {
@@ -158,7 +159,10 @@ public class LevelRendererMixin {
                     poseStack.popPose();
                 }
 
-                RenderSystem.setShaderColor((float) skyColor.x * 0.2F + 0.04F, (float) skyColor.y * 0.2F + 0.04F, (float) skyColor.z * 0.6F + 0.1F, 1.0F);
+                // Vanilla ends sky with white ColorModulator. Leaving the old
+                // "sky*0.2" residual multiplies all block shaders and makes outdoors near-black.
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.defaultBlendFunc();
                 RenderSystem.depthMask(true);
             }
         }
