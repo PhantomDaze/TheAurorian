@@ -20,9 +20,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import shiroroku.theaurorian.Renderers.AurorianDimensionSpecialEffects;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -160,6 +162,16 @@ public class EventsClient {
         event.addSprite(SilentwoodChestBlockRenderer.DOUBLE_LEFT);
         event.addSprite(SilentwoodChestBlockRenderer.DOUBLE_RIGHT);
         event.addSprite(SilentwoodChestBlockRenderer.NORMAL);
+    }
+
+    /**
+     * 1.12 WorldProvider lighting/sky → 1.19 DimensionSpecialEffects.
+     * Must match {@code effects} in dimension_type JSON.
+     */
+    @SubscribeEvent
+    public static void onRegisterDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
+        event.register(new ResourceLocation(TheAurorian.MODID, "the_aurorian"),
+                new AurorianDimensionSpecialEffects());
     }
 
 }
