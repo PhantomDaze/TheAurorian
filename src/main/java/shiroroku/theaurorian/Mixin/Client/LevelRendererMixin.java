@@ -3,9 +3,6 @@ package shiroroku.theaurorian.Mixin.Client;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.AxisAngle4f;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -18,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -147,7 +145,7 @@ public class LevelRendererMixin {
                     AuroraRenderer.renderSky(level, pPoseStack, pProjectionMatrix, pPartialTick);
                 }
 
-                // texture unit always enabled in 1.20+
+                // Void/horizon disc (below sea level). Must not leak this color into terrain.
                 RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
                 double d0 = this.minecraft.player.getEyePosition(pPartialTick).y - this.level.getLevelData().getHorizonHeight(this.level);
                 if (d0 < 0.0D) {
@@ -159,8 +157,10 @@ public class LevelRendererMixin {
                     pPoseStack.popPose();
                 }
 
-                RenderSystem.setShaderColor((float) skyColor.x * 0.2F + 0.04F, (float) skyColor.y * 0.2F + 0.04F, (float) skyColor.z * 0.6F + 0.1F, 1.0F);
-                // texture unit always enabled in 1.20+
+                // 1.20 vanilla ends sky with white ColorModulator. Leaving the 1.19
+                // "sky*0.2" residual multiplies all block shaders and makes outdoors near-black.
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.defaultBlendFunc();
                 RenderSystem.depthMask(true);
 
             }

@@ -2,10 +2,10 @@
   "temperature": 0.7,
   "downfall": 0.9,
   "effects": {
-    "sky_color": 7972607,
-    "fog_color": 12638463,
-    "water_color": 16777215,
-    "water_fog_color": 10131862,
+    "sky_color": 9805,
+    "fog_color": 1714756,
+    "water_color": 4020864,
+    "water_fog_color": 660768,
     "music": {
       "replace_current_music": false,
       "max_delay": 3600,

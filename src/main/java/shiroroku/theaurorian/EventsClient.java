@@ -19,12 +19,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import shiroroku.theaurorian.Blocks.BossSpawner.BossSpawnerBlockRenderer;
+import shiroroku.theaurorian.Renderers.AurorianDimensionSpecialEffects;
 import shiroroku.theaurorian.Blocks.Crystal.CrystalBlockRenderer;
 import shiroroku.theaurorian.Blocks.MoonlightForge.MoonlightForgeBlockRenderer;
 import shiroroku.theaurorian.Blocks.MoonlightForge.MoonlightForgeScreen;
@@ -144,5 +146,15 @@ public class EventsClient {
     @SubscribeEvent
     public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ParticleRegistry.WEEPING_WILLOW_DRIP.get(), WeepingWillowDripParticle.Provider::new);
+    }
+
+    /**
+     * 1.12 WorldProvider lighting/sky → 1.20 DimensionSpecialEffects.
+     * Must match {@code effects} in dimension_type JSON.
+     */
+    @SubscribeEvent
+    public static void onRegisterDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
+        event.register(new ResourceLocation(TheAurorian.MODID, "the_aurorian"),
+                new AurorianDimensionSpecialEffects());
     }
 }
