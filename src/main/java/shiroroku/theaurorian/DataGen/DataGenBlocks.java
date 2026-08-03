@@ -28,10 +28,15 @@ public class DataGenBlocks extends BlockStateProvider {
         List<RegistryObject<Block>> BASIC = new ArrayList<>();
         BASIC.addAll(BlockRegistry.BLOCKS_GEN.getEntries());
         BASIC.addAll(BlockRegistry.BLOCKS_GEN_NL.getEntries());
-        BASIC.stream().map(Supplier::get).forEach(block -> {
-            simpleBlock(block);
-            simpleBlockItem(block);
-        });
+        BASIC.stream().map(Supplier::get)
+                // glass/urn need non-solid render types — handled below
+                .filter(block -> block != BlockRegistry.aurorian_glass.get()
+                        && block != BlockRegistry.moon_glass.get()
+                        && block != BlockRegistry.urn.get())
+                .forEach(block -> {
+                    simpleBlock(block);
+                    simpleBlockItem(block);
+                });
         BlockRegistry.BLOCKS_GEN_NL_PLANT.getEntries().stream().map(Supplier::get)
                 .filter(block -> block != BlockRegistry.lavender_crop.get() && block != BlockRegistry.silkberry_crop.get())
                 .forEach(block -> {
@@ -52,6 +57,10 @@ public class DataGenBlocks extends BlockStateProvider {
         ModelFile willowLeaves = models().cubeAll(blockTexture(BlockRegistry.weeping_willow_leaves.get()).getPath(), blockTexture(BlockRegistry.weeping_willow_leaves.get())).renderType("cutout_mipped");
         simpleBlock(BlockRegistry.weeping_willow_leaves.get(), willowLeaves);
         simpleBlockItem(BlockRegistry.weeping_willow_leaves.get(), "cutout_mipped");
+        // model render_type replaces deprecated ItemBlockRenderTypes.setRenderLayer
+        simpleBlockWithRenderType(BlockRegistry.aurorian_glass.get(), "translucent");
+        simpleBlockWithRenderType(BlockRegistry.moon_glass.get(), "translucent");
+        simpleBlockWithRenderType(BlockRegistry.urn.get(), "cutout");
         barsBlock(BlockRegistry.runestone_bars.get());
         barsBlock(BlockRegistry.moon_temple_bars.get());
         glassPaneBlock(BlockRegistry.aurorian_glass_pane.get(), blockTexture(BlockRegistry.aurorian_glass.get()));
@@ -82,6 +91,12 @@ public class DataGenBlocks extends BlockStateProvider {
         torchBlock(BlockRegistry.silentwood_torch.get(), blockTexture(BlockRegistry.silentwood_torch.get()));
         torchBlock(BlockRegistry.moon_torch.get(), blockTexture(BlockRegistry.moon_torch.get()));
         ladderBlock(BlockRegistry.silentwood_ladder.get(), blockTexture(BlockRegistry.silentwood_ladder.get()));
+    }
+
+    private void simpleBlockWithRenderType(Block block, String renderType) {
+        ModelFile model = models().cubeAll(blockTexture(block).getPath(), blockTexture(block)).renderType(renderType);
+        simpleBlock(block, model);
+        simpleBlockItem(block, renderType);
     }
 
     private void cropBlock(Block block, String name) {

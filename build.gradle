@@ -81,9 +81,6 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Geckolib
-    implementation fg.deobf("curse.maven:geckolib-388172:4407241")
-
     // Curios
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 

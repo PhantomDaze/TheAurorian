@@ -1,3 +1,4 @@
 {
-  "parent": "theaurorian:block/aurorian_glass"
+  "parent": "theaurorian:block/aurorian_glass",
+  "render_type": "minecraft:translucent"
 }

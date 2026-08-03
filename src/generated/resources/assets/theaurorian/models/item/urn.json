@@ -1,3 +1,4 @@
 {
-  "parent": "theaurorian:block/urn"
+  "parent": "theaurorian:block/urn",
+  "render_type": "minecraft:cutout"
 }

@@ -1,33 +1,38 @@
 package shiroroku.theaurorian.World.Feature;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
-import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.SpruceFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import org.jetbrains.annotations.Nullable;
-import shiroroku.theaurorian.Registry.BlockRegistry;
+import shiroroku.theaurorian.TheAurorian;
 
+/**
+ * Sapling grower for silentwood; configured feature lives in datapack
+ * ({@code theaurorian:silentwood_tree}).
+ */
 public class SilentwoodTreeFeature extends AbstractTreeGrower {
 
-    private static final Holder<ConfiguredFeature<TreeConfiguration, ?>> TREE = FeatureUtils.register("silentwood_tree", Feature.TREE, (
-            new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(BlockRegistry.silentwood_log.get()),
-                    new StraightTrunkPlacer(12, 2, 1), BlockStateProvider.simple(BlockRegistry.silentwood_leaves.get()),
-                    new SpruceFoliagePlacer(UniformInt.of(2, 3), UniformInt.of(0, 2), UniformInt.of(5, 7)),
-                    new TwoLayersFeatureSize(2, 0, 2)))
-            .ignoreVines()
-            .build());
+    private static final ResourceKey<ConfiguredFeature<?, ?>> TREE = ResourceKey.create(
+            Registry.CONFIGURED_FEATURE_REGISTRY, new ResourceLocation(TheAurorian.MODID, "silentwood_tree"));
+
+    @Nullable
+    @Override
+    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(ServerLevel level, ChunkGenerator chunkGenerator, BlockPos pos, BlockState state, RandomSource random, boolean hasFlowers) {
+        return level.registryAccess().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY).getHolder(TREE).orElse(null);
+    }
 
     @Nullable
     @Override
     protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource pRandom, boolean pLargeHive) {
-        return TREE; //todo use json silentwood instead
+        // Deprecated vanilla path — not used when the Forge overload above is present.
+        return null;
     }
 }

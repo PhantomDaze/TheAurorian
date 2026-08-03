@@ -7,8 +7,6 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -39,7 +37,6 @@ import shiroroku.theaurorian.Items.Loot.UmbraPickaxe;
 import shiroroku.theaurorian.Items.Spectral.SpectralArmorLayer;
 import shiroroku.theaurorian.Particles.WeepingWillowDripParticle;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
-import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.Registry.MenuRegistry;
 import shiroroku.theaurorian.Registry.ParticleRegistry;
@@ -53,16 +50,7 @@ public class EventsClient {
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            // RENDER LAYERS (translucent glass / cutout torches & ladder)
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_glass.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_glass.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_glass_pane.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_glass_pane.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_torch.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_torch.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_ladder.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_tallgrass_light.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.urn.get(), RenderType.cutout());
+            // Render layers: set via model JSON "render_type" (see DataGenBlocks)
 
             // ITEM PROPERTIES
             ItemRegistry.ITEMS_GEN_SHIELD.getEntries().stream().map(Supplier::get).forEach((shield) -> ItemProperties.register(shield, new ResourceLocation("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F));
@@ -80,7 +68,6 @@ public class EventsClient {
             // BLOCK ENTITY RENDERERS
             BlockEntityRenderers.register(BlockEntityRegistry.boss_spawner.get(), BossSpawnerBlockRenderer::new);
             BlockEntityRenderers.register(BlockEntityRegistry.crystal.get(), CrystalBlockRenderer::new);
-            BlockEntityRenderers.register(BlockEntityRegistry.moonlight_forge.get(), MoonlightForgeBlockRenderer::new);
             BlockEntityRenderers.register(BlockEntityRegistry.moonlight_forge.get(), MoonlightForgeBlockRenderer::new);
             BlockEntityRenderers.register(BlockEntityRegistry.silentwood_chest.get(), SilentwoodChestBlockRenderer::new);
         });
