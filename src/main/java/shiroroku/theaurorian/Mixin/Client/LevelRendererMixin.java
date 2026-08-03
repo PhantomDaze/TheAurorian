@@ -67,6 +67,7 @@ public class LevelRendererMixin {
         if (level.dimension() != TheAurorian.the_aurorian) {
             return; // Only override aurorian sky renderer
         }
+        // Always cancel vanilla sky for this dim — so every exit path must leave clean GL state.
         skyFogSetup.run();
         if (!isFoggy) {
             FogType fogtype = camera.getFluidInCamera();
@@ -148,24 +149,26 @@ public class LevelRendererMixin {
                 }
 
                 // Void/horizon disc (below sea level). Must not leak this color into terrain.
-                RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
-                double d0 = this.minecraft.player.getEyePosition(partialTick).y - this.level.getLevelData().getHorizonHeight(this.level);
-                if (d0 < 0.0D) {
-                    poseStack.pushPose();
-                    poseStack.translate(0.0D, 12.0D, 0.0D);
-                    this.darkBuffer.bind();
-                    this.darkBuffer.drawWithShader(poseStack.last().pose(), projectionMatrix, shaderinstance);
-                    VertexBuffer.unbind();
-                    poseStack.popPose();
+                if (this.minecraft.player != null) {
+                    RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
+                    double d0 = this.minecraft.player.getEyePosition(partialTick).y - this.level.getLevelData().getHorizonHeight(this.level);
+                    if (d0 < 0.0D) {
+                        poseStack.pushPose();
+                        poseStack.translate(0.0D, 12.0D, 0.0D);
+                        this.darkBuffer.bind();
+                        this.darkBuffer.drawWithShader(poseStack.last().pose(), projectionMatrix, shaderinstance);
+                        VertexBuffer.unbind();
+                        poseStack.popPose();
+                    }
                 }
-
-                // Vanilla ends sky with white ColorModulator. Leaving the old
-                // "sky*0.2" residual multiplies all block shaders and makes outdoors near-black.
-                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                RenderSystem.defaultBlendFunc();
-                RenderSystem.depthMask(true);
             }
         }
+
+        // Always restore white ColorModulator + default blend after cancelling vanilla sky.
+        // Covers blocked-view paths (powder snow / lava / blindness) that skip the draw body.
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.depthMask(true);
 
         ci.cancel(); // Dont render vanilla sky after
     }
