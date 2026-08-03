@@ -7,7 +7,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class AurorianPigEntityRender extends MobRenderer<AurorianPigEntity, AurorianPigEntityModel> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/aurorian_pig.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/aurorian_pig.png");
 
     public AurorianPigEntityRender(EntityRendererProvider.Context context) {
         super(context, new AurorianPigEntityModel(context.bakeLayer(AurorianPigEntityModel.MODEL_LAYER_LOCATION)), 0.7F);

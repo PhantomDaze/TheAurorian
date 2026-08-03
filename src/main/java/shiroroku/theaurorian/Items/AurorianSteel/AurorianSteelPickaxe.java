@@ -1,11 +1,13 @@
 package shiroroku.theaurorian.Items.AurorianSteel;
 
+import net.minecraft.world.item.Item;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeTier;
+import net.neoforged.neoforge.common.SimpleTier;
 import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Items.BaseAurorianPickaxe;
 
@@ -14,17 +16,17 @@ import java.util.function.Consumer;
 
 public class AurorianSteelPickaxe extends BaseAurorianPickaxe {
 
-    public AurorianSteelPickaxe(ForgeTier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
+    public AurorianSteelPickaxe(SimpleTier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
         super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, AurorianSteel.appendHoverText(pTooltipComponents, pStack), pIsAdvanced);
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
         return AurorianSteel.onItemDamage(stack, entity, amount);
     }
 }

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:silkberry"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "theaurorian:silkberry_seeds"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "theaurorian:umbra_stone_roof_tiles"
+    }
+  },
+  "result": {
+    "count": 4,
+    "id": "theaurorian:umbra_stone_roof_stairs"
+  }
+}

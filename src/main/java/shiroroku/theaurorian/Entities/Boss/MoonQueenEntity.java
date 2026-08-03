@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Entities.Boss;
 
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,7 +52,6 @@ public class MoonQueenEntity extends Monster {
         super(pEntityType, pLevel);
         this.xpReward = 500;
         this.fireImmune();
-        this.setMaxUpStep(1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -132,7 +133,7 @@ public class MoonQueenEntity extends Monster {
         this.level().setBlock(this.blockPosition(), Blocks.CHEST.defaultBlockState(), 2);
         BlockEntity te = this.level().getBlockEntity(this.blockPosition());
         if (te instanceof ChestBlockEntity chest) {
-            chest.setLootTable(new net.minecraft.resources.ResourceLocation(CHEST_LOOT), this.random.nextLong());
+            chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, net.minecraft.resources.ResourceLocation.parse(CHEST_LOOT)), this.random.nextLong());
         } else {
             TheAurorian.LOGGER.error("Failed to spawn Moon Queen loot box!");
         }
@@ -144,11 +145,11 @@ public class MoonQueenEntity extends Monster {
     private static final net.minecraft.network.syncher.EntityDataAccessor<Boolean> CHARGE_HIT = net.minecraft.network.syncher.SynchedEntityData.defineId(MoonQueenEntity.class, net.minecraft.network.syncher.EntityDataSerializers.BOOLEAN);
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(WINDINGUP_CHARGE, false);
-        this.entityData.define(CHARGING, false);
-        this.entityData.define(CHARGE_HIT, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(WINDINGUP_CHARGE, false);
+        builder.define(CHARGING, false);
+        builder.define(CHARGE_HIT, false);
     }
 
     public void setCharging(boolean bool) {

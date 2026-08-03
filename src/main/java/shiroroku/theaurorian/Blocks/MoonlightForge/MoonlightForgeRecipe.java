@@ -1,40 +1,44 @@
 package shiroroku.theaurorian.Blocks.MoonlightForge;
 
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import shiroroku.theaurorian.Blocks.EmptyRecipeInput;
 import shiroroku.theaurorian.Registry.RecipeRegistry;
 
-public record MoonlightForgeRecipe(ResourceLocation id, Ingredient input, Ingredient catalyst, ItemStack output) implements Recipe<Container> {
+/**
+ * Moonlight Forge recipe. JSON fields: input, catalyst, output (same as 1.20.1).
+ * Identity is external via RecipeHolder in 1.21.
+ */
+public record MoonlightForgeRecipe(Ingredient input, Ingredient catalyst, ItemStack output) implements Recipe<RecipeInput> {
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
+    public boolean matches(RecipeInput input, Level level) {
         return true;
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, net.minecraft.core.RegistryAccess access) {
+    public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
         return this.output.copy();
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResultItem(net.minecraft.core.RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
         return this.output.copy();
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override
@@ -48,28 +52,27 @@ public record MoonlightForgeRecipe(ResourceLocation id, Ingredient input, Ingred
     }
 
     public static class Serializer implements RecipeSerializer<MoonlightForgeRecipe> {
+        public static final MapCodec<MoonlightForgeRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+                Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(MoonlightForgeRecipe::input),
+                Ingredient.CODEC_NONEMPTY.fieldOf("catalyst").forGetter(MoonlightForgeRecipe::catalyst),
+                ItemStack.STRICT_CODEC.fieldOf("output").forGetter(MoonlightForgeRecipe::output)
+        ).apply(inst, MoonlightForgeRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, MoonlightForgeRecipe> STREAM_CODEC = StreamCodec.composite(
+                Ingredient.CONTENTS_STREAM_CODEC, MoonlightForgeRecipe::input,
+                Ingredient.CONTENTS_STREAM_CODEC, MoonlightForgeRecipe::catalyst,
+                ItemStack.STREAM_CODEC, MoonlightForgeRecipe::output,
+                MoonlightForgeRecipe::new
+        );
 
         @Override
-        public MoonlightForgeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));
-            Ingredient catalyst = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "catalyst"));
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-            return new MoonlightForgeRecipe(recipeId, input, catalyst, output);
+        public MapCodec<MoonlightForgeRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public MoonlightForgeRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            Ingredient input = Ingredient.fromNetwork(buffer);
-            Ingredient catalyst = Ingredient.fromNetwork(buffer);
-            ItemStack output = buffer.readItem();
-            return new MoonlightForgeRecipe(id, input, catalyst, output);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, MoonlightForgeRecipe recipe) {
-            recipe.input.toNetwork(buffer);
-            recipe.catalyst.toNetwork(buffer);
-            buffer.writeItem(recipe.output);
+        public StreamCodec<RegistryFriendlyByteBuf, MoonlightForgeRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

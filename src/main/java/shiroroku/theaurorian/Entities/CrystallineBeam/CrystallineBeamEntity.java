@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Entities.CrystallineBeam;
 
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.sounds.SoundEvents;
@@ -31,8 +33,7 @@ public class CrystallineBeamEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
@@ -48,7 +49,7 @@ public class CrystallineBeamEntity extends Projectile {
         Vec3 vec3 = this.getDeltaMovement();
 
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+        if (hitresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
         }
 

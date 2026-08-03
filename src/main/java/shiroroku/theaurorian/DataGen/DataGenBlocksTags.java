@@ -2,13 +2,13 @@ package shiroroku.theaurorian.DataGen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.TheAurorian;
@@ -17,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class DataGenBlocksTags extends BlockTagsProvider {
 
-    public static final TagKey<Block> CERULEAN_ORE = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "cerulean_ore"));
-    public static final TagKey<Block> DUNGEON_BRICKS = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "dungeon_bricks"));
-    public static final TagKey<Block> DUNGEON_GATES = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "dungeon_gates"));
-    public static final TagKey<Block> AURORIAN_STONES = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "aurorian_stones"));
-    public static final TagKey<Block> MOONSTONE_ORE = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "moonstone_ore"));
+    public static final TagKey<Block> CERULEAN_ORE = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "cerulean_ore"));
+    public static final TagKey<Block> DUNGEON_BRICKS = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "dungeon_bricks"));
+    public static final TagKey<Block> DUNGEON_GATES = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "dungeon_gates"));
+    public static final TagKey<Block> AURORIAN_STONES = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "aurorian_stones"));
+    public static final TagKey<Block> MOONSTONE_ORE = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "moonstone_ore"));
 
     protected DataGenBlocksTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, TheAurorian.MODID, existingFileHelper);

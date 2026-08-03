@@ -37,7 +37,7 @@ class DatapackSmokeTest {
     @Test
     void bossAdvancementsUseOrRequirements() throws Exception {
         for (String id : new String[]{"liberated", "exterminated", "dethroned"}) {
-            JsonObject adv = readObject(MAIN.resolve("data/theaurorian/advancements/" + id + ".json"));
+            JsonObject adv = readObject(MAIN.resolve("data/theaurorian/advancement/" + id + ".json"));
             assertTrue(adv.has("requirements"), id + " missing requirements");
             assertEquals(1, adv.getAsJsonArray("requirements").size(), id + " requirements outer size");
             assertTrue(adv.getAsJsonArray("requirements").get(0).getAsJsonArray().size() >= 2,
@@ -70,7 +70,7 @@ class DatapackSmokeTest {
 
     @Test
     void structureFoldersMeetMinimums() throws Exception {
-        Path structures = MAIN.resolve("data/theaurorian/structures");
+        Path structures = MAIN.resolve("data/theaurorian/structure");
         assertMinNbt(structures.resolve("runestone"), 20);
         assertMinNbt(structures.resolve("darkstone"), 14);
         assertMinNbt(structures.resolve("moontemple"), 11);
@@ -98,7 +98,7 @@ class DatapackSmokeTest {
 
     @Test
     void criticalMoonlightForgeRecipesExist() {
-        Path mf = MAIN.resolve("data/theaurorian/recipes/moonlight_forge");
+        Path mf = MAIN.resolve("data/theaurorian/recipe/moonlight_forge");
         assertTrue(Files.isRegularFile(mf.resolve("keepers_bow.json")));
         assertTrue(Files.isRegularFile(mf.resolve("queens_chipper.json")));
         assertTrue(Files.isRegularFile(mf.resolve("moon_shield.json")));

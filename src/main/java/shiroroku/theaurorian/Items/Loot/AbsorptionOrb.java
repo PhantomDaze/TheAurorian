@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Items.Loot;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -35,18 +37,8 @@ public class AbsorptionOrb extends BaseAurorianItem {
 
         // check if its repairable, then repair
         if (CommonConfig.absorption_orb_repairs_all.get() || player.getMainHandItem().is(DataGenItemsTags.ABSORPTION_ORB_REPAIRABLE)) {
-            orbItem.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(InteractionHand.OFF_HAND));
+            orbItem.hurtAndBreak(1, player, EquipmentSlot.OFFHAND);
             mainhandItem.setDamageValue(mainhandItem.getDamageValue() - 1);
         }
-    }
-
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return false;
-    }
-
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
     }
 }

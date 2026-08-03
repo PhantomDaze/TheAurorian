@@ -15,7 +15,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class MoonAcolyteEntityLayer extends RenderLayer<MoonAcolyteEntity, MoonAcolyteEntityRender.MoonAcolyteModel> {
 
-    private static final ResourceLocation LAYER_TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/moon_acolyte_layer.png");
+    private static final ResourceLocation LAYER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/moon_acolyte_layer.png");
     private final HumanoidModel<MoonAcolyteEntity> model;
 
     public MoonAcolyteEntityLayer(RenderLayerParent<MoonAcolyteEntity, MoonAcolyteEntityRender.MoonAcolyteModel> pRenderer, EntityModelSet set) {
@@ -29,6 +29,6 @@ public class MoonAcolyteEntityLayer extends RenderLayer<MoonAcolyteEntity, MoonA
         this.getParentModel().copyPropertiesTo(this.model);
         this.model.prepareMobModel(pEntity, pLimbSwing, pLimbSwingAmount, pPartialTicks);
         this.model.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-        this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, LivingEntityRenderer.getOverlayCoords(pEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, LivingEntityRenderer.getOverlayCoords(pEntity, 0.0F), -1);
     }
 }

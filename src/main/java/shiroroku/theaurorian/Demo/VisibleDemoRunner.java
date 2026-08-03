@@ -12,10 +12,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import shiroroku.theaurorian.TheAurorian;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.UUID;
  * player, recenters the camera on the action, and waits between cases so a
  * human watching the client can see the result.
  */
-@Mod.EventBusSubscriber(modid = TheAurorian.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = TheAurorian.MODID)
 public final class VisibleDemoRunner {
 
     /** Default pause between cases (~4s). */
@@ -90,8 +91,8 @@ public final class VisibleDemoRunner {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || SESSIONS.isEmpty()) {
+    public static void onServerTick(ServerTickEvent.Post event) {
+        if (SESSIONS.isEmpty()) {
             return;
         }
         Iterator<Map.Entry<UUID, Session>> it = SESSIONS.entrySet().iterator();
@@ -345,7 +346,7 @@ public final class VisibleDemoRunner {
         public AABB bounds() {
             BlockPos a = origin;
             BlockPos b = origin.relative(right, width - 1).relative(forward, depth - 1).above(height);
-            return new AABB(a, b.offset(1, 1, 1));
+            return new AABB(Vec3.atLowerCornerOf(a), Vec3.atLowerCornerOf(b.offset(1, 1, 1)));
         }
 
         public void set(ServerLevel level, int x, int y, int z, BlockState state) {

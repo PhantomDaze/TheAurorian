@@ -1,25 +1,24 @@
 package shiroroku.theaurorian.Blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-
+/**
+ * Inventory BE base. Item handler is exposed via {@link shiroroku.theaurorian.Registry.CapabilityRegistry}
+ * (RegisterCapabilitiesEvent), not legacy LazyOptional getCapability overrides.
+ */
 public abstract class AbstractInventoryBlockEntity extends BlockEntity {
 
     private final ItemStackHandler itemHandler = createItemHandler();
 
-    public AbstractInventoryBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
-        super(pType, pPos, pBlockState);
+    public AbstractInventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     protected abstract ItemStackHandler createItemHandler();
@@ -28,29 +27,24 @@ public abstract class AbstractInventoryBlockEntity extends BlockEntity {
         return itemHandler;
     }
 
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        return cap == ForgeCapabilities.ITEM_HANDLER ? LazyOptional.of(() -> itemHandler).cast() : super.getCapability(cap, side);
-    }
-
-    @Override
-    public void load(CompoundTag tag) {
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         if (tag.contains("items")) {
-            itemHandler.deserializeNBT(tag.getCompound("items"));
+            itemHandler.deserializeNBT(registries, tag.getCompound("items"));
         }
-        super.load(tag);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        tag.put("items", itemHandler.serializeNBT());
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("items", itemHandler.serializeNBT(registries));
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag nbt = super.getUpdateTag();
-        this.saveAdditional(nbt);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag nbt = super.getUpdateTag(registries);
+        this.saveAdditional(nbt, registries);
         return nbt;
     }
 
@@ -60,6 +54,8 @@ public abstract class AbstractInventoryBlockEntity extends BlockEntity {
     }
 
     public void updateClient() {
-        level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+        if (level != null) {
+            level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+        }
     }
 }

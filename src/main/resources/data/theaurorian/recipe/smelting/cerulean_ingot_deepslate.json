@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "theaurorian:deepslate_cerulean_ore"
+  },
+  "result": {
+    "id": "theaurorian:cerulean_ingot"
+  }
+}

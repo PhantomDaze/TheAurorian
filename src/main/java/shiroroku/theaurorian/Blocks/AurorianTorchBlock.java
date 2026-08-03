@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class AurorianTorchBlock extends TorchBlock {
 
     public AurorianTorchBlock(Properties pProperties) {
-        super(pProperties, ParticleTypes.FLAME);
+        super(ParticleTypes.FLAME, pProperties);
     }
 
     @Override

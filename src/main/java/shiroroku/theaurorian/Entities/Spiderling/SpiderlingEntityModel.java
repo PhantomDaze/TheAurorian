@@ -14,7 +14,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class SpiderlingEntityModel extends HierarchicalModel<SpiderlingEntity> {
 
-    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "spiderling"), "main");
+    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "spiderling"), "main");
 
     private final ModelPart root;
     private final ModelPart spiderHead;

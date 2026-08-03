@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.theaurorian.lightning_resistance"
+  },
+  "supported_items": "#minecraft:enchantable/armor",
+  "weight": 5,
+  "max_level": 1,
+  "min_cost": {
+    "base": 10,
+    "per_level_above_first": 20
+  },
+  "max_cost": {
+    "base": 40,
+    "per_level_above_first": 20
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "head",
+    "chest",
+    "legs",
+    "feet"
+  ]
+}

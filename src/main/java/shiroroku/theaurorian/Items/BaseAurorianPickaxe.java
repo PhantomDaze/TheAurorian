@@ -1,12 +1,12 @@
 package shiroroku.theaurorian.Items;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Util.TooltipUtil;
 
@@ -16,22 +16,22 @@ public class BaseAurorianPickaxe extends PickaxeItem {
 
     private int burnTime = 0;
 
-    public BaseAurorianPickaxe(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties, int burnTime) {
-        super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+    public BaseAurorianPickaxe(Tier tier, int attackDamageModifier, float attackSpeedModifier, Properties properties, int burnTime) {
+        super(tier, properties.attributes(PickaxeItem.createAttributes(tier, attackDamageModifier, attackSpeedModifier)));
         this.burnTime = burnTime;
     }
 
-    public BaseAurorianPickaxe(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-        super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+    public BaseAurorianPickaxe(Tier tier, int attackDamageModifier, float attackSpeedModifier, Properties properties) {
+        this(tier, attackDamageModifier, attackSpeedModifier, properties, 0);
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        super.appendHoverText(pStack, pLevel, TooltipUtil.tryAddDesc(pStack, pTooltipComponents), pIsAdvanced);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag flag) {
+        super.appendHoverText(stack, context, TooltipUtil.tryAddDesc(stack, tooltipComponents), flag);
     }
 
     @Override
-    public int getBarColor(ItemStack pStack) {
+    public int getBarColor(ItemStack stack) {
         return TooltipUtil.getBarColor();
     }
 

@@ -7,8 +7,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.function.Predicate;
 
@@ -19,11 +20,16 @@ public class ModUtil {
     }
 
     public static void dropItemHandlerInWorld(BlockEntity block) {
-        block.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+        Level level = block.getLevel();
+        if (level == null) {
+            return;
+        }
+        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, block.getBlockPos(), null);
+        if (handler != null) {
             for (int i = 0; i < handler.getSlots(); i++) {
-                block.getLevel().addFreshEntity(new ItemEntity(block.getLevel(), block.getBlockPos().getX() + 0.5f, block.getBlockPos().getY() + 0.5f, block.getBlockPos().getZ() + 0.5f, handler.getStackInSlot(i)));
+                level.addFreshEntity(new ItemEntity(level, block.getBlockPos().getX() + 0.5f, block.getBlockPos().getY() + 0.5f, block.getBlockPos().getZ() + 0.5f, handler.getStackInSlot(i)));
             }
-        });
+        }
     }
 
     public static float wave(float time, float speed, float amp) {

@@ -1,6 +1,6 @@
 package shiroroku.theaurorian.World.Structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -34,11 +34,11 @@ import java.util.Optional;
  */
 public class SingleTemplateStructure extends Structure {
 
-    public static final Codec<SingleTemplateStructure> CODEC = RecordCodecBuilder.<SingleTemplateStructure>mapCodec(instance ->
+    public static final MapCodec<SingleTemplateStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     settingsCodec(instance),
                     ResourceLocation.CODEC.fieldOf("template").forGetter(s -> s.template)
-            ).apply(instance, SingleTemplateStructure::new)).codec();
+            ).apply(instance, SingleTemplateStructure::new));
 
     private final ResourceLocation template;
 
@@ -93,7 +93,7 @@ public class SingleTemplateStructure extends Structure {
 
         public static SingleTemplatePiece load(StructurePieceSerializationContext context, CompoundTag tag) {
             BlockPos pos = new BlockPos(tag.getInt("posX"), tag.getInt("posY"), tag.getInt("posZ"));
-            ResourceLocation template = new ResourceLocation(tag.getString("template"));
+            ResourceLocation template = ResourceLocation.parse(tag.getString("template"));
             Rotation rotation = Rotation.valueOf(tag.getString("rot"));
             SingleTemplatePiece piece = new SingleTemplatePiece(context.structureTemplateManager(), pos, template, rotation);
             piece.loaded = context.structureTemplateManager().get(template).orElse(null);
@@ -123,7 +123,7 @@ public class SingleTemplateStructure extends Structure {
             for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
                 BlockEntity te = level.getBlockEntity(info.pos());
                 if (te instanceof ChestBlockEntity chest) {
-                    chest.setLootTable(new ResourceLocation(TheAurorian.MODID, "chests/ruins/common"), random.nextLong());
+                    chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "chests/ruins/common")), random.nextLong());
                 }
             }
         }

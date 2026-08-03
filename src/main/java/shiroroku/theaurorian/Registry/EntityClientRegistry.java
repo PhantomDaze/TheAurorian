@@ -1,10 +1,11 @@
 package shiroroku.theaurorian.Registry;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockRenderer;
 import shiroroku.theaurorian.Entities.AurorianArrow.AurorianArrowRenderer;
 import shiroroku.theaurorian.Entities.Boss.DungeonSpiderRenderer;
@@ -37,7 +38,7 @@ import shiroroku.theaurorian.TheAurorian;
  * Client-only entity renderer / layer registration. Kept out of
  * {@link EntityRegistry} so dedicated and GameTest servers do not load client classes.
  */
-@Mod.EventBusSubscriber(modid = TheAurorian.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = TheAurorian.MODID, value = Dist.CLIENT)
 public final class EntityClientRegistry {
 
     private EntityClientRegistry() {
@@ -45,8 +46,8 @@ public final class EntityClientRegistry {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(EntityRegistry.cerulean_arrow.get(), (ctx) -> new AurorianArrowRenderer(ctx, new ResourceLocation(TheAurorian.MODID, "textures/entity/cerulean_arrow.png")));
-        event.registerEntityRenderer(EntityRegistry.crystal_arrow.get(), (ctx) -> new AurorianArrowRenderer(ctx, new ResourceLocation(TheAurorian.MODID, "textures/entity/crystal_arrow.png")));
+        event.registerEntityRenderer(EntityRegistry.cerulean_arrow.get(), (ctx) -> new AurorianArrowRenderer(ctx, ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/cerulean_arrow.png")));
+        event.registerEntityRenderer(EntityRegistry.crystal_arrow.get(), (ctx) -> new AurorianArrowRenderer(ctx, ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/crystal_arrow.png")));
         event.registerEntityRenderer(EntityRegistry.crystalline_beam.get(), CrystallineBeamRenderer::new);
 
         event.registerEntityRenderer(EntityRegistry.dungeon_keeper.get(), DungeonKeeperRenderer::new);

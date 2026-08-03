@@ -11,7 +11,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class SpiritEntityRender extends MobRenderer<SpiritEntity, SpiritEntityRender.SpiritModel> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/spirit.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/spirit.png");
 
     public SpiritEntityRender(EntityRendererProvider.Context context) {
         super(context, new SpiritModel(context.bakeLayer(ModelLayers.ZOMBIE)), 0.5F);

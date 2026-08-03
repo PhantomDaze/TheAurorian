@@ -1,0 +1,12 @@
+{
+  "type": "theaurorian:moonlight_forge",
+  "input": {
+    "item": "theaurorian:silentwood_bow"
+  },
+  "catalyst": {
+    "item": "theaurorian:trophy_keeper"
+  },
+  "output": {
+    "id": "theaurorian:keepers_bow"
+  }
+}

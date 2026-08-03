@@ -12,7 +12,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class UndeadKnightRenderer extends HumanoidMobRenderer<UndeadKnightEntity, HumanoidModel<UndeadKnightEntity>> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/undead_knight.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/undead_knight.png");
 
     public UndeadKnightRenderer(EntityRendererProvider.Context context) {
         this(context, ModelLayers.ZOMBIE, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);

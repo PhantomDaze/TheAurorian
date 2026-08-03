@@ -28,9 +28,9 @@ import java.util.Random;
 
 public class MirrorOGScreen extends Screen {
 
-    public static final ResourceLocation WIDGETS = new ResourceLocation(TheAurorian.MODID, "textures/gui/mirror_of_guidance.png");
-    private static final ResourceLocation BACKGROUND_1 = new ResourceLocation(TheAurorian.MODID, "textures/gui/mirror_of_guidance_bg.png");
-    private static final ResourceLocation BACKGROUND_2 = new ResourceLocation(TheAurorian.MODID, "textures/gui/mirror_of_guidance_bg_2.png");
+    public static final ResourceLocation WIDGETS = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/gui/mirror_of_guidance.png");
+    private static final ResourceLocation BACKGROUND_1 = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/gui/mirror_of_guidance_bg.png");
+    private static final ResourceLocation BACKGROUND_2 = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/gui/mirror_of_guidance_bg_2.png");
 
     // Texture dimensions
     private static final int WIDTH = 256;
@@ -96,7 +96,7 @@ public class MirrorOGScreen extends Screen {
         }
 
         // Game tint
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
 
         // Setup
         RenderSystem.enableBlend();

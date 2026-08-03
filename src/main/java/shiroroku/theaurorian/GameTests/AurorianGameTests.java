@@ -1,6 +1,7 @@
 package shiroroku.theaurorian.GameTests;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.GameType;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -12,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import shiroroku.theaurorian.Blocks.BossSpawner.BossSpawnerBlockEntity;
 import shiroroku.theaurorian.Blocks.FogWallBlock;
 import shiroroku.theaurorian.Blocks.MoonlightForge.MoonlightForgeBlockEntity;
@@ -320,15 +321,15 @@ public class AurorianGameTests {
         pick.setDamageValue((int) (pick.getMaxDamage() * 0.30));
         // update via mineBlock path
         var state = Blocks.STONE.defaultBlockState();
-        pick.getItem().mineBlock(pick, helper.getLevel(), state, helper.absolutePos(new BlockPos(1, 1, 1)), helper.makeMockPlayer());
+        pick.getItem().mineBlock(pick, helper.getLevel(), state, helper.absolutePos(new BlockPos(1, 1, 1)), helper.makeMockPlayer(GameType.SURVIVAL));
         GameTestUtil.assertEquals(helper, 1, SilentwoodPickaxe.getHarvestLevel(pick), "30% damage → level 1");
 
         pick.setDamageValue((int) (pick.getMaxDamage() * 0.60));
-        pick.getItem().mineBlock(pick, helper.getLevel(), state, helper.absolutePos(new BlockPos(1, 1, 1)), helper.makeMockPlayer());
+        pick.getItem().mineBlock(pick, helper.getLevel(), state, helper.absolutePos(new BlockPos(1, 1, 1)), helper.makeMockPlayer(GameType.SURVIVAL));
         GameTestUtil.assertEquals(helper, 2, SilentwoodPickaxe.getHarvestLevel(pick), "60% damage → level 2");
 
         pick.setDamageValue((int) (pick.getMaxDamage() * 0.80));
-        pick.getItem().mineBlock(pick, helper.getLevel(), state, helper.absolutePos(new BlockPos(1, 1, 1)), helper.makeMockPlayer());
+        pick.getItem().mineBlock(pick, helper.getLevel(), state, helper.absolutePos(new BlockPos(1, 1, 1)), helper.makeMockPlayer(GameType.SURVIVAL));
         GameTestUtil.assertEquals(helper, 3, SilentwoodPickaxe.getHarvestLevel(pick), "80% damage → level 3");
         helper.succeed();
     }
@@ -340,13 +341,13 @@ public class AurorianGameTests {
         GameTestUtil.hold(player, locator);
         player.setShiftKeyDown(true);
         locator.use(helper.getLevel(), player, net.minecraft.world.InteractionHand.MAIN_HAND);
-        String d1 = locator.getOrCreateTag().getString("dungeon");
+        String d1 = locator.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getString("dungeon");
         GameTestUtil.assertTrue(helper, !d1.isEmpty(), "locator selected " + d1);
         locator.use(helper.getLevel(), player, net.minecraft.world.InteractionHand.MAIN_HAND);
-        String d2 = locator.getOrCreateTag().getString("dungeon");
+        String d2 = locator.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getString("dungeon");
         GameTestUtil.assertTrue(helper, !d1.equals(d2), "cycle should change selection " + d1 + " -> " + d2);
         locator.use(helper.getLevel(), player, net.minecraft.world.InteractionHand.MAIN_HAND);
-        String d3 = locator.getOrCreateTag().getString("dungeon");
+        String d3 = locator.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getString("dungeon");
         GameTestUtil.assertTrue(helper, !d2.equals(d3), "second cycle changes again");
         helper.succeed();
     }
@@ -363,7 +364,7 @@ public class AurorianGameTests {
     public static void items_slimeBootsFallCancel(GameTestHelper helper) {
         Player player = GameTestUtil.survivalPlayer(helper, new BlockPos(2, 2, 2));
         player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ItemRegistry.slime_boots.get()));
-        var event = new net.minecraftforge.event.entity.living.LivingFallEvent(player, 5f, 1f);
+        var event = new net.neoforged.neoforge.event.entity.living.LivingFallEvent(player, 5f, 1f);
         shiroroku.theaurorian.Items.SlimeBoots.SlimeBootsItem.handleFallEvent(event);
         GameTestUtil.assertTrue(helper, event.isCanceled(), "slime boots cancel fall >3");
         GameTestUtil.assertTrue(helper, player.getDeltaMovement().y > 0, "bounce impulse applied");
@@ -378,6 +379,14 @@ public class AurorianGameTests {
         helper.assertBlockPresent(BlockRegistry.aurorian_portal_frame.get(), new BlockPos(1, 1, 1));
         helper.assertBlockPresent(BlockRegistry.aurorian_portal.get(), new BlockPos(2, 1, 1));
         GameTestUtil.assertTrue(helper, TheAurorian.the_aurorian != null, "dimension key registered");
+        // Portal block must implement 1.21 Portal for DimensionTransition teleports.
+        GameTestUtil.assertTrue(helper,
+                helper.getBlockState(new BlockPos(2, 1, 1)).getBlock() instanceof net.minecraft.world.level.block.Portal,
+                "aurorian portal implements Portal");
+        GameTestUtil.assertTrue(helper,
+                helper.getLevel().registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.DIMENSION_TYPE)
+                        .containsKey(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "the_aurorian")),
+                "dimension_type the_aurorian bound");
         helper.succeed();
     }
 

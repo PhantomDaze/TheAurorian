@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Items.Loot;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,7 +32,7 @@ public class LivingDiviningRod extends BaseAurorianItem {
             }
         });
 
-        pPlayer.getItemInHand(pUsedHand).hurtAndBreak(1, pPlayer, (p) -> p.broadcastBreakEvent(pUsedHand));
+        pPlayer.getItemInHand(pUsedHand).hurtAndBreak(1, pPlayer, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
         pPlayer.getCooldowns().addCooldown(this, 120);
         return super.use(pLevel, pPlayer, pUsedHand);
     }

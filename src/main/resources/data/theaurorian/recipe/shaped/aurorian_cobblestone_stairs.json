@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "theaurorian:aurorian_cobblestone"
+    }
+  },
+  "result": {
+    "count": 4,
+    "id": "theaurorian:aurorian_cobblestone_stairs"
+  }
+}

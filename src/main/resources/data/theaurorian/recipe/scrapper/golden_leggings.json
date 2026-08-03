@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "minecraft:golden_leggings"
+  },
+  "output": {
+    "count": 42,
+    "id": "minecraft:gold_nugget"
+  }
+}

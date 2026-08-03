@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C",
+    "I"
+  ],
+  "key": {
+    "C": {
+      "item": "theaurorian:aurorian_coal"
+    },
+    "I": {
+      "item": "theaurorian:silentwood_stick"
+    }
+  },
+  "result": {
+    "count": 4,
+    "id": "theaurorian:silentwood_torch"
+  }
+}

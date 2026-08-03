@@ -14,8 +14,8 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,10 +44,7 @@ public final class GameTestUtil {
     }
 
     public static void useBlockAs(GameTestHelper helper, BlockPos relativePos, Player player) {
-        BlockPos abs = helper.absolutePos(relativePos);
-        var state = helper.getLevel().getBlockState(abs);
-        state.use(helper.getLevel(), player, InteractionHand.MAIN_HAND,
-                new BlockHitResult(Vec3.atCenterOf(abs), Direction.NORTH, abs, true));
+        helper.useBlock(relativePos, player);
     }
 
     public static void useItemOn(GameTestHelper helper, BlockPos relativePos, Player player) {

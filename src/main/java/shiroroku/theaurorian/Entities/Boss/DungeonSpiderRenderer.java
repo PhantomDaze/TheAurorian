@@ -15,6 +15,6 @@ public class DungeonSpiderRenderer extends MobRenderer<DungeonSpiderEntity, Spid
 
     @Override
     public ResourceLocation getTextureLocation(DungeonSpiderEntity pEntity) {
-        return new ResourceLocation(TheAurorian.MODID, "textures/entity/dungeon_spider.png");
+        return ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/dungeon_spider.png");
     }
 }

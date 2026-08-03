@@ -1,12 +1,13 @@
 package shiroroku.theaurorian.Items.SlimeBoots;
 
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import shiroroku.theaurorian.Config.CommonConfig;
 import shiroroku.theaurorian.Items.BaseAurorianArmor;
 import shiroroku.theaurorian.Registry.ItemRegistry;
@@ -17,7 +18,7 @@ import shiroroku.theaurorian.Registry.ItemRegistry;
  */
 public class SlimeBootsItem extends BaseAurorianArmor {
 
-    public SlimeBootsItem(ArmorMaterial pMaterial, Properties pProperties) {
+    public SlimeBootsItem(Holder<ArmorMaterial> pMaterial, Properties pProperties) {
         super(pMaterial, ArmorItem.Type.BOOTS, pProperties);
     }
 
@@ -38,7 +39,7 @@ public class SlimeBootsItem extends BaseAurorianArmor {
         }
     }
 
-    public static void handleJumpEvent(LivingJumpEvent event) {
+    public static void handleJumpEvent(LivingEvent.LivingJumpEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (player.isShiftKeyDown() && player.onGround() && !player.getCooldowns().isOnCooldown(ItemRegistry.slime_boots.get())) {
                 for (ItemStack s : player.getArmorSlots()) {

@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 public class WeepingWillowSap extends Item {
 
     public WeepingWillowSap(Properties pProperties) {
-        super(pProperties.food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).build()));
+        super(pProperties.food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.0F).build()));
     }
 
     @Override

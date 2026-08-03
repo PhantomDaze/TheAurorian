@@ -15,11 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Entities.AurorianArrow.CeruleanArrowEntity;
 import shiroroku.theaurorian.Entities.AurorianArrow.CrystalArrowEntity;
@@ -39,194 +39,194 @@ import java.util.function.Supplier;
 
 public class ItemRegistry {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID); // no datagen
-    public static final DeferredRegister<Item> ITEMS_GEN = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID); // basic generated item model
-    public static final DeferredRegister<Item> ITEMS_GEN_HANDHELD = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID); // item with handheld model (tools, sticks)
-    public static final DeferredRegister<Item> ITEMS_GEN_SHIELD = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID); // adds blocking functionality and models
-    public static final DeferredRegister<Item> ITEMS_SPAWN_EGGS = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID);
-    public static final DeferredRegister<Item> ITEMS_GEN_KEY = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID);
-    public static final DeferredRegister<Item> ITEMS_GEN_TEA = DeferredRegister.create(ForgeRegistries.ITEMS, TheAurorian.MODID); // tea
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID); // no datagen
+    public static final DeferredRegister<Item> ITEMS_GEN = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID); // basic generated item model
+    public static final DeferredRegister<Item> ITEMS_GEN_HANDHELD = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID); // item with handheld model (tools, sticks)
+    public static final DeferredRegister<Item> ITEMS_GEN_SHIELD = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID); // adds blocking functionality and models
+    public static final DeferredRegister<Item> ITEMS_SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID);
+    public static final DeferredRegister<Item> ITEMS_GEN_KEY = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID);
+    public static final DeferredRegister<Item> ITEMS_GEN_TEA = DeferredRegister.create(Registries.ITEM, TheAurorian.MODID); // tea
 
     // Ingredients
-    public static final RegistryObject<Item> aurorian_coal = ITEMS_GEN.register("aurorian_coal", basicItemWithBurntime(defaultProp(), 1600));
-    public static final RegistryObject<Item> aurorian_coal_nugget = ITEMS_GEN.register("aurorian_coal_nugget", basicItemWithBurntime(defaultProp(), 200));
-    public static final RegistryObject<Item> aurorian_steel_ingot = ITEMS_GEN.register("aurorian_steel_ingot", basicItem());
-    public static final RegistryObject<Item> aurorian_steel_nugget = ITEMS_GEN.register("aurorian_steel_nugget", basicItem());
-    public static final RegistryObject<Item> aurorianite_ingot = ITEMS_GEN.register("aurorianite_ingot", basicItem());
-    public static final RegistryObject<Item> aurorianite_scrap = ITEMS_GEN.register("aurorianite_scrap", basicItem());
-    public static final RegistryObject<Item> cerulean_ingot = ITEMS_GEN.register("cerulean_ingot", basicItem());
-    public static final RegistryObject<Item> cerulean_nugget = ITEMS_GEN.register("cerulean_nugget", basicItem());
-    public static final RegistryObject<Item> crystalline_ingot = ITEMS_GEN.register("crystalline_ingot", basicItem());
-    public static final RegistryObject<Item> crystalline_scrap = ITEMS_GEN.register("crystalline_scrap", basicItem());
-    public static final RegistryObject<Item> cup = ITEMS_GEN.register("cup", basicItemWithBurntime(defaultProp(), 100));
-    public static final RegistryObject<Item> darkstone_key = ITEMS_GEN_KEY.register("darkstone_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> lavender = ITEMS_GEN.register("lavender", basicItem());
-    public static final RegistryObject<Item> lockpicks = ITEMS_GEN.register("lockpicks", basicItem(defaultProp().durability(16)));
-    public static final RegistryObject<Item> moon_temple_interior_key = ITEMS_GEN_KEY.register("moon_temple_interior_key", basicItem(defaultProp().durability(1).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> moon_temple_key = ITEMS_GEN_KEY.register("moon_temple_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> moon_temple_key_fragment = ITEMS_GEN.register("moon_temple_key_fragment", basicItem());
-    public static final RegistryObject<Item> moonstone_ingot = ITEMS_GEN.register("moonstone_ingot", basicItem());
-    public static final RegistryObject<Item> moonstone_nugget = ITEMS_GEN.register("moonstone_nugget", basicItem());
-    public static final RegistryObject<Item> plant_fiber = ITEMS_GEN.register("plant_fiber", basicItem());
-    public static final RegistryObject<Item> runestone_key = ITEMS_GEN_KEY.register("runestone_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> runestone_loot_key = ITEMS_GEN_KEY.register("runestone_loot_key", basicItem(defaultProp().durability(1).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> silentwood_stick = ITEMS_GEN_HANDHELD.register("silentwood_stick", () -> new SilentwoodStick(defaultProp()) {
+    public static final DeferredHolder<Item, Item> aurorian_coal = ITEMS_GEN.register("aurorian_coal", basicItemWithBurntime(defaultProp(), 1600));
+    public static final DeferredHolder<Item, Item> aurorian_coal_nugget = ITEMS_GEN.register("aurorian_coal_nugget", basicItemWithBurntime(defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> aurorian_steel_ingot = ITEMS_GEN.register("aurorian_steel_ingot", basicItem());
+    public static final DeferredHolder<Item, Item> aurorian_steel_nugget = ITEMS_GEN.register("aurorian_steel_nugget", basicItem());
+    public static final DeferredHolder<Item, Item> aurorianite_ingot = ITEMS_GEN.register("aurorianite_ingot", basicItem());
+    public static final DeferredHolder<Item, Item> aurorianite_scrap = ITEMS_GEN.register("aurorianite_scrap", basicItem());
+    public static final DeferredHolder<Item, Item> cerulean_ingot = ITEMS_GEN.register("cerulean_ingot", basicItem());
+    public static final DeferredHolder<Item, Item> cerulean_nugget = ITEMS_GEN.register("cerulean_nugget", basicItem());
+    public static final DeferredHolder<Item, Item> crystalline_ingot = ITEMS_GEN.register("crystalline_ingot", basicItem());
+    public static final DeferredHolder<Item, Item> crystalline_scrap = ITEMS_GEN.register("crystalline_scrap", basicItem());
+    public static final DeferredHolder<Item, Item> cup = ITEMS_GEN.register("cup", basicItemWithBurntime(defaultProp(), 100));
+    public static final DeferredHolder<Item, Item> darkstone_key = ITEMS_GEN_KEY.register("darkstone_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> lavender = ITEMS_GEN.register("lavender", basicItem());
+    public static final DeferredHolder<Item, Item> lockpicks = ITEMS_GEN.register("lockpicks", basicItem(defaultProp().durability(16)));
+    public static final DeferredHolder<Item, Item> moon_temple_interior_key = ITEMS_GEN_KEY.register("moon_temple_interior_key", basicItem(defaultProp().durability(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> moon_temple_key = ITEMS_GEN_KEY.register("moon_temple_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> moon_temple_key_fragment = ITEMS_GEN.register("moon_temple_key_fragment", basicItem());
+    public static final DeferredHolder<Item, Item> moonstone_ingot = ITEMS_GEN.register("moonstone_ingot", basicItem());
+    public static final DeferredHolder<Item, Item> moonstone_nugget = ITEMS_GEN.register("moonstone_nugget", basicItem());
+    public static final DeferredHolder<Item, Item> plant_fiber = ITEMS_GEN.register("plant_fiber", basicItem());
+    public static final DeferredHolder<Item, Item> runestone_key = ITEMS_GEN_KEY.register("runestone_key", basicItem(defaultProp().durability(3).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> runestone_loot_key = ITEMS_GEN_KEY.register("runestone_loot_key", basicItem(defaultProp().durability(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> silentwood_stick = ITEMS_GEN_HANDHELD.register("silentwood_stick", () -> new SilentwoodStick(defaultProp()) {
         @Override
         public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
             return 100;
         }
     });
-    public static final RegistryObject<Item> spectral_silk = ITEMS_GEN.register("spectral_silk", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> umbra_ingot = ITEMS_GEN.register("umbra_ingot", basicItem());
-    public static final RegistryObject<Item> umbra_scrap = ITEMS_GEN.register("umbra_scrap", basicItem());
+    public static final DeferredHolder<Item, Item> spectral_silk = ITEMS_GEN.register("spectral_silk", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> umbra_ingot = ITEMS_GEN.register("umbra_ingot", basicItem());
+    public static final DeferredHolder<Item, Item> umbra_scrap = ITEMS_GEN.register("umbra_scrap", basicItem());
 
     // Foodstuff
-    public static final RegistryObject<Item> bright_bulb_tea = ITEMS_GEN_TEA.register("bright_bulb_tea", () -> new BaseAurorianTea(new Color(247, 213, 92), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600, 1), 1F).build())));
-    public static final RegistryObject<Item> lavender_bread = ITEMS_GEN.register("lavender_bread", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.2F).fast().build())));
-    public static final RegistryObject<Item> lavender_tea = ITEMS_GEN_TEA.register("lavender_tea", () -> new BaseAurorianTea(new Color(166, 138, 249), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 1), 1F).build())));
-    public static final RegistryObject<Item> petunia_tea = ITEMS_GEN_TEA.register("petunia_tea", () -> new BaseAurorianTea(new Color(255, 200, 214), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1), 1F).build())));
-    public static final RegistryObject<Item> silkberry = ITEMS_GEN.register("silkberry", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20, 0), 0.5F).build())));
-    public static final RegistryObject<Item> silkberry_jam = ITEMS_GEN.register("silkberry_jam", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.2F).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20, 0), 1F).build())));
-    public static final RegistryObject<Item> silkberry_jam_sandwich = ITEMS_GEN.register("silkberry_jam_sandwich", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(7).saturationMod(0.4F).build())));
-    public static final RegistryObject<Item> silkberry_tea = ITEMS_GEN_TEA.register("silkberry_tea", () -> new BaseAurorianTea(new Color(71, 193, 249), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1F).build())));
-    public static final RegistryObject<Item> strange_meat = ITEMS_GEN.register("strange_meat", () -> new StrangeMeat(defaultProp().durability(10).food(new FoodProperties.Builder().nutrition(8).saturationMod(0.9F).build())));
+    public static final DeferredHolder<Item, Item> bright_bulb_tea = ITEMS_GEN_TEA.register("bright_bulb_tea", () -> new BaseAurorianTea(new Color(247, 213, 92), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600, 1), 1F).build())));
+    public static final DeferredHolder<Item, Item> lavender_bread = ITEMS_GEN.register("lavender_bread", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.2F).fast().build())));
+    public static final DeferredHolder<Item, Item> lavender_tea = ITEMS_GEN_TEA.register("lavender_tea", () -> new BaseAurorianTea(new Color(166, 138, 249), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 1), 1F).build())));
+    public static final DeferredHolder<Item, Item> petunia_tea = ITEMS_GEN_TEA.register("petunia_tea", () -> new BaseAurorianTea(new Color(255, 200, 214), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1), 1F).build())));
+    public static final DeferredHolder<Item, Item> silkberry = ITEMS_GEN.register("silkberry", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1F).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20, 0), 0.5F).build())));
+    public static final DeferredHolder<Item, Item> silkberry_jam = ITEMS_GEN.register("silkberry_jam", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.2F).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20, 0), 1F).build())));
+    public static final DeferredHolder<Item, Item> silkberry_jam_sandwich = ITEMS_GEN.register("silkberry_jam_sandwich", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.4F).build())));
+    public static final DeferredHolder<Item, Item> silkberry_tea = ITEMS_GEN_TEA.register("silkberry_tea", () -> new BaseAurorianTea(new Color(71, 193, 249), BaseAurorianTea.properties().food(BaseAurorianTea.foodProperties().effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1F).build())));
+    public static final DeferredHolder<Item, Item> strange_meat = ITEMS_GEN.register("strange_meat", () -> new StrangeMeat(defaultProp().durability(10).food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.9F).build())));
 
     // Phase 1: Foods & drops referenced by entity/chest loot (upstream FoodItem values)
-    public static final RegistryObject<Item> aurorian_pork = ITEMS_GEN.register("aurorian_pork", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3F).meat().build())));
-    public static final RegistryObject<Item> aurorian_bacon = ITEMS_GEN.register("aurorian_bacon", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.8F).fast().meat().build())));
-    public static final RegistryObject<Item> cooked_aurorian_pork = ITEMS_GEN.register("cooked_aurorian_pork", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(8).saturationMod(0.8F).meat().build())));
-    public static final RegistryObject<Item> aurorian_slime_ball = ITEMS_GEN.register("aurorian_slime_ball", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2F).build())));
-    public static final RegistryObject<Item> silkshroom_stew = ITEMS_GEN.register("silkshroom_stew", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(6).saturationMod(1.0F).build())));
-    public static final RegistryObject<Item> soulless_flesh = ITEMS_GEN.register("soulless_flesh", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).meat().build())));
-    public static final RegistryObject<Item> weeping_willow_sap = ITEMS_GEN.register("weeping_willow_sap", () -> new WeepingWillowSap(defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorian_pork = ITEMS_GEN.register("aurorian_pork", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3F).build())));
+    public static final DeferredHolder<Item, Item> aurorian_bacon = ITEMS_GEN.register("aurorian_bacon", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.8F).fast().build())));
+    public static final DeferredHolder<Item, Item> cooked_aurorian_pork = ITEMS_GEN.register("cooked_aurorian_pork", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8F).build())));
+    public static final DeferredHolder<Item, Item> aurorian_slime_ball = ITEMS_GEN.register("aurorian_slime_ball", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.2F).build())));
+    public static final DeferredHolder<Item, Item> silkshroom_stew = ITEMS_GEN.register("silkshroom_stew", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.0F).build())));
+    public static final DeferredHolder<Item, Item> soulless_flesh = ITEMS_GEN.register("soulless_flesh", basicItem(defaultProp().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1F).build())));
+    public static final DeferredHolder<Item, Item> weeping_willow_sap = ITEMS_GEN.register("weeping_willow_sap", () -> new WeepingWillowSap(defaultProp()));
 
     // Phase 7: crop seeds (register early so crop blocks/loot stay valid)
-    public static final RegistryObject<Item> lavender_seeds = ITEMS_GEN.register("lavender_seeds", () -> new SeedItem(() -> BlockRegistry.lavender_crop.get(), defaultProp()));
-    public static final RegistryObject<Item> silkberry_seeds = ITEMS_GEN.register("silkberry_seeds", () -> new SeedItem(() -> BlockRegistry.silkberry_crop.get(), defaultProp()));
+    public static final DeferredHolder<Item, Item> lavender_seeds = ITEMS_GEN.register("lavender_seeds", () -> new SeedItem(() -> BlockRegistry.lavender_crop.get(), defaultProp()));
+    public static final DeferredHolder<Item, Item> silkberry_seeds = ITEMS_GEN.register("silkberry_seeds", () -> new SeedItem(() -> BlockRegistry.silkberry_crop.get(), defaultProp()));
 
     // Phase 1: Boss trophies (decorative; MoonlightForge weapon recipes in Phase 5)
-    public static final RegistryObject<Item> trophy_keeper = ITEMS_GEN.register("trophy_keeper", basicItem(defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> trophy_moon_queen = ITEMS_GEN.register("trophy_moon_queen", basicItem(defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> trophy_spider = ITEMS_GEN.register("trophy_spider", basicItem(defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> trophy_keeper = ITEMS_GEN.register("trophy_keeper", basicItem(defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> trophy_moon_queen = ITEMS_GEN.register("trophy_moon_queen", basicItem(defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> trophy_spider = ITEMS_GEN.register("trophy_spider", basicItem(defaultProp().rarity(Rarity.RARE)));
 
     // Phase 5: Boss weapons (crafted with trophies in the Moonlight Forge)
-    public static final RegistryObject<Item> keepers_bow = ITEMS.register("keepers_bow", () -> new KeepersBowItem(defaultProp().durability(512).rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> queens_chipper = ITEMS_GEN_HANDHELD.register("queens_chipper", () -> new QueensChipperItem(MaterialTiers.AURORIAN_STEEL, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> moon_shield = ITEMS_GEN_SHIELD.register("moon_shield", () -> new MoonShieldItem(MaterialTiers.MOON_SHIELD, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> keepers_bow = ITEMS.register("keepers_bow", () -> new KeepersBowItem(defaultProp().durability(512).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> queens_chipper = ITEMS_GEN_HANDHELD.register("queens_chipper", () -> new QueensChipperItem(MaterialTiers.AURORIAN_STEEL, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> moon_shield = ITEMS_GEN_SHIELD.register("moon_shield", () -> new MoonShieldItem(MaterialTiers.MOON_SHIELD, defaultProp().rarity(Rarity.RARE)));
 
     // Phase 1: Darkstone-line amulet from Dungeon Spider (Phase 2 wires drops)
-    public static final RegistryObject<Item> dark_amulet = ITEMS_GEN.register("dark_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADDITION, 1.0D));
+    public static final DeferredHolder<Item, Item> dark_amulet = ITEMS_GEN.register("dark_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE, 1.0D));
 
     // Phase 1: Throwables & armor registered so darkstone chest loot stays valid;
     // real behaviours land in Phase 8.
-    public static final RegistryObject<Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> webbing = ITEMS_GEN.register("webbing", basicItem(defaultProp()));
-    public static final RegistryObject<Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new SpikedChestplate(MaterialTiers.SPIKED_ARMOR, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> slime_boots = ITEMS_GEN.register("slime_boots", () -> new SlimeBootsItem(MaterialTiers.SLIME_ARMOR, defaultProp().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> webbing = ITEMS_GEN.register("webbing", basicItem(defaultProp()));
+    public static final DeferredHolder<Item, Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new SpikedChestplate(MaterialTiers.SPIKED_ARMOR, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.SPIKED_ARMOR_DURABILITY)).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> slime_boots = ITEMS_GEN.register("slime_boots", () -> new SlimeBootsItem(MaterialTiers.SLIME_ARMOR, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(MaterialTiers.SLIME_ARMOR_DURABILITY)).rarity(Rarity.EPIC)));
 
     // Tools
-    public static final RegistryObject<Item> aurorian_steel_hoe = ITEMS_GEN_HANDHELD.register("aurorian_steel_hoe", () -> new AurorianSteelHoe(MaterialTiers.AURORIAN_STEEL, -3, 0.0F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_leggings = ITEMS_GEN.register("aurorian_steel_leggings", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_pickaxe = ITEMS_GEN_HANDHELD.register("aurorian_steel_pickaxe", () -> new AurorianSteelPickaxe(MaterialTiers.AURORIAN_STEEL, 1, -2.8F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_shovel = ITEMS_GEN_HANDHELD.register("aurorian_steel_shovel", () -> new AurorianSteelShovel(MaterialTiers.AURORIAN_STEEL, 1.5F, -3.0F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_sword = ITEMS_GEN_HANDHELD.register("aurorian_steel_sword", () -> new AurorianSteelSword(MaterialTiers.AURORIAN_STEEL, 3, -2.4F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_stone_axe = ITEMS_GEN_HANDHELD.register("aurorian_stone_axe", () -> new BaseAurorianAxe(MaterialTiers.AURORIAN_STONE, 7.0F, -3.2F, defaultProp()));
-    public static final RegistryObject<Item> aurorian_stone_hoe = ITEMS_GEN_HANDHELD.register("aurorian_stone_hoe", () -> new BaseAurorianHoe(MaterialTiers.AURORIAN_STONE, -1, -2.0F, defaultProp()));
-    public static final RegistryObject<Item> aurorian_stone_pickaxe = ITEMS_GEN_HANDHELD.register("aurorian_stone_pickaxe", () -> new BaseAurorianPickaxe(MaterialTiers.AURORIAN_STONE, 1, -2.8F, defaultProp()));
-    public static final RegistryObject<Item> aurorian_stone_shovel = ITEMS_GEN_HANDHELD.register("aurorian_stone_shovel", () -> new BaseAurorianShovel(MaterialTiers.AURORIAN_STONE, 1.5F, -3.0F, defaultProp()));
-    public static final RegistryObject<Item> aurorian_stone_sickle = ITEMS_GEN_HANDHELD.register("aurorian_stone_sickle", () -> new BaseAurorianSickle(MaterialTiers.AURORIAN_STONE, defaultProp()));
-    public static final RegistryObject<Item> aurorian_stone_sword = ITEMS_GEN_HANDHELD.register("aurorian_stone_sword", () -> new BaseAurorianSword(MaterialTiers.AURORIAN_STONE, 3, -2.4F, defaultProp()));
-    public static final RegistryObject<Item> moonstone_axe = ITEMS_GEN_HANDHELD.register("moonstone_axe", () -> new MoonstoneAxe(MaterialTiers.MOONSTONE, 6.0F, -3.1F, defaultProp()));
-    public static final RegistryObject<Item> moonstone_hoe = ITEMS_GEN_HANDHELD.register("moonstone_hoe", () -> new MoonstoneHoe(MaterialTiers.MOONSTONE, -2, -1.0F, defaultProp()));
-    public static final RegistryObject<Item> moonstone_pickaxe = ITEMS_GEN_HANDHELD.register("moonstone_pickaxe", () -> new MoonstonePickaxe(MaterialTiers.MOONSTONE, 1, -2.8F, defaultProp()));
-    public static final RegistryObject<Item> moonstone_shield = ITEMS_GEN_SHIELD.register("moonstone_shield", () -> new MoonstoneShield(MaterialTiers.MOONSTONE, defaultProp()));
-    public static final RegistryObject<Item> moonstone_shovel = ITEMS_GEN_HANDHELD.register("moonstone_shovel", () -> new MoonstoneShovel(MaterialTiers.MOONSTONE, 1.5F, -3.0F, defaultProp()));
-    public static final RegistryObject<Item> moonstone_sickle = ITEMS_GEN_HANDHELD.register("moonstone_sickle", () -> new MoonstoneSickle(MaterialTiers.MOONSTONE, defaultProp()));
-    public static final RegistryObject<Item> moonstone_sword = ITEMS_GEN_HANDHELD.register("moonstone_sword", () -> new MoonstoneSword(MaterialTiers.MOONSTONE, 3, -2.4F, defaultProp()));
-    public static final RegistryObject<Item> silentwood_axe = ITEMS_GEN_HANDHELD.register("silentwood_axe", () -> new SilentwoodAxe(MaterialTiers.SILENTWOOD, 6.0F, -3.2F, defaultProp(), 200));
-    public static final RegistryObject<Item> silentwood_bow = ITEMS.register("silentwood_bow", () -> new BaseAurorianBow(MaterialTiers.SILENTWOOD, defaultProp().durability(150), 200));
-    public static final RegistryObject<Item> silentwood_hoe = ITEMS_GEN_HANDHELD.register("silentwood_hoe", () -> new BaseAurorianHoe(MaterialTiers.SILENTWOOD, 0, -3.0F, defaultProp(), 200));
-    public static final RegistryObject<Item> silentwood_pickaxe = ITEMS_GEN_HANDHELD.register("silentwood_pickaxe", () -> new SilentwoodPickaxe(MaterialTiers.SILENTWOOD, 1, -2.8F, defaultProp(), 200));
-    public static final RegistryObject<Item> silentwood_shovel = ITEMS_GEN_HANDHELD.register("silentwood_shovel", () -> new BaseAurorianShovel(MaterialTiers.SILENTWOOD, 1.5F, -3.0F, defaultProp(), 200));
-    public static final RegistryObject<Item> silentwood_sickle = ITEMS_GEN_HANDHELD.register("silentwood_sickle", () -> new BaseAurorianSickle(MaterialTiers.SILENTWOOD, defaultProp(), 200));
-    public static final RegistryObject<Item> silentwood_sword = ITEMS_GEN_HANDHELD.register("silentwood_sword", () -> new BaseAurorianSword(MaterialTiers.SILENTWOOD, 3, -2.4F, defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> aurorian_steel_hoe = ITEMS_GEN_HANDHELD.register("aurorian_steel_hoe", () -> new AurorianSteelHoe(MaterialTiers.AURORIAN_STEEL, -3, 0.0F, defaultProp().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_leggings = ITEMS_GEN.register("aurorian_steel_leggings", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(MaterialTiers.AURORIAN_STEEL_ARMOR_DURABILITY)).rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_pickaxe = ITEMS_GEN_HANDHELD.register("aurorian_steel_pickaxe", () -> new AurorianSteelPickaxe(MaterialTiers.AURORIAN_STEEL, 1, -2.8F, defaultProp().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_shovel = ITEMS_GEN_HANDHELD.register("aurorian_steel_shovel", () -> new AurorianSteelShovel(MaterialTiers.AURORIAN_STEEL, 1.5F, -3.0F, defaultProp().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_sword = ITEMS_GEN_HANDHELD.register("aurorian_steel_sword", () -> new AurorianSteelSword(MaterialTiers.AURORIAN_STEEL, 3, -2.4F, defaultProp().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_stone_axe = ITEMS_GEN_HANDHELD.register("aurorian_stone_axe", () -> new BaseAurorianAxe(MaterialTiers.AURORIAN_STONE, 7.0F, -3.2F, defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorian_stone_hoe = ITEMS_GEN_HANDHELD.register("aurorian_stone_hoe", () -> new BaseAurorianHoe(MaterialTiers.AURORIAN_STONE, -1, -2.0F, defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorian_stone_pickaxe = ITEMS_GEN_HANDHELD.register("aurorian_stone_pickaxe", () -> new BaseAurorianPickaxe(MaterialTiers.AURORIAN_STONE, 1, -2.8F, defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorian_stone_shovel = ITEMS_GEN_HANDHELD.register("aurorian_stone_shovel", () -> new BaseAurorianShovel(MaterialTiers.AURORIAN_STONE, 1.5F, -3.0F, defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorian_stone_sickle = ITEMS_GEN_HANDHELD.register("aurorian_stone_sickle", () -> new BaseAurorianSickle(MaterialTiers.AURORIAN_STONE, defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorian_stone_sword = ITEMS_GEN_HANDHELD.register("aurorian_stone_sword", () -> new BaseAurorianSword(MaterialTiers.AURORIAN_STONE, 3, -2.4F, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_axe = ITEMS_GEN_HANDHELD.register("moonstone_axe", () -> new MoonstoneAxe(MaterialTiers.MOONSTONE, 6.0F, -3.1F, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_hoe = ITEMS_GEN_HANDHELD.register("moonstone_hoe", () -> new MoonstoneHoe(MaterialTiers.MOONSTONE, -2, -1.0F, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_pickaxe = ITEMS_GEN_HANDHELD.register("moonstone_pickaxe", () -> new MoonstonePickaxe(MaterialTiers.MOONSTONE, 1, -2.8F, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_shield = ITEMS_GEN_SHIELD.register("moonstone_shield", () -> new MoonstoneShield(MaterialTiers.MOONSTONE, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_shovel = ITEMS_GEN_HANDHELD.register("moonstone_shovel", () -> new MoonstoneShovel(MaterialTiers.MOONSTONE, 1.5F, -3.0F, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_sickle = ITEMS_GEN_HANDHELD.register("moonstone_sickle", () -> new MoonstoneSickle(MaterialTiers.MOONSTONE, defaultProp()));
+    public static final DeferredHolder<Item, Item> moonstone_sword = ITEMS_GEN_HANDHELD.register("moonstone_sword", () -> new MoonstoneSword(MaterialTiers.MOONSTONE, 3, -2.4F, defaultProp()));
+    public static final DeferredHolder<Item, Item> silentwood_axe = ITEMS_GEN_HANDHELD.register("silentwood_axe", () -> new SilentwoodAxe(MaterialTiers.SILENTWOOD, 6.0F, -3.2F, defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> silentwood_bow = ITEMS.register("silentwood_bow", () -> new BaseAurorianBow(MaterialTiers.SILENTWOOD, defaultProp().durability(150), 200));
+    public static final DeferredHolder<Item, Item> silentwood_hoe = ITEMS_GEN_HANDHELD.register("silentwood_hoe", () -> new BaseAurorianHoe(MaterialTiers.SILENTWOOD, 0, -3.0F, defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> silentwood_pickaxe = ITEMS_GEN_HANDHELD.register("silentwood_pickaxe", () -> new SilentwoodPickaxe(MaterialTiers.SILENTWOOD, 1, -2.8F, defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> silentwood_shovel = ITEMS_GEN_HANDHELD.register("silentwood_shovel", () -> new BaseAurorianShovel(MaterialTiers.SILENTWOOD, 1.5F, -3.0F, defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> silentwood_sickle = ITEMS_GEN_HANDHELD.register("silentwood_sickle", () -> new BaseAurorianSickle(MaterialTiers.SILENTWOOD, defaultProp(), 200));
+    public static final DeferredHolder<Item, Item> silentwood_sword = ITEMS_GEN_HANDHELD.register("silentwood_sword", () -> new BaseAurorianSword(MaterialTiers.SILENTWOOD, 3, -2.4F, defaultProp(), 200));
 
     // Armor
-    public static final RegistryObject<Item> aurorian_steel_axe = ITEMS_GEN_HANDHELD.register("aurorian_steel_axe", () -> new AurorianSteelAxe(MaterialTiers.AURORIAN_STEEL, 5.0F, -3.0F, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_boots = ITEMS_GEN.register("aurorian_steel_boots", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.BOOTS, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_chestplate = ITEMS_GEN.register("aurorian_steel_chestplate", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> aurorian_steel_helmet = ITEMS_GEN.register("aurorian_steel_helmet", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.HELMET, defaultProp().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> cerulean_boots = ITEMS_GEN.register("cerulean_boots", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.BOOTS, defaultProp()));
-    public static final RegistryObject<Item> cerulean_chestplate = ITEMS_GEN.register("cerulean_chestplate", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp()));
-    public static final RegistryObject<Item> cerulean_helmet = ITEMS_GEN.register("cerulean_helmet", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.HELMET, defaultProp()));
-    public static final RegistryObject<Item> cerulean_leggings = ITEMS_GEN.register("cerulean_leggings", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp()));
-    public static final RegistryObject<Item> cerulean_shield = ITEMS_GEN_SHIELD.register("cerulean_shield", () -> new BaseAurorianShield(MaterialTiers.CERULEAN, defaultProp()));
-    public static final RegistryObject<Item> knight_boots = ITEMS_GEN.register("knight_boots", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.BOOTS, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> knight_chestplate = ITEMS_GEN.register("knight_chestplate", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> knight_helmet = ITEMS_GEN.register("knight_helmet", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.HELMET, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> knight_leggings = ITEMS_GEN.register("knight_leggings", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_boots = ITEMS_GEN.register("spectral_boots", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.BOOTS, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_chestplate = ITEMS_GEN.register("spectral_chestplate", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.CHESTPLATE, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_helmet = ITEMS_GEN.register("spectral_helmet", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.HELMET, defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> spectral_leggings = ITEMS_GEN.register("spectral_leggings", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.LEGGINGS, defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_axe = ITEMS_GEN_HANDHELD.register("aurorian_steel_axe", () -> new AurorianSteelAxe(MaterialTiers.AURORIAN_STEEL, 5.0F, -3.0F, defaultProp().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_boots = ITEMS_GEN.register("aurorian_steel_boots", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(MaterialTiers.AURORIAN_STEEL_ARMOR_DURABILITY)).rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_chestplate = ITEMS_GEN.register("aurorian_steel_chestplate", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.AURORIAN_STEEL_ARMOR_DURABILITY)).rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> aurorian_steel_helmet = ITEMS_GEN.register("aurorian_steel_helmet", () -> new AurorianSteelArmor(MaterialTiers.AURORIAN_STEEL_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(MaterialTiers.AURORIAN_STEEL_ARMOR_DURABILITY)).rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, Item> cerulean_boots = ITEMS_GEN.register("cerulean_boots", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(MaterialTiers.CERULEAN_ARMOR_DURABILITY))));
+    public static final DeferredHolder<Item, Item> cerulean_chestplate = ITEMS_GEN.register("cerulean_chestplate", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.CERULEAN_ARMOR_DURABILITY))));
+    public static final DeferredHolder<Item, Item> cerulean_helmet = ITEMS_GEN.register("cerulean_helmet", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(MaterialTiers.CERULEAN_ARMOR_DURABILITY))));
+    public static final DeferredHolder<Item, Item> cerulean_leggings = ITEMS_GEN.register("cerulean_leggings", () -> new BaseAurorianArmor(MaterialTiers.CERULEAN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(MaterialTiers.CERULEAN_ARMOR_DURABILITY))));
+    public static final DeferredHolder<Item, Item> cerulean_shield = ITEMS_GEN_SHIELD.register("cerulean_shield", () -> new BaseAurorianShield(MaterialTiers.CERULEAN, defaultProp()));
+    public static final DeferredHolder<Item, Item> knight_boots = ITEMS_GEN.register("knight_boots", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(MaterialTiers.KNIGHT_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> knight_chestplate = ITEMS_GEN.register("knight_chestplate", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.KNIGHT_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> knight_helmet = ITEMS_GEN.register("knight_helmet", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(MaterialTiers.KNIGHT_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> knight_leggings = ITEMS_GEN.register("knight_leggings", () -> new BaseAurorianArmor(MaterialTiers.KNIGHT_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(MaterialTiers.KNIGHT_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> spectral_boots = ITEMS_GEN.register("spectral_boots", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(MaterialTiers.SPECTRAL_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> spectral_chestplate = ITEMS_GEN.register("spectral_chestplate", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.SPECTRAL_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> spectral_helmet = ITEMS_GEN.register("spectral_helmet", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(MaterialTiers.SPECTRAL_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> spectral_leggings = ITEMS_GEN.register("spectral_leggings", () -> new SpectralArmor(MaterialTiers.SPECTRAL_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(MaterialTiers.SPECTRAL_ARMOR_DURABILITY)).rarity(Rarity.UNCOMMON)));
 
     // Aurorianite
-    public static final RegistryObject<Item> aurorianite_axe = ITEMS_GEN_HANDHELD.register("aurorianite_axe", () -> new AurorianiteAxe(MaterialTiers.AURORIANITE, 5.0F, -3.0F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> aurorianite_pickaxe = ITEMS_GEN_HANDHELD.register("aurorianite_pickaxe", () -> new AurorianitePickaxe(MaterialTiers.AURORIANITE, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> aurorianite_sword = ITEMS_GEN_HANDHELD.register("aurorianite_sword", () -> new AurorianiteSword(MaterialTiers.AURORIANITE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> aurorianite_shovel = ITEMS_GEN_HANDHELD.register("aurorianite_shovel", () -> new AurorianiteShovel(MaterialTiers.AURORIANITE, 1.5F, -3.0F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> living_divining_rod = ITEMS_GEN_HANDHELD.register("living_divining_rod", () -> new LivingDiviningRod(defaultProp().durability(100).rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> dungeon_locator = ITEMS_GEN_HANDHELD.register("dungeon_locator", () -> new DungeonLocatorItem(defaultProp()));
+    public static final DeferredHolder<Item, Item> aurorianite_axe = ITEMS_GEN_HANDHELD.register("aurorianite_axe", () -> new AurorianiteAxe(MaterialTiers.AURORIANITE, 5.0F, -3.0F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> aurorianite_pickaxe = ITEMS_GEN_HANDHELD.register("aurorianite_pickaxe", () -> new AurorianitePickaxe(MaterialTiers.AURORIANITE, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> aurorianite_sword = ITEMS_GEN_HANDHELD.register("aurorianite_sword", () -> new AurorianiteSword(MaterialTiers.AURORIANITE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> aurorianite_shovel = ITEMS_GEN_HANDHELD.register("aurorianite_shovel", () -> new AurorianiteShovel(MaterialTiers.AURORIANITE, 1.5F, -3.0F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> living_divining_rod = ITEMS_GEN_HANDHELD.register("living_divining_rod", () -> new LivingDiviningRod(defaultProp().durability(100).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> dungeon_locator = ITEMS_GEN_HANDHELD.register("dungeon_locator", () -> new DungeonLocatorItem(defaultProp()));
 
     // Umbra
-    public static final RegistryObject<Item> umbra_chestplate = ITEMS_GEN.register("umbra_chestplate", () -> new UmbraChestplate(MaterialTiers.UMBRA_ARMOR, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> umbra_greatsword = ITEMS.register("umbra_greatsword", () -> new UmbraGreatsword(MaterialTiers.UMBRA, 7, -3.75F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> umbra_pickaxe = ITEMS_GEN_HANDHELD.register("umbra_pickaxe", () -> new UmbraPickaxe(MaterialTiers.UMBRA, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> umbra_shield = ITEMS_GEN_SHIELD.register("umbra_shield", () -> new UmbraShield(MaterialTiers.UMBRA, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> umbra_chestplate = ITEMS_GEN.register("umbra_chestplate", () -> new UmbraChestplate(MaterialTiers.UMBRA_ARMOR, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.UMBRA_ARMOR_DURABILITY)).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> umbra_greatsword = ITEMS.register("umbra_greatsword", () -> new UmbraGreatsword(MaterialTiers.UMBRA, 7, -3.75F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> umbra_pickaxe = ITEMS_GEN_HANDHELD.register("umbra_pickaxe", () -> new UmbraPickaxe(MaterialTiers.UMBRA, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> umbra_shield = ITEMS_GEN_SHIELD.register("umbra_shield", () -> new UmbraShield(MaterialTiers.UMBRA, defaultProp().rarity(Rarity.RARE)));
 
     // Crystalline
-    public static final RegistryObject<Item> absorption_orb = ITEMS_GEN.register("absorption_orb", () -> new AbsorptionOrb(defaultProp().durability(250).rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> crystalline_pickaxe = ITEMS_GEN_HANDHELD.register("crystalline_pickaxe", () -> new CrystallinePickaxe(MaterialTiers.CRYSTALLINE, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> crystalline_shield = ITEMS_GEN_SHIELD.register("crystalline_shield", () -> new CrystallineShield(MaterialTiers.CRYSTALLINE, defaultProp().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> crystalline_sword = ITEMS.register("crystalline_sword", () -> new CrystallineSword(MaterialTiers.CRYSTALLINE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> absorption_orb = ITEMS_GEN.register("absorption_orb", () -> new AbsorptionOrb(defaultProp().durability(250).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> crystalline_pickaxe = ITEMS_GEN_HANDHELD.register("crystalline_pickaxe", () -> new CrystallinePickaxe(MaterialTiers.CRYSTALLINE, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> crystalline_shield = ITEMS_GEN_SHIELD.register("crystalline_shield", () -> new CrystallineShield(MaterialTiers.CRYSTALLINE, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> crystalline_sword = ITEMS.register("crystalline_sword", () -> new CrystallineSword(MaterialTiers.CRYSTALLINE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
 
     // Trinkets
-    public static final RegistryObject<Item> amulet_of_chroma = ITEMS_GEN.register("amulet_of_chroma", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Arrays.asList(
-            new BaseAurorianCurio.SimpleAttibuteModifier(Attributes.MAX_HEALTH, AttributeModifier.Operation.ADDITION, 2),
-            new BaseAurorianCurio.SimpleAttibuteModifier(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.MULTIPLY_BASE, 0.05),
-            new BaseAurorianCurio.SimpleAttibuteModifier(Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADDITION, 0.1))
+    public static final DeferredHolder<Item, Item> amulet_of_chroma = ITEMS_GEN.register("amulet_of_chroma", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Arrays.asList(
+            new BaseAurorianCurio.SimpleAttibuteModifier(Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_VALUE, 2),
+            new BaseAurorianCurio.SimpleAttibuteModifier(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.05),
+            new BaseAurorianCurio.SimpleAttibuteModifier(Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE, 0.1))
     ));
-    public static final RegistryObject<Item> emerald_amulet = ITEMS_GEN.register("emerald_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADDITION, 0.2));
-    public static final RegistryObject<Item> keepers_amulet = ITEMS_GEN.register("keepers_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADDITION, 1));
-    public static final RegistryObject<Item> mirror_of_guidance = ITEMS_GEN.register("mirror_of_guidance", () -> new MirrorOGItem(defaultProp().rarity(Rarity.EPIC).stacksTo(1)));
-    public static final RegistryObject<Item> ruby_amulet = ITEMS_GEN.register("ruby_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.MAX_HEALTH, AttributeModifier.Operation.ADDITION, 4));
-    public static final RegistryObject<Item> sapphire_amulet = ITEMS_GEN.register("sapphire_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.MULTIPLY_BASE, 0.1));
+    public static final DeferredHolder<Item, Item> emerald_amulet = ITEMS_GEN.register("emerald_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE, 0.2));
+    public static final DeferredHolder<Item, Item> keepers_amulet = ITEMS_GEN.register("keepers_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.ATTACK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE, 1));
+    public static final DeferredHolder<Item, Item> mirror_of_guidance = ITEMS_GEN.register("mirror_of_guidance", () -> new MirrorOGItem(defaultProp().rarity(Rarity.EPIC).stacksTo(1)));
+    public static final DeferredHolder<Item, Item> ruby_amulet = ITEMS_GEN.register("ruby_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.MAX_HEALTH, AttributeModifier.Operation.ADD_VALUE, 4));
+    public static final DeferredHolder<Item, Item> sapphire_amulet = ITEMS_GEN.register("sapphire_amulet", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.1));
 
     // Misc
-    public static final RegistryObject<Item> spawn_egg_dungeon_keeper = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_keeper", () -> new ForgeSpawnEggItem(EntityRegistry.dungeon_keeper, 8117755, 3363951, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_dungeon_slime = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_slime", () -> new ForgeSpawnEggItem(EntityRegistry.dungeon_slime, 8117755, 3363951, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_hollow = ITEMS_SPAWN_EGGS.register("spawn_egg_hollow", () -> new ForgeSpawnEggItem(EntityRegistry.hollow, 8117755, 3363951, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_undead_knight = ITEMS_SPAWN_EGGS.register("spawn_egg_undead_knight", () -> new ForgeSpawnEggItem(EntityRegistry.undead_knight, 8117755, 3363951, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_moon_queen = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_queen", () -> new ForgeSpawnEggItem(EntityRegistry.moon_queen, 0xE69AC7, 0x4A2A5A, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_dungeon_spider = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_spider", () -> new ForgeSpawnEggItem(EntityRegistry.dungeon_spider, 0x2B2433, 0x7A5F8A, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_spiderling = ITEMS_SPAWN_EGGS.register("spawn_egg_spiderling", () -> new ForgeSpawnEggItem(EntityRegistry.spiderling, 0x3A2F45, 0x9B7AAD, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_moon_acolyte = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_acolyte", () -> new ForgeSpawnEggItem(EntityRegistry.moon_acolyte, 0xC8B0D8, 0x5A4068, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_crystalline_sprite = ITEMS_SPAWN_EGGS.register("spawn_egg_crystalline_sprite", () -> new ForgeSpawnEggItem(EntityRegistry.crystalline_sprite, 0xA8E6FF, 0x4A90B8, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_spirit = ITEMS_SPAWN_EGGS.register("spawn_egg_spirit", () -> new ForgeSpawnEggItem(EntityRegistry.spirit, 0xD0E8FF, 0x6A8AAA, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_disturbed_hollow = ITEMS_SPAWN_EGGS.register("spawn_egg_disturbed_hollow", () -> new ForgeSpawnEggItem(EntityRegistry.disturbed_hollow, 0x5A6A5A, 0x2A3A2A, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_aurorian_pig = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_pig", () -> new ForgeSpawnEggItem(EntityRegistry.aurorian_pig, 0x7A9BB8, 0x3A5A78, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_aurorian_rabbit = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_rabbit", () -> new ForgeSpawnEggItem(EntityRegistry.aurorian_rabbit, 0xB0C8E0, 0x607888, defaultProp()));
-    public static final RegistryObject<Item> spawn_egg_aurorian_sheep = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_sheep", () -> new ForgeSpawnEggItem(EntityRegistry.aurorian_sheep, 0xC0D8F0, 0x708898, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_dungeon_keeper = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_keeper", () -> new DeferredSpawnEggItem(() -> EntityRegistry.dungeon_keeper.get(), 8117755, 3363951, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_dungeon_slime = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_slime", () -> new DeferredSpawnEggItem(() -> EntityRegistry.dungeon_slime.get(), 8117755, 3363951, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_hollow = ITEMS_SPAWN_EGGS.register("spawn_egg_hollow", () -> new DeferredSpawnEggItem(() -> EntityRegistry.hollow.get(), 8117755, 3363951, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_undead_knight = ITEMS_SPAWN_EGGS.register("spawn_egg_undead_knight", () -> new DeferredSpawnEggItem(() -> EntityRegistry.undead_knight.get(), 8117755, 3363951, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_moon_queen = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_queen", () -> new DeferredSpawnEggItem(() -> EntityRegistry.moon_queen.get(), 0xE69AC7, 0x4A2A5A, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_dungeon_spider = ITEMS_SPAWN_EGGS.register("spawn_egg_dungeon_spider", () -> new DeferredSpawnEggItem(() -> EntityRegistry.dungeon_spider.get(), 0x2B2433, 0x7A5F8A, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_spiderling = ITEMS_SPAWN_EGGS.register("spawn_egg_spiderling", () -> new DeferredSpawnEggItem(() -> EntityRegistry.spiderling.get(), 0x3A2F45, 0x9B7AAD, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_moon_acolyte = ITEMS_SPAWN_EGGS.register("spawn_egg_moon_acolyte", () -> new DeferredSpawnEggItem(() -> EntityRegistry.moon_acolyte.get(), 0xC8B0D8, 0x5A4068, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_crystalline_sprite = ITEMS_SPAWN_EGGS.register("spawn_egg_crystalline_sprite", () -> new DeferredSpawnEggItem(() -> EntityRegistry.crystalline_sprite.get(), 0xA8E6FF, 0x4A90B8, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_spirit = ITEMS_SPAWN_EGGS.register("spawn_egg_spirit", () -> new DeferredSpawnEggItem(() -> EntityRegistry.spirit.get(), 0xD0E8FF, 0x6A8AAA, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_disturbed_hollow = ITEMS_SPAWN_EGGS.register("spawn_egg_disturbed_hollow", () -> new DeferredSpawnEggItem(() -> EntityRegistry.disturbed_hollow.get(), 0x5A6A5A, 0x2A3A2A, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_aurorian_pig = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_pig", () -> new DeferredSpawnEggItem(() -> EntityRegistry.aurorian_pig.get(), 0x7A9BB8, 0x3A5A78, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_aurorian_rabbit = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_rabbit", () -> new DeferredSpawnEggItem(() -> EntityRegistry.aurorian_rabbit.get(), 0xB0C8E0, 0x607888, defaultProp()));
+    public static final DeferredHolder<Item, Item> spawn_egg_aurorian_sheep = ITEMS_SPAWN_EGGS.register("spawn_egg_aurorian_sheep", () -> new DeferredSpawnEggItem(() -> EntityRegistry.aurorian_sheep.get(), 0xC0D8F0, 0x708898, defaultProp()));
 
-    public static final RegistryObject<Item> cerulean_arrow = ITEMS_GEN.register("cerulean_arrow", () -> new BaseAurorianArrow(defaultProp()) {
+    public static final DeferredHolder<Item, Item> cerulean_arrow = ITEMS_GEN.register("cerulean_arrow", () -> new BaseAurorianArrow(defaultProp()) {
         @Override
-        public AbstractArrow createArrow(Level pLevel, ItemStack pStack, LivingEntity pShooter) {
+        public AbstractArrow createArrow(Level pLevel, ItemStack pStack, LivingEntity pShooter, @org.jetbrains.annotations.Nullable ItemStack weapon) {
             return new CeruleanArrowEntity(pLevel, pShooter);
         }
     });
-    public static final RegistryObject<Item> crystal_arrow = ITEMS_GEN.register("crystal_arrow", () -> new BaseAurorianArrow(defaultProp()) {
+    public static final DeferredHolder<Item, Item> crystal_arrow = ITEMS_GEN.register("crystal_arrow", () -> new BaseAurorianArrow(defaultProp()) {
         @Override
-        public AbstractArrow createArrow(Level pLevel, ItemStack pStack, LivingEntity pShooter) {
+        public AbstractArrow createArrow(Level pLevel, ItemStack pStack, LivingEntity pShooter, @org.jetbrains.annotations.Nullable ItemStack weapon) {
             return new CrystalArrowEntity(pLevel, pShooter);
         }
     });

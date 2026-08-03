@@ -19,8 +19,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.PlantType;
+import net.minecraft.world.level.block.CropBlock;
+import net.neoforged.neoforge.common.util.TriState;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 
 /**
@@ -92,13 +92,15 @@ public class AurorianFarmTile extends Block {
                 return true;
             }
         }
-        return net.minecraftforge.common.FarmlandWaterManager.hasBlockWaterTicket(pLevel, pPos);
+        return net.neoforged.neoforge.common.FarmlandWaterManager.hasBlockWaterTicket(pLevel, pPos);
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
-        PlantType type = plantable.getPlantType(world, pos.relative(facing));
-        return type == PlantType.CROP || type == PlantType.PLAINS;
+    public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition, Direction facing, BlockState plant) {
+        if (plant.getBlock() instanceof CropBlock || plant.is(net.minecraft.tags.BlockTags.MAINTAINS_FARMLAND)) {
+            return TriState.TRUE;
+        }
+        return TriState.DEFAULT;
     }
 
 }

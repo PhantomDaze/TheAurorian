@@ -120,7 +120,7 @@ class PortContentCategoriesTest {
             assertTrue(entities.size() >= 19, "entities " + entities.size());
             Set<String> items = ContentTestSupport.parseItemIds(JAVA);
             JsonObject en = ContentTestSupport.loadLangs(MAIN).get("en_us");
-            Set<String> loot = ContentTestSupport.jsonStems(MAIN, MAIN, "data/" + MODID + "/loot_tables/entities");
+            Set<String> loot = ContentTestSupport.jsonStems(MAIN, MAIN, "data/" + MODID + "/loot_table/entities");
             for (String e : entities) {
                 assertTrue(en.has("entity." + MODID + "." + e), "entity lang " + e);
                 if (PROJECTILES.contains(e)) {
@@ -140,7 +140,7 @@ class PortContentCategoriesTest {
     class Structures {
         @Test
         void nbtFoldersAndDefinitions() throws Exception {
-            Path structures = MAIN.resolve("data/" + MODID + "/structures");
+            Path structures = MAIN.resolve("data/" + MODID + "/structure");
             assertMinNbt(structures.resolve("runestone"), 20);
             assertMinNbt(structures.resolve("darkstone"), 14);
             assertMinNbt(structures.resolve("moontemple"), 11);
@@ -253,7 +253,7 @@ class PortContentCategoriesTest {
     class Recipes {
         @Test
         void recipeVolumeTypesAndBossMf() throws Exception {
-            Path recipes = MAIN.resolve("data/" + MODID + "/recipes");
+            Path recipes = MAIN.resolve("data/" + MODID + "/recipe");
             long count;
             try (Stream<Path> stream = Files.walk(recipes)) {
                 count = stream.filter(p -> p.toString().endsWith(".json")).count();
@@ -275,7 +275,7 @@ class PortContentCategoriesTest {
             assertTrue(mf >= 20, "moonlight_forge recipes " + mf);
             assertTrue(scrapper >= 40, "scrapper recipes " + scrapper);
 
-            Path chests = MAIN.resolve("data/" + MODID + "/loot_tables/chests");
+            Path chests = MAIN.resolve("data/" + MODID + "/loot_table/chests");
             assertMinJson(chests.resolve("runestone"), 3);
             assertMinJson(chests.resolve("darkstone"), 3);
             assertMinJson(chests.resolve("moontemple"), 3);
@@ -286,7 +286,7 @@ class PortContentCategoriesTest {
         void recipeResultsAndChestLootReferenceKnownIds() throws Exception {
             Set<String> blocks = ContentTestSupport.parseBlockIds(JAVA);
             Set<String> items = ContentTestSupport.parseItemIds(JAVA);
-            Path recipes = MAIN.resolve("data/" + MODID + "/recipes");
+            Path recipes = MAIN.resolve("data/" + MODID + "/recipe");
             try (Stream<Path> stream = Files.walk(recipes)) {
                 for (Path p : stream.filter(x -> x.toString().endsWith(".json")).toList()) {
                     JsonObject o = ContentTestSupport.readObject(p);
@@ -305,13 +305,13 @@ class PortContentCategoriesTest {
                     }
                 }
             }
-            Path chests = MAIN.resolve("data/" + MODID + "/loot_tables/chests");
+            Path chests = MAIN.resolve("data/" + MODID + "/loot_table/chests");
             try (Stream<Path> stream = Files.walk(chests)) {
                 for (Path p : stream.filter(x -> x.toString().endsWith(".json")).toList()) {
                     assertLootItemsKnown(p, blocks, items);
                 }
             }
-            Path entities = MAIN.resolve("data/" + MODID + "/loot_tables/entities");
+            Path entities = MAIN.resolve("data/" + MODID + "/loot_table/entities");
             try (Stream<Path> stream = Files.list(entities)) {
                 for (Path p : stream.filter(x -> x.toString().endsWith(".json")).toList()) {
                     assertLootItemsKnown(p, blocks, items);
@@ -325,7 +325,7 @@ class PortContentCategoriesTest {
     class Advancements {
         @Test
         void treeLangAndBossOrLogic() throws Exception {
-            Path dir = MAIN.resolve("data/" + MODID + "/advancements");
+            Path dir = MAIN.resolve("data/" + MODID + "/advancement");
             Set<String> stems;
             try (Stream<Path> stream = Files.list(dir)) {
                 stems = stream.filter(p -> p.toString().endsWith(".json"))
@@ -444,7 +444,7 @@ class PortContentCategoriesTest {
                 tags = stream.filter(p -> p.toString().replace('\\', '/').contains("/tags/") && p.toString().endsWith(".json")).count();
             }
             assertTrue(tags >= 40, "tag files " + tags);
-            Path blockLoot = GEN.resolve("data/" + MODID + "/loot_tables/blocks");
+            Path blockLoot = GEN.resolve("data/" + MODID + "/loot_table/blocks");
             assertTrue(Files.isDirectory(blockLoot));
             long bloot;
             try (Stream<Path> stream = Files.list(blockLoot)) {

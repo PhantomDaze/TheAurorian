@@ -1,8 +1,8 @@
 package shiroroku.theaurorian.Items.MirrorOfGuidance;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * Client-only helpers for Mirror of Guidance. Kept separate so the item class

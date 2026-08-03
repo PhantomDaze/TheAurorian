@@ -5,12 +5,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.TheAurorian;
 
@@ -27,10 +27,11 @@ public class DataGenBlocks extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         // AUTO GENERATED
-        List<RegistryObject<Block>> BASIC = new ArrayList<>();
-        BASIC.addAll(BlockRegistry.BLOCKS_GEN.getEntries());
-        BASIC.addAll(BlockRegistry.BLOCKS_GEN_NL.getEntries());
-        BASIC.stream().map(Supplier::get).forEach(block -> {
+        BlockRegistry.BLOCKS_GEN.getEntries().stream().map(Supplier::get).forEach(block -> {
+            simpleBlock(block);
+            simpleBlockItem(block);
+        });
+        BlockRegistry.BLOCKS_GEN_NL.getEntries().stream().map(Supplier::get).forEach(block -> {
             simpleBlock(block);
             simpleBlockItem(block);
         });
@@ -38,7 +39,7 @@ public class DataGenBlocks extends BlockStateProvider {
                 .filter(block -> block != BlockRegistry.lavender_crop.get() && block != BlockRegistry.silkberry_crop.get())
                 .forEach(block -> {
                     getVariantBuilder(block).partialState().setModels(new ConfiguredModel(models().cross(blockTexture(block).getPath(), blockTexture(block)).renderType("cutout")));
-                    itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", blockTexture(block));
+                    itemModels().getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", blockTexture(block));
                 });
         cropBlock(BlockRegistry.lavender_crop.get(), "lavender_crop");
         cropBlock(BlockRegistry.silkberry_crop.get(), "silkberry_crop");
@@ -108,13 +109,13 @@ public class DataGenBlocks extends BlockStateProvider {
     }
 
     private void torchBlock(Block parent, ResourceLocation texture) {
-        ModelFile torch = models().torch(ForgeRegistries.BLOCKS.getKey(parent).getPath(), texture).renderType("cutout");
+        ModelFile torch = models().torch(BuiltInRegistries.BLOCK.getKey(parent).getPath(), texture).renderType("cutout");
         getVariantBuilder(parent).partialState().modelForState().modelFile(torch).addModel();
-        itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(parent).getPath()).parent(torch);
+        itemModels().getBuilder(BuiltInRegistries.BLOCK.getKey(parent).getPath()).parent(torch);
     }
 
     private void ladderBlock(Block parent, ResourceLocation texture) {
-        ResourceLocation location = ForgeRegistries.BLOCKS.getKey(parent);
+        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(parent);
         ModelFile ladder = models().withExistingParent(location.getPath(), mcLoc("block/ladder")).texture("texture", texture).texture("particle", texture).renderType("cutout");
         getVariantBuilder(parent).forAllStates(state -> {
             int yRot = switch (state.getValue(LadderBlock.FACING)) {
@@ -130,13 +131,13 @@ public class DataGenBlocks extends BlockStateProvider {
 
     private void wallBlock(Block parent, ResourceLocation texture) {
         super.wallBlock((WallBlock) parent, texture);
-        ResourceLocation location = ForgeRegistries.BLOCKS.getKey(parent);
+        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(parent);
         itemModels().getBuilder(location.getPath()).parent(new ModelFile.UncheckedModelFile(mcLoc("block/wall_inventory"))).texture("wall", texture);
     }
 
     private void fenceBlock(Block parent, ResourceLocation texture) {
         super.fenceBlock((FenceBlock) parent, texture);
-        ResourceLocation location = ForgeRegistries.BLOCKS.getKey(parent);
+        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(parent);
         itemModels().getBuilder(location.getPath()).parent(new ModelFile.UncheckedModelFile(mcLoc("block/fence_inventory"))).texture("texture", texture);
     }
 
@@ -146,25 +147,25 @@ public class DataGenBlocks extends BlockStateProvider {
     }
 
     private void simpleBlockItem(Block parent) {
-        ResourceLocation location = ForgeRegistries.BLOCKS.getKey(parent);
+        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(parent);
         itemModels().getBuilder(location.getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + location.getPath())));
     }
 
     private void simpleBlockItem(Block parent, String renderType) {
-        ResourceLocation location = ForgeRegistries.BLOCKS.getKey(parent);
+        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(parent);
         itemModels().getBuilder(location.getPath()).renderType(renderType).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + location.getPath())));
     }
 
     private void barsBlock(Block block) {
         ResourceLocation texture = blockTexture(block);
         this.paneBlockWithRenderType((IronBarsBlock) block, texture, texture, "cutout");
-        itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", texture);
+        itemModels().getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", texture);
     }
 
     private void glassPaneBlock(Block block, ResourceLocation glassTexture) {
-        ResourceLocation pane = modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath() + "_top");
+        ResourceLocation pane = modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "_top");
         this.paneBlockWithRenderType((IronBarsBlock) block, glassTexture, pane, "translucent");
-        itemModels().getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", glassTexture);
+        itemModels().getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", glassTexture);
     }
 
     private void slabBlock(Block block, ResourceLocation texture) {
@@ -173,6 +174,6 @@ public class DataGenBlocks extends BlockStateProvider {
     }
 
     private static ResourceLocation append(ResourceLocation loc, String value) {
-        return new ResourceLocation(loc.getNamespace(), loc.getPath() + value);
+        return ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), loc.getPath() + value);
     }
 }

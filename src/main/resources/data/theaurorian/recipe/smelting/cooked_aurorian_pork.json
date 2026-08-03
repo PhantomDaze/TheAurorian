@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "theaurorian:aurorian_pork"
+  },
+  "result": {
+    "id": "theaurorian:cooked_aurorian_pork"
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

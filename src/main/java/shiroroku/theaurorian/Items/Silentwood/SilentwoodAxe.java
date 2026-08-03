@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Items.Silentwood;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -29,10 +31,10 @@ public class SilentwoodAxe extends BaseAurorianAxe {
                         pStack.setDamageValue(pStack.getDamageValue() - 1);
                     }
                 } else {
-                    pStack.hurtAndBreak(1, pEntityLiving, (player) -> player.broadcastBreakEvent(pEntityLiving.getUsedItemHand()));
+                    pStack.hurtAndBreak(1, pEntityLiving, EquipmentSlot.MAINHAND);
                 }
             } else {
-                pStack.hurtAndBreak(1, pEntityLiving, (player) -> player.broadcastBreakEvent(pEntityLiving.getUsedItemHand()));
+                pStack.hurtAndBreak(1, pEntityLiving, EquipmentSlot.MAINHAND);
             }
         }
         return true;

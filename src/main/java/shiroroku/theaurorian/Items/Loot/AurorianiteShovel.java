@@ -30,7 +30,7 @@ public class AurorianiteShovel extends BaseAurorianShovel {
             return super.mineBlock(pStack, pLevel, pState, pPos, pEntityLiving);
         }
 
-        HitResult hitResult = pEntityLiving.pick(((Player) pEntityLiving).getBlockReach(), 1, false);
+        HitResult hitResult = pEntityLiving.pick(((Player) pEntityLiving).blockInteractionRange(), 1, false);
         // Make sure we hit a block
         if (hitResult.getType() != HitResult.Type.BLOCK) {
             return super.mineBlock(pStack, pLevel, pState, pPos, pEntityLiving);
@@ -51,7 +51,7 @@ public class AurorianiteShovel extends BaseAurorianShovel {
 
                 if (currentBlock.getTags().anyMatch(t -> t == BlockTags.MINEABLE_WITH_SHOVEL) && resistanceDifference <= CommonConfig.aurorianite_shovel_resistance_difference.get()) {
                     pLevel.destroyBlock(offsetHitpos, true);
-                    pStack.hurtAndBreak(1, pEntityLiving, (player) -> player.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                    pStack.hurtAndBreak(1, pEntityLiving, EquipmentSlot.MAINHAND);
                 }
             }
         }

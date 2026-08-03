@@ -1,6 +1,10 @@
 package shiroroku.theaurorian.Items.Spectral;
 
+import net.minecraft.world.item.Item;
+
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
@@ -16,7 +20,7 @@ import java.util.List;
 
 public class SpectralArmor extends BaseAurorianArmor {
 
-    public SpectralArmor(ArmorMaterial pMaterial, ArmorItem.Type pType, Properties pProperties) {
+    public SpectralArmor(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Properties pProperties) {
         super(pMaterial, pType, pProperties);
     }
 
@@ -26,12 +30,12 @@ public class SpectralArmor extends BaseAurorianArmor {
      * texture stops it from double-rendering the piece opaque.
      */
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return TheAurorian.MODID + ":textures/models/armor/spectral_transparent.png";
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, net.minecraft.world.item.ArmorMaterial.Layer layer, boolean innerModel) {
+        return ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/models/armor/spectral_transparent.png");
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, Spectral.appendHoverText(pTooltipComponents), pIsAdvanced);
     }
 }

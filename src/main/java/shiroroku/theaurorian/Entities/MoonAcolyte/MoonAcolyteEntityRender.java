@@ -11,7 +11,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class MoonAcolyteEntityRender extends MobRenderer<MoonAcolyteEntity, MoonAcolyteEntityRender.MoonAcolyteModel> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/moon_acolyte.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/moon_acolyte.png");
 
     public MoonAcolyteEntityRender(EntityRendererProvider.Context context) {
         super(context, new MoonAcolyteModel(context.bakeLayer(ModelLayers.ZOMBIE)), 0.5F);

@@ -10,7 +10,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class DisturbedHollowEntityRender extends MobRenderer<DisturbedHollowEntity, DisturbedHollowEntityRender.DisturbedHollowModel> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/disturbed_hollow.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/disturbed_hollow.png");
 
     public DisturbedHollowEntityRender(EntityRendererProvider.Context context) {
         super(context, new DisturbedHollowModel(context.bakeLayer(ModelLayers.ZOMBIE)), 0.5F);

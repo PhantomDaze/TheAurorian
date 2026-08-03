@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ISI",
+    "III",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "item": "theaurorian:cerulean_ingot"
+    },
+    "S": {
+      "item": "theaurorian:plant_fiber"
+    }
+  },
+  "result": {
+    "id": "theaurorian:cerulean_shield"
+  }
+}

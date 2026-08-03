@@ -12,16 +12,16 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class ScrapperScreen extends AbstractContainerScreen<ScrapperMenu> {
 
-    private final ResourceLocation GUI = new ResourceLocation(TheAurorian.MODID, "textures/gui/scrapper.png");
+    private final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/gui/scrapper.png");
 
     public ScrapperScreen(ScrapperMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics, mouseX, mouseY, partialTick);
+        super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 

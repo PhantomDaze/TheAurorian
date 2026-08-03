@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "theaurorian:aurorian_stone"
+    }
+  },
+  "result": {
+    "count": 4,
+    "id": "theaurorian:aurorian_stone_stairs"
+  }
+}

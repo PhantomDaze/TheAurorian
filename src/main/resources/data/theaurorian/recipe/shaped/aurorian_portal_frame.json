@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "A A",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "theaurorian:aurorian_stone"
+    }
+  },
+  "result": {
+    "count": 14,
+    "id": "theaurorian:aurorian_portal_frame"
+  }
+}

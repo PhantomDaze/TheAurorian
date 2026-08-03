@@ -16,7 +16,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 UP_STRUCT="${ROOT}/upstream/src/main/resources/assets/theaurorian/structures"
-DST_STRUCT="${ROOT}/src/main/resources/data/theaurorian/structures"
+DST_STRUCT="${ROOT}/src/main/resources/data/theaurorian/structure"
 REMAP_PY="${ROOT}/scripts/remap_structure_nbt.py"
 CP="/usr/bin/cp"
 MKDIR="/usr/bin/mkdir"
@@ -61,7 +61,7 @@ copy_tree() {
   fi
   local count
   count="$(find "$src" -type f -name '*.nbt' | wc -l | tr -d ' ')"
-  echo "  ${src_rel}/  ->  structures/${dst_rel}/  (${count} nbt)"
+  echo "  ${src_rel}/  ->  structure/${dst_rel}/  (${count} nbt)"
   if [[ "$DRY_RUN" -eq 1 ]]; then
     return 0
   fi

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " IS",
+    "I S",
+    " IS"
+  ],
+  "key": {
+    "I": {
+      "tag": "c:rods/wooden"
+    },
+    "S": {
+      "item": "theaurorian:plant_fiber"
+    }
+  },
+  "result": {
+    "id": "theaurorian:silentwood_bow"
+  }
+}

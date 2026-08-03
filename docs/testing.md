@@ -5,14 +5,14 @@ Two layers: **datapack integrity** (no game) and **in-world GameTests** (headles
 ## Quick commands
 
 ```bash
-# Use Java 17 (required; system Java 26 breaks Gradle 8.1)
-export JAVA_HOME=/usr/lib/jvm/zulu-17   # or your JDK 17 path
+# Use Java 21 (NeoForge 1.21.1 / MDG)
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk   # or your JDK 21 path
 export PATH="$JAVA_HOME/bin:$PATH"
 
-# 1) Datapack / asset gate + JUnit unit tests
+# 1) Datapack / asset gate + JUnit unit tests (MDG unitTest mode)
 ./gradlew test
 
-# 2) In-world functional GameTests (Forge GameTest server)
+# 2) In-world functional GameTests (NeoForge GameTest server)
 ./gradlew runGameTestServer
 
 # Both
@@ -40,7 +40,7 @@ After adding blocks/items/entities:
 | H | Mirror | nodes, graph, lang |
 | I | Sounds & particles | ogg + registries |
 | J | Tags & generated | tag/loot volume |
-| K | JSON / pack | parse-all, mods.toml |
+| K | JSON / pack | parse-all, neoforge.mods.toml (template or generated) |
 
 - Script: `scripts/validate_resources.py` (`./gradlew validateResources`)
 - JUnit: `src/test/java/.../content/PortContentCategoriesTest.java`
@@ -49,7 +49,7 @@ After adding blocks/items/entities:
 
 Run configuration: `gameTestServer` in `build.gradle`  
 Entry: `src/main/java/shiroroku/theaurorian/GameTests/AurorianGameTests.java`  
-Templates: `data/theaurorian/structures/gametest/*.nbt`
+Templates: `data/theaurorian/structure/gametest/*.nbt`
 
 | Batch | Coverage |
 |-------|----------|
@@ -63,7 +63,7 @@ Templates: `data/theaurorian/structures/gametest/*.nbt`
 | **portal** | Portal + frame place; dimension key present |
 | **registry** | Critical items/blocks resolve in-world |
 
-**22 required tests** — last run: all passed.
+**22 required tests** — last run (1.21.1 NeoForge 21.1.248): all passed.
 
 ### Server-safe loading fixes (needed for GameTest)
 
@@ -97,6 +97,8 @@ Code: `src/main/java/shiroroku/theaurorian/Demo/`
 
 Content port **Phase 0–10 + G closed** per `docs/port-plan.md`（§8.1–8.7 全勾；§9 仅 D26 TCon/CT/ConArm `exempt`）。
 
+**1.21.1 NeoForge platform port:** see [`docs/port-plan-1.21.1.md`](port-plan-1.21.1.md). Toolchain NF0–NF1 closed; compile + `./gradlew test` + **22/22 GameTest** green (2026-08-03). Remaining §9 items are mostly in-world hand feel, Curios IMC cleanup, and JEI deprecation polish — not silent content cuts.
+
 ## Optional human playtest（不阻塞完成判定）
 
 自动化已覆盖逻辑/资源/可重复演示；下列仅手感：
@@ -112,6 +114,6 @@ See `docs/port-plan.md` §8.8.
 
 ```yaml
 - uses: actions/setup-java@v4
-  with: { distribution: temurin, java-version: 17 }
+  with: { distribution: temurin, java-version: 21 }
 - run: ./gradlew test runGameTestServer --no-daemon
 ```

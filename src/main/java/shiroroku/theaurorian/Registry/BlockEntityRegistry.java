@@ -1,9 +1,11 @@
 package shiroroku.theaurorian.Registry;
 
+import net.minecraft.core.registries.Registries;
+
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
 import shiroroku.theaurorian.Blocks.AurorianFurnace.AurorianFurnaceBlockEntity;
 import shiroroku.theaurorian.Blocks.BossSpawner.BossSpawnerBlockEntity;
 import shiroroku.theaurorian.Blocks.Crystal.CrystalBlockEntity;
@@ -16,7 +18,7 @@ import java.util.function.Supplier;
 
 public class BlockEntityRegistry {
 
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TheAurorian.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, TheAurorian.MODID);
 
     public static final Supplier<BlockEntityType<? extends ChestBlockEntity>> silentwood_chest = BLOCK_ENTITIES.register("silentwood_chest", () -> BlockEntityType.Builder.of(SilentwoodChestBlockEntity::new, BlockRegistry.silentwood_chest.get()).build(null));
     public static final Supplier<BlockEntityType<AurorianFurnaceBlockEntity>> aurorian_furnace = BLOCK_ENTITIES.register("aurorian_furnace", () -> BlockEntityType.Builder.of(AurorianFurnaceBlockEntity::new, BlockRegistry.aurorian_furnace.get()).build(null));

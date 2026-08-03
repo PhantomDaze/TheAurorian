@@ -1,5 +1,9 @@
 package shiroroku.theaurorian.Items.Loot;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -10,37 +14,28 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import shiroroku.theaurorian.Items.BaseAurorianArmor;
 
-import java.util.Map;
-
 public class UmbraChestplate extends BaseAurorianArmor {
 
-    public UmbraChestplate(ArmorMaterial pMaterial, Properties pProperties) {
-        super(pMaterial, ArmorItem.Type.CHESTPLATE, pProperties);
+    public UmbraChestplate(Holder<ArmorMaterial> material, Properties properties) {
+        super(material, ArmorItem.Type.CHESTPLATE, properties);
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, Level level, Player player) {
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
-        if (player.isCrouching()) {
-            if (!enchants.containsKey(Enchantments.THORNS)) {
-                enchants.put(Enchantments.THORNS, 3);
-                EnchantmentHelper.setEnchantments(enchants, stack);
-            }
-        } else {
-            if (enchants.containsKey(Enchantments.THORNS)) {
-                enchants.remove(Enchantments.THORNS);
-                EnchantmentHelper.setEnchantments(enchants, stack);
-            }
+    public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity, int slotId, boolean isSelected) {
+        if (!(entity instanceof Player player) || level.isClientSide || !(level instanceof ServerLevel sl)) {
+            return;
         }
-    }
-
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment != Enchantments.THORNS && super.canApplyAtEnchantingTable(stack, enchantment);
-    }
-
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return EnchantmentHelper.getEnchantments(book).entrySet().stream().noneMatch(e -> e.getKey() == Enchantments.THORNS) && super.isBookEnchantable(stack, book);
+        if (player.getItemBySlot(EquipmentSlot.CHEST) != stack) {
+            return;
+        }
+        Holder<Enchantment> thorns = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.THORNS);
+        int hasThorns = stack.getEnchantmentLevel(thorns);
+        if (player.isCrouching()) {
+            if (hasThorns < 3) {
+                EnchantmentHelper.updateEnchantments(stack, m -> m.set(thorns, 3));
+            }
+        } else if (hasThorns > 0) {
+            EnchantmentHelper.updateEnchantments(stack, m -> m.removeIf(h -> h.is(Enchantments.THORNS)));
+        }
     }
 }

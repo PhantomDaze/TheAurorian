@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "ASA",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "theaurorian:aurorian_portal_frame"
+    },
+    "S": {
+      "tag": "c:glass"
+    }
+  },
+  "result": {
+    "id": "theaurorian:mirror_of_guidance"
+  }
+}

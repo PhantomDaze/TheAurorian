@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Demo;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -66,8 +68,12 @@ public final class VisibleDemoCases {
 
     private static void useBlock(ServerPlayer player, ServerLevel level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        state.use(level, player, InteractionHand.MAIN_HAND,
-                new BlockHitResult(Vec3.atCenterOf(pos), Direction.NORTH, pos, true));
+        // 1.21 BlockState: useItemOn(stack, level, player, hand, hit) / useWithoutItem(level, player, hit)
+        var hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.NORTH, pos, true);
+        var itemResult = state.useItemOn(player.getMainHandItem(), level, player, InteractionHand.MAIN_HAND, hit);
+        if (!itemResult.consumesAction()) {
+            state.useWithoutItem(level, player, hit);
+        }
     }
 
     private static void useItemOn(ServerPlayer player, ServerLevel level, BlockPos pos) {
@@ -434,9 +440,9 @@ public final class VisibleDemoCases {
                 BlockEntity be = ctx.level.getBlockEntity(spawnerPos);
                 if (be instanceof BossSpawnerBlockEntity spawner) {
                     spawner.setBoss(type);
-                    CompoundTag tag = be.saveWithoutMetadata();
-                    tag.putString("boss", net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
-                    be.load(tag);
+                    CompoundTag tag = be.saveWithoutMetadata(ctx.level.registryAccess());
+                    tag.putString("boss", net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
+                    be.loadWithComponents(tag, ctx.level.registryAccess());
                 }
                 ctx.focusOn(spawnerPos.above(2));
             }
@@ -698,11 +704,11 @@ public final class VisibleDemoCases {
                 ItemStack locator = ctx.player.getMainHandItem();
                 ctx.player.setShiftKeyDown(true);
                 locator.use(ctx.level, ctx.player, InteractionHand.MAIN_HAND);
-                d1 = locator.getOrCreateTag().getString("dungeon");
+                d1 = locator.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getString("dungeon");
                 locator.use(ctx.level, ctx.player, InteractionHand.MAIN_HAND);
-                d2 = locator.getOrCreateTag().getString("dungeon");
+                d2 = locator.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getString("dungeon");
                 locator.use(ctx.level, ctx.player, InteractionHand.MAIN_HAND);
-                d3 = locator.getOrCreateTag().getString("dungeon");
+                d3 = locator.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getString("dungeon");
                 ctx.player.setShiftKeyDown(false);
                 ctx.player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                         "§7Locator cycle: §f" + d1 + " §7→ §f" + d2 + " §7→ §f" + d3));
@@ -738,7 +744,7 @@ public final class VisibleDemoCases {
 
             @Override
             public void run(VisibleDemoRunner.DemoContext ctx) {
-                var event = new net.minecraftforge.event.entity.living.LivingFallEvent(ctx.player, 5f, 1f);
+                var event = new net.neoforged.neoforge.event.entity.living.LivingFallEvent(ctx.player, 5f, 1f);
                 SlimeBootsItem.handleFallEvent(event);
                 cancelled = event.isCanceled();
                 bounced = ctx.player.getDeltaMovement().y > 0;

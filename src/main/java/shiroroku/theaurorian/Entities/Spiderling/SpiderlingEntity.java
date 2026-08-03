@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Entities.Spiderling;
 
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -8,7 +10,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -57,9 +58,9 @@ public class SpiderlingEntity extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CLIMBING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CLIMBING, false);
     }
 
     @Override
@@ -100,10 +101,6 @@ public class SpiderlingEntity extends Monster {
         return this.entityData.get(CLIMBING);
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
 
     @Override
     public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
@@ -149,8 +146,4 @@ public class SpiderlingEntity extends Monster {
         this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pPose, EntityDimensions pSize) {
-        return 0.25F / pSize.height;
-    }
 }

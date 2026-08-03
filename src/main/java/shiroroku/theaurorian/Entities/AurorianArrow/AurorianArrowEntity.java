@@ -7,30 +7,31 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 public class AurorianArrowEntity extends AbstractArrow {
 
     private final Item arrowItem;
-    private final Float weight;
+    private final float weight;
 
-    public AurorianArrowEntity(EntityType<? extends AbstractArrow> pEntityType, Level pLevel, Item arrowItem, float damage, Float weight) {
-        super(pEntityType, pLevel);
+    public AurorianArrowEntity(EntityType<? extends AbstractArrow> type, Level level, Item arrowItem, float damage, Float weight) {
+        super(type, level);
         this.arrowItem = arrowItem;
-        this.weight = weight;
+        this.weight = weight == null ? 0f : weight;
         this.setBaseDamage(damage);
     }
 
-    public AurorianArrowEntity(EntityType<? extends AbstractArrow> pEntityType, Level pLevel, double pX, double pY, double pZ, Item arrowItem, float damage, Float weight) {
-        super(pEntityType, pX, pY, pZ, pLevel);
+    public AurorianArrowEntity(EntityType<? extends AbstractArrow> type, Level level, double x, double y, double z, Item arrowItem, float damage, Float weight) {
+        super(type, x, y, z, level, new ItemStack(arrowItem), null);
         this.arrowItem = arrowItem;
-        this.weight = weight;
+        this.weight = weight == null ? 0f : weight;
         this.setBaseDamage(damage);
     }
 
-    public AurorianArrowEntity(EntityType<? extends AbstractArrow> pEntityType, Level pLevel, LivingEntity pShooter, Item arrowItem, float damage, Float weight) {
-        super(pEntityType, pShooter, pLevel);
+    public AurorianArrowEntity(EntityType<? extends AbstractArrow> type, Level level, LivingEntity shooter, Item arrowItem, float damage, Float weight) {
+        super(type, shooter, level, new ItemStack(arrowItem), null);
         this.arrowItem = arrowItem;
-        this.weight = weight;
+        this.weight = weight == null ? 0f : weight;
         this.setBaseDamage(damage);
     }
 
@@ -44,7 +45,7 @@ public class AurorianArrowEntity extends AbstractArrow {
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected ItemStack getDefaultPickupItem() {
         return new ItemStack(arrowItem);
     }
 }

@@ -19,9 +19,7 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.TransientCraftingContainer;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -117,31 +115,18 @@ public class AurorianSheepEntity extends Sheep {
     private DyeColor getOffspringColor(Animal pFather, Animal pMother) {
         DyeColor dyecolor = ((Sheep) pFather).getColor();
         DyeColor dyecolor1 = ((Sheep) pMother).getColor();
-        CraftingContainer craftingcontainer = makeContainer(dyecolor, dyecolor1);
-        return this.level().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingcontainer, this.level())
-                .map(p_29828_ -> p_29828_.assemble(craftingcontainer, this.level().registryAccess()))
+        CraftingInput craftinginput = CraftingInput.of(2, 1, java.util.List.of(
+                new ItemStack(DyeItem.byColor(dyecolor)),
+                new ItemStack(DyeItem.byColor(dyecolor1))));
+        return this.level()
+                .getRecipeManager()
+                .getRecipeFor(RecipeType.CRAFTING, craftinginput, this.level())
+                .map(holder -> holder.value().assemble(craftinginput, this.level().registryAccess()))
                 .map(ItemStack::getItem)
                 .filter(DyeItem.class::isInstance)
                 .map(DyeItem.class::cast)
                 .map(DyeItem::getDyeColor)
                 .orElseGet(() -> this.level().random.nextBoolean() ? dyecolor : dyecolor1);
-    }
-
-    private static CraftingContainer makeContainer(DyeColor pFatherColor, DyeColor pMotherColor) {
-        CraftingContainer craftingcontainer = new TransientCraftingContainer(new AbstractContainerMenu(null, -1) {
-            @Override
-            public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
-                return ItemStack.EMPTY;
-            }
-
-            @Override
-            public boolean stillValid(Player pPlayer) {
-                return false;
-            }
-        }, 2, 1);
-        craftingcontainer.setItem(0, new ItemStack(DyeItem.byColor(pFatherColor)));
-        craftingcontainer.setItem(1, new ItemStack(DyeItem.byColor(pMotherColor)));
-        return craftingcontainer;
     }
 
     @SuppressWarnings("deprecation")

@@ -46,8 +46,8 @@ public class DungeonSlimeEntity extends Slime {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        SpawnGroupData data = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData) {
+        SpawnGroupData data = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData);
         this.setSize(pDifficulty.getDifficulty() == Difficulty.EASY ? 1 : pLevel.getRandom().nextInt(3), true);
         return data;
     }
@@ -65,13 +65,12 @@ public class DungeonSlimeEntity extends Slime {
             int i = this.getSize();
             if (this.distanceToSqr(pLivingEntity) < 0.8D * (double) i * 0.8D * (double) i && this.hasLineOfSight(pLivingEntity) && pLivingEntity.hurt(this.damageSources().mobAttack(this), this.getAttackDamage())) {
                 this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                this.doEnchantDamageEffects(this, pLivingEntity);
             }
         }
     }
 
     @Override
-    protected void jumpFromGround() {
+    public void jumpFromGround() {
         Vec3 vec3 = this.getDeltaMovement();
         this.setDeltaMovement(vec3.x * 1.2, this.getJumpPower() * 1.2, vec3.z * 1.2);
         this.hasImpulse = true;

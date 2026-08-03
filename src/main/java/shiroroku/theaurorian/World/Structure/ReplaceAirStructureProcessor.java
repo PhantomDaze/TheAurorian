@@ -1,6 +1,6 @@
 package shiroroku.theaurorian.World.Structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -17,7 +17,7 @@ import shiroroku.theaurorian.Registry.StructureRegistry;
  */
 public class ReplaceAirStructureProcessor extends StructureProcessor {
 
-    public static final Codec<ReplaceAirStructureProcessor> CODEC = Codec.unit(ReplaceAirStructureProcessor::new);
+    public static final MapCodec<ReplaceAirStructureProcessor> CODEC = MapCodec.unit(ReplaceAirStructureProcessor::new);
     public static final ReplaceAirStructureProcessor INSTANCE = new ReplaceAirStructureProcessor();
 
     @Nullable

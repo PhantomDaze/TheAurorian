@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:aurorian_steel_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "theaurorian:aurorian_steel_ingot"
+  }
+}

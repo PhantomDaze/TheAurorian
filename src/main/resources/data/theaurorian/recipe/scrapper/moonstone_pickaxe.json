@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:moonstone_pickaxe"
+  },
+  "output": {
+    "count": 18,
+    "id": "theaurorian:moonstone_nugget"
+  }
+}

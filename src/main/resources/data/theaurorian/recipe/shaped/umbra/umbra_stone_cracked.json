@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:umbra_stone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "theaurorian:umbra_stone_cracked"
+  }
+}

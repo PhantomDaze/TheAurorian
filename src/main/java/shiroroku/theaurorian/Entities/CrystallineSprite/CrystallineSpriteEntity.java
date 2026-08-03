@@ -67,10 +67,6 @@ public class CrystallineSpriteEntity extends Monster implements RangedAttackMob 
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pPose, EntityDimensions pSize) {
-        return 0.5F;
-    }
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {

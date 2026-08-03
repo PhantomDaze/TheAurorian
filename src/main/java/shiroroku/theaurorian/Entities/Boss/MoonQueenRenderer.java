@@ -20,6 +20,6 @@ public class MoonQueenRenderer extends HumanoidMobRenderer<MoonQueenEntity, Huma
 
     @Override
     public ResourceLocation getTextureLocation(MoonQueenEntity pEntity) {
-        return new ResourceLocation(TheAurorian.MODID, "textures/entity/moon_queen.png");
+        return ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/moon_queen.png");
     }
 }

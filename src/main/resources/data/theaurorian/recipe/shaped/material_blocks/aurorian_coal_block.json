@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "theaurorian:aurorian_coal"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "theaurorian:aurorian_coal_block"
+  }
+}

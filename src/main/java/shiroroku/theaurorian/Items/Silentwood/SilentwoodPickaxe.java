@@ -1,12 +1,16 @@
 package shiroroku.theaurorian.Items.Silentwood;
 
+import net.minecraft.world.item.Item;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.Tier;
@@ -34,7 +38,7 @@ public class SilentwoodPickaxe extends BaseAurorianPickaxe {
     }
 
     public static int getHarvestLevel(ItemStack pStack) {
-        return pStack.getOrCreateTag().getInt("currentharvestlevel");
+        return pStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getInt("currentharvestlevel");
     }
 
     private static void updateHarvestLevel(ItemStack pStack) {
@@ -49,7 +53,7 @@ public class SilentwoodPickaxe extends BaseAurorianPickaxe {
         } else {
             level = 3;
         }
-        pStack.getOrCreateTag().putInt("currentharvestlevel", level);
+        CustomData.update(DataComponents.CUSTOM_DATA, pStack, tag -> tag.putInt("currentharvestlevel", level));
     }
 
     private static int requiredLevel(BlockState pState) {
@@ -68,7 +72,7 @@ public class SilentwoodPickaxe extends BaseAurorianPickaxe {
     @Override
     public float getDestroySpeed(ItemStack pStack, BlockState pState) {
         if (pState.is(BlockTags.MINEABLE_WITH_PICKAXE) && getHarvestLevel(pStack) >= requiredLevel(pState)) {
-            return this.speed;
+            return this.getTier().getSpeed();
         }
         return super.getDestroySpeed(pStack, pState);
     }
@@ -79,7 +83,7 @@ public class SilentwoodPickaxe extends BaseAurorianPickaxe {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.translatable("item.theaurorian.silentwood_pickaxe.desc2", getHarvestLevel(pStack)).withStyle(ChatFormatting.AQUA));
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }

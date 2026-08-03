@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I",
+    "S",
+    "L"
+  ],
+  "key": {
+    "I": {
+      "item": "theaurorian:cerulean_nugget"
+    },
+    "S": {
+      "tag": "c:rods/wooden"
+    },
+    "L": {
+      "item": "theaurorian:silentwood_leaves"
+    }
+  },
+  "result": {
+    "id": "theaurorian:cerulean_arrow"
+  }
+}

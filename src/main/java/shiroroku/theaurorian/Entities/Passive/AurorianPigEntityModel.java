@@ -10,7 +10,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class AurorianPigEntityModel extends PigModel<AurorianPigEntity> {
 
-    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "aurorian_pig"), "main");
+    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "aurorian_pig"), "main");
 
     public AurorianPigEntityModel(ModelPart root) {
         super(root);

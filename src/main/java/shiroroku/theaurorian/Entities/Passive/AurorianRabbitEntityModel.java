@@ -9,7 +9,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class AurorianRabbitEntityModel extends RabbitModel<AurorianRabbitEntity> {
 
-    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "aurorian_rabbit"), "main");
+    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "aurorian_rabbit"), "main");
 
     public AurorianRabbitEntityModel(ModelPart root) {
         super(root);

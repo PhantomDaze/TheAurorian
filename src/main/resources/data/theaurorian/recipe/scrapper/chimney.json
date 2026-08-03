@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:chimney"
+  },
+  "output": {
+    "count": 18,
+    "id": "theaurorian:cerulean_nugget"
+  }
+}

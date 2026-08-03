@@ -6,21 +6,22 @@
 
 《The Aurorian》是一款 Minecraft 模组，加入了新的维度、首领、工具以及许多可探索和使用的新物品。
 
-当前分支为 Forge **1.20.1** 移植版，Forge 版本为 **47.4.10**。
+当前工作区为 **Minecraft 1.21.1 + NeoForge 21.1.248**（ModDevGradle 2.0.143，Java 21）。内容基于已完成的 1.19.2 → 1.20.1 内容移植。
 
 ## 当前状态
 
-- 1.20.1 Forge 版本可以编译。
+- NeoForge 1.21.1 版本可以编译并打包。
 - 资源完整性检查通过。
 - JUnit 测试通过。
-- 22 个 GameTest 全部通过。
-- 该版本基于已经完成的 1.19.2 内容移植（Phase 0–10 + G）。
+- **22 个 GameTest 全部通过**（`runGameTestServer`）。
+- 内容量保持：结构 NBT 61、配方 205、实体 19 等。
+- **1.21.1 NeoForge 零妥协平台计划：** [`docs/port-plan-1.21.1.md`](docs/port-plan-1.21.1.md)（§9 仍有进世界手测 / Curios IMC / JEI 弃用清理等开放项）。
 
 后续可选工作包括：TCon/ConArm/CT 兼容、自定义 Gecko 首领模型、自由游玩体验优化，以及客户端冒烟测试（`runClient` / `/ta demo`）。
 
 ## 主要变化
 
-从 1.12 版本经 1.19.2 移植到 1.20.1 的主要变化包括：
+从 1.12 版本经 1.19.2 / 1.20.1 移植到 1.21.1 的主要变化包括：
 
 - 加入自定义游戏内指南「指引之镜」。
 - Curios 成为必需依赖，并加入新的可穿戴物品。
@@ -36,11 +37,12 @@
 - 恢复垂柳群系，包括树木、滴水和钟声效果。
 - 地牢战利品遵循材料路线：符文石 → 极光石，暗石 → 本影，月神殿 → 水晶。
 - 加入新的渲染效果，包括极光和月亮运动。
+- **平台：** Forge → NeoForge；数据包路径单数化；Common 标签 `c:`；物品 Data Components；附魔 datapack 化。
 
 ## 验证与演示
 
 ```bash
-# Java 17
+# Java 21
 ./gradlew test                 # 数据包完整性和单元测试
 ./gradlew runGameTestServer    # 22 个无头功能 GameTest
 # 在开启作弊的客户端中执行：

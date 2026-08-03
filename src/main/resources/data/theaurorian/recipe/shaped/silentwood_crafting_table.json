@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "II"
+  ],
+  "key": {
+    "I": {
+      "item": "theaurorian:silentwood_planks"
+    }
+  },
+  "result": {
+    "id": "theaurorian:silentwood_crafting_table"
+  }
+}

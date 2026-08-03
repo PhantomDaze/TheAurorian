@@ -1,5 +1,11 @@
 package shiroroku.theaurorian.Entities.MoonAcolyte;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -22,6 +28,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -56,9 +63,9 @@ public class MoonAcolyteEntity extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ARMS_RAISED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ARMS_RAISED, false);
     }
 
     @Override
@@ -75,7 +82,7 @@ public class MoonAcolyteEntity extends Monster {
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         ItemStack sword = new ItemStack(ItemRegistry.aurorian_stone_sword.get());
-        sword.enchant(Enchantments.KNOCKBACK, 2);
+        ((java.util.function.Consumer<net.minecraft.world.item.ItemStack>)(s -> { if (this.level() instanceof ServerLevel _sl) { Holder<Enchantment> _h = _sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.KNOCKBACK); s.enchant(_h, 2); } })).accept(sword);
         this.setItemInHand(InteractionHand.MAIN_HAND, sword);
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
     }

@@ -1,7 +1,6 @@
 package shiroroku.theaurorian.World.Structure;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -36,8 +35,7 @@ import java.util.Optional;
  */
 public class MoonTempleStructure extends Structure {
 
-    public static final Codec<MoonTempleStructure> CODEC = RecordCodecBuilder.<MoonTempleStructure>mapCodec(instance ->
-            instance.group(settingsCodec(instance)).apply(instance, MoonTempleStructure::new)).codec();
+    public static final MapCodec<MoonTempleStructure> CODEC = simpleCodec(MoonTempleStructure::new);
 
     private static final int TEMPLE_HEIGHT = 200;
     private static final int FLOATING_ISLAND_DROP = 27;
@@ -87,7 +85,7 @@ public class MoonTempleStructure extends Structure {
         // floating islands
         int[][] islands = {{-16, -48}, {16, -48}, {-48, -16}, {48, 16}, {-48, 16}, {48, -16}, {-16, 48}, {16, 48}};
         for (int[] iso : islands) {
-            slots.add(new Slot(new ResourceLocation("theaurorian:moontemple/moontemple_island"), Rotation.NONE, new BlockPos(cx + iso[0], cy - FLOATING_ISLAND_DROP - random.nextInt(10), cz + iso[1])));
+            slots.add(new Slot(ResourceLocation.parse("theaurorian:moontemple/moontemple_island"), Rotation.NONE, new BlockPos(cx + iso[0], cy - FLOATING_ISLAND_DROP - random.nextInt(10), cz + iso[1])));
         }
 
         // spiral path (16 segments, wrapping the 5x5 chunk square)
@@ -116,7 +114,7 @@ public class MoonTempleStructure extends Structure {
     }
 
     private static void add(List<Slot> slots, String name, Rotation rot, int ax, int ay, int az) {
-        slots.add(new Slot(new ResourceLocation("theaurorian:" + name), rot, new BlockPos(ax, ay, az)));
+        slots.add(new Slot(ResourceLocation.parse("theaurorian:" + name), rot, new BlockPos(ax, ay, az)));
     }
 
     private static BoundingBox boundingBoxOf(List<Slot> slots) {
@@ -156,7 +154,7 @@ public class MoonTempleStructure extends Structure {
             List<Slot> slots = new ArrayList<>();
             for (int i = 0; tag.contains("slot" + i); i++) {
                 CompoundTag st = tag.getCompound("slot" + i);
-                Slot s = new Slot(new ResourceLocation(st.getString("template")), Rotation.valueOf(st.getString("rot")), new BlockPos(st.getInt("posX"), st.getInt("posY"), st.getInt("posZ")));
+                Slot s = new Slot(ResourceLocation.parse(st.getString("template")), Rotation.valueOf(st.getString("rot")), new BlockPos(st.getInt("posX"), st.getInt("posY"), st.getInt("posZ")));
                 s.template = context.structureTemplateManager().get(s.templateId).orElse(null);
                 slots.add(s);
             }
@@ -209,7 +207,7 @@ public class MoonTempleStructure extends Structure {
                 level.setBlock(info.pos(), Blocks.AIR.defaultBlockState(), 3);
                 BlockEntity te = level.getBlockEntity(info.pos().below());
                 if (te instanceof ChestBlockEntity chest) {
-                    chest.setLootTable(new ResourceLocation(loot), random.nextLong());
+                    chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.parse(loot)), random.nextLong());
                 }
             }
         }

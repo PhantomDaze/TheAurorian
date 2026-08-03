@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:moon_glass"
+    },
+    {
+      "item": "theaurorian:moon_glass"
+    },
+    {
+      "item": "theaurorian:moon_glass"
+    },
+    {
+      "item": "theaurorian:plant_fiber"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "theaurorian:aurorian_glass"
+  }
+}

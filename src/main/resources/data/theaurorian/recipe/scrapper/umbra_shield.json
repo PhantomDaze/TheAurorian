@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:umbra_shield"
+  },
+  "output": {
+    "count": 6,
+    "id": "theaurorian:umbra_scrap"
+  }
+}

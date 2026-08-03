@@ -8,7 +8,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class SpiderlingEntityRender extends MobRenderer<SpiderlingEntity, SpiderlingEntityModel> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/spiderling.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/spiderling.png");
 
     private static final float MOB_SCALE = 0.5F;
 

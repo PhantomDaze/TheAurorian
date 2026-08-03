@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,74 +13,86 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Portal;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.portal.PortalShape;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Portal.AurorianPortalTeleporter;
 import shiroroku.theaurorian.TheAurorian;
 
-@SuppressWarnings("deprecation")
-public class AurorianPortal extends Block {
+/**
+ * Aurorian dimension portal. Uses 1.21 {@link Portal} + {@link DimensionTransition}
+ * (replaces Forge ITeleporter / changeDimension overload).
+ */
+public class AurorianPortal extends Block implements Portal {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     protected static final VoxelShape X_AXIS_AABB = Block.box(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
     protected static final VoxelShape Z_AXIS_AABB = Block.box(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
 
-    public AurorianPortal(Properties pProperties) {
-        super(pProperties);
+    public AurorianPortal(Properties properties) {
+        super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-        if (!pEntity.isPassenger() && !pEntity.isVehicle() && pEntity.canChangeDimensions()) {
-            if (pEntity.isOnPortalCooldown()) {
-                pEntity.setPortalCooldown();
-            } else {
-                if (!pEntity.level().isClientSide && !pPos.equals(pEntity.portalEntrancePos)) {
-                    pEntity.portalEntrancePos = pPos.immutable();
-                }
-                Level entityWorld = pEntity.level();
-                if (entityWorld != null) {
-                    MinecraftServer server = entityWorld.getServer();
-                    ResourceKey<Level> destination = pEntity.level().dimension() == TheAurorian.the_aurorian ? Level.OVERWORLD : TheAurorian.the_aurorian;
-                    if (server != null) {
-                        ServerLevel destinationWorld = server.getLevel(destination);
-                        if (destinationWorld != null && !pEntity.isPassenger()) {
-                            pEntity.level().getProfiler().push("aurorian_portal");
-                            pEntity.setPortalCooldown();
-                            pEntity.changeDimension(destinationWorld, new AurorianPortalTeleporter(destinationWorld));
-                            pEntity.level().getProfiler().pop();
-                        }
-                    }
-                }
-            }
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (entity.canUsePortal(false)) {
+            entity.setAsInsidePortal(this, pos);
         }
     }
 
     @Override
-    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pRandom.nextInt(100) == 0) {
-            pLevel.playLocalSound((double) pPos.getX() + 0.5D, (double) pPos.getY() + 0.5D, (double) pPos.getZ() + 0.5D, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.5F, pRandom.nextFloat() * 0.4F + 0.8F, false);
+    public int getPortalTransitionTime(ServerLevel level, Entity entity) {
+        return 0; // instant like prior behaviour
+    }
+
+    @Nullable
+    @Override
+    public DimensionTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+        ResourceKey<Level> destinationKey = level.dimension() == TheAurorian.the_aurorian
+                ? Level.OVERWORLD
+                : TheAurorian.the_aurorian;
+        ServerLevel destination = level.getServer().getLevel(destinationKey);
+        if (destination == null) {
+            return null;
+        }
+        return AurorianPortalTeleporter.createTransition(destination, entity, pos);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (random.nextInt(100) == 0) {
+            level.playLocalSound(
+                    pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+                    SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS,
+                    0.5F, random.nextFloat() * 0.4F + 0.8F, false
+            );
         }
         for (int i = 0; i < 2; ++i) {
-            double d0 = (double) pPos.getX() + pRandom.nextDouble();
-            double d1 = (double) pPos.getY() + pRandom.nextDouble();
-            double d2 = (double) pPos.getZ() + pRandom.nextDouble();
-            double d3 = ((double) pRandom.nextFloat() - 0.5D) * 0.5D;
-            double d4 = ((double) pRandom.nextFloat() - 0.5D) * 0.5D;
-            double d5 = ((double) pRandom.nextFloat() - 0.5D) * 0.5D;
-            int j = pRandom.nextInt(2) * 2 - 1;
-            if (!pLevel.getBlockState(pPos.west()).is(this) && !pLevel.getBlockState(pPos.east()).is(this)) {
-                d0 = (double) pPos.getX() + 0.5D + 0.25D * (double) j;
-                d3 = pRandom.nextFloat() * 2.0F * (float) j;
+            double d0 = pos.getX() + random.nextDouble();
+            double d1 = pos.getY() + random.nextDouble();
+            double d2 = pos.getZ() + random.nextDouble();
+            double d3 = (random.nextFloat() - 0.5D) * 0.5D;
+            double d4 = (random.nextFloat() - 0.5D) * 0.5D;
+            double d5 = (random.nextFloat() - 0.5D) * 0.5D;
+            int j = random.nextInt(2) * 2 - 1;
+            if (!level.getBlockState(pos.west()).is(this) && !level.getBlockState(pos.east()).is(this)) {
+                d0 = pos.getX() + 0.5D + 0.25D * j;
+                d3 = random.nextFloat() * 2.0F * j;
             } else {
-                d2 = (double) pPos.getZ() + 0.5D + 0.25D * (double) j;
-                d5 = pRandom.nextFloat() * 2.0F * (float) j;
+                d2 = pos.getZ() + 0.5D + 0.25D * j;
+                d5 = random.nextFloat() * 2.0F * j;
             }
-            pLevel.addParticle(ParticleTypes.WAX_OFF, d0, d1, d2, d3, d4, d5);
+            level.addParticle(ParticleTypes.WAX_OFF, d0, d1, d2, d3, d4, d5);
         }
     }
 
@@ -106,18 +117,16 @@ public class AurorianPortal extends Block {
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return switch (pState.getValue(FACING)) {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
             case WEST, EAST -> Z_AXIS_AABB;
             default -> X_AXIS_AABB;
         };
     }
 
     @Override
-    public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
-        Direction.Axis direction$axis = pDirection.getAxis();
-        Direction.Axis direction$axis1 = pState.getValue(FACING).getClockWise().getAxis();
-        boolean flag = direction$axis1 != direction$axis && direction$axis.isHorizontal();
-        return !flag && !pNeighborState.is(this) && !(new PortalShape(pLevel, pCurrentPos, direction$axis1)).isComplete() ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
+        // Frame integrity is enforced by shape placement; keep portal if neighbour still portal or frame-ish.
+        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
     }
 }

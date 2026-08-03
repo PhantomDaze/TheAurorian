@@ -66,7 +66,7 @@ public class AurorianiteAxe extends BaseAurorianAxe {
 
         for (BlockPos p : searchedWood) {
             pLevel.destroyBlock(p, true);
-            pStack.hurtAndBreak(1, pEntityLiving, (player) -> player.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+            pStack.hurtAndBreak(1, pEntityLiving, EquipmentSlot.MAINHAND);
         }
 
         return super.mineBlock(pStack, pLevel, pState, pPos, pEntityLiving);

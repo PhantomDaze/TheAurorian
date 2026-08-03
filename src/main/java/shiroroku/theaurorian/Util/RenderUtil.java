@@ -45,13 +45,12 @@ public class RenderUtil {
         float u1 = (pUOffset + pWidth) / (float) pTextureWidth;
         float v0 = pVOffset / (float) pTextureHeight;
         float v1 = (pVOffset + pHeight) / (float) pTextureHeight;
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(matrix, (float) x, (float) y, 0).uv(u0, v0).endVertex();
-        bufferbuilder.vertex(matrix, (float) x, (float) (y + pHeight), 0).uv(u0, v1).endVertex();
-        bufferbuilder.vertex(matrix, (float) (x + pWidth), (float) (y + pHeight), 0).uv(u1, v1).endVertex();
-        bufferbuilder.vertex(matrix, (float) (x + pWidth), (float) y, 0).uv(u1, v0).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(matrix, (float) x, (float) y, 0).setUv(u0, v0);
+        bufferbuilder.addVertex(matrix, (float) x, (float) (y + pHeight), 0).setUv(u0, v1);
+        bufferbuilder.addVertex(matrix, (float) (x + pWidth), (float) (y + pHeight), 0).setUv(u1, v1);
+        bufferbuilder.addVertex(matrix, (float) (x + pWidth), (float) y, 0).setUv(u1, v0);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
     public static void blit(GuiGraphics graphics, ResourceLocation atlas, int x, int y, float pUOffset, float pVOffset, int pWidth, int pHeight, int pTextureWidth, int pTextureHeight) {
@@ -60,14 +59,13 @@ public class RenderUtil {
 
     public static void blitRepeating(ResourceLocation atlas, int x, int y, int w, int h, float u, float v) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
         RenderSystem.setShaderTexture(0, atlas);
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(x, y, 0.0D).uv(u, v).endVertex();
-        bufferbuilder.vertex(x, y + h, 0.0D).uv(u, v + 1).endVertex();
-        bufferbuilder.vertex(x + w, y + h, 0.0D).uv(u + 1, v + 1).endVertex();
-        bufferbuilder.vertex(x + w, y, 0.0D).uv(u + 1, v).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex((float) x, (float) y, 0.0F).setUv(u, v);
+        bufferbuilder.addVertex((float) x, (float) (y + h), 0.0F).setUv(u, v + 1);
+        bufferbuilder.addVertex((float) (x + w), (float) (y + h), 0.0F).setUv(u + 1, v + 1);
+        bufferbuilder.addVertex((float) (x + w), (float) y, 0.0F).setUv(u + 1, v);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
     public static boolean isMouseOver(int pX, int pY, int pWidth, int pHeight, double pMouseX, double pMouseY) {
@@ -90,8 +88,8 @@ public class RenderUtil {
             dx /= f3;
             dy /= f3;
             dz /= f3;
-            consumer.vertex(last.pose(), (float) (x + pX), (float) (y + pY), (float) (z + pZ)).color(r, g, b, a).normal(last.normal(), dx, dy, dz).endVertex();
-            consumer.vertex(last.pose(), (float) (x1 + pX), (float) (y1 + pY), (float) (z1 + pZ)).color(r, g, b, a).normal(last.normal(), dx, dy, dz).endVertex();
+            consumer.addVertex(last.pose(), (float) (x + pX), (float) (y + pY), (float) (z + pZ)).setColor(r, g, b, a).setNormal(last, dx, dy, dz);
+            consumer.addVertex(last.pose(), (float) (x1 + pX), (float) (y1 + pY), (float) (z1 + pZ)).setColor(r, g, b, a).setNormal(last, dx, dy, dz);
         });
         poseStack.popPose();
     }

@@ -303,7 +303,7 @@ def cat_entities(langs: dict[str, dict], items: set[str]) -> list[str]:
             err(cat, f"missing entity lang: entity.{MODID}.{e}")
 
     living = [e for e in entities if e not in PROJECTILE_ENTITIES]
-    loot_dir = MAIN / "data" / MODID / "loot_tables" / "entities"
+    loot_dir = MAIN / "data" / MODID / "loot_table" / "entities"
     loot = {p.stem for p in loot_dir.glob("*.json")} if loot_dir.exists() else set()
     stats["entity_loot"] = str(len(loot))
     for e in living:
@@ -340,9 +340,9 @@ def cat_entities(langs: dict[str, dict], items: set[str]) -> list[str]:
 # ---------------------------------------------------------------------------
 def cat_structures() -> None:
     cat = "D-structures"
-    struct_root = MAIN / "data" / MODID / "structures"
+    struct_root = MAIN / "data" / MODID / "structure"
     if not struct_root.exists():
-        err(cat, "missing structures directory")
+        err(cat, "missing structure directory")
         return
 
     by_folder: dict[str, int] = defaultdict(int)
@@ -370,7 +370,7 @@ def cat_structures() -> None:
     for folder, minimum in STRUCTURE_NBT_MIN.items():
         got = by_folder.get(folder, 0)
         if got < minimum:
-            err(cat, f"structures/{folder}: expected >= {minimum}, found {got}")
+            err(cat, f"structure/{folder}: expected >= {minimum}, found {got}")
 
     wg_struct = MAIN / "data" / MODID / "worldgen" / "structure"
     wg_set = MAIN / "data" / MODID / "worldgen" / "structure_set"
@@ -506,9 +506,9 @@ def cat_worldgen() -> None:
 # ---------------------------------------------------------------------------
 def cat_recipes(blocks: set[str], items: set[str]) -> None:
     cat = "F-recipes"
-    recipes_dir = MAIN / "data" / MODID / "recipes"
+    recipes_dir = MAIN / "data" / MODID / "recipe"
     if not recipes_dir.exists():
-        err(cat, "missing recipes directory")
+        err(cat, "missing recipe directory")
         return
     files = list(recipes_dir.rglob("*.json"))
     stats["recipes"] = str(len(files))
@@ -547,7 +547,7 @@ def cat_recipes(blocks: set[str], items: set[str]) -> None:
             err(cat, f"missing moonlight_forge recipe: {name}")
 
     # chest loot
-    chests = MAIN / "data" / MODID / "loot_tables" / "chests"
+    chests = MAIN / "data" / MODID / "loot_table" / "chests"
     required_dirs = {"runestone": 3, "darkstone": 3, "moontemple": 3, "ruins": 1}
     for name, minimum in required_dirs.items():
         d = chests / name
@@ -589,9 +589,9 @@ def _check_loot_item_refs(cat: str, path: Path, data: dict, blocks: set[str], it
 # ---------------------------------------------------------------------------
 def cat_advancements(langs: dict[str, dict], items: set[str], blocks: set[str]) -> None:
     cat = "G-advancements"
-    adv_dir = MAIN / "data" / MODID / "advancements"
+    adv_dir = MAIN / "data" / MODID / "advancement"
     if not adv_dir.exists():
-        err(cat, "missing advancements directory")
+        err(cat, "missing advancement directory")
         return
     files = list(adv_dir.glob("*.json"))
     stats["advancements"] = str(len(files))
@@ -760,18 +760,18 @@ def cat_registry_tags(blocks: set[str], items: set[str]) -> None:
         err(cat, f"expected >= 40 generated tag files, found {len(tag_files)}")
 
     # shears tag should include sickle if present
-    shears = GEN / "data" / "forge" / "tags" / "items" / "shears.json"
+    shears = GEN / "data" / "c" / "tags" / "item" / "shears.json"
     if shears.exists():
         data = load_json(shears)
         if isinstance(data, dict):
             values = data.get("values") or []
             if not any("sickle" in str(v) for v in values):
-                warn(cat, "forge:shears tag has no sickle entry")
+                warn(cat, "c:shears tag has no sickle entry")
     else:
-        warn(cat, "generated forge:shears tag missing (run runData?)")
+        warn(cat, "generated c:shears tag missing (run runData?)")
 
     # block loot tables for a sample of blocks
-    block_loot_dir = GEN / "data" / MODID / "loot_tables" / "blocks"
+    block_loot_dir = GEN / "data" / MODID / "loot_table" / "blocks"
     if block_loot_dir.exists():
         bloot = {p.stem for p in block_loot_dir.glob("*.json")}
         stats["block_loot"] = str(len(bloot))
@@ -797,9 +797,16 @@ def cat_json_parse() -> None:
     if count < 500:
         err(cat, f"expected >= 500 json files, found {count}")
 
-    mods_toml = MAIN / "META-INF" / "mods.toml"
-    if not mods_toml.exists():
-        err(cat, "missing META-INF/mods.toml")
+    # NeoForge 1.21: neoforge.mods.toml is generated from templates into build/
+    # during generateModMetadata; accept either hand-placed or templated path.
+    mods_toml_candidates = [
+        MAIN / "META-INF" / "neoforge.mods.toml",
+        MAIN / "META-INF" / "mods.toml",
+        ROOT / "src" / "main" / "templates" / "META-INF" / "neoforge.mods.toml",
+        ROOT / "build" / "generated" / "sources" / "modMetadata" / "META-INF" / "neoforge.mods.toml",
+    ]
+    if not any(p.exists() for p in mods_toml_candidates):
+        err(cat, "missing META-INF/neoforge.mods.toml (or mods.toml)")
     pack = MAIN / "pack.mcmeta"
     if not pack.exists():
         err(cat, "missing pack.mcmeta")

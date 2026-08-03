@@ -27,7 +27,7 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(TheAurorian.MODID, "recipes");
+        return ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "recipes");
     }
 
     @Override
@@ -38,8 +38,10 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-        registry.addRecipes(scrapper, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeRegistry.scrapper.get()));
-        registry.addRecipes(moonlight_forge, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeRegistry.moonlight_forge.get()));
+        var level = Minecraft.getInstance().level;
+        if (level == null) return;
+        registry.addRecipes(scrapper, level.getRecipeManager().getAllRecipesFor(RecipeRegistry.scrapper.get()).stream().map(h -> h.value()).toList());
+        registry.addRecipes(moonlight_forge, level.getRecipeManager().getAllRecipesFor(RecipeRegistry.moonlight_forge.get()).stream().map(h -> h.value()).toList());
     }
 
     @Override

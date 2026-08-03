@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:crystalline_pickaxe"
+  },
+  "output": {
+    "count": 6,
+    "id": "theaurorian:crystalline_scrap"
+  }
+}

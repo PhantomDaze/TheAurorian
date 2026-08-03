@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:aurorianite_sword"
+  },
+  "output": {
+    "count": 6,
+    "id": "theaurorian:aurorianite_scrap"
+  }
+}

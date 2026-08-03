@@ -1,5 +1,10 @@
 package shiroroku.theaurorian.Items.Loot;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -8,15 +13,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import shiroroku.theaurorian.Config.CommonConfig;
 import shiroroku.theaurorian.Items.BaseAurorianPickaxe;
 
@@ -40,7 +47,7 @@ public class UmbraPickaxe extends BaseAurorianPickaxe {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         Block selectedBlock = getSelectedBlock(pStack);
         if (selectedBlock != Blocks.AIR) {
             pTooltipComponents.add(Component.translatable("item.theaurorian.umbra_pickaxe.selected", Component.translatable(selectedBlock.getDescriptionId())).withStyle(ChatFormatting.GOLD));
@@ -50,22 +57,30 @@ public class UmbraPickaxe extends BaseAurorianPickaxe {
 
     @Override
     public float getDestroySpeed(ItemStack pStack, BlockState pState) {
-        return pState.is(getSelectedBlock(pStack)) ? (float) (this.speed * CommonConfig.umbra_pickaxe_speed_multiplier.get()) : super.getDestroySpeed(pStack, pState);
+        Block selected = getSelectedBlock(pStack);
+        if (selected != null && selected != Blocks.AIR && pState.is(selected)) {
+            return (float) (this.getTier().getSpeed() * CommonConfig.umbra_pickaxe_speed_multiplier.get());
+        }
+        return super.getDestroySpeed(pStack, pState);
     }
 
     @Nullable
     public static Block getSelectedBlock(ItemStack stack) {
-        return ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(stack.getOrCreateTag().getString("selected_block")));
+        String id = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("selected_block");
+        if (id == null || id.isEmpty()) return Blocks.AIR;
+        ResourceLocation rl = ResourceLocation.tryParse(id);
+        return rl == null ? Blocks.AIR : BuiltInRegistries.BLOCK.get(rl);
     }
 
     private static void clearSelectedBlock(ItemStack stack) {
-        stack.getOrCreateTag().remove("selected_block");
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.remove("selected_block"));
     }
 
     private static void setSelectedBlock(ItemStack stack, Block block, Player player, InteractionHand hand) {
         if (getSelectedBlock(stack) != block) {
-            stack.getOrCreateTag().putString("selected_block", ForgeRegistries.BLOCKS.getKey(block).toString());
-            stack.hurtAndBreak(CommonConfig.umbra_pickaxe_selection_cost.get(), player, (p) -> p.broadcastBreakEvent(hand));
+            final String key = BuiltInRegistries.BLOCK.getKey(block).toString();
+            CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.putString("selected_block", key));
+            stack.hurtAndBreak(CommonConfig.umbra_pickaxe_selection_cost.get(), player, EquipmentSlot.MAINHAND);
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1F, 2F);
         }
     }

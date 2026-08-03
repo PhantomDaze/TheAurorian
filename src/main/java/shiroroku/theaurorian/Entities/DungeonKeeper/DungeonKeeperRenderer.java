@@ -13,7 +13,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class DungeonKeeperRenderer extends HumanoidMobRenderer<AbstractSkeleton, DungeonKeeperModel> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/dungeon_keeper/dungeon_keeper.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/dungeon_keeper/dungeon_keeper.png");
 
     public DungeonKeeperRenderer(EntityRendererProvider.Context ctx) {
         this(ctx, ModelLayers.STRAY, ModelLayers.STRAY_INNER_ARMOR, ModelLayers.STRAY_OUTER_ARMOR);

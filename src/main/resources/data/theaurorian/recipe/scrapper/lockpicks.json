@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:lockpicks"
+  },
+  "output": {
+    "count": 16,
+    "id": "theaurorian:cerulean_nugget"
+  }
+}

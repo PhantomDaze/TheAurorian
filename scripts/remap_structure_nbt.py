@@ -6,7 +6,7 @@ re-encoded with correct length prefixes (raw byte substitution corrupts NBT).
 
 Usage:
   python3 scripts/remap_structure_nbt.py --dry-run path/to/dir_or_file.nbt
-  python3 scripts/remap_structure_nbt.py src/main/resources/data/theaurorian/structures/darkstone
+  python3 scripts/remap_structure_nbt.py src/main/resources/data/theaurorian/structure/darkstone
 """
 
 from __future__ import annotations

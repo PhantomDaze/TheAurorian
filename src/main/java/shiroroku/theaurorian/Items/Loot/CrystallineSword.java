@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Items.Loot;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +26,7 @@ public class CrystallineSword extends BaseAurorianSword {
 
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
-        if(pLevel.isClientSide || this.getUseDuration(pStack) - pTimeCharged < 19){
+        if(pLevel.isClientSide || this.getUseDuration(pStack, pLivingEntity) - pTimeCharged < 19){
             return;
         }
         CrystallineBeamEntity beam = new CrystallineBeamEntity(pLevel, pLivingEntity);
@@ -32,7 +34,7 @@ public class CrystallineSword extends BaseAurorianSword {
         pLevel.addFreshEntity(beam);
         pLevel.playSound(null, pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ(), SoundEvents.GRINDSTONE_USE, SoundSource.PLAYERS, 1F, 2.5F);
         pLevel.playSound(null, pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1F, 5F);
-        pStack.hurtAndBreak(1, pLivingEntity, (livingEntity) -> livingEntity.broadcastBreakEvent(livingEntity.getUsedItemHand()));
+        pStack.hurtAndBreak(1, pLivingEntity, EquipmentSlot.MAINHAND);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class CrystallineSword extends BaseAurorianSword {
     }
 
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack pStack, net.minecraft.world.entity.LivingEntity entity) {
         return 72000;
     }
 

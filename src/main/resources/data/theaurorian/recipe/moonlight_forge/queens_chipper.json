@@ -1,0 +1,12 @@
+{
+  "type": "theaurorian:moonlight_forge",
+  "input": {
+    "item": "theaurorian:aurorian_steel_pickaxe"
+  },
+  "catalyst": {
+    "item": "theaurorian:trophy_moon_queen"
+  },
+  "output": {
+    "id": "theaurorian:queens_chipper"
+  }
+}

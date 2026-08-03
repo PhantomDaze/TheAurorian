@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Items.Moonstone;
 
+import net.minecraft.world.item.Item;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -19,12 +21,12 @@ public class MoonstoneSickle extends BaseAurorianSickle {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, Moonstone.appendHoverText(pTooltipComponents), pIsAdvanced);
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
         return Moonstone.onItemDamage(stack, entity, amount);
     }
 }

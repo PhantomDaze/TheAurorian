@@ -1,112 +1,124 @@
 plugins {
-    id 'eclipse'
-    id 'idea'
+    id 'java-library'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'net.neoforged.moddev' version '2.0.143'
+    id 'idea'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
 }
 
 version = mod_version
 group = mod_group_id
-base.archivesName = mod_id
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    runs {
-        configureEach {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        client {
-        }
-
-        server {
-            workingDirectory project.file('run/server')
-        }
-
-        data {
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
-
-        // Headless in-world GameTest server (functional tests)
-        gameTestServer {
-            workingDirectory project.file('run/gametest')
-            property 'forge.enabledGameTestNamespaces', mod_id
-            property 'forge.enableGameTest', 'true'
-            property 'forge.gameTestServer', 'true'
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+sourceSets.main.resources {
+    srcDir('src/generated/resources')
+    exclude('**/*.bbmodel')
+    exclude('src/generated/**/.cache')
 }
-
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
-        // Curios
-        url = "https://maven.theillusivec4.top/"
+        name = 'TheIllusiveC4'
+        url = 'https://maven.theillusivec4.top/'
     }
     maven {
-        // JEI
-        url = "https://maven.blamejared.com"
+        name = 'BlameJared'
+        url = 'https://maven.blamejared.com'
     }
     maven {
-        // CurseForge
-        url = "https://cursemaven.com"
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
+}
+
+base {
+    archivesName = mod_id
+}
+
+// Mojang ships Java 21 for 1.21.x
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    // AT auto-detected at META-INF/accesstransformer.cfg
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').absolutePath,
+                    '--existing', file('src/main/resources/').absolutePath
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+
+    // JUnit tests that touch Minecraft classes (SimpleTimer/Mth, etc.)
+    unitTest {
+        enable()
+        testedMod = mods."${mod_id}"
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    // Curios (required)
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
-    // Geckolib 4.x for 1.20.1 (kept for future animated entities; not currently referenced in Java)
-    implementation fg.deobf("curse.maven:geckolib-388172:8285794")
+    // JEI (compile API + local runtime for dev)
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-    // Curios
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    // Geckolib optional runtime (not required for content; kept for future meshes)
+    localRuntime "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
-    // JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-
-    // Mixin
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    // Unit / resource tests (no full game bootstrap required)
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Gson comes transitively from Minecraft via neoForge.unitTest { enable() }
 }
 
-
-processResources {
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
     var replaceProperties = [
             minecraft_version      : minecraft_version,
             minecraft_version_range: minecraft_version_range,
-            forge_version          : forge_version,
-            forge_version_range    : forge_version_range,
+            neo_version            : neo_version,
             loader_version_range   : loader_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,
@@ -114,41 +126,26 @@ processResources {
             mod_version            : mod_version,
             mod_authors            : mod_authors,
             mod_description        : mod_description,
-            mod_link               : mod_link
+            mod_link               : mod_link,
+            curios_version         : curios_version
     ]
-
     inputs.properties replaceProperties
-
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
-    }
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
 }
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : mod_id,
-                "Specification-Vendor"    : mod_authors,
-                "Specification-Version"   : "1",
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : mod_authors,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-jar.finalizedBy('reobfJar')
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        register('mavenJava', MavenPublication) {
+            from components.java
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url = "file://${project.projectDir}/mcmodsrepo"
         }
     }
 }
@@ -157,10 +154,14 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-// ---- Automated tests -------------------------------------------------------
-// 1) validateResources — pure Python datapack/asset integrity gate (fast, CI-friendly)
-// 2) test — JUnit 5 unit tests + resource/datapack smoke tests
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
 
+// ---- Automated tests -------------------------------------------------------
 tasks.register('validateResources', Exec) {
     group = 'verification'
     description = 'Validate datapack/asset integrity (lang, loot, structures, mirror, advancements, registries).'
@@ -170,7 +171,6 @@ tasks.register('validateResources', Exec) {
 
 tasks.named('test', Test).configure {
     useJUnitPlatform()
-    // Resource integrity also runs via ResourceIntegrityTest; keep explicit task for CI scripts.
     dependsOn tasks.named('validateResources')
     testLogging {
         events 'passed', 'skipped', 'failed'
@@ -179,7 +179,6 @@ tasks.named('test', Test).configure {
     }
 }
 
-// Make `check` (and therefore a careful `build`) run the resource gate even if tests are skipped later.
 tasks.named('check').configure {
     dependsOn tasks.named('validateResources')
 }

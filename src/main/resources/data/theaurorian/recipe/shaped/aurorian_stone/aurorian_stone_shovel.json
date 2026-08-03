@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I",
+    "S",
+    "S"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:rods/wooden"
+    },
+    "I": {
+      "tag": "theaurorian:aurorian_stones"
+    }
+  },
+  "result": {
+    "id": "theaurorian:aurorian_stone_shovel"
+  }
+}

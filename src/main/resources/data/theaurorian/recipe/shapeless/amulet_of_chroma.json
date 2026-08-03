@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:sapphire_amulet"
+    },
+    {
+      "item": "theaurorian:ruby_amulet"
+    },
+    {
+      "item": "theaurorian:emerald_amulet"
+    }
+  ],
+  "result": {
+    "id": "theaurorian:amulet_of_chroma"
+  }
+}

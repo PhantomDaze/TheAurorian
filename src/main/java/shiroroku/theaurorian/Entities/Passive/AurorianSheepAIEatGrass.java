@@ -60,7 +60,7 @@ public class AurorianSheepAIEatGrass extends Goal {
             BlockPos below = blockpos.below();
             BlockState state = this.sheep.level().getBlockState(below);
             if (state.is(BlockRegistry.aurorian_grass.get())) {
-                if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.sheep.level(), this.sheep)) {
+                if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(this.sheep.level(), this.sheep)) {
                     this.sheep.level().levelEvent(2001, below, Block.getId(state));
                     this.sheep.level().setBlock(below, BlockRegistry.aurorian_dirt.get().defaultBlockState(), 2);
                 }

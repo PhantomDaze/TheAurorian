@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:cerulean_helmet"
+  },
+  "output": {
+    "count": 30,
+    "id": "theaurorian:cerulean_nugget"
+  }
+}

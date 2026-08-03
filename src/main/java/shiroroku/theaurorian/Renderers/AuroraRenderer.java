@@ -3,8 +3,6 @@ package shiroroku.theaurorian.Renderers;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.AxisAngle4f;
 import com.mojang.math.Axis;
 import org.joml.Vector4f;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -31,8 +29,6 @@ public class AuroraRenderer {
     public static void renderSky(ClientLevel level, PoseStack pPoseStack, Matrix4f pProjectionMatrix, float pPartialTick) {
         level.getProfiler().push("theaurorian:auroras");
 
-        Matrix4f matrix = pPoseStack.last().pose();
-        BufferBuilder buf = Tesselator.getInstance().getBuilder();
         pPoseStack.pushPose();
         pPoseStack.mulPose(Axis.XP.rotationDegrees(90));
         RenderSystem.enableBlend();
@@ -40,15 +36,15 @@ public class AuroraRenderer {
 
         float time = level.getGameTime() + pPartialTick;
         pPoseStack.translate(0, -300, 0);
-        renderAuroraStream(level, pPoseStack, buf, time);
+        renderAuroraStream(level, pPoseStack, time);
         pPoseStack.translate(0, 100, 0);
-        renderAuroraStream(level, pPoseStack, buf, time + 10);
+        renderAuroraStream(level, pPoseStack, time + 10);
         pPoseStack.translate(0, 260, 0);
-        renderAuroraStream(level, pPoseStack, buf, time + 100);
+        renderAuroraStream(level, pPoseStack, time + 100);
         pPoseStack.translate(0, 60, 0);
-        renderAuroraStream(level, pPoseStack, buf, time + 110);
+        renderAuroraStream(level, pPoseStack, time + 110);
         pPoseStack.translate(0, 200, 0);
-        renderAuroraStream(level, pPoseStack, buf, time);
+        renderAuroraStream(level, pPoseStack, time);
 
         // texture always on
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -58,7 +54,7 @@ public class AuroraRenderer {
         level.getProfiler().pop();
     }
 
-    private static void renderAuroraStream(ClientLevel level, PoseStack pPoseStack, BufferBuilder buf, float time) {
+    private static void renderAuroraStream(ClientLevel level, PoseStack pPoseStack, float time) {
         pPoseStack.pushPose();
         Matrix4f matrix = pPoseStack.last().pose();
         pPoseStack.translate(-stripWidth * sections, 0, -height);
@@ -69,21 +65,21 @@ public class AuroraRenderer {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (-1.2f * Mth.square((i / sections) * 2 - 1) + 1) * alpha);
             float zOffset = ModUtil.wave(time * speed + i, 0.1f, amp);
             float zOffsetNext = ModUtil.wave(time * speed + i + 1, 0.1f, amp);
-            renderStrip(matrix, buf, zOffset, zOffsetNext, colorMid, colorTop);
+            renderStrip(matrix, zOffset, zOffsetNext, colorMid, colorTop);
             pPoseStack.translate(0, 0, stripHeight * 2);
-            renderStrip(matrix, buf, zOffset, zOffsetNext, colorBottom, colorMid);
+            renderStrip(matrix, zOffset, zOffsetNext, colorBottom, colorMid);
             pPoseStack.translate(0, 0, -stripHeight * 2);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
         }
         pPoseStack.popPose();
     }
 
-    private static void renderStrip(Matrix4f matrix, BufferBuilder buf, float zOffset1, float zOffset2, Vector4f color1, Vector4f color2) {
-        buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        buf.vertex(matrix, -stripWidth, 0 - zOffset1, stripHeight).uv(1, 1).color(color1.x(), color1.y(), color1.z(), color1.w()).endVertex();
-        buf.vertex(matrix, stripWidth, 0 - zOffset2, stripHeight).uv(0, 1).color(color1.x(), color1.y(), color1.z(), color1.w()).endVertex();
-        buf.vertex(matrix, stripWidth, 0 - zOffset2, -stripHeight).uv(0, 0).color(color2.x(), color2.y(), color2.z(), color2.w()).endVertex();
-        buf.vertex(matrix, -stripWidth, 0 - zOffset1, -stripHeight).uv(1, 0).color(color2.x(), color2.y(), color2.z(), color2.w()).endVertex();
-        BufferUploader.drawWithShader(buf.end());
+    private static void renderStrip(Matrix4f matrix, float zOffset1, float zOffset2, Vector4f color1, Vector4f color2) {
+        BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        buf.addVertex(matrix, -stripWidth, 0 - zOffset1, stripHeight).setColor(color1.x(), color1.y(), color1.z(), color1.w());
+        buf.addVertex(matrix, stripWidth, 0 - zOffset2, stripHeight).setColor(color1.x(), color1.y(), color1.z(), color1.w());
+        buf.addVertex(matrix, stripWidth, 0 - zOffset2, -stripHeight).setColor(color2.x(), color2.y(), color2.z(), color2.w());
+        buf.addVertex(matrix, -stripWidth, 0 - zOffset1, -stripHeight).setColor(color2.x(), color2.y(), color2.z(), color2.w());
+        BufferUploader.drawWithShader(buf.buildOrThrow());
     }
 }

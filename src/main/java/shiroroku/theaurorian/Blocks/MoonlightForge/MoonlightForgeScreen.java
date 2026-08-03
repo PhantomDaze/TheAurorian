@@ -11,16 +11,16 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class MoonlightForgeScreen extends AbstractContainerScreen<MoonlightForgeMenu> {
 
-    private final ResourceLocation GUI = new ResourceLocation(TheAurorian.MODID, "textures/gui/moonlight_forge.png");
+    private final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/gui/moonlight_forge.png");
 
     public MoonlightForgeScreen(MoonlightForgeMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics, mouseX, mouseY, partialTick);
+        super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 

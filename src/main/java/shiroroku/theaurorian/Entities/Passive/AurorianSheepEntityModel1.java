@@ -9,7 +9,7 @@ import shiroroku.theaurorian.TheAurorian;
 
 public class AurorianSheepEntityModel1 extends SheepFurModel<AurorianSheepEntity> {
 
-    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "aurorian_sheep"), "fur");
+    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "aurorian_sheep"), "fur");
 
     public AurorianSheepEntityModel1(ModelPart root) {
         super(root);

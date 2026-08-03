@@ -24,7 +24,7 @@ import shiroroku.theaurorian.Util.ModUtil;
 @SuppressWarnings("deprecation")
 public class MoonlightForgeBlockRenderer implements BlockEntityRenderer<MoonlightForgeBlockEntity> {
 
-    public static final ResourceLocation RING_OVERLAY = new ResourceLocation(TheAurorian.MODID, "block/moonlight_forge_overlay");
+    public static final ResourceLocation RING_OVERLAY = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "block/moonlight_forge_overlay");
     private final BlockRenderDispatcher blockRenderer;
 
     public MoonlightForgeBlockRenderer(BlockEntityRendererProvider.Context pContext) {
@@ -101,7 +101,7 @@ public class MoonlightForgeBlockRenderer implements BlockEntityRenderer<Moonligh
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static void vert(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, float u, float v) {
-        vertexConsumer.vertex(matrix4f, x, y, z).color(255, 255, 255, 255).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+        private static void vert(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, float u, float v) {
+        vertexConsumer.addVertex(matrix4f, x, y, z).setColor(255, 255, 255, 255).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(0.0F, 1.0F, 0.0F);
     }
 }

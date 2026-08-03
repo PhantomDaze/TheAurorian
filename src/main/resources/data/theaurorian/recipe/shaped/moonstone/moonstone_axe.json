@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "IS",
+    " S"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:rods/wooden"
+    },
+    "I": {
+      "item": "theaurorian:moonstone_ingot"
+    }
+  },
+  "result": {
+    "id": "theaurorian:moonstone_axe"
+  }
+}

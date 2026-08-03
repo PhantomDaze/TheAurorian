@@ -1,5 +1,8 @@
 package shiroroku.theaurorian.Items;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -20,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +52,7 @@ public class DungeonLocatorItem extends Item {
             String current = getSelectedDungeon(stack);
             int idx = java.util.Arrays.asList(DUNGEONS).indexOf(current);
             String next = DUNGEONS[(idx + 1) % DUNGEONS.length];
-            stack.getOrCreateTag().putString("dungeon", next);
+            CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.putString("dungeon", next));
             pPlayer.displayClientMessage(Component.literal("[" + next + "]"), true);
             return InteractionResultHolder.sidedSuccess(stack, pLevel.isClientSide);
         }
@@ -62,7 +66,7 @@ public class DungeonLocatorItem extends Item {
                 Holder<Structure> holder = registry.getHolderOrThrow(key);
                 var found = server.getChunkSource().getGenerator().findNearestMapStructure(server, HolderSet.direct(holder), pPlayer.blockPosition(), searchRadius(selected), false);
                 if (found != null) {
-                    stack.hurtAndBreak(1, pPlayer, (p) -> p.broadcastBreakEvent(pHand));
+                    stack.hurtAndBreak(1, pPlayer, EquipmentSlot.MAINHAND);
                     pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.NEUTRAL, 0.5F, 0.4F / (pLevel.getRandom().nextFloat() * 0.4F + 0.8F));
                     spawnDirectionParticles(pLevel, pPlayer, found.getFirst());
                 } else {
@@ -87,7 +91,7 @@ public class DungeonLocatorItem extends Item {
             case "Moontemple" -> "moon_temple";
             default -> "runestone_dungeon";
         };
-        return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(TheAurorian.MODID, id));
+        return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, id));
     }
 
     private static void spawnDirectionParticles(Level level, Player player, BlockPos dungeon) {
@@ -115,12 +119,12 @@ public class DungeonLocatorItem extends Item {
     }
 
     private static String getSelectedDungeon(ItemStack stack) {
-        String dungeon = stack.getOrCreateTag().getString("dungeon");
+        String dungeon = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("dungeon");
         return dungeon.isEmpty() ? "Runestone" : dungeon;
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.literal("§b[" + getSelectedDungeon(pStack) + "§r]"));
         pTooltipComponents.add(Component.translatable("string.theaurorian.tooltip.locator"));
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);

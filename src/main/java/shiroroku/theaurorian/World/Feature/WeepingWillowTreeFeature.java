@@ -53,7 +53,7 @@ public class WeepingWillowTreeFeature extends Feature<NoneFeatureConfiguration> 
 
         StructureTemplateManager manager = ((ServerLevelAccessor) level).getLevel().getServer().getStructureManager();
         String[] pool = small ? SMALL : LARGE;
-        ResourceLocation id = new ResourceLocation(TheAurorian.MODID, "weepingwillow/" + pool[random.nextInt(pool.length)]);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "weepingwillow/" + pool[random.nextInt(pool.length)]);
         StructureTemplate template = manager.get(id).orElse(null);
         if (template == null) {
             return false;

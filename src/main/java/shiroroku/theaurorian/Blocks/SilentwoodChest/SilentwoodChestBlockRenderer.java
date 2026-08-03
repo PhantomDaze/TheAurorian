@@ -32,13 +32,13 @@ import shiroroku.theaurorian.TheAurorian;
 @SuppressWarnings("deprecation")
 public class SilentwoodChestBlockRenderer<T extends BlockEntity & LidBlockEntity> implements BlockEntityRenderer<T> {
 
-    public static final ModelLayerLocation MODEL_LAYER_NORMAL = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "silentwood_chest"), "normal");
-    public static final ModelLayerLocation MODEL_LAYER_DOUBLE_LEFT = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "silentwood_chest"), "double_left");
-    public static final ModelLayerLocation MODEL_LAYER_DOUBLE_RIGHT = new ModelLayerLocation(new ResourceLocation(TheAurorian.MODID, "silentwood_chest"), "double_right");
+    public static final ModelLayerLocation MODEL_LAYER_NORMAL = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "silentwood_chest"), "normal");
+    public static final ModelLayerLocation MODEL_LAYER_DOUBLE_LEFT = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "silentwood_chest"), "double_left");
+    public static final ModelLayerLocation MODEL_LAYER_DOUBLE_RIGHT = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "silentwood_chest"), "double_right");
 
-    public static final ResourceLocation NORMAL = new ResourceLocation(TheAurorian.MODID, "textures/entity/silentwood_chest/normal.png");
-    public static final ResourceLocation DOUBLE_LEFT = new ResourceLocation(TheAurorian.MODID, "textures/entity/silentwood_chest/double_left.png");
-    public static final ResourceLocation DOUBLE_RIGHT = new ResourceLocation(TheAurorian.MODID, "textures/entity/silentwood_chest/double_right.png");
+    public static final ResourceLocation NORMAL = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/silentwood_chest/normal.png");
+    public static final ResourceLocation DOUBLE_LEFT = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/silentwood_chest/double_left.png");
+    public static final ResourceLocation DOUBLE_RIGHT = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/silentwood_chest/double_right.png");
 
     private final ModelPart lid;
     private final ModelPart bottom;

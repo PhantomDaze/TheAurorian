@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Entities.DisturbedHollow;
 
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -45,9 +47,9 @@ public class DisturbedHollowEntity extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ARMS_RAISED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ARMS_RAISED, false);
     }
 
     @Override

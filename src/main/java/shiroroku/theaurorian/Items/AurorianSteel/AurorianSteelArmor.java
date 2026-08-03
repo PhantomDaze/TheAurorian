@@ -1,5 +1,8 @@
 package shiroroku.theaurorian.Items.AurorianSteel;
 
+import net.minecraft.world.item.Item;
+
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -15,17 +18,17 @@ import java.util.function.Consumer;
 
 public class AurorianSteelArmor extends BaseAurorianArmor {
 
-    public AurorianSteelArmor(ArmorMaterial pMaterial, ArmorItem.Type pType, Properties pProperties) {
+    public AurorianSteelArmor(Holder<ArmorMaterial> pMaterial, ArmorItem.Type pType, Properties pProperties) {
         super(pMaterial, pType, pProperties);
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, AurorianSteel.appendHoverText(pTooltipComponents, pStack), pIsAdvanced);
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
         return AurorianSteel.onItemDamage(stack, entity, amount);
     }
 }

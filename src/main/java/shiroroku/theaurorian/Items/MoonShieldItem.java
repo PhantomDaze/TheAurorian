@@ -27,7 +27,7 @@ public class MoonShieldItem extends BaseAurorianShield {
     }
 
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack pStack, net.minecraft.world.entity.LivingEntity entity) {
         return 50;
     }
 

@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Items;
 
+import net.minecraft.world.entity.EquipmentSlot;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -7,7 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeTier;
+import net.neoforged.neoforge.common.SimpleTier;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 
 /**
@@ -16,7 +18,7 @@ import shiroroku.theaurorian.Registry.BlockRegistry;
  */
 public class QueensChipperItem extends BaseAurorianPickaxe {
 
-    public QueensChipperItem(ForgeTier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
+    public QueensChipperItem(SimpleTier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
         super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
     }
 
@@ -28,7 +30,7 @@ public class QueensChipperItem extends BaseAurorianPickaxe {
             level.playSound(pContext.getPlayer(), pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 0.8F, 0.7F);
             if (!level.isClientSide) {
                 level.destroyBlock(pos, true);
-                pContext.getItemInHand().hurtAndBreak(1, pContext.getPlayer(), (p) -> p.broadcastBreakEvent(pContext.getHand()));
+                pContext.getItemInHand().hurtAndBreak(1, pContext.getPlayer(), net.minecraft.world.entity.EquipmentSlot.MAINHAND);
             }
             return InteractionResult.SUCCESS;
         }

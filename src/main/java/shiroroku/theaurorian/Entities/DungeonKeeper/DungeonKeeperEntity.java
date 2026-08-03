@@ -1,5 +1,9 @@
 package shiroroku.theaurorian.Entities.DungeonKeeper;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +27,7 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import shiroroku.theaurorian.Entities.DungeonKeeper.AI.KeeperBarrageGoal;
@@ -65,8 +70,11 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
 
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         ItemStack sword = new ItemStack(ItemRegistry.moonstone_sword.get());
-        sword.enchant(Enchantments.KNOCKBACK, 2);
-        sword.enchant(EnchantRegistry.lightning.get(), 3);
+        ((java.util.function.Consumer<net.minecraft.world.item.ItemStack>)(s -> { if (this.level() instanceof ServerLevel _sl) { Holder<Enchantment> _h = _sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.KNOCKBACK); s.enchant(_h, 2); } })).accept(sword);
+        if (this.level() instanceof ServerLevel sl) {
+            Holder<Enchantment> lightning = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(EnchantRegistry.LIGHTNING);
+            sword.enchant(lightning, 3);
+        }
         this.setItemInHand(InteractionHand.MAIN_HAND, sword);
     }
 

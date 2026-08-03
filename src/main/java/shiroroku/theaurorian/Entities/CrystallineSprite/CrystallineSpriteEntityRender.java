@@ -2,12 +2,9 @@ package shiroroku.theaurorian.Entities.CrystallineSprite;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import org.joml.Quaternionf;
 import org.joml.AxisAngle4f;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -24,7 +21,7 @@ import shiroroku.theaurorian.TheAurorian;
  */
 public class CrystallineSpriteEntityRender extends EntityRenderer<CrystallineSpriteEntity> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/crystalline_sprite.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/entity/crystalline_sprite.png");
     private static final int FRAME_COUNT = 8;
 
     public CrystallineSpriteEntityRender(EntityRendererProvider.Context context) {
@@ -38,8 +35,8 @@ public class CrystallineSpriteEntityRender extends EntityRenderer<CrystallineSpr
         pPoseStack.scale(4.0F, 4.0F, 4.0F);
         float yaw = Mth.lerp(pPartialTick, pEntity.yRotO, pEntity.getYRot()) + 180.0F;
         float pitch = Mth.lerp(pPartialTick, pEntity.xRotO, pEntity.getXRot());
-        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float)Math.toRadians(-yaw), 0.0F, 1.0F, 0.0F)));
-        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float)Math.toRadians(pitch), 1.0F, 0.0F, 0.0F)));
+        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.toRadians(-yaw), 0.0F, 1.0F, 0.0F)));
+        pPoseStack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.toRadians(pitch), 1.0F, 0.0F, 0.0F)));
 
         int frame = (pEntity.tickCount / 3) % FRAME_COUNT;
         float v0 = frame / (float) FRAME_COUNT;
@@ -48,12 +45,11 @@ public class CrystallineSpriteEntityRender extends EntityRenderer<CrystallineSpr
         VertexConsumer vc = pBuffer.getBuffer(RenderType.entityTranslucent(TEXTURE));
         PoseStack.Pose pose = pPoseStack.last();
         Matrix4f mat = pose.pose();
-        Matrix3f normal = pose.normal();
         float half = 0.125F;
-        vc.vertex(mat, -half, -half, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(normal, 0, 0, 1).endVertex();
-        vc.vertex(mat, half, -half, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(normal, 0, 0, 1).endVertex();
-        vc.vertex(mat, half, half, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(normal, 0, 0, 1).endVertex();
-        vc.vertex(mat, -half, half, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(normal, 0, 0, 1).endVertex();
+        vc.addVertex(mat, -half, -half, 0).setColor(1.0F, 1.0F, 1.0F, 1.0F).setUv(0.0F, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(pPackedLight).setNormal(pose, 0, 0, 1);
+        vc.addVertex(mat, half, -half, 0).setColor(1.0F, 1.0F, 1.0F, 1.0F).setUv(1.0F, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(pPackedLight).setNormal(pose, 0, 0, 1);
+        vc.addVertex(mat, half, half, 0).setColor(1.0F, 1.0F, 1.0F, 1.0F).setUv(1.0F, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(pPackedLight).setNormal(pose, 0, 0, 1);
+        vc.addVertex(mat, -half, half, 0).setColor(1.0F, 1.0F, 1.0F, 1.0F).setUv(0.0F, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(pPackedLight).setNormal(pose, 0, 0, 1);
         pPoseStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
     }

@@ -1,5 +1,7 @@
 package shiroroku.theaurorian.Entities.Boss;
 
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -8,7 +10,6 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -53,10 +54,6 @@ public class DungeonSpiderEntity extends Monster {
                 .add(Attributes.ARMOR, 2.0);
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
 
     @Override
     protected void registerGoals() {
@@ -64,12 +61,7 @@ public class DungeonSpiderEntity extends Monster {
         this.goalSelector.addGoal(1, new SpiderAIHang(this));
         this.goalSelector.addGoal(2, new SpiderAISpit(this));
         this.goalSelector.addGoal(4, new SpiderAILeap(this));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2D, true) {
-            @Override
-            protected double getAttackReachSqr(net.minecraft.world.entity.LivingEntity pAttackTarget) {
-                return this.mob.getBbWidth() * this.mob.getBbWidth() + pAttackTarget.getBbWidth();
-            }
-        });
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -137,12 +129,12 @@ public class DungeonSpiderEntity extends Monster {
     private static final net.minecraft.network.syncher.EntityDataAccessor<Boolean> HANGING = net.minecraft.network.syncher.SynchedEntityData.defineId(DungeonSpiderEntity.class, net.minecraft.network.syncher.EntityDataSerializers.BOOLEAN);
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(WINDINGUP_SPIT, false);
-        this.entityData.define(SPITTING, false);
-        this.entityData.define(CLIMBING, false);
-        this.entityData.define(HANGING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(WINDINGUP_SPIT, false);
+        builder.define(SPITTING, false);
+        builder.define(CLIMBING, false);
+        builder.define(HANGING, false);
     }
 
     public void setWindingUpSpit(boolean bool) {

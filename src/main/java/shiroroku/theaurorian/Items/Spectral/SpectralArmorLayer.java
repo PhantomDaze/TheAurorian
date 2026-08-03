@@ -45,8 +45,8 @@ public class SpectralArmorLayer<T extends LivingEntity, M extends PlayerModel<T>
             this.getParentModel().copyPropertiesTo(pModel);
             pModel.setAllVisible(false);
             this.setPartVisibility(pModel, pSlot);
-            ResourceLocation texture = new ResourceLocation(TheAurorian.MODID, "textures/models/armor/spectral_layer_" + (pSlot == EquipmentSlot.LEGS ? 2 : 1) + ".png");
-            pModel.renderToBuffer(pPoseStack, pBufferSource.getBuffer(RenderType.entityTranslucent(texture)), pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "textures/models/armor/spectral_layer_" + (pSlot == EquipmentSlot.LEGS ? 2 : 1) + ".png");
+            pModel.renderToBuffer(pPoseStack, pBufferSource.getBuffer(RenderType.entityTranslucent(texture)), pPackedLight, OverlayTexture.NO_OVERLAY, net.minecraft.util.FastColor.ARGB32.color((int)(1.0*255), (int)(1.0*255), (int)(1.0*255), (int)(1.0*255)));
         }
     }
 
