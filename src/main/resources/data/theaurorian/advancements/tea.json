@@ -17,16 +17,7 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:silkberry_tea"
-          },
-          {
-            "item": "theaurorian:lavender_tea"
-          },
-          {
-            "item": "theaurorian:bright_bulb_tea"
-          },
-          {
-            "item": "theaurorian:petunia_tea"
+            "tag": "theaurorian:tea"
           }
         ]
       }

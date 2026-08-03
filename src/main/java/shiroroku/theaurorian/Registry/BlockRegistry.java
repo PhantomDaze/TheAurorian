@@ -100,12 +100,18 @@ public class BlockRegistry {
     public static final RegistryObject<Block> weeping_willow_sapling = regBlockItemWithBurntime(BLOCKS_GEN_NL_PLANT, "weeping_willow_sapling", () -> new SaplingBlock(new WeepingWillowTreeGrower(), BlockBehaviour.Properties.copy(Blocks.JUNGLE_SAPLING)), 100);
     public static final RegistryObject<Block> weeping_willow_stairs = regBlockItemWithBurntime(BLOCKS, "weeping_willow_stairs", () -> new StairBlock(() -> weeping_willow_planks.get().defaultBlockState(), BlockBehaviour.Properties.copy(weeping_willow_planks.get())), 300);
 
-    // Plants
-    public static final RegistryObject<Block> aurorian_tallgrass = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass", () -> new TallGrassBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
-    public static final RegistryObject<Block> bright_bulb = regBlockItem(BLOCKS_GEN_NL_PLANT, "bright_bulb", () -> new BushBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS).lightLevel((state) -> 10)));
-    public static final RegistryObject<Block> lavender_block = regBlockItem(BLOCKS_GEN_NL_PLANT, "lavender_block", () -> new BushBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
-    public static final RegistryObject<Block> petunia = regBlockItem(BLOCKS_GEN_NL_PLANT, "petunia", () -> new BushBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
-    public static final RegistryObject<Block> silkberry_block = regBlockItem(BLOCKS_GEN_NL_PLANT, "silkberry_block", () -> new BushBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
+    // Plants — must be non-colliding (like vanilla grass/flowers). Prefer Blocks.GRASS
+    // (short grass / TallGrassBlock) over Blocks.TALL_GRASS (double plant) and always
+    // re-assert noCollission so dense ground cover cannot shove the player.
+    private static BlockBehaviour.Properties plantProps() {
+        return BlockBehaviour.Properties.copy(Blocks.GRASS).noCollission().replaceable();
+    }
+
+    public static final RegistryObject<Block> aurorian_tallgrass = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass", () -> new TallGrassBlock(plantProps()));
+    public static final RegistryObject<Block> bright_bulb = regBlockItem(BLOCKS_GEN_NL_PLANT, "bright_bulb", () -> new TallGrassBlock(plantProps().lightLevel((state) -> 10)));
+    public static final RegistryObject<Block> lavender_block = regBlockItem(BLOCKS_GEN_NL_PLANT, "lavender_block", () -> new TallGrassBlock(plantProps()));
+    public static final RegistryObject<Block> petunia = regBlockItem(BLOCKS_GEN_NL_PLANT, "petunia", () -> new TallGrassBlock(plantProps()));
+    public static final RegistryObject<Block> silkberry_block = regBlockItem(BLOCKS_GEN_NL_PLANT, "silkberry_block", () -> new TallGrassBlock(plantProps()));
 
     // Ores
     public static final RegistryObject<Block> aurorian_coal_ore = regBlockItem(BLOCKS_GEN_NL, "aurorian_coal_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_ORE)));
@@ -176,7 +182,7 @@ public class BlockRegistry {
 
     // Phase 1: Light grass variants
     public static final RegistryObject<Block> aurorian_grass_light = regBlockItem(BLOCKS, "aurorian_grass_light", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK).lightLevel((state) -> 5)));
-    public static final RegistryObject<Block> aurorian_tallgrass_light = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass_light", () -> new TallGrassBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
+    public static final RegistryObject<Block> aurorian_tallgrass_light = regBlockItem(BLOCKS_GEN_NL_PLANT, "aurorian_tallgrass_light", () -> new TallGrassBlock(plantProps().lightLevel((state) -> 5)));
 
     // Phase 1: Farm tile + Phase 7 crops (registered early so loot/remap stay valid).
     // Crops are registered WITHOUT a block item — the seed item plants them.

@@ -18,7 +18,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:moon_temple_key"
+            "items": [
+              "theaurorian:moon_temple_key"
+            ]
           }
         ]
       }

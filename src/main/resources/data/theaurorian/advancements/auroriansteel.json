@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:aurorian_steel_ingot"
+            "items": [
+              "theaurorian:aurorian_steel_ingot"
+            ]
           }
         ]
       }

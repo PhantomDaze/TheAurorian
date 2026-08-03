@@ -18,13 +18,11 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:aurorianite_ingot"
-          },
-          {
-            "item": "theaurorian:crystalline_ingot"
-          },
-          {
-            "item": "theaurorian:umbra_ingot"
+            "items": [
+              "theaurorian:aurorianite_ingot",
+              "theaurorian:crystalline_ingot",
+              "theaurorian:umbra_ingot"
+            ]
           }
         ]
       }

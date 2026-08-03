@@ -17,13 +17,11 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:aurorian_stone_sickle"
-          },
-          {
-            "item": "theaurorian:silentwood_sickle"
-          },
-          {
-            "item": "theaurorian:moonstone_sickle"
+            "items": [
+              "theaurorian:aurorian_stone_sickle",
+              "theaurorian:silentwood_sickle",
+              "theaurorian:moonstone_sickle"
+            ]
           }
         ]
       }
