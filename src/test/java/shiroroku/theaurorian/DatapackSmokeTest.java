@@ -45,6 +45,50 @@ class DatapackSmokeTest {
         }
     }
 
+    /**
+     * 1.19+ ItemPredicate uses {@code items:[id,...]}, not the pre-1.13 singular {@code item}.
+     * A bare {@code item} key is ignored, so the predicate matches every stack and any pickup
+     * unlocks every inventory_changed advancement.
+     */
+    @Test
+    void inventoryChangedAdvancementsUseItemsArrayNotSingularItem() throws Exception {
+        Path dir = MAIN.resolve("data/theaurorian/advancements");
+        try (Stream<Path> stream = Files.list(dir)) {
+            stream.filter(p -> p.toString().endsWith(".json")).forEach(path -> {
+                try {
+                    JsonObject adv = readObject(path);
+                    if (!adv.has("criteria")) {
+                        return;
+                    }
+                    assertNoSingularItemInItemPredicates(adv.getAsJsonObject("criteria"), path.getFileName().toString());
+                } catch (IOException e) {
+                    fail(e);
+                }
+            });
+        }
+    }
+
+    private static void assertNoSingularItemInItemPredicates(JsonElement el, String file) {
+        if (el == null || el.isJsonNull()) {
+            return;
+        }
+        if (el.isJsonObject()) {
+            JsonObject obj = el.getAsJsonObject();
+            // ItemPredicate shape: has "item" string but not "items"/"tag" → would match ANY item
+            if (obj.has("item") && obj.get("item").isJsonPrimitive() && obj.get("item").getAsJsonPrimitive().isString()
+                    && !obj.has("items") && !obj.has("tag")) {
+                fail(file + " uses obsolete ItemPredicate key \"item\" (use \"items\": [id]); would match any stack");
+            }
+            for (String key : obj.keySet()) {
+                assertNoSingularItemInItemPredicates(obj.get(key), file);
+            }
+        } else if (el.isJsonArray()) {
+            for (JsonElement child : el.getAsJsonArray()) {
+                assertNoSingularItemInItemPredicates(child, file);
+            }
+        }
+    }
+
     @Test
     void mirrorGraphHasNoDanglingChildren() throws Exception {
         Path dir = MAIN.resolve("data/theaurorian/mirror_of_guidance");
@@ -102,6 +146,49 @@ class DatapackSmokeTest {
         assertTrue(Files.isRegularFile(mf.resolve("keepers_bow.json")));
         assertTrue(Files.isRegularFile(mf.resolve("queens_chipper.json")));
         assertTrue(Files.isRegularFile(mf.resolve("moon_shield.json")));
+    }
+
+    @Test
+    void dungeonKeyRecipesMatchUpstream() throws Exception {
+        Path shapeless = MAIN.resolve("data/theaurorian/recipes/shapeless");
+        JsonObject dark = readObject(shapeless.resolve("darkstone_key.json"));
+        assertEquals("minecraft:crafting_shapeless", dark.get("type").getAsString());
+        assertEquals("theaurorian:darkstone_key", dark.getAsJsonObject("result").get("item").getAsString());
+        String darkIng = dark.getAsJsonArray("ingredients").toString();
+        assertTrue(darkIng.contains("theaurorian:keepers_amulet"), darkIng);
+        assertTrue(darkIng.contains("theaurorian:crystal"), darkIng);
+        assertTrue(darkIng.contains("theaurorian:cerulean_nugget"), darkIng);
+
+        JsonObject moon = readObject(shapeless.resolve("moon_temple_key.json"));
+        assertEquals("theaurorian:moon_temple_key", moon.getAsJsonObject("result").get("item").getAsString());
+        String moonIng = moon.getAsJsonArray("ingredients").toString();
+        assertTrue(moonIng.contains("theaurorian:dark_amulet"), moonIng);
+        assertTrue(moonIng.contains("theaurorian:crystal"), moonIng);
+        assertTrue(moonIng.contains("theaurorian:moon_gem"), moonIng);
+
+        JsonObject interior = readObject(shapeless.resolve("moon_temple_interior_key.json"));
+        String intIng = interior.getAsJsonArray("ingredients").toString();
+        assertTrue(intIng.contains("theaurorian:moon_temple_key_fragment"), intIng);
+        assertTrue(intIng.contains("theaurorian:moon_gem"), intIng);
+    }
+
+    @Test
+    void rootUsesChangedDimensionToAurorian() throws Exception {
+        JsonObject root = readObject(MAIN.resolve("data/theaurorian/advancements/root.json"));
+        JsonObject arrived = root.getAsJsonObject("criteria").getAsJsonObject("arrived");
+        assertEquals("minecraft:changed_dimension", arrived.get("trigger").getAsString());
+        assertEquals("theaurorian:the_aurorian", arrived.getAsJsonObject("conditions").get("to").getAsString());
+    }
+
+    @Test
+    void multiOptionInventoryAdvancementsUseSinglePredicateOr() throws Exception {
+        for (String id : new String[]{"sickle", "tea", "scrapper"}) {
+            JsonObject adv = readObject(MAIN.resolve("data/theaurorian/advancements/" + id + ".json"));
+            var items = adv.getAsJsonObject("criteria").getAsJsonObject("inv")
+                    .getAsJsonObject("conditions").getAsJsonArray("items");
+            assertEquals(1, items.size(), id + " should OR items in one predicate, not AND many");
+            assertTrue(items.get(0).getAsJsonObject().getAsJsonArray("items").size() >= 2, id);
+        }
     }
 
     private static void assertMinNbt(Path dir, int min) throws IOException {

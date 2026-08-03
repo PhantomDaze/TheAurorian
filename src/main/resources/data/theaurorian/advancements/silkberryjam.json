@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:silkberry_jam"
+            "items": [
+              "theaurorian:silkberry_jam"
+            ]
           }
         ]
       }

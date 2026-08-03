@@ -18,7 +18,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:lockpicks"
+            "items": [
+              "theaurorian:lockpicks"
+            ]
           }
         ]
       }

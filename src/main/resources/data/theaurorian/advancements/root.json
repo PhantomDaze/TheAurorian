@@ -13,9 +13,9 @@
   },
   "criteria": {
     "arrived": {
-      "trigger": "minecraft:location",
+      "trigger": "minecraft:changed_dimension",
       "conditions": {
-        "dimension": "theaurorian:the_aurorian"
+        "to": "theaurorian:the_aurorian"
       }
     }
   }
