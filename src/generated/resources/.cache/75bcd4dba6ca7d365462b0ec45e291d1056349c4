@@ -4,6 +4,7 @@
 52812fab3474d07f55d5ed5e0025c937791a2a04 data/forge/tags/blocks/fences/wooden.json
 90508d9d9a6debf79466d4cfabfd60aec5edb69c data/forge/tags/blocks/ores.json
 fae13353da6edb331f10f01e307c666030c75191 data/forge/tags/blocks/ores/coal.json
+03ac40f8fb0c876b5b5d67eba6c9e7eb51e7d0c6 data/minecraft/tags/blocks/climbable.json
 17c0cce815d32f9b3c26aec5bbf37e02a0472a4c data/minecraft/tags/blocks/deepslate_ore_replaceables.json
 7c9955f473dc23c07fa9515f7f2794d50cd1408c data/minecraft/tags/blocks/dirt.json
 9b1c5d240443b5e006c2e26622493c15080e4d79 data/minecraft/tags/blocks/flowers.json

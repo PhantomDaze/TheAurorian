@@ -45,6 +45,7 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_slab.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_stairs.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_ladder.get());
+        this.tag(BlockTags.CLIMBABLE).add(BlockRegistry.silentwood_ladder.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_log.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_planks.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_stairs.get());
