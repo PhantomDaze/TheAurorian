@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:keepers_amulet"
+    },
+    {
+      "item": "theaurorian:crystal"
+    },
+    {
+      "item": "theaurorian:cerulean_nugget"
+    }
+  ],
+  "result": {
+    "id": "theaurorian:darkstone_key"
+  }
+}

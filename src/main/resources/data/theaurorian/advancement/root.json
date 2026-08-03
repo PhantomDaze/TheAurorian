@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "theaurorian:silentwood_sapling"
+      "id": "theaurorian:silentwood_sapling"
     },
     "title": {
       "translate": "advancement.theaurorian.root.title"
@@ -9,14 +9,32 @@
     "description": {
       "translate": "advancement.theaurorian.root.description"
     },
-    "background": "theaurorian:textures/block/aurorian_stone.png"
+    "background": "theaurorian:textures/block/aurorian_stone.png",
+    "show_toast": false,
+    "announce_to_chat": false
   },
   "criteria": {
-    "arrived": {
+    "entered": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "theaurorian:the_aurorian"
+      }
+    },
+    "located": {
       "trigger": "minecraft:location",
       "conditions": {
-        "dimension": "theaurorian:the_aurorian"
+        "player": {
+          "location": {
+            "dimension": "theaurorian:the_aurorian"
+          }
+        }
       }
     }
-  }
+  },
+  "requirements": [
+    [
+      "entered",
+      "located"
+    ]
+  ]
 }

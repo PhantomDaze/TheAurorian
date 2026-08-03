@@ -2,7 +2,7 @@
   "parent": "theaurorian:root",
   "display": {
     "icon": {
-      "item": "theaurorian:lockpicks"
+      "id": "theaurorian:lockpicks"
     },
     "title": {
       "translate": "advancement.theaurorian.lockpicks.title"
@@ -18,7 +18,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:lockpicks"
+            "items": [
+              "theaurorian:lockpicks"
+            ]
           }
         ]
       }

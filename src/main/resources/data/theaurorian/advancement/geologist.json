@@ -2,7 +2,7 @@
   "parent": "theaurorian:root",
   "display": {
     "icon": {
-      "item": "theaurorian:moonstone_pickaxe"
+      "id": "theaurorian:moonstone_pickaxe"
     },
     "title": {
       "translate": "advancement.theaurorian.geologist.title"
@@ -17,16 +17,24 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:cerulean_ingot"
+            "items": [
+              "theaurorian:cerulean_ingot"
+            ]
           },
           {
-            "item": "theaurorian:aurorian_coal"
+            "items": [
+              "theaurorian:aurorian_coal"
+            ]
           },
           {
-            "item": "theaurorian:moonstone_ingot"
+            "items": [
+              "theaurorian:moonstone_ingot"
+            ]
           },
           {
-            "item": "theaurorian:crystal"
+            "items": [
+              "theaurorian:crystal"
+            ]
           }
         ]
       }

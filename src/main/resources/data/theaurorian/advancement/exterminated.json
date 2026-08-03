@@ -2,7 +2,7 @@
   "parent": "theaurorian:darkstonekey",
   "display": {
     "icon": {
-      "item": "theaurorian:dark_amulet"
+      "id": "theaurorian:dark_amulet"
     },
     "title": {
       "translate": "advancement.theaurorian.exterminated.title"
@@ -26,7 +26,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:dark_amulet"
+            "items": [
+              "theaurorian:dark_amulet"
+            ]
           }
         ]
       }

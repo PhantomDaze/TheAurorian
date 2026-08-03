@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:silentwood_crafting_table"
+    }
+  ],
+  "result": {
+    "id": "minecraft:crafting_table"
+  }
+}

@@ -2,7 +2,7 @@
   "parent": "theaurorian:geologist",
   "display": {
     "icon": {
-      "item": "theaurorian:aurorianite_ingot"
+      "id": "theaurorian:aurorianite_ingot"
     },
     "title": {
       "translate": "advancement.theaurorian.scrapper.title"
@@ -18,13 +18,11 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:aurorianite_ingot"
-          },
-          {
-            "item": "theaurorian:crystalline_ingot"
-          },
-          {
-            "item": "theaurorian:umbra_ingot"
+            "items": [
+              "theaurorian:aurorianite_ingot",
+              "theaurorian:crystalline_ingot",
+              "theaurorian:umbra_ingot"
+            ]
           }
         ]
       }

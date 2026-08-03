@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "theaurorian:moon_temple_key_fragment"
+      "item": "theaurorian:dark_amulet"
     },
     {
-      "item": "theaurorian:moon_temple_key_fragment"
+      "item": "theaurorian:crystal"
     },
     {
       "item": "theaurorian:moon_gem"
     }
   ],
   "result": {
-    "id": "theaurorian:moon_temple_interior_key"
+    "id": "theaurorian:moon_temple_key"
   }
 }

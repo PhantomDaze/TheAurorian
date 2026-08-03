@@ -45,6 +45,173 @@ class DatapackSmokeTest {
         }
     }
 
+    /**
+     * Descriptions must match unlock logic:
+     * - root: enter/visit the dimension (changed_dimension OR location)
+     * - sickle/scrapper/tea: any one matching item (single ItemPredicate list/tag)
+     * - geologist: all four materials at once (multiple ItemPredicates = AND)
+     * - bosses: kill OR inventory (requirements OR row), and lang mentions both paths
+     */
+    @Test
+    void advancementConditionsMatchDescriptions() throws Exception {
+        JsonObject en = readObject(MAIN.resolve("assets/theaurorian/lang/en_us.json"));
+        Path dir = MAIN.resolve("data/theaurorian/advancement");
+
+        // root: visit dimension
+        JsonObject root = readObject(dir.resolve("root.json"));
+        assertTrue(root.getAsJsonObject("criteria").has("entered"), "root needs changed_dimension criterion");
+        assertEquals("minecraft:changed_dimension",
+                root.getAsJsonObject("criteria").getAsJsonObject("entered").get("trigger").getAsString());
+        assertEquals("theaurorian:the_aurorian",
+                root.getAsJsonObject("criteria").getAsJsonObject("entered")
+                        .getAsJsonObject("conditions").get("to").getAsString());
+        assertTrue(root.getAsJsonObject("criteria").has("located"), "root needs location fallback");
+        String rootDesc = en.get("advancement.theaurorian.root.description").getAsString().toLowerCase();
+        assertTrue(rootDesc.contains("visit") || rootDesc.contains("aurorian"), "root description should mention visiting");
+
+        // any-one-item advancements: one ItemPredicate whose items list/tag covers alternatives
+        assertAnyOfItems(dir.resolve("sickle.json"),
+                "theaurorian:aurorian_stone_sickle", "theaurorian:silentwood_sickle", "theaurorian:moonstone_sickle");
+        assertAnyOfItems(dir.resolve("scrapper.json"),
+                "theaurorian:aurorianite_ingot", "theaurorian:crystalline_ingot", "theaurorian:umbra_ingot");
+        JsonObject tea = readObject(dir.resolve("tea.json"));
+        JsonObject teaPred = tea.getAsJsonObject("criteria").getAsJsonObject("inv")
+                .getAsJsonObject("conditions").getAsJsonArray("items").get(0).getAsJsonObject();
+        assertEquals(1, tea.getAsJsonObject("criteria").getAsJsonObject("inv")
+                .getAsJsonObject("conditions").getAsJsonArray("items").size(),
+                "tea should be a single any-of predicate, not AND of all teas");
+        assertTrue(teaPred.has("items"), "tea predicate items");
+        String teaItems = teaPred.get("items").toString();
+        assertTrue(teaItems.contains("theaurorian:tea") || teaItems.contains("silkberry_tea"),
+                "tea should accept tea tag or tea items, got " + teaItems);
+        String teaDesc = en.get("advancement.theaurorian.tea.description").getAsString().toLowerCase();
+        assertTrue(teaDesc.contains("tea"), "tea description");
+        String sickleDesc = en.get("advancement.theaurorian.sickle.description").getAsString().toLowerCase();
+        assertTrue(sickleDesc.contains("sickle") || sickleDesc.contains("a sickle"), "sickle description is singular");
+        String scrapperDesc = en.get("advancement.theaurorian.scrapper.description").getAsString().toLowerCase();
+        assertTrue(scrapperDesc.contains("an ingot") || scrapperDesc.contains("ingot"), "scrapper description is singular ingot");
+
+        // geologist: all four required (AND via multiple predicates)
+        JsonObject geo = readObject(dir.resolve("geologist.json"));
+        var geoItems = geo.getAsJsonObject("criteria").getAsJsonObject("inv")
+                .getAsJsonObject("conditions").getAsJsonArray("items");
+        assertEquals(4, geoItems.size(), "geologist requires all four materials");
+        String geoDesc = en.get("advancement.theaurorian.geologist.description").getAsString().toLowerCase();
+        assertTrue(geoDesc.contains("crystal") && geoDesc.contains("coal")
+                && geoDesc.contains("cerulean") && geoDesc.contains("moonstone"), "geologist lists all four");
+
+        // bosses: kill OR loot, descriptions mention both
+        assertBossOr(dir, en, "liberated", "theaurorian:dungeon_keeper", "theaurorian:keepers_amulet",
+                "dungeon keeper", "amulet");
+        assertBossOr(dir, en, "exterminated", "theaurorian:dungeon_spider", "theaurorian:dark_amulet",
+                "spider", "amulet");
+        assertBossOr(dir, en, "dethroned", "theaurorian:moon_queen", "theaurorian:trophy_moon_queen",
+                "moon queen", "trophy");
+
+        // single-item craft/obtain — description item id present in criteria
+        assertSingleItemInv(dir.resolve("auroriansteel.json"), "theaurorian:aurorian_steel_ingot");
+        assertSingleItemInv(dir.resolve("darkstonekey.json"), "theaurorian:darkstone_key");
+        assertSingleItemInv(dir.resolve("lockpicks.json"), "theaurorian:lockpicks");
+        assertSingleItemInv(dir.resolve("moonlightforge.json"), "theaurorian:moonlight_forge");
+        assertSingleItemInv(dir.resolve("moontemplekey.json"), "theaurorian:moon_temple_key");
+        assertSingleItemInv(dir.resolve("lavenderbread.json"), "theaurorian:lavender_bread");
+        assertSingleItemInv(dir.resolve("silkberryjam.json"), "theaurorian:silkberry_jam");
+    }
+
+    private static void assertAnyOfItems(Path path, String... expectedIds) throws IOException {
+        JsonObject adv = readObject(path);
+        var items = adv.getAsJsonObject("criteria").getAsJsonObject("inv")
+                .getAsJsonObject("conditions").getAsJsonArray("items");
+        assertEquals(1, items.size(), path.getFileName() + " should use one any-of ItemPredicate (not AND list)");
+        JsonObject pred = items.get(0).getAsJsonObject();
+        assertTrue(pred.has("items"), path.getFileName() + " missing items");
+        String blob = pred.get("items").toString();
+        for (String id : expectedIds) {
+            assertTrue(blob.contains(id), path.getFileName() + " missing " + id + " in " + blob);
+        }
+    }
+
+    private static void assertSingleItemInv(Path path, String itemId) throws IOException {
+        JsonObject adv = readObject(path);
+        var items = adv.getAsJsonObject("criteria").getAsJsonObject("inv")
+                .getAsJsonObject("conditions").getAsJsonArray("items");
+        assertEquals(1, items.size(), path.getFileName() + " item count");
+        String blob = items.get(0).toString();
+        assertTrue(blob.contains(itemId), path.getFileName() + " expected " + itemId + " got " + blob);
+    }
+
+    private static void assertBossOr(Path dir, JsonObject en, String id, String entityId, String itemId,
+                                     String descEntityToken, String descLootToken) throws IOException {
+        JsonObject adv = readObject(dir.resolve(id + ".json"));
+        JsonObject criteria = adv.getAsJsonObject("criteria");
+        assertTrue(criteria.has("kill"), id + " kill");
+        assertTrue(criteria.has("inv"), id + " inv");
+        assertEquals("minecraft:player_killed_entity", criteria.getAsJsonObject("kill").get("trigger").getAsString());
+        String entityBlob = criteria.getAsJsonObject("kill").toString();
+        assertTrue(entityBlob.contains(entityId), id + " entity " + entityId + " in " + entityBlob);
+        String invBlob = criteria.getAsJsonObject("inv").toString();
+        assertTrue(invBlob.contains(itemId), id + " item " + itemId);
+        assertTrue(adv.has("requirements") && adv.getAsJsonArray("requirements").size() == 1
+                        && adv.getAsJsonArray("requirements").get(0).getAsJsonArray().size() >= 2,
+                id + " OR requirements");
+        String desc = en.get("advancement.theaurorian." + id + ".description").getAsString().toLowerCase();
+        assertTrue(desc.contains(descEntityToken), id + " desc should mention " + descEntityToken + ": " + desc);
+        assertTrue(desc.contains(descLootToken) || desc.contains("or"),
+                id + " desc should mention loot/or path: " + desc);
+    }
+
+    /**
+     * 1.19+ ItemPredicate uses {@code items:[id,...]}, not the pre-1.13 singular {@code item}.
+     * A bare {@code item} key is ignored, so the predicate matches every stack and any pickup
+     * unlocks every inventory_changed advancement.
+     * <p>
+     * 1.20.5+ display icons are ItemStacks ({@code id}), not the old {@code item} key.
+     */
+    @Test
+    void inventoryChangedAdvancementsUseItemsArrayNotSingularItem() throws Exception {
+        Path dir = MAIN.resolve("data/theaurorian/advancement");
+        try (Stream<Path> stream = Files.list(dir)) {
+            stream.filter(p -> p.toString().endsWith(".json")).forEach(path -> {
+                try {
+                    JsonObject adv = readObject(path);
+                    String file = path.getFileName().toString();
+                    if (adv.has("display")) {
+                        JsonObject icon = adv.getAsJsonObject("display").getAsJsonObject("icon");
+                        assertTrue(icon.has("id"), file + " display.icon must use \"id\" (ItemStack), not \"item\"");
+                        assertFalse(icon.has("item"), file + " display.icon still has obsolete \"item\" key");
+                    }
+                    if (!adv.has("criteria")) {
+                        return;
+                    }
+                    assertNoSingularItemInItemPredicates(adv.getAsJsonObject("criteria"), file);
+                } catch (IOException e) {
+                    fail(e);
+                }
+            });
+        }
+    }
+
+    private static void assertNoSingularItemInItemPredicates(JsonElement el, String file) {
+        if (el == null || el.isJsonNull()) {
+            return;
+        }
+        if (el.isJsonObject()) {
+            JsonObject obj = el.getAsJsonObject();
+            // ItemPredicate shape: has "item" string but not "items"/"tag" → would match ANY item
+            if (obj.has("item") && obj.get("item").isJsonPrimitive() && obj.get("item").getAsJsonPrimitive().isString()
+                    && !obj.has("items") && !obj.has("tag")) {
+                fail(file + " uses obsolete ItemPredicate key \"item\" (use \"items\": [id]); would match any stack");
+            }
+            for (String key : obj.keySet()) {
+                assertNoSingularItemInItemPredicates(obj.get(key), file);
+            }
+        } else if (el.isJsonArray()) {
+            for (JsonElement child : el.getAsJsonArray()) {
+                assertNoSingularItemInItemPredicates(child, file);
+            }
+        }
+    }
+
     @Test
     void mirrorGraphHasNoDanglingChildren() throws Exception {
         Path dir = MAIN.resolve("data/theaurorian/mirror_of_guidance");

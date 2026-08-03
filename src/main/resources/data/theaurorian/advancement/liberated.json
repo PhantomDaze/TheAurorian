@@ -2,7 +2,7 @@
   "parent": "theaurorian:lockpicks",
   "display": {
     "icon": {
-      "item": "theaurorian:keepers_amulet"
+      "id": "theaurorian:keepers_amulet"
     },
     "title": {
       "translate": "advancement.theaurorian.liberated.title"
@@ -26,7 +26,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:keepers_amulet"
+            "items": [
+              "theaurorian:keepers_amulet"
+            ]
           }
         ]
       }

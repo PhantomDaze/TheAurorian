@@ -2,7 +2,7 @@
   "parent": "theaurorian:liberated",
   "display": {
     "icon": {
-      "item": "theaurorian:darkstone_key"
+      "id": "theaurorian:darkstone_key"
     },
     "title": {
       "translate": "advancement.theaurorian.darkstonekey.title"
@@ -18,7 +18,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:darkstone_key"
+            "items": [
+              "theaurorian:darkstone_key"
+            ]
           }
         ]
       }

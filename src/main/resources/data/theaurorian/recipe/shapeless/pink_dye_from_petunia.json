@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:petunia"
+    }
+  ],
+  "result": {
+    "id": "minecraft:pink_dye"
+  }
+}

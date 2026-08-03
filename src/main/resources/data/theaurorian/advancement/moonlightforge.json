@@ -2,7 +2,7 @@
   "parent": "theaurorian:scrapper",
   "display": {
     "icon": {
-      "item": "theaurorian:moonlight_forge"
+      "id": "theaurorian:moonlight_forge"
     },
     "title": {
       "translate": "advancement.theaurorian.moonlightforge.title"
@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:moonlight_forge"
+            "items": [
+              "theaurorian:moonlight_forge"
+            ]
           }
         ]
       }

@@ -2,7 +2,7 @@
   "parent": "theaurorian:exterminated",
   "display": {
     "icon": {
-      "item": "theaurorian:moon_temple_key"
+      "id": "theaurorian:moon_temple_key"
     },
     "title": {
       "translate": "advancement.theaurorian.moontemplekey.title"
@@ -18,7 +18,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:moon_temple_key"
+            "items": [
+              "theaurorian:moon_temple_key"
+            ]
           }
         ]
       }

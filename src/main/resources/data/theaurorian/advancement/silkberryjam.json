@@ -2,7 +2,7 @@
   "parent": "theaurorian:sickle",
   "display": {
     "icon": {
-      "item": "theaurorian:silkberry_jam"
+      "id": "theaurorian:silkberry_jam"
     },
     "title": {
       "translate": "advancement.theaurorian.silkberryjam.title"
@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:silkberry_jam"
+            "items": [
+              "theaurorian:silkberry_jam"
+            ]
           }
         ]
       }

@@ -2,7 +2,7 @@
   "parent": "theaurorian:scrapper",
   "display": {
     "icon": {
-      "item": "theaurorian:aurorian_steel_ingot"
+      "id": "theaurorian:aurorian_steel_ingot"
     },
     "title": {
       "translate": "advancement.theaurorian.auroriansteel.title"
@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:aurorian_steel_ingot"
+            "items": [
+              "theaurorian:aurorian_steel_ingot"
+            ]
           }
         ]
       }

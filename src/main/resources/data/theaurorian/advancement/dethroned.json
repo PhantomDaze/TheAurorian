@@ -2,7 +2,7 @@
   "parent": "theaurorian:moontemplekey",
   "display": {
     "icon": {
-      "item": "theaurorian:trophy_moon_queen"
+      "id": "theaurorian:trophy_moon_queen"
     },
     "title": {
       "translate": "advancement.theaurorian.dethroned.title"
@@ -26,7 +26,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:trophy_moon_queen"
+            "items": [
+              "theaurorian:trophy_moon_queen"
+            ]
           }
         ]
       }

@@ -2,7 +2,7 @@
   "parent": "theaurorian:sickle",
   "display": {
     "icon": {
-      "item": "theaurorian:lavender_bread"
+      "id": "theaurorian:lavender_bread"
     },
     "title": {
       "translate": "advancement.theaurorian.lavenderbread.title"
@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:lavender_bread"
+            "items": [
+              "theaurorian:lavender_bread"
+            ]
           }
         ]
       }

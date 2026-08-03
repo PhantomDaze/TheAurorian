@@ -2,7 +2,7 @@
   "parent": "theaurorian:root",
   "display": {
     "icon": {
-      "item": "theaurorian:aurorian_stone_sickle"
+      "id": "theaurorian:aurorian_stone_sickle"
     },
     "title": {
       "translate": "advancement.theaurorian.sickle.title"
@@ -17,13 +17,11 @@
       "conditions": {
         "items": [
           {
-            "item": "theaurorian:aurorian_stone_sickle"
-          },
-          {
-            "item": "theaurorian:silentwood_sickle"
-          },
-          {
-            "item": "theaurorian:moonstone_sickle"
+            "items": [
+              "theaurorian:aurorian_stone_sickle",
+              "theaurorian:silentwood_sickle",
+              "theaurorian:moonstone_sickle"
+            ]
           }
         ]
       }
