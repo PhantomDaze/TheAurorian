@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -61,12 +63,24 @@ public class DungeonSpiderEntity extends Monster {
         this.goalSelector.addGoal(1, new SpiderAIHang(this));
         this.goalSelector.addGoal(2, new SpiderAISpit(this));
         this.goalSelector.addGoal(4, new SpiderAILeap(this));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2D, true));
+        // S4: reach by attacker width (upstream getAttackReachSqr); 1.21 MeleeAttackGoal uses isWithinMeleeAttackRange
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2D, true) {
+            @Override
+            protected boolean canPerformAttack(LivingEntity entity) {
+                float w = this.mob.getBbWidth();
+                double reachSqr = (double) w * (double) w + entity.getBbWidth();
+                return this.isTimeToAttack()
+                        && this.mob.distanceToSqr(entity) <= reachSqr
+                        && this.mob.getSensing().hasLineOfSight(entity);
+            }
+        });
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        // S2: also target cows
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Cow.class, true));
     }
 
     @Override

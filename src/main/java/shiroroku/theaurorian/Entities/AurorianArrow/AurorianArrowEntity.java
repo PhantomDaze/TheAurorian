@@ -7,7 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 public class AurorianArrowEntity extends AbstractArrow {
 
@@ -33,6 +32,16 @@ public class AurorianArrowEntity extends AbstractArrow {
         this.arrowItem = arrowItem;
         this.weight = weight == null ? 0f : weight;
         this.setBaseDamage(damage);
+    }
+
+    /** Upstream multiplies shoot velocity (Cerulean 1.5, Crystal 0.45). */
+    public float getShootVelocityMultiplier() {
+        return 1.0f;
+    }
+
+    @Override
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+        super.shoot(x, y, z, velocity * getShootVelocityMultiplier(), inaccuracy);
     }
 
     @Override

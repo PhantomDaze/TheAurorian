@@ -1,6 +1,7 @@
 package shiroroku.theaurorian.GameTests;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.GameType;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
@@ -21,6 +22,7 @@ import shiroroku.theaurorian.Blocks.MoonlightForge.MoonlightForgeBlockEntity;
 import shiroroku.theaurorian.Blocks.Scrapper.ScrapperBlockEntity;
 import shiroroku.theaurorian.Items.Silentwood.SilentwoodPickaxe;
 import shiroroku.theaurorian.Registry.BlockRegistry;
+import shiroroku.theaurorian.Registry.EnchantRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.TheAurorian;
@@ -181,7 +183,17 @@ public class AurorianGameTests {
         spawner.setBoss(EntityRegistry.dungeon_keeper.get());
         spawner.spawnBoss();
         helper.assertBlockNotPresent(BlockRegistry.boss_spawner.get(), pos);
-        helper.succeedWhen(() -> helper.assertEntityPresent(EntityRegistry.dungeon_keeper.get()));
+        helper.succeedWhen(() -> {
+            var keeper = helper.findOneEntity(EntityRegistry.dungeon_keeper.get());
+            GameTestUtil.assertTrue(helper, keeper.getMainHandItem().is(ItemRegistry.moonstone_sword.get()), "Keeper main hand");
+            var enchantments = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+            GameTestUtil.assertEquals(helper, 2,
+                    keeper.getMainHandItem().getEnchantmentLevel(enchantments.getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.KNOCKBACK)),
+                    "Keeper Knockback level");
+            GameTestUtil.assertEquals(helper, 3,
+                    keeper.getMainHandItem().getEnchantmentLevel(enchantments.getHolderOrThrow(EnchantRegistry.LIGHTNING)),
+                    "Keeper Lightning level");
+        });
     }
 
     @GameTest(template = EMPTY9, batch = "boss", timeoutTicks = 80)
@@ -191,7 +203,13 @@ public class AurorianGameTests {
         BossSpawnerBlockEntity spawner = GameTestUtil.be(helper, pos, BossSpawnerBlockEntity.class);
         spawner.setBoss(EntityRegistry.moon_queen.get());
         spawner.spawnBoss();
-        helper.succeedWhen(() -> helper.assertEntityPresent(EntityRegistry.moon_queen.get()));
+        helper.succeedWhen(() -> {
+            var queen = helper.findOneEntity(EntityRegistry.moon_queen.get());
+            GameTestUtil.assertTrue(helper, queen.getMainHandItem().is(ItemRegistry.moonstone_sword.get()), "Moon Queen main hand");
+            GameTestUtil.assertTrue(helper, queen.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).is(ItemRegistry.knight_chestplate.get()), "Moon Queen chestplate");
+            GameTestUtil.assertTrue(helper, queen.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).is(ItemRegistry.knight_leggings.get()), "Moon Queen leggings");
+            GameTestUtil.assertTrue(helper, queen.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET).is(ItemRegistry.knight_boots.get()), "Moon Queen boots");
+        });
     }
 
     @GameTest(template = EMPTY9, batch = "boss", timeoutTicks = 80)

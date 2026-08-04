@@ -24,15 +24,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "theaurorian:darkstone_key"
-        }
-      ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "name": "theaurorian:trophy_keeper",
           "weight": 100,
           "functions": [

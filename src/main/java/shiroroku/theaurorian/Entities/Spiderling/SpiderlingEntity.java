@@ -118,12 +118,13 @@ public class SpiderlingEntity extends Monster {
             return false;
         }
         List<SpiderlingEntity> nearby = level.getEntitiesOfClass(SpiderlingEntity.class, new AABB(pos).inflate(64, 6, 64), e -> e.isAlive());
-        return nearby.size() <= 3;
+        int max = 3 * shiroroku.theaurorian.Config.CommonConfig.darkstone_dungeon_mob_density.get();
+        return max > 0 && nearby.size() <= max;
     }
 
     @Override
     public int getMaxSpawnClusterSize() {
-        return this.maxNearby;
+        return 3 * shiroroku.theaurorian.Config.CommonConfig.darkstone_dungeon_mob_density.get();
     }
 
     @Override

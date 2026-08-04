@@ -131,14 +131,17 @@ public class MoonQueenAICharge extends Goal {
 
         if (this.chainCharge) {
             double healthScale = this.entity.getHealth() / this.entity.getMaxHealth();
+            // Q2: explicit upstream half-open intervals
             if (healthScale >= 0.75) {
                 this.maxChainCharges = 0;
-            } else if (healthScale >= 0.50) {
+            } else if (healthScale >= 0.50 && healthScale < 0.75) {
                 this.maxChainCharges = 1;
-            } else if (healthScale >= 0.25) {
+            } else if (healthScale >= 0.25 && healthScale < 0.50) {
                 this.maxChainCharges = 2;
-            } else {
+            } else if (healthScale >= 0 && healthScale < 0.25) {
                 this.maxChainCharges = 3;
+            } else {
+                this.maxChainCharges = 0;
             }
         }
     }

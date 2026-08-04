@@ -9,13 +9,17 @@ import net.minecraft.world.item.ItemStack;
 import shiroroku.theaurorian.Entities.DungeonKeeper.DungeonKeeperEntity;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 
+/**
+ * Low-HP barrage. Upstream: move 0.25, interval 2, radius 40, HP ≤ 35%.
+ */
 public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowAttackGoal<T> {
 
     private final DungeonKeeperEntity keeper;
     private int attackTime = 0;
 
     public KeeperBarrageGoal(DungeonKeeperEntity pMob) {
-        super(pMob, 0.25D, 10, 20.0F);
+        // K5: 0.25 / interval 2 / range 40
+        super(pMob, 0.25D, 2, 40.0F);
         keeper = pMob;
     }
 
@@ -23,22 +27,23 @@ public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowA
     public void start() {
         super.start();
         keeper.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.silentwood_bow.get()));
-        attackTime = 10;
+        attackTime = 2;
         this.keeper.startUsingItem(ProjectileUtil.getWeaponHoldingHand(keeper, item -> item instanceof BowItem));
     }
 
     private boolean hasLowHealth() {
-        return keeper.getHealth() / keeper.getMaxHealth() < 0.2f;
+        // K2: ≤ 35% (upstream)
+        return keeper.getHealth() / keeper.getMaxHealth() <= 0.35f;
     }
 
     @Override
     public boolean canUse() {
-        return hasLowHealth();
+        return hasLowHealth() && keeper.getTarget() != null;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return hasLowHealth();
+        return hasLowHealth() && keeper.getTarget() != null;
     }
 
     @Override
@@ -59,9 +64,10 @@ public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowA
         if (canSee) {
             keeper.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
-            if(attackTime <= 0){
+            if (attackTime <= 0) {
                 keeper.stopUsingItem();
-                attackTime = 3;
+                // K5 interval ~2 ticks between shots
+                attackTime = 2;
                 keeper.performRangedAttack(target, 0.5f);
                 this.keeper.startUsingItem(ProjectileUtil.getWeaponHoldingHand(keeper, item -> item instanceof BowItem));
             }

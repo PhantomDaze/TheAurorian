@@ -18,7 +18,9 @@ public class SpiderAISpit extends Goal {
     private final DungeonSpiderEntity entity;
     private int spitCooldown = 0;
     private int spitWindup = 0;
-    private final float spitRange = 16.0F;
+    // S1: upstream min 3 / max 50
+    private final float minDistance = 3.0F;
+    private final float maxDistance = 50.0F;
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -37,7 +39,7 @@ public class SpiderAISpit extends Goal {
     public boolean canUse() {
         if (this.entity.getTarget() != null) {
             float dist = this.entity.distanceTo(this.entity.getTarget());
-            if (dist <= this.spitRange && this.entity.hasLineOfSight(this.entity.getTarget())) {
+            if (dist >= this.minDistance && dist <= this.maxDistance && this.entity.hasLineOfSight(this.entity.getTarget())) {
                 if (this.spitCooldown == 0) {
                     return true;
                 } else if (this.spitCooldown > 0) {

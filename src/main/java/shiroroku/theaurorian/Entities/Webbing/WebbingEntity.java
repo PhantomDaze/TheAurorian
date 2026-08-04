@@ -35,7 +35,11 @@ public class WebbingEntity extends ThrowableProjectile {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
-    // 1.21: Entity.getGravity() is final; light projectile gravity handled via tick drag if needed
+    // PR8: upstream getGravityVelocity 0.01F
+    @Override
+    protected double getDefaultGravity() {
+        return 0.01D;
+    }
 
     @Override
     public void handleEntityEvent(byte pId) {

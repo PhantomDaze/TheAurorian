@@ -22,6 +22,8 @@ import shiroroku.theaurorian.Registry.EntityRegistry;
 
 public class CrystallineBeamEntity extends Projectile {
 
+    private float damageOverride = -1f;
+
     public CrystallineBeamEntity(Level pLevel, Entity owner) {
         super(EntityRegistry.crystalline_beam.get(), pLevel);
         setOwner(owner);
@@ -30,6 +32,18 @@ public class CrystallineBeamEntity extends Projectile {
 
     public CrystallineBeamEntity(EntityType<? extends CrystallineBeamEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    /** PR5: Sprite uses fixed/config 2; sword leaves override unset to use sword config 8. */
+    public void setDamage(float damage) {
+        this.damageOverride = damage;
+    }
+
+    public float getBeamDamage() {
+        if (damageOverride >= 0f) {
+            return damageOverride;
+        }
+        return CommonConfig.cystalline_sword_beam_damage.get().floatValue();
     }
 
     @Override
@@ -91,7 +105,7 @@ public class CrystallineBeamEntity extends Projectile {
     protected void onHitEntity(EntityHitResult pResult) {
         if (this.getOwner() instanceof LivingEntity livingEntity) {
             this.level().broadcastEntityEvent(this, (byte) 0);
-            pResult.getEntity().hurt(this.level().damageSources().mobProjectile(this, livingEntity), CommonConfig.cystalline_sword_beam_damage.get().floatValue());
+            pResult.getEntity().hurt(this.level().damageSources().mobProjectile(this, livingEntity), this.getBeamDamage());
             this.discard();
         }
     }

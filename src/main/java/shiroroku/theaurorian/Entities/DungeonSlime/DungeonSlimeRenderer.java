@@ -18,14 +18,16 @@ public class DungeonSlimeRenderer extends MobRenderer<DungeonSlimeEntity, Dungeo
     }
 
     public void render(DungeonSlimeEntity dungeonSlimeEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        this.shadowRadius = 0.25F * (float) dungeonSlimeEntity.getSize();
+        // Upstream always used a fixed small shadow matching size-1 model.
+        this.shadowRadius = 0.25F;
         super.render(dungeonSlimeEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
     protected void scale(DungeonSlimeEntity dungeonSlimeEntity, PoseStack pMatrixStack, float pPartialTick) {
+        // Upstream preRenderCallback locked visual scale to 1 (model already ~0.5 block).
         pMatrixStack.scale(0.999F, 0.999F, 0.999F);
         pMatrixStack.translate(0.0D, 0.001F, 0.0D);
-        float size = (float) dungeonSlimeEntity.getSize();
+        float size = 1.0F;
         float squishLerp = Mth.lerp(pPartialTick, dungeonSlimeEntity.oSquish, dungeonSlimeEntity.squish) / (size * 0.5F + 1.0F);
         float scale = 1.0F / (squishLerp + 1.0F);
         pMatrixStack.scale(scale * size, 1.0F / scale * size, scale * size);

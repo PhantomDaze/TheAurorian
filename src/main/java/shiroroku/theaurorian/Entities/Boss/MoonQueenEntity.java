@@ -61,7 +61,9 @@ public class MoonQueenEntity extends Monster {
                 .add(Attributes.MOVEMENT_SPEED, 0.20)
                 .add(Attributes.ATTACK_DAMAGE, 4.0)
                 .add(Attributes.ARMOR, 8.0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.85)
+                // Q3: upstream stepHeight 1.0
+                .add(Attributes.STEP_HEIGHT, 1.0);
     }
 
     @Override
@@ -79,10 +81,25 @@ public class MoonQueenEntity extends Monster {
 
     @Override
     public void populateDefaultEquipmentSlots(net.minecraft.util.RandomSource pRandom, net.minecraft.world.DifficultyInstance pDifficulty) {
-        this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.moonstone_sword.get()));
-        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ItemRegistry.knight_chestplate.get()));
-        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ItemRegistry.knight_leggings.get()));
-        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ItemRegistry.knight_boots.get()));
+        ensureBossEquipment();
+    }
+
+    /**
+     * Applies the upstream Moon Queen loadout without replacing combat-swapped items.
+     */
+    public void ensureBossEquipment() {
+        if (this.getMainHandItem().isEmpty()) {
+            this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.moonstone_sword.get()));
+        }
+        if (this.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).isEmpty()) {
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ItemRegistry.knight_chestplate.get()));
+        }
+        if (this.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).isEmpty()) {
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ItemRegistry.knight_leggings.get()));
+        }
+        if (this.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET).isEmpty()) {
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ItemRegistry.knight_boots.get()));
+        }
     }
 
     @Override

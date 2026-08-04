@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import shiroroku.theaurorian.Config.CommonConfig;
+import shiroroku.theaurorian.Entities.Boss.MoonQueenEntity;
+import shiroroku.theaurorian.Entities.DungeonKeeper.DungeonKeeperEntity;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
 import shiroroku.theaurorian.TheAurorian;
 import shiroroku.theaurorian.Util.ModUtil;
@@ -72,6 +74,11 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         if (boss == null) {
             return;
         }
+        if (boss instanceof DungeonKeeperEntity keeper) {
+            keeper.ensureBossEquipment();
+        } else if (boss instanceof MoonQueenEntity queen) {
+            queen.ensureBossEquipment();
+        }
         if (nearbyPlayers > 1) {
             boss.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(
                     boss.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * ((nearbyPlayers * CommonConfig.boss_speed_per_player.get()) + 1));
@@ -87,12 +94,38 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
+        String bossKey = null;
         if (tag.contains("boss")) {
-            ResourceLocation id = ResourceLocation.tryParse(tag.getString("boss"));
+            bossKey = tag.getString("boss");
+        } else if (tag.contains("containedboss")) {
+            // 1.12 / unremapped structure NBT
+            bossKey = mapLegacyBossName(tag.getString("containedboss"));
+        }
+        if (bossKey != null && !bossKey.isEmpty()) {
+            ResourceLocation id = ResourceLocation.tryParse(bossKey);
             if (id != null) {
-                this.bossEntity = BuiltInRegistries.ENTITY_TYPE.get(id);
+                EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(id);
+                // get() falls back to pig for unknown ids on some mappings — reject pig unless explicitly requested
+                if (type != null && type != EntityType.PIG) {
+                    this.bossEntity = type;
+                } else {
+                    TheAurorian.LOGGER.warn("Boss spawner at {} has unknown boss id: {}", worldPosition, bossKey);
+                    this.bossEntity = null;
+                }
             }
         }
+    }
+
+    private static String mapLegacyBossName(String raw) {
+        if (raw == null) {
+            return null;
+        }
+        return switch (raw.toLowerCase(java.util.Locale.ROOT)) {
+            case "spider", "spiderboss", "dungeon_spider" -> "theaurorian:dungeon_spider";
+            case "moonqueen", "moonqueenboss", "moon_queen" -> "theaurorian:moon_queen";
+            case "keeper", "runestonedungeonkeeper", "dungeon_keeper" -> "theaurorian:dungeon_keeper";
+            default -> raw.contains(":") ? raw : "theaurorian:" + raw;
+        };
     }
 
     @Override

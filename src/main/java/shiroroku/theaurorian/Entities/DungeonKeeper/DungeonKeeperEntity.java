@@ -1,10 +1,10 @@
 package shiroroku.theaurorian.Entities.DungeonKeeper;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -15,7 +15,11 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -27,7 +31,6 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import shiroroku.theaurorian.Entities.DungeonKeeper.AI.KeeperBarrageGoal;
@@ -52,7 +55,6 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
                 .add(Attributes.ATTACK_DAMAGE, 2.0)
                 .add(Attributes.ARMOR, 4.0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.1)
                 .add(Attributes.FOLLOW_RANGE, 50);
     }
 
@@ -60,7 +62,8 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new KeeperBarrageGoal<>(this));
         this.goalSelector.addGoal(3, new KeeperMeleeGoal(this));
-        this.goalSelector.addGoal(4, new KeeperRangedGoal<>(this, 1.0D, 10, 15.0F));
+        // K4: upstream 0.85 move / interval 20 / radius 40
+        this.goalSelector.addGoal(4, new KeeperRangedGoal<>(this, 0.85D, 20, 40.0F));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -69,13 +72,51 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
+        ensureBossEquipment();
+    }
+
+    /**
+     * Restores the upstream Keeper weapon only when the main hand is empty.
+     * Combat goals are allowed to replace it with the silentwood bow.
+     */
+    public void ensureBossEquipment() {
+        if (!this.getMainHandItem().isEmpty()) {
+            return;
+        }
+
         ItemStack sword = new ItemStack(ItemRegistry.moonstone_sword.get());
-        ((java.util.function.Consumer<net.minecraft.world.item.ItemStack>)(s -> { if (this.level() instanceof ServerLevel _sl) { Holder<Enchantment> _h = _sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.KNOCKBACK); s.enchant(_h, 2); } })).accept(sword);
         if (this.level() instanceof ServerLevel sl) {
-            Holder<Enchantment> lightning = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(EnchantRegistry.LIGHTNING);
-            sword.enchant(lightning, 3);
+            var enchantments = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+            sword.enchant(enchantments.getHolderOrThrow(Enchantments.KNOCKBACK), 2);
+            sword.enchant(enchantments.getHolderOrThrow(EnchantRegistry.LIGHTNING), 3);
         }
         this.setItemInHand(InteractionHand.MAIN_HAND, sword);
+    }
+
+    /** K1: melee applies Slowness 200 ticks (upstream). */
+    @Override
+    public boolean doHurtTarget(Entity pEntity) {
+        boolean flag = super.doHurtTarget(pEntity);
+        if (flag && pEntity instanceof LivingEntity living) {
+            living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200), this);
+        }
+        return flag;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        // K8: low-HP client water splash particles (≤30%)
+        if (this.level().isClientSide && this.tickCount % 2 == 0 && this.getHealth() <= this.getMaxHealth() * 0.30F) {
+            double mx = this.random.nextGaussian() * 0.02D;
+            double my = this.random.nextGaussian() * 0.02D;
+            double mz = this.random.nextGaussian() * 0.02D;
+            this.level().addParticle(ParticleTypes.SPLASH,
+                    this.getX() + this.random.nextFloat(),
+                    this.getY() + this.random.nextFloat() * this.getBbHeight(),
+                    this.getZ() + this.random.nextFloat(),
+                    mx, my, mz);
+        }
     }
 
     @Override
@@ -89,8 +130,8 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
         // we do this ourselves
     }
 
-    // Drops: data/theaurorian/loot_tables/entities/dungeon_keeper.json
-    // (keepers_amulet, runestone_loot_key, darkstone_key; trophy_keeper in Phase 5)
+    // Drops: data/theaurorian/loot_table/entities/dungeon_keeper.json
+    // (keepers_amulet, runestone_loot_key, trophy_keeper — no darkstone_key)
 
     @Override
     public void remove(RemovalReason pReason) {
@@ -132,23 +173,24 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
         }
     }
 
+    // K9: Wither Skeleton sounds
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SKELETON_AMBIENT;
+        return SoundEvents.WITHER_SKELETON_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.SKELETON_HURT;
+        return SoundEvents.WITHER_SKELETON_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SKELETON_DEATH;
+        return SoundEvents.WITHER_SKELETON_DEATH;
     }
 
     @Override
     protected SoundEvent getStepSound() {
-        return SoundEvents.STRAY_STEP;
+        return SoundEvents.WITHER_SKELETON_STEP;
     }
 }

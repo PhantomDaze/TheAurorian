@@ -25,7 +25,8 @@ public class UndeadKnightRenderer extends HumanoidMobRenderer<UndeadKnightEntity
 
     @Override
     protected void scale(UndeadKnightEntity pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
-        pMatrixStack.scale(1.2625F, 1.2625F, 1.2625F);
+        // UK4: upstream MobScale 1.3 (hitbox already sized with 1.3)
+        pMatrixStack.scale(1.3F, 1.3F, 1.3F);
         super.scale(pLivingEntity, pMatrixStack, pPartialTickTime);
     }
 
