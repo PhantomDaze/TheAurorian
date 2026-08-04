@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""Remap 1.12 The Aurorian structure NBT block/item/entity IDs to 1.19 names.
+"""Remap 1.12 The Aurorian structure NBT block/item/entity IDs to 1.21 names.
+
+Also upgrades legacy mob-spawner NBT to 1.18+/1.21 shape and maps
+boss_spawner `containedboss` → `boss`.
 
 This is a proper NBT parser/serializer: string values are rewritten and
 re-encoded with correct length prefixes (raw byte substitution corrupts NBT).
 
 Usage:
   python3 scripts/remap_structure_nbt.py --dry-run path/to/dir_or_file.nbt
-  python3 scripts/remap_structure_nbt.py src/main/resources/data/theaurorian/structure/darkstone
+  python3 scripts/remap_structure_nbt.py src/main/resources/data/theaurorian/structure
 """
 
 from __future__ import annotations
@@ -25,7 +28,6 @@ BLOCK_REMAP: dict[str, str] = {
     "theaurorian:auroriancobblestonestairs": "theaurorian:aurorian_cobblestone_stairs",
     "theaurorian:aurorianperidotitesmoothstairs": "theaurorian:peridotite_smooth_stairs",
     "theaurorian:aurorianperidotitesmooth": "theaurorian:peridotite_smooth",
-    "theaurorian:aurorianperidotite": "theaurorian:peridotite",
     "theaurorian:aurorianperidotite": "theaurorian:peridotite",
     "theaurorian:auroriancobblestone": "theaurorian:aurorian_cobblestone",
     "theaurorian:aurorianfurnacechimney": "theaurorian:chimney",
@@ -136,6 +138,16 @@ BOSS_CONTAINED: dict[str, str] = {
     "spider": "theaurorian:dungeon_spider",
     "moonqueen": "theaurorian:moon_queen",
     "keeper": "theaurorian:dungeon_keeper",
+    # 1.12 full / legacy names
+    "runestonedungeonkeeper": "theaurorian:dungeon_keeper",
+    "moonqueenboss": "theaurorian:moon_queen",
+    "spiderboss": "theaurorian:dungeon_spider",
+    "dungeon_spider": "theaurorian:dungeon_spider",
+    "dungeon_keeper": "theaurorian:dungeon_keeper",
+    "moon_queen": "theaurorian:moon_queen",
+    "theaurorian:dungeon_spider": "theaurorian:dungeon_spider",
+    "theaurorian:dungeon_keeper": "theaurorian:dungeon_keeper",
+    "theaurorian:moon_queen": "theaurorian:moon_queen",
 }
 
 
@@ -166,13 +178,31 @@ class NBTWriter:
 
 
 def remap_str(s: str) -> tuple[str, bool]:
-    """Return (possibly mapped string, changed). Exact value match only."""
+    """Return (possibly mapped string, changed). Exact value match only.
+
+    Identity entries in BLOCK_REMAP (value == key) are treated as no-ops so
+    repeated runs stay idempotent.
+    """
     if not isinstance(s, str):
         return s, False
     for old, new in sorted(BLOCK_REMAP.items(), key=lambda kv: -len(kv[0])):
         if old == s:
+            if new == old:
+                return s, False
             return new, True
     return s, False
+
+
+def deep_copy_nbt(node: "NBT") -> "NBT":
+    if node.kind == "compound":
+        return NBT("compound", {k: deep_copy_nbt(v) for k, v in node.value.items()})
+    if node.kind == "list":
+        return NBT("list", [deep_copy_nbt(v) for v in node.value], node.list_type)
+    if node.kind in ("bytearray",):
+        return NBT(node.kind, bytes(node.value))
+    if node.kind in ("intarray", "longarray"):
+        return NBT(node.kind, list(node.value))
+    return NBT(node.kind, node.value, node.list_type)
 
 
 class NBT:
@@ -199,21 +229,6 @@ class NBT:
             if changed:
                 self.value = new
         return self
-
-    def boss_contained(self):
-        """Convert 1.12 `containedboss` on boss_spawner block nbt to `boss`."""
-        if self.kind != "compound":
-            return
-        d = self.value
-        cb = d.get("containedboss")
-        if cb is not None and cb.kind == "string" and cb.value in BOSS_CONTAINED:
-            d.pop("containedboss")
-            d["boss"] = NBT("string", BOSS_CONTAINED[cb.value])
-        # drop 1.12 chest Items marker and metadata-only structure blocks leftovers
-        for k in ("metadata", "mirror", "ignoreEntities", "powered", "seed", "author",
-                  "rotation", "posX", "mode", "posY", "sizeX", "posZ", "integrity",
-                  "showair", "name", "sizeY", "sizeZ", "showboundingbox"):
-            d.pop(k, None)
 
 
 TAG_END, TAG_BYTE, TAG_SHORT, TAG_INT, TAG_LONG, TAG_FLOAT, TAG_DOUBLE, \
@@ -281,28 +296,210 @@ class NBTReader:
         return name, self.read_payload(t)
 
 
-def _transform_boss_blocks(node: NBT) -> bool:
-    changed = False
+def _entity_id_from_compound(entity: NBT | None) -> str | None:
+    if entity is None or entity.kind != "compound":
+        return None
+    eid = entity.value.get("id")
+    if eid is not None and eid.kind == "string":
+        return eid.value
+    return None
+
+
+def _upgrade_spawner_nbt(nbt: NBT) -> list[str]:
+    """Upgrade one block-entity compound to 1.21 spawner shape. Returns change notes."""
+    notes: list[str] = []
+    if nbt.kind != "compound":
+        return notes
+    d = nbt.value
+
+    bid = d.get("id")
+    if bid is not None and bid.kind == "string" and bid.value == "minecraft:mob_spawner":
+        bid.value = "minecraft:spawner"
+        notes.append("id mob_spawner -> spawner")
+
+    # Only touch compounds that look like spawners
+    is_spawner = (
+        (bid is not None and bid.kind == "string" and bid.value in ("minecraft:spawner", "minecraft:mob_spawner"))
+        or "SpawnData" in d
+        or "SpawnPotentials" in d
+    )
+    if not is_spawner:
+        return notes
+
+    # SpawnData: { id } -> { entity: { id } }
+    sd = d.get("SpawnData")
+    if sd is not None and sd.kind == "compound":
+        if "entity" not in sd.value and "id" in sd.value and sd.value["id"].kind == "string":
+            old_id = sd.value["id"]
+            entity = NBT("compound", {"id": old_id})
+            # preserve non-id keys under entity if any odd extras exist at top
+            extras = {k: v for k, v in sd.value.items() if k != "id"}
+            if extras:
+                # keep only entity wrapper; drop unknown top-level keys from SpawnData
+                pass
+            d["SpawnData"] = NBT("compound", {"entity": entity})
+            notes.append(f"SpawnData.id -> SpawnData.entity.id ({old_id.value})")
+            sd = d["SpawnData"]
+        # Remap entity id string if still old
+        ent = sd.value.get("entity") if sd.kind == "compound" else None
+        if ent is not None and ent.kind == "compound":
+            eid = ent.value.get("id")
+            if eid is not None and eid.kind == "string":
+                new, ch = remap_str(eid.value)
+                if ch:
+                    eid.value = new
+                    notes.append(f"SpawnData.entity.id remap -> {new}")
+
+    # SpawnPotentials: [{Entity, Weight}] -> [{weight, data:{entity}}]
+    pots = d.get("SpawnPotentials")
+    if pots is not None and pots.kind == "list":
+        new_items: list[NBT] = []
+        converted_legacy = False
+        id_remapped = False
+        for pot in pots.value:
+            if pot.kind != "compound":
+                new_items.append(pot)
+                continue
+            pd = pot.value
+            if "Entity" in pd:
+                entity = pd["Entity"]
+                weight_node = pd.get("Weight")
+                weight = 1
+                if weight_node is not None and weight_node.kind in ("int", "byte", "short", "long"):
+                    weight = int(weight_node.value)
+                if entity.kind == "compound":
+                    eid = entity.value.get("id")
+                    if eid is not None and eid.kind == "string":
+                        new, ch = remap_str(eid.value)
+                        if ch:
+                            eid.value = new
+                            id_remapped = True
+                new_items.append(NBT("compound", {
+                    "weight": NBT("int", weight),
+                    "data": NBT("compound", {"entity": entity}),
+                }))
+                converted_legacy = True
+            elif "data" in pd and "weight" in pd:
+                data = pd["data"]
+                if data.kind == "compound":
+                    ent = data.value.get("entity")
+                    if ent is not None and ent.kind == "compound":
+                        eid = ent.value.get("id")
+                        if eid is not None and eid.kind == "string":
+                            new, ch = remap_str(eid.value)
+                            if ch:
+                                eid.value = new
+                                id_remapped = True
+                                notes.append(f"SpawnPotentials entity remap -> {new}")
+                new_items.append(pot)
+            else:
+                new_items.append(pot)
+        if converted_legacy:
+            d["SpawnPotentials"] = NBT("list", new_items, TAG_COMPOUND)
+            notes.append("SpawnPotentials Entity/Weight -> weight/data.entity")
+        elif id_remapped:
+            d["SpawnPotentials"] = NBT("list", new_items, TAG_COMPOUND)
+        pots = d.get("SpawnPotentials")
+
+    # Empty potentials + valid SpawnData.entity -> synthesize one potential
+    sd = d.get("SpawnData")
+    pots = d.get("SpawnPotentials")
+    empty_pots = pots is None or (pots.kind == "list" and len(pots.value) == 0)
+    if empty_pots and sd is not None and sd.kind == "compound":
+        ent = sd.value.get("entity")
+        eid = _entity_id_from_compound(ent)
+        if eid is not None and ent is not None:
+            pot = NBT("compound", {
+                "weight": NBT("int", 1),
+                "data": NBT("compound", {"entity": deep_copy_nbt(ent)}),
+            })
+            d["SpawnPotentials"] = NBT("list", [pot], TAG_COMPOUND)
+            notes.append(f"filled empty SpawnPotentials from SpawnData ({eid})")
+
+    # Optional: normalize Delay so structures don't sit on a huge leftover timer
+    delay = d.get("Delay")
+    if delay is not None and delay.kind in ("int", "short") and int(delay.value) < 0:
+        d["Delay"] = NBT("int", 0)
+        notes.append("Delay <0 -> 0")
+
+    return notes
+
+
+def _transform_boss_nbt(nbt: NBT) -> list[str]:
+    """Convert containedboss / short boss names on boss_spawner BE."""
+    notes: list[str] = []
+    if nbt.kind != "compound":
+        return notes
+    d = nbt.value
+
+    bid = d.get("id")
+    # After string walk, block id should be boss_spawner; also accept legacy names
+    is_boss = False
+    if bid is not None and bid.kind == "string":
+        if bid.value == "theaurorian:boss_spawner" or "bossspawner" in bid.value.replace("_", ""):
+            is_boss = True
+            if bid.value != "theaurorian:boss_spawner":
+                bid.value = "theaurorian:boss_spawner"
+                notes.append("boss block id -> theaurorian:boss_spawner")
+    if "containedboss" in d or ("boss" in d and is_boss):
+        is_boss = True
+    if not is_boss:
+        return notes
+
+    cb = d.get("containedboss")
+    if cb is not None and cb.kind == "string":
+        key = cb.value
+        mapped = BOSS_CONTAINED.get(key) or BOSS_CONTAINED.get(key.lower())
+        if mapped is None and ":" not in key:
+            # try remap_str path names
+            mapped = BOSS_CONTAINED.get(key.replace(" ", ""))
+        if mapped is None and key in ("theaurorian:dungeon_keeper", "theaurorian:dungeon_spider", "theaurorian:moon_queen"):
+            mapped = key
+        if mapped is not None:
+            d.pop("containedboss", None)
+            d["boss"] = NBT("string", mapped)
+            notes.append(f"containedboss={key} -> boss={mapped}")
+        else:
+            notes.append(f"containedboss unmatched: {key}")
+
+    boss = d.get("boss")
+    if boss is not None and boss.kind == "string":
+        mapped = BOSS_CONTAINED.get(boss.value) or BOSS_CONTAINED.get(boss.value.lower())
+        if mapped is not None and mapped != boss.value:
+            notes.append(f"boss={boss.value} -> {mapped}")
+            boss.value = mapped
+        else:
+            new, ch = remap_str(boss.value)
+            if ch:
+                notes.append(f"boss remap {boss.value} -> {new}")
+                boss.value = new
+
+    # drop leftover structure-block / 1.12 noise keys if any leaked onto BE
+    for k in ("metadata", "mirror", "ignoreEntities", "powered", "seed", "author",
+              "rotation", "posX", "mode", "posY", "sizeX", "posZ", "integrity",
+              "showair", "name", "sizeY", "sizeZ", "showboundingbox"):
+        d.pop(k, None)
+
+    return notes
+
+
+def _transform_block_entities(node: NBT) -> list[str]:
+    """Walk structure template blocks[] and upgrade spawner / boss_spawner NBTs."""
+    notes: list[str] = []
     if node.kind != "compound":
-        return changed
+        return notes
     blks = node.value.get("blocks")
     if blks is None or blks.kind != "list":
-        return changed
+        return notes
     for b in blks.value:
         if b.kind != "compound":
             continue
-        bd = b.value
-        nbt = bd.get("nbt")
+        nbt = b.value.get("nbt")
         if nbt is None or nbt.kind != "compound":
             continue
-        bid = nbt.value.get("id")
-        if bid is not None and bid.kind == "string" and bid.value == "theaurorian:boss_spawner":
-            before = nbt.value.get("containedboss")
-            nbt.boss_contained()
-            after = nbt.value.get("boss")
-            if before is not None and after is not None:
-                changed = True
-    return changed
+        notes.extend(_upgrade_spawner_nbt(nbt))
+        notes.extend(_transform_boss_nbt(nbt))
+    return notes
 
 
 def write_nbt(w: NBTWriter, t: int, name: str, node: NBT):
@@ -381,15 +578,16 @@ def remap_file(path: Path, dry_run: bool) -> int:
     changes: list[str] = []
     seen_old: set[str] = set()
 
-    def collect(node: NBT, prefix: str):
-        if node.kind == "compound":
-            for k, v in node.value.items():
+    def collect(n: NBT, prefix: str):
+        if n.kind == "compound":
+            for k, v in n.value.items():
                 if k == "Name" and v.kind == "string" and v.value.startswith("theaurorian:"):
                     old = v.value
                     if old not in seen_old:
                         seen_old.add(old)
-                        if old in BLOCK_REMAP:
-                            changes.append(f"{old} -> {BLOCK_REMAP[old]}")
+                        new, ch = remap_str(old)
+                        if ch:
+                            changes.append(f"{old} -> {new}")
                 elif k in ("LootTable", "boss", "Entity", "id", "Item") and v.kind == "string":
                     old = v.value
                     new, ch = remap_str(old)
@@ -397,29 +595,31 @@ def remap_file(path: Path, dry_run: bool) -> int:
                         seen_old.add(old)
                         changes.append(f"[{k}] {old} -> {new}")
                 collect(v, prefix + k + ".")
-        elif node.kind == "list":
-            for v in node.value:
+        elif n.kind == "list":
+            for v in n.value:
                 collect(v, prefix + "[].")
 
     collect(node, "")
 
     node.walk(lambda k: k)
-    # boss spawner block entities
-    boss_changed = _transform_boss_blocks(node)
+    be_notes = _transform_block_entities(node)
+
     writer = NBTWriter()
     write_nbt(writer, TAG_COMPOUND, name, node)
     out = bytes(writer.buf)
     if compressed:
         out = gzip.compress(out)
 
-    if changes or boss_changed:
+    if changes or be_notes:
         print(f"\n{path}:")
         for c in changes[:40]:
             print(f"  {c}")
-        if boss_changed:
-            print("  [boss_spawner] containedboss -> boss")
+        for n in be_notes[:40]:
+            print(f"  [be] {n}")
         if len(changes) > 40:
-            print(f"  ... and {len(changes) - 40} more")
+            print(f"  ... and {len(changes) - 40} more id changes")
+        if len(be_notes) > 40:
+            print(f"  ... and {len(be_notes) - 40} more be notes")
         if dry_run:
             print("  (dry-run, not written)")
             return 0

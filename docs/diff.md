@@ -272,26 +272,29 @@
 
 ### 4.3 实体
 
-| 类型 | 上游 | 当前 | 状态 |
+> **玩法对齐状态见 [`entity-parity-fix-plan.md`](entity-parity-fix-plan.md)。**  
+> 下表仅表示「实体已注册/存在」，**不等于** 1.12.2 数值/AI 全对齐。Nightmare Mode 与每 Boss 独立 HP/伤倍率 **有意不移植**（由多人缩放替代）；`hollow` 为移植新增保留。
+
+| 类型 | 上游 | 当前 | 说明 |
 |------|------|------|------|
-| **Boss: Keeper** | ✅ KeeperEntity | ✅ DungeonKeeperEntity | ✅ |
-| **Boss: Moon Queen** | ✅ MoonQueenEntity | ✅ MoonQueenEntity | ✅ |
-| **Boss: Spider** | ✅ SpiderEntity (dungeon) | ✅ DungeonSpiderEntity | ✅ |
-| Hollow / DisturbedHollow | ✅ | ✅ Hollow + DisturbedHollow | ✅ |
-| Undead Knight | ✅ | ✅（骑士甲 + 月石剑） | ✅ |
-| Aurorian Slime / Dungeon Slime | ✅ | ✅ DungeonSlime | ✅ |
-| Moon Acolyte | ✅ | ✅ MoonAcolyte | ✅ |
-| Crystalline Sprite | ✅ | ✅ CrystallineSprite | ✅ |
-| Spirit | ✅ | ✅ Spirit | ✅ |
-| Spiderling | ✅ | ✅ Spiderling | ✅ |
-| 被动: Pig / Rabbit / Sheep | ✅ | ✅ ×3 | ✅ |
-| 投射: Cerulean/Crystal Arrow | ✅ | ✅ | ✅ |
-| Crystalline Beam | ✅ | ✅ | ✅ |
-| Sticky Spiker / Webbing | ✅ | ✅ | ✅ |
+| **Boss: Keeper** | KeeperEntity | DungeonKeeperEntity | 对齐中：缓慢/弹幕≤35%/体型/远程参数/击退抗/音效/loot（无 darkstone_key） |
+| **Boss: Moon Queen** | MoonQueenEntity | MoonQueenEntity | 属性/冲锋+侧移已齐；连锁冲锋血线与 stepHeight 微调 |
+| **Boss: Spider** | SpiderEntity | DungeonSpiderEntity | 吐丝 3–50、目标含牛、跃击朝向、近战 reach |
+| Hollow / DisturbedHollow | ✅ | Hollow + DisturbedHollow | hollow 为移植新增（keep） |
+| Undead Knight | ✅ | UndeadKnightEntity | 火免/饥饿/FOLLOW40/体型1.3/石剑无盔/装备不掉 |
+| Aurorian Slime / Dungeon Slime | ✅ | DungeonSlime | 固定 size1 HP6 + 模组粒子 + 密度 config |
+| Moon Acolyte | ✅ | MoonAcolyte | 行为已齐；密度走 config |
+| Crystalline Sprite | ✅ | CrystallineSprite | 行为已齐；beam 伤独立默认 2 |
+| Spirit | ✅ | Spirit | 已齐 |
+| Spiderling | ✅ | Spiderling | 已齐；密度走 config |
+| 被动: Pig / Rabbit / Sheep | ✅ | ×3 | 羊毛按色；猪可鞍；刷怪权重对齐 |
+| 投射: Cerulean/Crystal Arrow | ✅ | ✅ | 伤 1.0 / 2.0；Crystal KB2；射速/weight 对齐 |
+| Crystalline Beam | ✅ | ✅ | 剑 config 默认 8；Sprite 默认 2；velocity 键已修正 |
+| Sticky Spiker / Webbing | ✅ | ✅ | Webbing 重力 0.01 |
 
 **当前实体注册名：** `cerulean_arrow`, `crystal_arrow`, `crystalline_beam`, `dungeon_keeper`, `dungeon_slime`, `hollow`, `undead_knight`, `moon_queen`, `dungeon_spider`, `spiderling`, `moon_acolyte`, `crystalline_sprite`, `spirit`, `disturbed_hollow`, `sticky_spiker`, `webbing`, `aurorian_pig`, `aurorian_rabbit`, `aurorian_sheep`（19 种）
 
-**上游实体 loot 表：** 12 个 entity loot；当前 **13** 个 entity loot JSON（含 disturb hollow，引用物品均已注册）。
+**上游实体 loot 表：** 12 个 entity loot；当前 **13** 个 entity loot JSON（含 hollow，引用物品均已注册）。
 
 ### 4.4 方块实体 / 机器
 

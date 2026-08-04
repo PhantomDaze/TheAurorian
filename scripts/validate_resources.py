@@ -113,6 +113,21 @@ REQUIRED_STRUCTURES = {
     "ruined_house",
 }
 
+REQUIRED_STRUCTURE_SETS = {
+    "major_dungeons",
+    "umbra_tower",
+    "ruins_1",
+    "ruins_2",
+    "graveyard",
+    "ruined_house",
+}
+
+MAJOR_DUNGEON_STRUCTURES = {
+    f"{MODID}:runestone_dungeon",
+    f"{MODID}:darkstone_dungeon",
+    f"{MODID}:moon_temple",
+}
+
 STRUCTURE_NBT_MIN = {
     "runestone": 20,
     "darkstone": 14,
@@ -356,13 +371,15 @@ def cat_structures() -> None:
         if len(raw) < 8:
             err(cat, f"structure too small: {nbt.relative_to(ROOT)}")
             continue
-        if raw[:2] == b"\x1f\x8b":
-            try:
-                decompressed = gzip.decompress(raw)
-                if len(decompressed) < 4:
-                    err(cat, f"structure gzip empty: {nbt.relative_to(ROOT)}")
-            except Exception as exc:  # noqa: BLE001
-                err(cat, f"structure gzip invalid {nbt.relative_to(ROOT)}: {exc}")
+        try:
+            decompressed = gzip.decompress(raw) if raw[:2] == b"\x1f\x8b" else raw
+            if len(decompressed) < 4:
+                err(cat, f"structure gzip empty: {nbt.relative_to(ROOT)}")
+        except Exception as exc:  # noqa: BLE001
+            err(cat, f"structure gzip invalid {nbt.relative_to(ROOT)}: {exc}")
+            continue
+        if folder == "darkstone" and (b"minecraft:water" in decompressed or b"minecraft:lava" in decompressed):
+            err(cat, f"Darkstone template contains fluid blocks: {nbt.relative_to(ROOT)}")
 
     stats["structure_nbt"] = str(total)
     if total < 50:
@@ -382,9 +399,31 @@ def cat_structures() -> None:
     missing_defs = sorted(REQUIRED_STRUCTURES - struct_defs)
     if missing_defs:
         err(cat, f"missing structure definitions: {missing_defs}")
-    missing_sets = sorted(REQUIRED_STRUCTURES - set_defs)
+    missing_sets = sorted(REQUIRED_STRUCTURE_SETS - set_defs)
     if missing_sets:
         err(cat, f"missing structure_set definitions: {missing_sets}")
+
+    major_set = wg_set / "major_dungeons.json"
+    if major_set.exists():
+        data = load_json(major_set)
+        if isinstance(data, dict):
+            placement = data.get("placement") or {}
+            if placement.get("type") != "minecraft:random_spread":
+                err(cat, "major_dungeons structure_set must use minecraft:random_spread")
+            if placement.get("spacing") != 32 or placement.get("separation") != 31:
+                err(cat, "major_dungeons structure_set must use spacing=32 and separation=31")
+            structures = data.get("structures") or []
+            actual = {
+                entry.get("structure")
+                for entry in structures
+                if isinstance(entry, dict) and isinstance(entry.get("structure"), str)
+            }
+            if actual != MAJOR_DUNGEON_STRUCTURES:
+                err(cat, f"major_dungeons structure_set must contain exactly {sorted(MAJOR_DUNGEON_STRUCTURES)}, got {sorted(actual)}")
+            if any(entry.get("weight") != 1 for entry in structures if isinstance(entry, dict)):
+                err(cat, "major_dungeons structure_set entries must all have weight 1")
+    elif "major_dungeons" in set_defs:
+        err(cat, "major_dungeons structure_set file is missing")
 
     # structure_set -> structure link
     if wg_set.exists():
@@ -415,6 +454,55 @@ def cat_structures() -> None:
             biomes = data.get("biomes")
             if isinstance(biomes, list) and not biomes:
                 err(cat, f"structure {path.stem} has empty biomes list")
+            # Runestone must use custom type (not leftover jigsaw)
+            if path.stem == "runestone_dungeon" and data.get("type") != f"{MODID}:runestone_dungeon":
+                err(cat, f"runestone_dungeon type should be {MODID}:runestone_dungeon, got {data.get('type')}")
+
+    # Spawner / boss_spawner NBT shape gate (1.18+ / 1.21)
+    _validate_structure_spawners(cat, struct_root)
+
+
+def _validate_structure_spawners(cat: str, struct_root: Path) -> None:
+    """Byte/scan level checks for legacy spawner + boss keys inside structure NBTs."""
+    legacy_mob = 0
+    legacy_contained = 0
+    legacy_entity_weight = 0
+    spawners_seen = 0
+    boss_ok = 0
+    for nbt in struct_root.rglob("*.nbt"):
+        # Skip gametest fixtures if any
+        if "gametest" in nbt.parts:
+            continue
+        raw = nbt.read_bytes()
+        try:
+            data = gzip.decompress(raw) if raw[:2] == b"\x1f\x8b" else raw
+        except Exception:  # noqa: BLE001
+            continue
+        if b"minecraft:mob_spawner" in data:
+            legacy_mob += 1
+            err(cat, f"legacy minecraft:mob_spawner in {nbt.relative_to(ROOT)}")
+        if b"containedboss" in data:
+            legacy_contained += 1
+            err(cat, f"legacy containedboss in {nbt.relative_to(ROOT)}")
+        # SpawnPotentials with capital Entity/Weight (1.12–1.16)
+        if b"SpawnPotentials" in data and b"Entity" in data and b"Weight" in data:
+            # Heuristic: modern shape uses weight/data; still flag if both legacy keys present
+            # Avoid false positive on unrelated Entity keys by requiring SpawnData nearby too
+            if b"SpawnData" in data:
+                legacy_entity_weight += 1
+                err(cat, f"legacy SpawnPotentials Entity/Weight likely in {nbt.relative_to(ROOT)}")
+        if b"SpawnData" in data or b"minecraft:spawner" in data:
+            spawners_seen += 1
+        if b"boss_spawner" in data and b"boss" in data:
+            boss_ok += 1
+    stats["structure_spawners"] = str(spawners_seen)
+    stats["structure_boss_spawners"] = str(boss_ok)
+    if spawners_seen == 0:
+        warn(cat, "no SpawnData/spawner markers found in structure NBTs")
+    if legacy_mob or legacy_contained or legacy_entity_weight:
+        stats["structure_spawner_legacy"] = (
+            f"mob_spawner={legacy_mob},containedboss={legacy_contained},EntityWeight={legacy_entity_weight}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -454,6 +542,41 @@ def cat_worldgen() -> None:
     missing_f = sorted(required_features - pf)
     if missing_f:
         err(cat, f"missing placed features: {missing_f}")
+
+    willow_templates = {
+        "willow_s1.nbt",
+        "willow_s2.nbt",
+        "willow_s3.nbt",
+        "willow_l1.nbt",
+        "willow_l2.nbt",
+    }
+    willow_dir = MAIN / "data" / MODID / "structure" / "weepingwillow"
+    missing_willow_templates = sorted(
+        name for name in willow_templates if not (willow_dir / name).exists()
+    )
+    if missing_willow_templates:
+        err(cat, f"missing weeping willow templates: {missing_willow_templates}")
+
+    # Trees require the vegetal decoration generation step, after terrain and heightmap placement.
+    if biome_dir.exists():
+        willow_biome = biome_dir / "weeping_willow_forest.json"
+        if willow_biome.exists():
+            data = load_json(willow_biome)
+            features = data.get("features") if isinstance(data, dict) else None
+            if not isinstance(features, list) or len(features) <= 9:
+                err(cat, "biome weeping_willow_forest: features missing VEGETAL_DECORATION step 9")
+            else:
+                willow_steps = [
+                    index
+                    for index, step in enumerate(features)
+                    if isinstance(step, list) and f"{MODID}:weeping_willow_tree" in step
+                ]
+                if willow_steps != [9]:
+                    err(
+                        cat,
+                        "biome weeping_willow_forest: weeping_willow_tree must appear only at step 9, "
+                        f"found {willow_steps}",
+                    )
 
     # biome music + feature refs + spawners lightly
     if biome_dir.exists():

@@ -56,6 +56,14 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
+        // Auto superflat + place 3 boss structures for layout inspection.
+        // Prefer: ./scripts/run_structure_layout_test.sh  or  Gradle task runClientStructureLayout
+        clientStructureLayout {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'theaurorian.structureLayoutTest', 'true'
+        }
+
         server {
             server()
             programArgument '--nogui'
@@ -162,6 +170,20 @@ idea {
 }
 
 // ---- Automated tests -------------------------------------------------------
+tasks.register('validateRunestoneLayout', Exec) {
+    group = 'verification'
+    description = 'Validate Runestone quadrant offsets, swap mapping, and template geometry.'
+    workingDir = project.projectDir
+    commandLine 'python3', 'scripts/validate_runestone_layout.py'
+}
+
+tasks.register('validateDungeonLayout', Exec) {
+    group = 'verification'
+    description = 'Validate Darkstone and Moon Temple upstream offsets and template geometry.'
+    workingDir = project.projectDir
+    commandLine 'python3', 'scripts/validate_dungeon_layout.py'
+}
+
 tasks.register('validateResources', Exec) {
     group = 'verification'
     description = 'Validate datapack/asset integrity (lang, loot, structures, mirror, advancements, registries).'
@@ -169,9 +191,32 @@ tasks.register('validateResources', Exec) {
     commandLine 'python3', 'scripts/validate_resources.py'
 }
 
+
+// Pre-launch: wipe previous structure-layout test world under run/saves/
+tasks.register('prepareStructureLayoutTest', Exec) {
+    group = 'verification'
+    description = 'Delete run/saves/ta_structure_layout so the next clientStructureLayout run starts fresh.'
+    workingDir = project.projectDir
+    commandLine 'bash', 'scripts/prepare_structure_layout_test.sh'
+}
+
+// MDG generates runClientStructureLayout from runs.clientStructureLayout.
+// Always wipe the previous test world before that client starts.
+afterEvaluate {
+    def runTask = tasks.findByName('runClientStructureLayout')
+    if (runTask != null) {
+        runTask.group = 'neoforge'
+        runTask.description = 'Wipe ta_structure_layout, launch client, auto-create superflat and place 3 boss structures.'
+        runTask.dependsOn tasks.named('prepareStructureLayoutTest')
+    } else {
+        logger.warn('runClientStructureLayout task not found — structure layout harness will not auto-clean the world')
+    }
+}
+
 tasks.named('test', Test).configure {
     useJUnitPlatform()
     dependsOn tasks.named('validateResources')
+    dependsOn tasks.named('validateRunestoneLayout')
     testLogging {
         events 'passed', 'skipped', 'failed'
         exceptionFormat 'full'
@@ -181,4 +226,5 @@ tasks.named('test', Test).configure {
 
 tasks.named('check').configure {
     dependsOn tasks.named('validateResources')
+    dependsOn tasks.named('validateRunestoneLayout')
 }

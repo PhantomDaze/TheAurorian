@@ -93,6 +93,32 @@ Cases include machines, fog wall, mushroom bounce, crops, keyholes, Queen’s Ch
 
 Code: `src/main/java/shiroroku/theaurorian/Demo/`
 
+## Layer 4 — Structure layout client harness (pre-launch)
+
+No in-game commands. Used to inspect dungeon/temple piece alignment after structure-port changes.
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk   # or your JDK 21
+./scripts/run_structure_layout_test.sh
+# or IDE run config: "Structure Layout Test"
+# or: ./gradlew runClientStructureLayout
+```
+
+Pre-launch (`prepareStructureLayoutTest`):
+
+1. Deletes `run/saves/ta_structure_layout` if present.
+
+Client JVM property `theaurorian.structureLayoutTest=true` then:
+
+1. On title screen, creates a **new** superflat world `ta_structure_layout`  
+   layers: **bedrock×1 + dirt×100 + grass×1**, difficulty **NORMAL**, creative + cheats, fixed seed.
+2. After join: force-loads chunks and places  
+   `runestone_dungeon` @ (0,0) · `darkstone_dungeon` @ (256,0) · `moon_temple` @ (0,256).
+3. Teleports to runestone; **keeps the game open** for manual inspection.
+
+Code: `src/main/java/shiroroku/theaurorian/DevTest/StructureLayoutTest.java`  
+Scripts: `scripts/prepare_structure_layout_test.sh`, `scripts/run_structure_layout_test.sh`
+
 ## Port plan status
 
 Content port **Phase 0–10 + G closed** per `docs/port-plan.md`（§8.1–8.7 全勾；§9 仅 D26 TCon/CT/ConArm `exempt`）。
