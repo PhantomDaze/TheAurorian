@@ -19,7 +19,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -31,6 +30,8 @@ import java.util.Optional;
 /**
  * Generic single-template structure placed on the surface, used for ruins and
  * the umbra tower. The template location is supplied by the structure JSON.
+ * Umbra tower additionally stacks {@code umbratower/umbratowerterrain} below
+ * (upstream 16 layers).
  */
 public class SingleTemplateStructure extends Structure {
 
@@ -39,6 +40,9 @@ public class SingleTemplateStructure extends Structure {
                     settingsCodec(instance),
                     ResourceLocation.CODEC.fieldOf("template").forGetter(s -> s.template)
             ).apply(instance, SingleTemplateStructure::new));
+
+    private static final ResourceLocation UMBRA_TERRAIN = ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "umbratower/umbratowerterrain");
+    private static final int UMBRA_TERRAIN_LAYERS = 16;
 
     private final ResourceLocation template;
 
@@ -57,6 +61,10 @@ public class SingleTemplateStructure extends Structure {
         }
         BlockPos center = new BlockPos(context.chunkPos().getMinBlockX() + 8, 0, context.chunkPos().getMinBlockZ() + 8);
         int y = context.chunkGenerator().getBaseHeight(center.getX(), center.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+        // Upstream Umbra tower sits a few blocks above surface grass
+        if (template.getPath().contains("umbratower") && !template.getPath().contains("terrain")) {
+            y += 3;
+        }
         BlockPos pos = new BlockPos(center.getX(), y, center.getZ());
         Rotation rotation = Rotation.getRandom(context.random());
         return Optional.of(new GenerationStub(pos, builder -> builder.addPiece(new SingleTemplatePiece(context.structureTemplateManager(), pos, template, rotation))));
@@ -73,6 +81,7 @@ public class SingleTemplateStructure extends Structure {
         private final ResourceLocation template;
         private final Rotation rotation;
         private StructureTemplate loaded;
+        private StructureTemplate terrain;
 
         public SingleTemplatePiece(StructureTemplateManager manager, BlockPos pos, ResourceLocation template, Rotation rotation) {
             super(StructureRegistry.SINGLE_TEMPLATE_PIECE.get(), 0, makeBox(pos, template, manager, rotation));
@@ -80,24 +89,34 @@ public class SingleTemplateStructure extends Structure {
             this.template = template;
             this.rotation = rotation;
             this.loaded = manager.get(template).orElse(null);
+            if (isUmbraTower(template)) {
+                this.terrain = manager.get(UMBRA_TERRAIN).orElse(null);
+            }
+        }
+
+        private static boolean isUmbraTower(ResourceLocation template) {
+            String path = template.getPath();
+            return path.contains("umbratower") && !path.contains("terrain");
         }
 
         private static BoundingBox makeBox(BlockPos pos, ResourceLocation template, StructureTemplateManager manager, Rotation rotation) {
             StructureTemplate t = manager.get(template).orElse(null);
+            int minY = pos.getY();
+            if (isUmbraTower(template)) {
+                minY = pos.getY() - UMBRA_TERRAIN_LAYERS;
+            }
             if (t == null) {
-                return new BoundingBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 16, pos.getY() + 32, pos.getZ() + 16);
+                return new BoundingBox(pos.getX(), minY, pos.getZ(), pos.getX() + 16, pos.getY() + 32, pos.getZ() + 16);
             }
             BoundingBox bb = t.getBoundingBox(new StructurePlaceSettings().setRotation(rotation), pos);
-            return new BoundingBox(bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ());
+            return new BoundingBox(bb.minX(), Math.min(bb.minY(), minY), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ());
         }
 
         public static SingleTemplatePiece load(StructurePieceSerializationContext context, CompoundTag tag) {
             BlockPos pos = new BlockPos(tag.getInt("posX"), tag.getInt("posY"), tag.getInt("posZ"));
             ResourceLocation template = ResourceLocation.parse(tag.getString("template"));
             Rotation rotation = Rotation.valueOf(tag.getString("rot"));
-            SingleTemplatePiece piece = new SingleTemplatePiece(context.structureTemplateManager(), pos, template, rotation);
-            piece.loaded = context.structureTemplateManager().get(template).orElse(null);
-            return piece;
+            return new SingleTemplatePiece(context.structureTemplateManager(), pos, template, rotation);
         }
 
         @Override
@@ -111,19 +130,66 @@ public class SingleTemplateStructure extends Structure {
 
         @Override
         public void postProcess(WorldGenLevel level, net.minecraft.world.level.StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-            if (!new ChunkPos(this.pos).equals(chunkPos) || loaded == null) {
+            if (loaded == null) {
                 return;
             }
-            StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation).setRandom(random)
-                    .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
+            // Clip to the generating chunk BB so multi-chunk templates place fully.
+            StructurePlaceSettings settings = new StructurePlaceSettings()
+                    .setRotation(rotation)
+                    .setRandom(random)
+                    .setBoundingBox(box)
                     .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
-            loaded.placeInWorld(level, this.pos, this.pos, settings, random, 2);
+            BoundingBox templateBox = loaded.getBoundingBox(settings, this.pos);
+            if (templateBox.intersects(box)) {
+                loaded.placeInWorld(level, this.pos, this.pos, settings, random, 2);
+                populateChests(level, settings, random, box);
+            }
 
-            // Umbra tower, ruins and graveyard all stock their chests from the shared ruins table
-            for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
-                BlockEntity te = level.getBlockEntity(info.pos());
+            // Umbra: stack terrain filler under the tower (upstream 16 layers, replace air only via empty processors)
+            if (terrain != null) {
+                StructurePlaceSettings terrainSettings = new StructurePlaceSettings()
+                        .setRotation(Rotation.NONE)
+                        .setRandom(random)
+                        .setBoundingBox(box);
+                for (int i = 1; i <= UMBRA_TERRAIN_LAYERS; i++) {
+                    BlockPos at = this.pos.below(i);
+                    BoundingBox tbb = terrain.getBoundingBox(terrainSettings, at);
+                    if (tbb.intersects(box)) {
+                        terrain.placeInWorld(level, at, at, terrainSettings, random, 2);
+                    }
+                }
+            }
+        }
+
+        private void populateChests(WorldGenLevel level, StructurePlaceSettings settings, RandomSource random, BoundingBox box) {
+            var lootKey = net.minecraft.resources.ResourceKey.create(
+                    net.minecraft.core.registries.Registries.LOOT_TABLE,
+                    ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "chests/ruins/common"));
+
+            // Prefer structure_block metadata markers (upstream style); fall back to plain chests.
+            for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.STRUCTURE_BLOCK)) {
+                if (!box.isInside(info.pos())) {
+                    continue;
+                }
+                String data = info.nbt() != null ? info.nbt().getString("metadata") : "";
+                if (!data.isEmpty() && !data.startsWith("chest")) {
+                    continue;
+                }
+                level.setBlock(info.pos(), Blocks.AIR.defaultBlockState(), 3);
+                BlockEntity te = level.getBlockEntity(info.pos().below());
                 if (te instanceof ChestBlockEntity chest) {
-                    chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "chests/ruins/common")), random.nextLong());
+                    chest.setLootTable(lootKey, random.nextLong());
+                } else if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootKey, random.nextLong());
+                }
+            }
+            for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
+                if (!box.isInside(info.pos())) {
+                    continue;
+                }
+                BlockEntity te = level.getBlockEntity(info.pos());
+                if (te instanceof ChestBlockEntity chest && chest.getLootTable() == null) {
+                    chest.setLootTable(lootKey, random.nextLong());
                 }
             }
         }

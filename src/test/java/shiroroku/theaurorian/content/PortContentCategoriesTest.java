@@ -149,12 +149,13 @@ class PortContentCategoriesTest {
             assertMinNbt(structures.resolve("weepingwillow"), 5);
 
             Set<String> defs = ContentTestSupport.jsonStems(MAIN, MAIN, "data/" + MODID + "/worldgen/structure");
-            Set<String> sets = ContentTestSupport.jsonStems(MAIN, MAIN, "data/" + MODID + "/worldgen/structure_set");
             assertTrue(defs.containsAll(REQUIRED_STRUCTURES), "missing structure defs " + diff(REQUIRED_STRUCTURES, defs));
-            assertTrue(sets.containsAll(REQUIRED_STRUCTURES), "missing structure sets " + diff(REQUIRED_STRUCTURES, sets));
 
-            // structure_set -> structure
+            // A structure set may intentionally contain multiple structures, such as
+            // major_dungeons, so validate the union of set members rather than
+            // requiring one same-named set file for every structure.
             Path setDir = MAIN.resolve("data/" + MODID + "/worldgen/structure_set");
+            Set<String> setMembers = new HashSet<>();
             try (Stream<Path> stream = Files.list(setDir)) {
                 stream.filter(p -> p.toString().endsWith(".json")).forEach(path -> {
                     try {
@@ -162,6 +163,7 @@ class PortContentCategoriesTest {
                         for (JsonElement el : obj.getAsJsonArray("structures")) {
                             String sid = el.getAsJsonObject().get("structure").getAsString();
                             String name = sid.substring(sid.indexOf(':') + 1);
+                            setMembers.add(name);
                             assertTrue(defs.contains(name), path.getFileName() + " -> missing " + sid);
                         }
                     } catch (IOException e) {
@@ -169,6 +171,8 @@ class PortContentCategoriesTest {
                     }
                 });
             }
+            assertTrue(setMembers.containsAll(REQUIRED_STRUCTURES),
+                    "structures missing from structure sets " + diff(REQUIRED_STRUCTURES, setMembers));
 
             // single_template NBT
             Path defDir = MAIN.resolve("data/" + MODID + "/worldgen/structure");

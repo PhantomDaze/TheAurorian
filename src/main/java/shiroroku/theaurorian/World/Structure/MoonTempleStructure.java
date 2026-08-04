@@ -17,7 +17,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -25,7 +24,6 @@ import shiroroku.theaurorian.Registry.StructureRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -66,49 +64,52 @@ public class MoonTempleStructure extends Structure {
         int cz = center.getZ();
         int x = 0, z = 0, y = 0;
 
-        // main temple parts at absolute offset (dx, dy, dz) from center
-        add(slots, "moontemple/moontemplev2_center", Rotation.NONE, cx + 0, cy + 0, cz + 0);
-        add(slots, "moontemple/moontemplev2_left", Rotation.NONE, cx - 16, cy + 0, cz + 0);
-        add(slots, "moontemple/moontemplev2_right", Rotation.NONE, cx + 16, cy + 0, cz + 0);
-        add(slots, "moontemple/moontemplev2_courtyard", Rotation.NONE, cx + 0, cy + 0, cz + 16);
-        add(slots, "moontemple/moontemplev2_courtyardl", Rotation.NONE, cx - 16, cy + 0, cz + 16);
-        add(slots, "moontemple/moontemplev2_courtyardr", Rotation.NONE, cx + 16, cy + 0, cz + 16);
-        add(slots, "moontemple/moontemplev2_room", Rotation.NONE, cx + 0, cy + 0, cz - 16);
+        // Upstream source branches use anchorChunk = sourceChunk + offset.
+        // Therefore source world origins are anchor - offset * 16; template
+        // names such as left/right must not be interpreted as screen sides.
+        add(slots, "moontemple/moontemplev2_center", Rotation.NONE, cx, cy, cz);
+        add(slots, "moontemple/moontemplev2_left", Rotation.NONE, cx + 16, cy, cz); // offset (-1,0)
+        add(slots, "moontemple/moontemplev2_right", Rotation.NONE, cx - 16, cy, cz); // offset (1,0)
+        add(slots, "moontemple/moontemplev2_courtyard", Rotation.NONE, cx, cy, cz - 16); // offset (0,1)
+        add(slots, "moontemple/moontemplev2_courtyardl", Rotation.NONE, cx + 16, cy, cz - 16); // offset (-1,1)
+        add(slots, "moontemple/moontemplev2_courtyardr", Rotation.NONE, cx - 16, cy, cz - 16); // offset (1,1)
+        add(slots, "moontemple/moontemplev2_room", Rotation.NONE, cx, cy, cz + 16); // offset (0,-1)
 
-        // terrain pillars below main parts
-        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx + 0, cy - 12, cz + 0);
-        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx - 16, cy - 12, cz + 0);
-        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx + 16, cy - 12, cz + 0);
-        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx + 0, cy - 12, cz + 16);
-        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx + 0, cy - 12, cz - 16);
+        // Terrain exists below the center, both towers, courtyard, and room.
+        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx, cy - 12, cz);
+        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx + 16, cy - 12, cz);
+        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx - 16, cy - 12, cz);
+        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx, cy - 12, cz - 16);
+        add(slots, "moontemple/moontemple_terrain", Rotation.NONE, cx, cy - 12, cz + 16);
 
         // floating islands
-        int[][] islands = {{-16, -48}, {16, -48}, {-48, -16}, {48, 16}, {-48, 16}, {48, -16}, {-16, 48}, {16, 48}};
+        int[][] islands = {{16, 48}, {-16, 48}, {16, -48}, {-16, -48}, {48, 16}, {48, -16}, {-48, 16}, {-48, -16}};
         for (int[] iso : islands) {
             slots.add(new Slot(ResourceLocation.parse("theaurorian:moontemple/moontemple_island"), Rotation.NONE, new BlockPos(cx + iso[0], cy - FLOATING_ISLAND_DROP - random.nextInt(10), cz + iso[1])));
         }
 
-        // spiral path (16 segments, wrapping the 5x5 chunk square)
+        // Exact upstream spiral path, with source offsets converted to anchor
+        // world coordinates. The +15 coordinates are rotation compensation.
         int yoffset = 7;
         int h = cy - 1;
-        add(slots, "moontemple/moontemple_path_turn", Rotation.NONE, cx + 0, h - yoffset, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx + 0, h - yoffset * 17, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx + 16, h - yoffset * 2, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx + 16, h - yoffset * 18, cz + 32);
-        add(slots, "moontemple/moontemple_path_turn", Rotation.COUNTERCLOCKWISE_90, cx + 32, h - yoffset * 3, cz + 47);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.COUNTERCLOCKWISE_90, cx + 32, h - yoffset * 4, cz + 47);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.COUNTERCLOCKWISE_90, cx + 32, h - yoffset * 5, cz + 47);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.COUNTERCLOCKWISE_90, cx + 32, h - yoffset * 6, cz + 47);
-        add(slots, "moontemple/moontemple_path_turn", Rotation.CLOCKWISE_180, cx + 47, h - yoffset * 7, cz + 47);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_180, cx + 47, h - yoffset * 8, cz + 47);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_180, cx + 47, h - yoffset * 9, cz + 47);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_180, cx + 47, h - yoffset * 10, cz + 47);
+        add(slots, "moontemple/moontemple_path_turn", Rotation.NONE, cx, h - yoffset, cz - 32);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx, h - yoffset * 17, cz - 32);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx - 16, h - yoffset * 2, cz - 32);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx - 16, h - yoffset * 18, cz - 32);
+        add(slots, "moontemple/moontemple_path_turn", Rotation.COUNTERCLOCKWISE_90, cx - 32, h - yoffset * 3, cz - 17);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.COUNTERCLOCKWISE_90, cx - 32, h - yoffset * 4, cz - 1);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.COUNTERCLOCKWISE_90, cx - 32, h - yoffset * 5, cz + 15);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.COUNTERCLOCKWISE_90, cx - 32, h - yoffset * 6, cz + 31);
+        add(slots, "moontemple/moontemple_path_turn", Rotation.CLOCKWISE_180, cx - 17, h - yoffset * 7, cz + 47);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_180, cx - 1, h - yoffset * 8, cz + 47);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_180, cx + 15, h - yoffset * 9, cz + 47);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_180, cx + 31, h - yoffset * 10, cz + 47);
         add(slots, "moontemple/moontemple_path_turn", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 11, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 12, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 13, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 14, cz + 32);
-        add(slots, "moontemple/moontemple_path_turn", Rotation.NONE, cx + 0, h - yoffset * 15, cz + 32);
-        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx + 0, h - yoffset * 16, cz + 32);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 12, cz + 16);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 13, cz);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.CLOCKWISE_90, cx + 47, h - yoffset * 14, cz - 16);
+        add(slots, "moontemple/moontemple_path_turn", Rotation.NONE, cx + 32, h - yoffset * 15, cz - 32);
+        add(slots, "moontemple/moontemple_path_straight", Rotation.NONE, cx + 16, h - yoffset * 16, cz - 32);
 
         return slots;
     }
@@ -117,16 +118,25 @@ public class MoonTempleStructure extends Structure {
         slots.add(new Slot(ResourceLocation.parse("theaurorian:" + name), rot, new BlockPos(ax, ay, az)));
     }
 
-    private static BoundingBox boundingBoxOf(List<Slot> slots) {
+    private static BoundingBox boundingBoxOf(StructureTemplateManager manager, List<Slot> slots) {
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
         for (Slot s : slots) {
-            minX = Math.min(minX, s.pos.getX());
-            minY = Math.min(minY, s.pos.getY());
-            minZ = Math.min(minZ, s.pos.getZ());
-            maxX = Math.max(maxX, s.pos.getX() + 16);
-            maxY = Math.max(maxY, s.pos.getY() + 16);
-            maxZ = Math.max(maxZ, s.pos.getZ() + 16);
+            StructureTemplate template = manager.get(s.templateId).orElse(null);
+            BoundingBox box;
+            if (template != null) {
+                StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(s.rotation);
+                box = template.getBoundingBox(settings, s.pos);
+            } else {
+                box = new BoundingBox(s.pos.getX(), s.pos.getY(), s.pos.getZ(),
+                        s.pos.getX() + 16, s.pos.getY() + 16, s.pos.getZ() + 16);
+            }
+            minX = Math.min(minX, box.minX());
+            minY = Math.min(minY, box.minY());
+            minZ = Math.min(minZ, box.minZ());
+            maxX = Math.max(maxX, box.maxX());
+            maxY = Math.max(maxY, box.maxY());
+            maxZ = Math.max(maxZ, box.maxZ());
         }
         return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
     }
@@ -137,7 +147,7 @@ public class MoonTempleStructure extends Structure {
         private final List<Slot> slots;
 
         public MoonTemplePiece(StructureTemplateManager manager, List<Slot> slots) {
-            super(StructureRegistry.MOON_TEMPLE_PIECE.get(), 0, boundingBoxOf(slots));
+            super(StructureRegistry.MOON_TEMPLE_PIECE.get(), 0, boundingBoxOf(manager, slots));
             this.seed = 0;
             this.slots = slots;
             for (Slot s : slots) {
@@ -177,28 +187,38 @@ public class MoonTempleStructure extends Structure {
 
         @Override
         public void postProcess(WorldGenLevel level, net.minecraft.world.level.StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-            StructurePlaceSettings settings = new StructurePlaceSettings().setRandom(random)
-                    .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
-                    .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
             for (Slot s : slots) {
-                if (s.template == null || !new ChunkPos(s.pos).equals(chunkPos)) {
+                if (s.template == null) {
                     continue;
                 }
-                settings.setRotation(s.rotation);
+                // Clip to current chunk BB — origin-chunk gating left half of multi-chunk templates empty.
+                StructurePlaceSettings settings = new StructurePlaceSettings()
+                        .setRotation(s.rotation)
+                        .setRandom(random)
+                        .setBoundingBox(box)
+                        .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
+                BoundingBox templateBox = s.template.getBoundingBox(settings, s.pos);
+                if (!templateBox.intersects(box)) {
+                    continue;
+                }
                 s.template.placeInWorld(level, s.pos, s.pos, settings, random, 2);
-                populateChests(level, s, settings, random);
+                populateChests(level, s, settings, random, box);
             }
         }
 
-        private void populateChests(WorldGenLevel level, Slot slot, StructurePlaceSettings settings, RandomSource random) {
+        private void populateChests(WorldGenLevel level, Slot slot, StructurePlaceSettings settings, RandomSource random, BoundingBox box) {
             if (slot.template == null) {
                 return;
             }
             for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.STRUCTURE_BLOCK)) {
+                if (!box.isInside(info.pos())) {
+                    continue;
+                }
                 String data = info.nbt() != null ? info.nbt().getString("metadata") : "";
                 String loot = switch (data) {
                     case "chest_low" -> "theaurorian:chests/moontemple/low";
                     case "chest_med" -> "theaurorian:chests/moontemple/med";
+                    case "chest", "chest_high" -> "theaurorian:chests/moontemple/med";
                     default -> null;
                 };
                 if (loot == null) {
@@ -207,6 +227,8 @@ public class MoonTempleStructure extends Structure {
                 level.setBlock(info.pos(), Blocks.AIR.defaultBlockState(), 3);
                 BlockEntity te = level.getBlockEntity(info.pos().below());
                 if (te instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.parse(loot)), random.nextLong());
+                } else if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
                     chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.parse(loot)), random.nextLong());
                 }
             }

@@ -18,6 +18,7 @@ public class CommonConfig {
     public static final ModConfigSpec.ConfigValue<Double> crystalline_pickaxe_treasure_chance;
     public static final ModConfigSpec.ConfigValue<Double> cystalline_sword_beam_damage;
     public static final ModConfigSpec.ConfigValue<Double> cystalline_sword_beam_velocity;
+    public static final ModConfigSpec.ConfigValue<Double> crystalline_sprite_beam_damage;
     public static final ModConfigSpec.ConfigValue<Double> moonstone_damage_chance;
     public static final ModConfigSpec.ConfigValue<Integer> slime_boots_cooldown;
     public static final ModConfigSpec.ConfigValue<Double> scrapper_crystal_break_chance;
@@ -32,6 +33,12 @@ public class CommonConfig {
     public static final ModConfigSpec.ConfigValue<Boolean> enable_moon_temple;
     public static final ModConfigSpec.ConfigValue<Boolean> enable_ruins;
     public static final ModConfigSpec.ConfigValue<Boolean> enable_umbra_tower;
+    public static final ModConfigSpec.ConfigValue<Boolean> enable_runestone_dungeon;
+    public static final ModConfigSpec.ConfigValue<Integer> runestone_dungeon_floors;
+    /** Multiplier for dungeon/temple mob nearby-density caps (upstream default 1). */
+    public static final ModConfigSpec.ConfigValue<Integer> runestone_dungeon_mob_density;
+    public static final ModConfigSpec.ConfigValue<Integer> moon_temple_mob_density;
+    public static final ModConfigSpec.ConfigValue<Integer> darkstone_dungeon_mob_density;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -42,8 +49,11 @@ public class CommonConfig {
         aurorian_steel_level_multiplier = builder.comment("The next max required XP is this multiplied by the last max required XP").defineInRange("aurorian_steel_level_multiplier", 1.25, 1, Integer.MAX_VALUE);
         crystalline_pickaxe_treasure_chance = builder.defineInRange("crystalline_pickaxe_treasure_chance", 0.2, 0, 1);
         crystalline_shield_repairs_all = builder.define("crystalline_shield_repairs_all", false);
+        // Historical misspelling "cystalline" kept for existing config files.
         cystalline_sword_beam_damage = builder.defineInRange("cystalline_sword_beam_damage", 8f, 1f, Integer.MAX_VALUE);
-        cystalline_sword_beam_velocity = builder.defineInRange("cystalline_sword_beam_damage", 2f, 0.25f, Integer.MAX_VALUE);
+        // PR10: velocity previously reused the damage key; now a distinct key.
+        cystalline_sword_beam_velocity = builder.comment("Sword beam projectile speed (was wrongly keyed as cystalline_sword_beam_damage)").defineInRange("cystalline_sword_beam_velocity", 2f, 0.25f, Integer.MAX_VALUE);
+        crystalline_sprite_beam_damage = builder.comment("Crystalline Sprite beam damage (separate from sword beam)").defineInRange("crystalline_sprite_beam_damage", 2f, 0f, Integer.MAX_VALUE);
         moonstone_damage_chance = builder.comment("% to take damage, day adds +1 damage to this after, night does not").defineInRange("moonstone_damage_chance", 0.5, 0, 1);
         slime_boots_cooldown = builder.comment("Ticks between sneaking slime boot high jumps").defineInRange("slime_boots_cooldown", 100, 0, Integer.MAX_VALUE);
         spectral_armor_cleanse_chance = builder.comment("+% per armor piece to cleanse negative effects when attacking").defineInRange("spectral_armor_cleanse_chance", 0.06, 0, 0.25);
@@ -64,11 +74,18 @@ public class CommonConfig {
         boss_health_per_player = builder.defineInRange("boss_health_per_player", 0.75, 0, Integer.MAX_VALUE);
         boss_speed_per_player = builder.defineInRange("boss_speed_per_player", 0.2, 0, Integer.MAX_VALUE);
         builder.pop();
-        builder.push("World Gen").comment("Toggles for Aurorian structure generation. The Runestone dungeon and ruined house are jigsaw structures driven by their datapack structure sets (see data/theaurorian/worldgen/structure_set/); the spacing of every structure is configured there as well.");
+        builder.push("Mobs").comment("Nearby-density multipliers for dungeon/temple hostiles (upstream default 1). Caps are baseNearby * this value.");
+        runestone_dungeon_mob_density = builder.defineInRange("runestone_dungeon_mob_density", 1, 0, 10);
+        moon_temple_mob_density = builder.defineInRange("moon_temple_mob_density", 1, 0, 10);
+        darkstone_dungeon_mob_density = builder.defineInRange("darkstone_dungeon_mob_density", 1, 0, 10);
+        builder.pop();
+        builder.push("World Gen").comment("Toggles for Aurorian structure generation. Spacing of every structure is configured in data/theaurorian/worldgen/structure_set/. Runestone uses a custom Structure (upstream 15×15 quadrants), not jigsaw.");
         enable_darkstone_dungeon = builder.define("enable_darkstone_dungeon", true);
         enable_moon_temple = builder.define("enable_moon_temple", true);
         enable_ruins = builder.define("enable_ruins", true);
         enable_umbra_tower = builder.define("enable_umbra_tower", true);
+        enable_runestone_dungeon = builder.define("enable_runestone_dungeon", true);
+        runestone_dungeon_floors = builder.comment("Number of intermediate floors between base and boss (forced even so stairs line up).").defineInRange("runestone_dungeon_floors", 4, 2, 32);
         builder.pop();
         builder.pop();
         config = builder.build();

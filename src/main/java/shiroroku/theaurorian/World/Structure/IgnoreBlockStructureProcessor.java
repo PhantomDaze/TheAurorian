@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -18,20 +17,31 @@ import java.util.function.Supplier;
 /**
  * Skips template blocks that equal the ignored block, leaving existing terrain
  * in place. Replicates 1.12 {@code PlacementSettings.setReplacedBlock}.
+ *
+ * The fluid-clearing variant is used by Darkstone Dungeon because an ignored
+ * marker otherwise preserves modern aquifer or lake fluid inside the dungeon.
  */
 public class IgnoreBlockStructureProcessor extends StructureProcessor {
 
     public static final MapCodec<IgnoreBlockStructureProcessor> CODEC = MapCodec.unit(IgnoreBlockStructureProcessor::new);
     public static final IgnoreBlockStructureProcessor AURORIAN_STONE = new IgnoreBlockStructureProcessor(() -> BlockRegistry.aurorian_stone.get());
+    public static final IgnoreBlockStructureProcessor AURORIAN_STONE_CLEAR_FLUID =
+            new IgnoreBlockStructureProcessor(() -> BlockRegistry.aurorian_stone.get(), true);
 
     private final Supplier<Block> ignored;
+    private final boolean replaceFluids;
 
     public IgnoreBlockStructureProcessor() {
-        this(() -> null);
+        this(() -> null, false);
     }
 
     public IgnoreBlockStructureProcessor(Supplier<Block> ignored) {
+        this(ignored, false);
+    }
+
+    private IgnoreBlockStructureProcessor(Supplier<Block> ignored, boolean replaceFluids) {
         this.ignored = ignored;
+        this.replaceFluids = replaceFluids;
     }
 
     @Nullable
@@ -39,6 +49,9 @@ public class IgnoreBlockStructureProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader pLevel, BlockPos pPos, BlockPos pPivot, StructureTemplate.StructureBlockInfo pOriginalInfo, StructureTemplate.StructureBlockInfo pModifiedInfo, StructurePlaceSettings pSettings) {
         Block ignoredBlock = ignored.get();
         if (ignoredBlock != null && pModifiedInfo.state().is(ignoredBlock)) {
+            if (replaceFluids && !pLevel.getFluidState(pModifiedInfo.pos()).isEmpty()) {
+                return pModifiedInfo;
+            }
             return null;
         }
         return pModifiedInfo;

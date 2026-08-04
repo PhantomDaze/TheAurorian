@@ -15,6 +15,7 @@ import shiroroku.theaurorian.World.Structure.DarkstoneDungeonStructure;
 import shiroroku.theaurorian.World.Structure.IgnoreBlockStructureProcessor;
 import shiroroku.theaurorian.World.Structure.MoonTempleStructure;
 import shiroroku.theaurorian.World.Structure.ReplaceAirStructureProcessor;
+import shiroroku.theaurorian.World.Structure.RunestoneDungeonStructure;
 import shiroroku.theaurorian.World.Structure.SingleTemplateStructure;
 
 public class StructureRegistry {
@@ -40,6 +41,11 @@ public class StructureRegistry {
             STRUCTURE_TYPES.register("single_template", () -> type(SingleTemplateStructure.CODEC));
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SINGLE_TEMPLATE_PIECE =
             PIECE_TYPES.register("single_template", () -> SingleTemplateStructure.SingleTemplatePiece::load);
+
+    public static final DeferredHolder<StructureType<?>, StructureType<RunestoneDungeonStructure>> RUNESTONE_DUNGEON_TYPE =
+            STRUCTURE_TYPES.register("runestone_dungeon", () -> type(RunestoneDungeonStructure.CODEC));
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> RUNESTONE_DUNGEON_PIECE =
+            PIECE_TYPES.register("runestone_dungeon", () -> RunestoneDungeonStructure.RunestoneDungeonPiece::load);
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<IgnoreBlockStructureProcessor>> IGNORE_BLOCK =
             PROCESSOR_TYPES.register("ignore_block", () -> processor(IgnoreBlockStructureProcessor.CODEC));

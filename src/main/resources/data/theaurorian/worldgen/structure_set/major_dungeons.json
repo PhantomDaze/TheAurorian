@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "theaurorian:runestone_dungeon",
+      "weight": 1
+    },
+    {
+      "structure": "theaurorian:darkstone_dungeon",
+      "weight": 1
+    },
+    {
+      "structure": "theaurorian:moon_temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 4244240,
+    "spacing": 32,
+    "separation": 31
+  }
+}
