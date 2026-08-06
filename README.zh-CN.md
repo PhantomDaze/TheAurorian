@@ -12,12 +12,7 @@
 
 - NeoForge 1.21.1 版本可以编译并打包。
 - 资源完整性检查通过。
-- JUnit 测试通过。
-- **22 个 GameTest 全部通过**（`runGameTestServer`）。
-- 内容量保持：结构 NBT 61、配方 205、实体 19 等。
-- **1.21.1 NeoForge 零妥协平台计划：** [`docs/port-plan-1.21.1.md`](docs/port-plan-1.21.1.md)（§9 仍有进世界手测 / Curios IMC / JEI 弃用清理等开放项）。
-
-后续可选工作包括：TCon/ConArm/CT 兼容、自定义 Gecko 首领模型、自由游玩体验优化，以及客户端冒烟测试（`runClient` / `/ta demo`）。
+- 内容量保持
 
 ## 主要变化
 
@@ -48,15 +43,6 @@
 # 在开启作弊的客户端中执行：
 /ta demo                       # 在面前展示 17 个可观察演示案例
 ```
-
-## 文档
-
-- [英文 README](README.md)
-- [移植计划](docs/port-plan.md)
-- [差异说明](docs/diff.md)
-- [测试说明](docs/testing.md)
-- [资源映射说明](docs/asset-remap.md)
-- [上游源码与许可](upstream/)
 
 ## 署名与许可
 
