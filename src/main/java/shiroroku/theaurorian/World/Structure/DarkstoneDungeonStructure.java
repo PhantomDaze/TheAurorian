@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -275,6 +276,7 @@ public class DarkstoneDungeonStructure extends Structure {
                         .setRotation(s.rotation)
                         .setRandom(random)
                         .setBoundingBox(box)
+                        .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING)
                         .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE_CLEAR_FLUID);
                 BoundingBox templateBox = s.template.getBoundingBox(settings, s.pos);
                 if (!templateBox.intersects(box)) {
