@@ -113,6 +113,21 @@ REQUIRED_STRUCTURES = {
     "ruined_house",
 }
 
+REQUIRED_STRUCTURE_SETS = {
+    "major_dungeons",
+    "umbra_tower",
+    "ruins_1",
+    "ruins_2",
+    "graveyard",
+    "ruined_house",
+}
+
+MAJOR_DUNGEON_STRUCTURES = {
+    f"{MODID}:runestone_dungeon",
+    f"{MODID}:darkstone_dungeon",
+    f"{MODID}:moon_temple",
+}
+
 STRUCTURE_NBT_MIN = {
     "runestone": 20,
     "darkstone": 14,
@@ -382,9 +397,31 @@ def cat_structures() -> None:
     missing_defs = sorted(REQUIRED_STRUCTURES - struct_defs)
     if missing_defs:
         err(cat, f"missing structure definitions: {missing_defs}")
-    missing_sets = sorted(REQUIRED_STRUCTURES - set_defs)
+    missing_sets = sorted(REQUIRED_STRUCTURE_SETS - set_defs)
     if missing_sets:
         err(cat, f"missing structure_set definitions: {missing_sets}")
+
+    major_set = wg_set / "major_dungeons.json"
+    if major_set.exists():
+        data = load_json(major_set)
+        if isinstance(data, dict):
+            placement = data.get("placement") or {}
+            if placement.get("type") != "minecraft:random_spread":
+                err(cat, "major_dungeons structure_set must use minecraft:random_spread")
+            if placement.get("spacing") != 32 or placement.get("separation") != 31:
+                err(cat, "major_dungeons structure_set must use spacing=32 and separation=31")
+            structures = data.get("structures") or []
+            actual = {
+                entry.get("structure")
+                for entry in structures
+                if isinstance(entry, dict) and isinstance(entry.get("structure"), str)
+            }
+            if actual != MAJOR_DUNGEON_STRUCTURES:
+                err(cat, f"major_dungeons structure_set must contain exactly {sorted(MAJOR_DUNGEON_STRUCTURES)}, got {sorted(actual)}")
+            if any(entry.get("weight") != 1 for entry in structures if isinstance(entry, dict)):
+                err(cat, "major_dungeons structure_set entries must all have weight 1")
+    elif "major_dungeons" in set_defs:
+        err(cat, "major_dungeons structure_set file is missing")
 
     # structure_set -> structure link
     if wg_set.exists():
@@ -415,6 +452,120 @@ def cat_structures() -> None:
             biomes = data.get("biomes")
             if isinstance(biomes, list) and not biomes:
                 err(cat, f"structure {path.stem} has empty biomes list")
+            # Runestone must use custom type (not leftover jigsaw)
+            if path.stem == "runestone_dungeon" and data.get("type") != f"{MODID}:runestone_dungeon":
+                err(cat, f"runestone_dungeon type should be {MODID}:runestone_dungeon, got {data.get('type')}")
+
+
+def _surface_rule_blocks(
+    node: object,
+    *,
+    water_offsets: tuple[int, ...] = (),
+    preliminary_surface_guard: bool = False,
+) -> list[tuple[str, tuple[int, ...], bool]]:
+    """Collect block results and the surface guards active on each result."""
+    if isinstance(node, list):
+        out: list[tuple[str, tuple[int, ...], bool]] = []
+        for child in node:
+            out.extend(
+                _surface_rule_blocks(
+                    child,
+                    water_offsets=water_offsets,
+                    preliminary_surface_guard=preliminary_surface_guard,
+                )
+            )
+        return out
+    if not isinstance(node, dict):
+        return []
+
+    node_type = node.get("type")
+    if node_type == "minecraft:block":
+        state = node.get("result_state")
+        if isinstance(state, dict) and isinstance(state.get("Name"), str):
+            return [(state["Name"], water_offsets, preliminary_surface_guard)]
+        return []
+
+    if node_type == "minecraft:condition":
+        condition = node.get("if_true")
+        next_water_offsets = water_offsets
+        if isinstance(condition, dict) and condition.get("type") == "minecraft:water":
+            offset = condition.get("offset")
+            if isinstance(offset, int):
+                next_water_offsets = (*water_offsets, offset)
+        return _surface_rule_blocks(
+            node.get("then_run"),
+            water_offsets=next_water_offsets,
+            preliminary_surface_guard=preliminary_surface_guard
+            or (
+                isinstance(condition, dict)
+                and condition.get("type") == "minecraft:above_preliminary_surface"
+            ),
+        )
+
+    if node_type == "minecraft:sequence":
+        return _surface_rule_blocks(
+            node.get("sequence"),
+            water_offsets=water_offsets,
+            preliminary_surface_guard=preliminary_surface_guard,
+        )
+    return []
+
+
+def _surface_rule_has_y_anchor(node: object, absolute: int) -> bool:
+    if isinstance(node, list):
+        return any(_surface_rule_has_y_anchor(child, absolute) for child in node)
+    if not isinstance(node, dict):
+        return False
+    if (
+        node.get("type") == "minecraft:y_above"
+        and isinstance(node.get("anchor"), dict)
+        and node["anchor"].get("absolute") == absolute
+    ):
+        return True
+    return any(_surface_rule_has_y_anchor(value, absolute) for value in node.values())
+
+
+def _validate_surface_rule(cat: str, noise: Path) -> None:
+    data = load_json(noise)
+    if not isinstance(data, dict):
+        return
+    if data.get("sea_level") != 63:
+        err(cat, f"noise sea_level changed: expected 63, found {data.get('sea_level')}")
+    rule = data.get("surface_rule")
+    if not isinstance(rule, dict):
+        err(cat, "noise surface_rule missing")
+        return
+
+    blocks = _surface_rule_blocks(rule)
+    names = {name for name, *_ in blocks}
+    required = {
+        f"{MODID}:aurorian_grass",
+        f"{MODID}:aurorian_grass_light",
+        f"{MODID}:aurorian_dirt",
+        f"{MODID}:moon_sand",
+    }
+    missing = sorted(required - names)
+    if missing:
+        err(cat, f"surface_rule missing expected land blocks: {missing}")
+
+    moon_sand = f"{MODID}:moon_sand"
+    surface_materials = {
+        f"{MODID}:aurorian_grass",
+        f"{MODID}:aurorian_grass_light",
+        f"{MODID}:aurorian_dirt",
+        moon_sand,
+    }
+    for name, water_offsets, preliminary_guard in blocks:
+        if name in surface_materials and not preliminary_guard:
+            err(cat, f"surface_rule {name} lacks minecraft:above_preliminary_surface guard")
+        if name == moon_sand and water_offsets != ():
+            err(cat, "surface_rule moon_sand must be the fallback (no water guard) after a water offset 0 land rule")
+        if name in {f"{MODID}:aurorian_grass", f"{MODID}:aurorian_grass_light"}:
+            if water_offsets and water_offsets != (0,):
+                err(cat, f"surface_rule {name} under a non-zero water guard")
+
+    if _surface_rule_has_y_anchor(rule, 55):
+        err(cat, "surface_rule contains the forbidden global y_above absolute 55 moon_sand band")
 
 
 # ---------------------------------------------------------------------------
@@ -495,6 +646,8 @@ def cat_worldgen() -> None:
     noise = MAIN / "data" / MODID / "worldgen" / "noise_settings" / "the_aurorian.json"
     if not noise.exists():
         err(cat, "missing noise_settings/the_aurorian.json")
+    else:
+        _validate_surface_rule(cat, noise)
 
     dim_type = MAIN / "data" / MODID / "dimension_type"
     if not dim_type.exists() or not list(dim_type.glob("*.json")):
@@ -545,6 +698,22 @@ def cat_recipes(blocks: set[str], items: set[str]) -> None:
     for name in REQUIRED_MF_RECIPES:
         if not (mf / name).exists():
             err(cat, f"missing moonlight_forge recipe: {name}")
+
+    required_furnace_recipes = {
+        "smelting/moon_sand.json",
+        "blasting/moon_sand.json",
+        "smoking/cooked_aurorian_pork.json",
+        "campfire/cooked_aurorian_pork.json",
+        "blasting/aurorian_stone.json",
+        "smelting/silentwood_charcoal.json",
+        "smelting/weeping_willow_charcoal.json",
+    }
+    missing_furnace = sorted(
+        name for name in required_furnace_recipes
+        if not (recipes_dir / name).is_file()
+    )
+    if missing_furnace:
+        err(cat, f"missing furnace-family recipes: {missing_furnace}")
 
     # chest loot
     chests = MAIN / "data" / MODID / "loot_tables" / "chests"

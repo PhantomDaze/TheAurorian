@@ -39,6 +39,9 @@ public class SpiderAILeap extends Goal {
 
     @Override
     public void start() {
+        if (this.target != null) {
+            this.entity.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+        }
         double dx = this.target.getX() - this.entity.getX();
         double dz = this.target.getZ() - this.entity.getZ();
         float f = (float) Math.sqrt(dx * dx + dz * dz);
@@ -54,5 +57,12 @@ public class SpiderAILeap extends Goal {
             this.entity.setDeltaMovement(motion.x, this.leapVelocity, motion.z);
         }
         this.entity.hasImpulse = true;
+    }
+
+    @Override
+    public void tick() {
+        if (this.target != null) {
+            this.entity.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+        }
     }
 }

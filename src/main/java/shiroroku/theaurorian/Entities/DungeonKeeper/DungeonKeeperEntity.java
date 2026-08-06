@@ -1,6 +1,7 @@
 package shiroroku.theaurorian.Entities.DungeonKeeper;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -12,6 +13,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -55,7 +57,7 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new KeeperBarrageGoal<>(this));
         this.goalSelector.addGoal(3, new KeeperMeleeGoal(this));
-        this.goalSelector.addGoal(4, new KeeperRangedGoal<>(this, 1.0D, 10, 15.0F));
+        this.goalSelector.addGoal(4, new KeeperRangedGoal<>(this, 0.85D, 20, 40.0F));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -64,12 +66,40 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
-        ItemStack sword = new ItemStack(ItemRegistry.moonstone_sword.get());
-        sword.enchant(Enchantments.KNOCKBACK, 2);
-        sword.enchant(EnchantRegistry.lightning.get(), 3);
-        this.setItemInHand(InteractionHand.MAIN_HAND, sword);
+        this.ensureBossEquipment();
     }
 
+    public void ensureBossEquipment() {
+        if (this.getMainHandItem().isEmpty()) {
+            ItemStack sword = new ItemStack(ItemRegistry.moonstone_sword.get());
+            sword.enchant(Enchantments.KNOCKBACK, 2);
+            sword.enchant(EnchantRegistry.lightning.get(), 3);
+            this.setItemInHand(InteractionHand.MAIN_HAND, sword);
+        }
+    }
+
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        if (super.doHurtTarget(target)) {
+            if (target instanceof LivingEntity living) {
+                living.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 200), this);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide && this.getHealth() / this.getMaxHealth() <= 0.3F) {
+            for (int i = 0; i < 2; i++) {
+                this.level().addParticle(ParticleTypes.SPLASH, this.getX() + this.random.nextGaussian() * 0.3D,
+                        this.getY() + this.random.nextDouble() * this.getBbHeight(),
+                        this.getZ() + this.random.nextGaussian() * 0.3D, 0.0D, 0.1D, 0.0D);
+            }
+        }
+    }
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
@@ -126,21 +156,21 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SKELETON_AMBIENT;
+        return SoundEvents.WITHER_SKELETON_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.SKELETON_HURT;
+        return SoundEvents.WITHER_SKELETON_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SKELETON_DEATH;
+        return SoundEvents.WITHER_SKELETON_DEATH;
     }
 
     @Override
     protected SoundEvent getStepSound() {
-        return SoundEvents.STRAY_STEP;
+        return SoundEvents.WITHER_SKELETON_STEP;
     }
 }

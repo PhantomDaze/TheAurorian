@@ -19,7 +19,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -111,19 +110,40 @@ public class SingleTemplateStructure extends Structure {
 
         @Override
         public void postProcess(WorldGenLevel level, net.minecraft.world.level.StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-            if (!new ChunkPos(this.pos).equals(chunkPos) || loaded == null) {
+            if (loaded == null) {
                 return;
             }
-            StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation).setRandom(random)
-                    .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
+            StructurePlaceSettings settings = new StructurePlaceSettings()
+                    .setRotation(rotation)
+                    .setRandom(random)
+                    .setBoundingBox(box)
                     .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
+            BoundingBox templateBox = loaded.getBoundingBox(settings, this.pos);
+            if (!templateBox.intersects(box)) {
+                return;
+            }
             loaded.placeInWorld(level, this.pos, this.pos, settings, random, 2);
 
-            // Umbra tower, ruins and graveyard all stock their chests from the shared ruins table
+            ResourceLocation lootTable = new ResourceLocation(TheAurorian.MODID, "chests/ruins/common");
+            for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.STRUCTURE_BLOCK)) {
+                if (!box.isInside(info.pos())) {
+                    continue;
+                }
+                String metadata = info.nbt() == null ? "" : info.nbt().getString("metadata");
+                if (!metadata.isEmpty() && !metadata.startsWith("chest")) {
+                    continue;
+                }
+                level.setBlock(info.pos(), Blocks.AIR.defaultBlockState(), 3);
+                BlockEntity blockEntity = level.getBlockEntity(info.pos().below());
+                if (blockEntity instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootTable, random.nextLong());
+                } else if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootTable, random.nextLong());
+                }
+            }
             for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
-                BlockEntity te = level.getBlockEntity(info.pos());
-                if (te instanceof ChestBlockEntity chest) {
-                    chest.setLootTable(new ResourceLocation(TheAurorian.MODID, "chests/ruins/common"), random.nextLong());
+                if (box.isInside(info.pos()) && level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootTable, random.nextLong());
                 }
             }
         }

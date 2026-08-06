@@ -11,7 +11,7 @@ import shiroroku.theaurorian.Registry.ItemRegistry;
 public class CeruleanArrowEntity extends AurorianArrowEntity {
 
     private static final Item item = ItemRegistry.cerulean_arrow.get();
-    private static final float damage = 1.5f;
+    private static final float damage = 1.0f;
     private static final float weight = 0f;
 
     public CeruleanArrowEntity(EntityType<? extends AbstractArrow> pEntityType, Level pLevel) {
@@ -24,5 +24,10 @@ public class CeruleanArrowEntity extends AurorianArrowEntity {
 
     public CeruleanArrowEntity(Level pLevel, LivingEntity pShooter) {
         super(EntityRegistry.cerulean_arrow.get(), pLevel, pShooter, item, damage, weight);
+    }
+
+    @Override
+    public float getShootVelocityMultiplier() {
+        return 1.5F;
     }
 }

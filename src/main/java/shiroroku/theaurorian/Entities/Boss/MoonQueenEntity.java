@@ -78,12 +78,23 @@ public class MoonQueenEntity extends Monster {
 
     @Override
     public void populateDefaultEquipmentSlots(net.minecraft.util.RandomSource pRandom, net.minecraft.world.DifficultyInstance pDifficulty) {
-        this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.moonstone_sword.get()));
-        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ItemRegistry.knight_chestplate.get()));
-        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ItemRegistry.knight_leggings.get()));
-        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ItemRegistry.knight_boots.get()));
+        this.ensureBossEquipment();
     }
 
+    public void ensureBossEquipment() {
+        if (this.getMainHandItem().isEmpty()) {
+            this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.moonstone_sword.get()));
+        }
+        if (this.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).isEmpty()) {
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(ItemRegistry.knight_chestplate.get()));
+        }
+        if (this.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).isEmpty()) {
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(ItemRegistry.knight_leggings.get()));
+        }
+        if (this.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET).isEmpty()) {
+            this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(ItemRegistry.knight_boots.get()));
+        }
+    }
     @Override
     public void aiStep() {
         super.aiStep();

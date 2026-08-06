@@ -227,6 +227,18 @@ class DatapackSmokeTest {
         assertTrue(Files.isRegularFile(mf.resolve("moon_shield.json")));
     }
 
+    @Test
+    void moonSandRecipesProduceMoonGlass() throws Exception {
+        for (String kind : new String[]{"smelting", "blasting"}) {
+            JsonObject recipe = readObject(MAIN.resolve("data/theaurorian/recipes/" + kind + "/moon_sand.json"));
+            assertEquals("minecraft:" + kind, recipe.get("type").getAsString());
+            assertEquals("theaurorian:moon_sand",
+                    recipe.getAsJsonObject("ingredient").get("item").getAsString());
+            assertEquals("theaurorian:moon_glass",
+                    recipe.get("result").getAsString(), kind + " result");
+        }
+    }
+
     private static void assertMinNbt(Path dir, int min) throws IOException {
         assertTrue(Files.isDirectory(dir), "missing " + dir);
         try (Stream<Path> stream = Files.walk(dir)) {

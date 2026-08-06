@@ -25,6 +25,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import shiroroku.theaurorian.Entities.CrystallineBeam.CrystallineBeamEntity;
+import shiroroku.theaurorian.Config.CommonConfig;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.TheAurorian;
@@ -75,6 +76,7 @@ public class CrystallineSpriteEntity extends Monster implements RangedAttackMob 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         CrystallineBeamEntity beam = new CrystallineBeamEntity(this.level(), this);
+        beam.setDamage(CommonConfig.crystalline_sprite_beam_damage.get().floatValue());
         double d0 = target.getX() - this.getX();
         double d1 = target.getBoundingBox().minY + target.getBbHeight() / 3.0F - beam.getY();
         double d2 = target.getZ() - this.getZ();
@@ -133,11 +135,12 @@ public class CrystallineSpriteEntity extends Monster implements RangedAttackMob 
             return false;
         }
         List<CrystallineSpriteEntity> nearby = level.getEntitiesOfClass(CrystallineSpriteEntity.class, new AABB(pos).inflate(64, 30, 64), e -> e.isAlive());
-        return nearby.size() <= 5;
+        int max = 5 * CommonConfig.moon_temple_mob_density.get();
+        return max > 0 && nearby.size() <= max;
     }
 
     @Override
     public int getMaxSpawnClusterSize() {
-        return this.maxNearby;
+        return 5 * CommonConfig.moon_temple_mob_density.get();
     }
 }

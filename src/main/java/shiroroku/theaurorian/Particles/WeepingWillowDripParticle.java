@@ -29,7 +29,7 @@ public class WeepingWillowDripParticle extends TextureSheetParticle {
         this.lifetime = 300;
         this.quadSize = 0.5F + this.random.nextFloat() * 0.25F;
         this.setColor(0.05F, 0.1F, 0.15F);
-        this.setSprite(sprites.get(0, 0));
+        this.setSprite(sprites.get(0, 1));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class WeepingWillowDripParticle extends TextureSheetParticle {
             this.xd *= 0.02D;
             this.yd *= 0.02D;
             this.zd *= 0.02D;
-            this.setSprite(sprites.get(0, 0));
+            this.setSprite(sprites.get(0, 1));
         } else {
             this.setSprite(sprites.get(1, 1));
         }

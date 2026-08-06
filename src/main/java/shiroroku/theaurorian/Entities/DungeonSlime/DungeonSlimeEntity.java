@@ -2,6 +2,7 @@ package shiroroku.theaurorian.Entities.DungeonSlime;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -17,18 +18,25 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import shiroroku.theaurorian.Config.CommonConfig;
+import shiroroku.theaurorian.Registry.EntityRegistry;
+import shiroroku.theaurorian.Registry.ParticleRegistry;
+import shiroroku.theaurorian.TheAurorian;
 
 import javax.annotation.Nullable;
 
 public class DungeonSlimeEntity extends Slime {
+
+    public static final int BASE_MAX_NEARBY = 5;
 
     public DungeonSlimeEntity(EntityType<? extends Slime> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 6.0).add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2);
     }
 
     @Override
@@ -48,15 +56,19 @@ public class DungeonSlimeEntity extends Slime {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         SpawnGroupData data = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-        this.setSize(pDifficulty.getDifficulty() == Difficulty.EASY ? 1 : pLevel.getRandom().nextInt(3), true);
+        this.setSize(1, true);
         return data;
     }
 
     @Override
     public void setSize(int pSize, boolean pResetHealth) {
-        super.setSize(pSize, pResetHealth);
+        super.setSize(1, pResetHealth);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(6.0);
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35F);
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(2);
+        if (pResetHealth) {
+            this.setHealth(this.getMaxHealth());
+        }
     }
 
     @Override
@@ -79,11 +91,41 @@ public class DungeonSlimeEntity extends Slime {
 
     @Override
     protected int getJumpDelay() {
-        return 1;
+        return 60 + this.random.nextInt(20);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean checkSpawn(EntityType<DungeonSlimeEntity> type, ServerLevelAccessor level,
+                                      MobSpawnType spawnType, BlockPos pos, net.minecraft.util.RandomSource random) {
+        if (!checkMobSpawnRules(type, level, spawnType, pos, random)) {
+            return false;
+        }
+        if (level.getLevel().dimension() != TheAurorian.the_aurorian) {
+            return false;
+        }
+        int cap = maxNearbyCap();
+        if (cap <= 0) {
+            return false;
+        }
+        return level.getEntitiesOfClass(DungeonSlimeEntity.class,
+                new AABB(pos).inflate(64, 6, 64), e -> e.isAlive()).size() <= cap;
+    }
+
+    public static int maxNearbyCap() {
+        return BASE_MAX_NEARBY * CommonConfig.runestone_dungeon_mob_density.get();
+    }
+
+    @Override
+    public int getMaxSpawnClusterSize() {
+        return maxNearbyCap();
     }
 
     @Override
     protected boolean spawnCustomParticles() {
+        SimpleParticleType type = ParticleRegistry.AURORIAN_SLIME.get();
+        for (int j = 0; j < 8; ++j) {
+            this.level().addParticle(type, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+        }
         return true;
     }
 }

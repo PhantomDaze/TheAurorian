@@ -34,6 +34,15 @@ public class AurorianArrowEntity extends AbstractArrow {
         this.setBaseDamage(damage);
     }
 
+    public float getShootVelocityMultiplier() {
+        return 1.0F;
+    }
+
+    @Override
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+        super.shoot(x, y, z, velocity * this.getShootVelocityMultiplier(), inaccuracy);
+    }
+
     @Override
     public void tick() {
         super.tick();

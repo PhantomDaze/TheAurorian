@@ -15,7 +15,7 @@ public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowA
     private int attackTime = 0;
 
     public KeeperBarrageGoal(DungeonKeeperEntity pMob) {
-        super(pMob, 0.25D, 10, 20.0F);
+        super(pMob, 0.25D, 10, 40.0F);
         keeper = pMob;
     }
 
@@ -23,22 +23,22 @@ public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowA
     public void start() {
         super.start();
         keeper.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.silentwood_bow.get()));
-        attackTime = 10;
+        attackTime = 2;
         this.keeper.startUsingItem(ProjectileUtil.getWeaponHoldingHand(keeper, item -> item instanceof BowItem));
     }
 
     private boolean hasLowHealth() {
-        return keeper.getHealth() / keeper.getMaxHealth() < 0.2f;
+        return keeper.getHealth() / keeper.getMaxHealth() <= 0.35f && keeper.getTarget() != null;
     }
 
     @Override
     public boolean canUse() {
-        return hasLowHealth();
+        return keeper.getHealth() / keeper.getMaxHealth() <= 0.35f && keeper.getTarget() != null;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return hasLowHealth();
+        return keeper.getHealth() / keeper.getMaxHealth() <= 0.35f && keeper.getTarget() != null;
     }
 
     @Override

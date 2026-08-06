@@ -18,17 +18,16 @@ public class DungeonSlimeRenderer extends MobRenderer<DungeonSlimeEntity, Dungeo
     }
 
     public void render(DungeonSlimeEntity dungeonSlimeEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        this.shadowRadius = 0.25F * (float) dungeonSlimeEntity.getSize();
+        this.shadowRadius = 0.25F;
         super.render(dungeonSlimeEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
     protected void scale(DungeonSlimeEntity dungeonSlimeEntity, PoseStack pMatrixStack, float pPartialTick) {
         pMatrixStack.scale(0.999F, 0.999F, 0.999F);
         pMatrixStack.translate(0.0D, 0.001F, 0.0D);
-        float size = (float) dungeonSlimeEntity.getSize();
-        float squishLerp = Mth.lerp(pPartialTick, dungeonSlimeEntity.oSquish, dungeonSlimeEntity.squish) / (size * 0.5F + 1.0F);
+        float squishLerp = Mth.lerp(pPartialTick, dungeonSlimeEntity.oSquish, dungeonSlimeEntity.squish) / 1.5F;
         float scale = 1.0F / (squishLerp + 1.0F);
-        pMatrixStack.scale(scale * size, 1.0F / scale * size, scale * size);
+        pMatrixStack.scale(scale, 1.0F / scale, scale);
     }
 
     @Override

@@ -19,8 +19,8 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -86,28 +86,41 @@ public class DarkstoneDungeonStructure extends Structure {
         return Math.max(h - 1, MIN_HEIGHT);
     }
 
+    private static int sourceSurfaceY(GenerationContext context, int ax, int az, int sourceOffsetX, int sourceOffsetZ) {
+        int anchorChunkX = Math.floorDiv(ax - 8, 16);
+        int anchorChunkZ = Math.floorDiv(az - 8, 16);
+        int sourceChunkX = anchorChunkX - sourceOffsetX;
+        int sourceChunkZ = anchorChunkZ - sourceOffsetZ;
+        int probeX = sourceChunkX * 16 + sourceOffsetX * 16 + 24;
+        int probeZ = sourceChunkZ * 16 + sourceOffsetZ * 16 + 16;
+        return surfaceY(context, probeX, probeZ);
+    }
+
     private static List<Slot> computeSlots(GenerationContext context, BlockPos center) {
         List<Slot> slots = new ArrayList<>();
         RandomSource random = RandomSource.create(context.seed());
         int ax = center.getX();
         int az = center.getZ();
 
-        // Entrance (chunk offset 0,0) and stairs (1,0)
-        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_entrance"), Rotation.NONE, new BlockPos(ax, surfaceY(context, ax, az), az), null));
-        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_stairs"), Rotation.NONE, new BlockPos(ax + 16, surfaceY(context, ax + 16, az) - FLOOR_HEIGHT, az), null));
+        int entranceY = sourceSurfaceY(context, ax, az, 0, 0);
+        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_entrance"), Rotation.NONE, new BlockPos(ax, entranceY, az), null));
+        int stairsY = sourceSurfaceY(context, ax, az, 1, 0);
+        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_stairs"), Rotation.NONE, new BlockPos(ax - 16, stairsY - FLOOR_HEIGHT, az), null));
 
-        // Map floors
+        // Map floors use each source cell's upstream height probe and anchor-relative position.
         for (int floor = 0; floor < MAP_FLOORS; floor++) {
-            String[][] map = mapForHeight(center.getY() - (FLOOR_HEIGHT * (floor + 1)));
             for (int ix = 0; ix < MAP_LENGTH; ix++) {
                 for (int iz = 0; iz < MAP_WIDTH; iz++) {
-                    char c = map[floor][ix].charAt(iz);
-                    if (c == ' ') continue;
-                    int ox = -ix + MAP_OFFSET_X;
-                    int oz = iz + MAP_OFFSET_Z;
-                    int px = ax + ox * 16;
-                    int pz = az + oz * 16;
-                    int py = surfaceY(context, px, pz) - (FLOOR_HEIGHT * (floor + 1));
+                    int sourceOffsetX = -ix + MAP_OFFSET_X;
+                    int sourceOffsetZ = iz + MAP_OFFSET_Z;
+                    int sourceY = sourceSurfaceY(context, ax, az, sourceOffsetX, sourceOffsetZ);
+                    int py = sourceY - FLOOR_HEIGHT * (floor + 1);
+                    char c = mapForHeight(py)[floor][ix].charAt(iz);
+                    if (c == ' ') {
+                        continue;
+                    }
+                    int px = ax - sourceOffsetX * 16;
+                    int pz = az - sourceOffsetZ * 16;
                     buildSlot(slots, c, px, py, pz, floor, random);
                 }
             }
@@ -124,10 +137,10 @@ public class DarkstoneDungeonStructure extends Structure {
         return slots;
     }
 
-    private static void addBossRoom(List<Slot> slots, GenerationContext context, int ax, int az, int dx, int dz, String name) {
-        int px = ax + dx * 16;
-        int pz = az + dz * 16;
-        int py = surfaceY(context, px, pz) - FLOOR_HEIGHT * 2;
+    private static void addBossRoom(List<Slot> slots, GenerationContext context, int ax, int az, int sourceOffsetX, int sourceOffsetZ, String name) {
+        int px = ax - sourceOffsetX * 16;
+        int pz = az - sourceOffsetZ * 16;
+        int py = sourceSurfaceY(context, ax, az, sourceOffsetX, sourceOffsetZ) - FLOOR_HEIGHT * 2;
         slots.add(new Slot(new ResourceLocation("theaurorian:" + name), Rotation.NONE, new BlockPos(px, py, pz), "theaurorian:chests/darkstone/high"));
     }
 
@@ -176,16 +189,20 @@ public class DarkstoneDungeonStructure extends Structure {
         slots.add(new Slot(template, rotation, new BlockPos(px + offx, py + offy, pz + offz), slotLoot));
     }
 
-    private static BoundingBox boundingBoxOf(List<Slot> slots) {
+    private static BoundingBox boundingBoxOf(StructureTemplateManager manager, List<Slot> slots) {
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
         for (Slot s : slots) {
-            minX = Math.min(minX, s.pos.getX());
-            minY = Math.min(minY, s.pos.getY());
-            minZ = Math.min(minZ, s.pos.getZ());
-            maxX = Math.max(maxX, s.pos.getX() + 16);
-            maxY = Math.max(maxY, s.pos.getY() + 16);
-            maxZ = Math.max(maxZ, s.pos.getZ() + 16);
+            StructureTemplate template = manager.get(s.templateId).orElse(null);
+            BoundingBox box = template == null
+                    ? new BoundingBox(s.pos.getX(), s.pos.getY(), s.pos.getZ(), s.pos.getX() + 16, s.pos.getY() + 16, s.pos.getZ() + 16)
+                    : template.getBoundingBox(new StructurePlaceSettings().setRotation(s.rotation), s.pos);
+            minX = Math.min(minX, box.minX());
+            minY = Math.min(minY, box.minY());
+            minZ = Math.min(minZ, box.minZ());
+            maxX = Math.max(maxX, box.maxX());
+            maxY = Math.max(maxY, box.maxY());
+            maxZ = Math.max(maxZ, box.maxZ());
         }
         return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
     }
@@ -196,7 +213,7 @@ public class DarkstoneDungeonStructure extends Structure {
         private final List<Slot> slots;
 
         public DarkstoneDungeonPiece(StructureTemplateManager manager, BlockPos origin, long seed, List<Slot> slots) {
-            super(StructureRegistry.DARKSTONE_DUNGEON_PIECE.get(), 0, boundingBoxOf(slots));
+            super(StructureRegistry.DARKSTONE_DUNGEON_PIECE.get(), 0, boundingBoxOf(manager, slots));
             this.seed = seed;
             this.slots = slots;
             loadTemplates(manager);
@@ -242,21 +259,54 @@ public class DarkstoneDungeonStructure extends Structure {
 
         @Override
         public void postProcess(WorldGenLevel level, net.minecraft.world.level.StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-            StructurePlaceSettings settings = new StructurePlaceSettings().setRandom(random)
-                    .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
-                    .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
             for (Slot s : slots) {
-                if (s.template == null || !new ChunkPos(s.pos).equals(chunkPos)) {
+                if (s.template == null) {
                     continue;
                 }
-                settings.setRotation(s.rotation);
+                StructurePlaceSettings settings = new StructurePlaceSettings()
+                        .setRotation(s.rotation)
+                        .setRandom(random)
+                        .setBoundingBox(box)
+                        .setKeepLiquids(false)
+                        .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE_CLEAR_FLUID);
+                BoundingBox templateBox = s.template.getBoundingBox(settings, s.pos);
+                if (!templateBox.intersects(box)) {
+                    continue;
+                }
                 s.template.placeInWorld(level, s.pos, s.pos, settings, random, 2);
                 if (s.loot != null) {
-                    for (StructureTemplate.StructureBlockInfo chest : s.template.filterBlocks(s.pos, settings, Blocks.CHEST)) {
-                        if (level.getBlockEntity(chest.pos()) instanceof ChestBlockEntity chestEntity) {
-                            chestEntity.setLootTable(new ResourceLocation(s.loot), random.nextLong());
-                        }
-                    }
+                    populateChests(level, s, settings, random, box);
+                }
+            }
+        }
+
+        private void populateChests(WorldGenLevel level, Slot slot, StructurePlaceSettings settings, RandomSource random, BoundingBox box) {
+            if (slot.template == null || slot.loot == null) {
+                return;
+            }
+            ResourceLocation lootTable = new ResourceLocation(slot.loot);
+            for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.STRUCTURE_BLOCK)) {
+                if (!box.isInside(info.pos())) {
+                    continue;
+                }
+                String metadata = info.nbt() == null ? "" : info.nbt().getString("metadata");
+                if (!metadata.isEmpty() && !metadata.startsWith("chest")) {
+                    continue;
+                }
+                level.setBlock(info.pos(), Blocks.AIR.defaultBlockState(), 3);
+                BlockEntity blockEntity = level.getBlockEntity(info.pos().below());
+                if (blockEntity instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootTable, random.nextLong());
+                } else if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootTable, random.nextLong());
+                }
+            }
+            for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.CHEST)) {
+                if (!box.isInside(info.pos())) {
+                    continue;
+                }
+                if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(lootTable, random.nextLong());
                 }
             }
         }
