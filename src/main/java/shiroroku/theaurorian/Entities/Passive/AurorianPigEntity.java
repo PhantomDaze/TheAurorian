@@ -62,7 +62,7 @@ public class AurorianPigEntity extends Pig {
 
     @Override
     public boolean isSaddleable() {
-        return false;
+        return this.isAlive() && !this.isBaby();
     }
 
     @SuppressWarnings("deprecation")

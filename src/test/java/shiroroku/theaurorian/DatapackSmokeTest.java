@@ -149,6 +149,18 @@ class DatapackSmokeTest {
     }
 
     @Test
+    void moonSandRecipesProduceMoonGlass() throws Exception {
+        for (String kind : new String[]{"smelting", "blasting"}) {
+            JsonObject recipe = readObject(MAIN.resolve("data/theaurorian/recipes/" + kind + "/moon_sand.json"));
+            assertEquals("minecraft:" + kind, recipe.get("type").getAsString());
+            assertEquals("theaurorian:moon_sand",
+                    recipe.getAsJsonObject("ingredient").get("item").getAsString());
+            assertEquals("theaurorian:moon_glass",
+                    recipe.get("result").getAsString(), kind + " result");
+        }
+    }
+
+    @Test
     void dungeonKeyRecipesMatchUpstream() throws Exception {
         Path shapeless = MAIN.resolve("data/theaurorian/recipes/shapeless");
         JsonObject dark = readObject(shapeless.resolve("darkstone_key.json"));

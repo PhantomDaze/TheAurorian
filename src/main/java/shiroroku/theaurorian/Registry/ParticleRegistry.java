@@ -13,6 +13,7 @@ public class ParticleRegistry {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, TheAurorian.MODID);
 
     public static final RegistryObject<SimpleParticleType> WEEPING_WILLOW_DRIP = PARTICLES.register("weeping_willow_drip", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> AURORIAN_SLIME = PARTICLES.register("aurorian_slime", () -> new SimpleParticleType(false));
 
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);

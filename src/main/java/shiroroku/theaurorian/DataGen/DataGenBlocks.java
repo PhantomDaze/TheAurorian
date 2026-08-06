@@ -29,10 +29,12 @@ public class DataGenBlocks extends BlockStateProvider {
         BASIC.addAll(BlockRegistry.BLOCKS_GEN.getEntries());
         BASIC.addAll(BlockRegistry.BLOCKS_GEN_NL.getEntries());
         BASIC.stream().map(Supplier::get)
-                // glass/urn need non-solid render types — handled below
+                // glass/urn need non-solid render types — handled below;
+                // aurorian_grass_light needs a top/side/bottom cube like aurorian_grass — handled below
                 .filter(block -> block != BlockRegistry.aurorian_glass.get()
                         && block != BlockRegistry.moon_glass.get()
-                        && block != BlockRegistry.urn.get())
+                        && block != BlockRegistry.urn.get()
+                        && block != BlockRegistry.aurorian_grass_light.get())
                 .forEach(block -> {
                     simpleBlock(block);
                     simpleBlockItem(block);
@@ -47,6 +49,12 @@ public class DataGenBlocks extends BlockStateProvider {
         cropBlock(BlockRegistry.silkberry_crop.get(), "silkberry_crop");
 
         // CUSTOM
+        // aurorian_grass_light — up/grass-light, sides/grass-light, down/dirt (not cube_all, which
+        // would put the dirt-inclusive side texture on the top face).
+        ModelFile grassLight = models().cubeBottomTop(blockTexture(BlockRegistry.aurorian_grass_light.get()).getPath(),
+                modLoc("block/aurorian_grass_light"), modLoc("block/aurorian_dirt"), modLoc("block/aurorian_grass_light_top"));
+        simpleBlock(BlockRegistry.aurorian_grass_light.get(), grassLight);
+        simpleBlockItem(BlockRegistry.aurorian_grass_light.get());
         // axisBlock(block, side, end) — side = bark, end = rings/top
         axisBlock((RotatedPillarBlock) BlockRegistry.silentwood_log.get(), modLoc("block/silentwood_log_side"), modLoc("block/silentwood_log_end"));
         axisBlock((RotatedPillarBlock) BlockRegistry.weeping_willow_log.get(), modLoc("block/weeping_willow_log_side"), modLoc("block/weeping_willow_log_top"));

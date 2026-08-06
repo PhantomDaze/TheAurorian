@@ -45,7 +45,7 @@ public class EntityRegistry {
     public static final RegistryObject<EntityType<CrystallineBeamEntity>> crystalline_beam = ENTITIES.register("crystalline_beam", () -> EntityType.Builder.<CrystallineBeamEntity>of(CrystallineBeamEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).fireImmune().setUpdateInterval(1).build("crystalline_beam"));
 
     public static final RegistryObject<EntityType<DungeonKeeperEntity>> dungeon_keeper = ENTITIES.register("dungeon_keeper", () -> EntityType.Builder.of(DungeonKeeperEntity::new, MobCategory.MONSTER).sized(0.8F, 2.3F).clientTrackingRange(8).sized(0.7F, 2.4F).fireImmune().build("dungeon_keeper"));
-    public static final RegistryObject<EntityType<DungeonSlimeEntity>> dungeon_slime = ENTITIES.register("dungeon_slime", () -> EntityType.Builder.of(DungeonSlimeEntity::new, MobCategory.MONSTER).sized(2.04F, 2.04F).clientTrackingRange(10).build("dungeon_slime"));
+    public static final RegistryObject<EntityType<DungeonSlimeEntity>> dungeon_slime = ENTITIES.register("dungeon_slime", () -> EntityType.Builder.of(DungeonSlimeEntity::new, MobCategory.MONSTER).sized(0.52F, 0.52F).clientTrackingRange(10).build("dungeon_slime"));
     public static final RegistryObject<EntityType<HollowEntity>> hollow = ENTITIES.register("hollow", () -> EntityType.Builder.<HollowEntity>of(HollowEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).clientTrackingRange(8).build("hollow"));
     public static final RegistryObject<EntityType<UndeadKnightEntity>> undead_knight = ENTITIES.register("undead_knight", () -> EntityType.Builder.<UndeadKnightEntity>of(UndeadKnightEntity::new, MobCategory.MONSTER).sized(0.8F, 2.3F).clientTrackingRange(8).build("undead_knight"));
     public static final RegistryObject<EntityType<MoonQueenEntity>> moon_queen = ENTITIES.register("moon_queen", () -> EntityType.Builder.<MoonQueenEntity>of(MoonQueenEntity::new, MobCategory.MONSTER).sized(0.6F * MoonQueenEntity.MOB_SCALE, 1.95F * MoonQueenEntity.MOB_SCALE).clientTrackingRange(8).fireImmune().build("moon_queen"));
@@ -80,7 +80,7 @@ public class EntityRegistry {
     }
 
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
-        event.register(EntityRegistry.hollow.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, HollowEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(EntityRegistry.dungeon_slime.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DungeonSlimeEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
         event.register(EntityRegistry.spiderling.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpiderlingEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
         event.register(EntityRegistry.moon_acolyte.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MoonAcolyteEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);
         event.register(EntityRegistry.crystalline_sprite.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CrystallineSpriteEntity::checkSpawn, SpawnPlacementRegisterEvent.Operation.AND);

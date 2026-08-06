@@ -36,7 +36,7 @@
   "block.theaurorian.geode": "Geode",
   "block.theaurorian.lavender_block": "Lavender",
   "block.theaurorian.moon_gem": "Moon Gem",
-  "block.theaurorian.moon_gem.desc": "Found on Moon Temple pillar islands, for crafting Moon Temple keys.",
+  "block.theaurorian.moon_gem.desc": "Found on floating islands around the Moon Temple",
   "block.theaurorian.moon_temple_bricks": "Moon Temple Bricks",
   "block.theaurorian.moon_temple_stairs": "Moon Temple Stairs",
   "block.theaurorian.moon_temple_lamp": "Moon Temple Lamp",
@@ -177,6 +177,7 @@
   "item.theaurorian.emerald_amulet": "Emerald Amulet",
   "item.theaurorian.forgotton_sword": "Forgotton Sword",
   "item.theaurorian.keepers_amulet": "Keeper's Amulet",
+  "item.theaurorian.keepers_amulet.desc": "Pulsates with corrupted power. Crafts into the Darkstone Key.",
   "item.theaurorian.knight_boots": "Knight Boots",
   "item.theaurorian.knight_chestplate": "Knight Chestplate",
   "item.theaurorian.knight_helmet": "Knight Helmet",
@@ -322,7 +323,7 @@
   "item.theaurorian.dark_amulet": "Dark Amulet",
   "item.theaurorian.sticky_spiker": "Sticky Spiker",
   "item.theaurorian.webbing": "Webbing",
-  "item.theaurorian.dark_amulet.desc": "Has a faint dreadful aura. Crafts into the Moon Temple Key.",
+  "item.theaurorian.dark_amulet.desc": "Grants extra knockback",
   "item.theaurorian.sticky_spiker.desc": "Throw at enemies to poison them",
   "item.theaurorian.webbing.desc": "Throw to slow enemies",
   "item.theaurorian.weeping_willow_sap.desc": "Cures poison, turning it into slowness",
@@ -381,6 +382,5 @@
   "item.theaurorian.spawn_egg_disturbed_hollow": "Disturbed Hollow Spawn Egg",
   "item.theaurorian.spawn_egg_aurorian_pig": "Aurorian Pig Spawn Egg",
   "item.theaurorian.spawn_egg_aurorian_rabbit": "Aurorian Rabbit Spawn Egg",
-  "item.theaurorian.spawn_egg_aurorian_sheep": "Aurorian Sheep Spawn Egg",
-  "item.theaurorian.keepers_amulet.desc": "Pulsates with corrupted power. Crafts into the Darkstone Key."
+  "item.theaurorian.spawn_egg_aurorian_sheep": "Aurorian Sheep Spawn Egg"
 }

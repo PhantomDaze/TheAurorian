@@ -55,7 +55,7 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new KeeperBarrageGoal<>(this));
         this.goalSelector.addGoal(3, new KeeperMeleeGoal(this));
-        this.goalSelector.addGoal(4, new KeeperRangedGoal<>(this, 1.0D, 10, 15.0F));
+        this.goalSelector.addGoal(4, new KeeperRangedGoal<>(this, 0.85D, 20, 40.0F));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -64,10 +64,27 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
+        ensureBossEquipment();
+    }
+
+    public void ensureBossEquipment() {
+        if (!this.getMainHandItem().isEmpty()) {
+            return;
+        }
         ItemStack sword = new ItemStack(ItemRegistry.moonstone_sword.get());
         sword.enchant(Enchantments.KNOCKBACK, 2);
         sword.enchant(EnchantRegistry.lightning.get(), 3);
         this.setItemInHand(InteractionHand.MAIN_HAND, sword);
+    }
+
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity pEntity) {
+        boolean flag = super.doHurtTarget(pEntity);
+        if (flag && pEntity instanceof net.minecraft.world.entity.LivingEntity living) {
+            living.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                    net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 200), this);
+        }
+        return flag;
     }
 
     @Override

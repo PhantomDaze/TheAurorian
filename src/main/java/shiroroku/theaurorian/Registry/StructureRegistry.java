@@ -11,6 +11,7 @@ import shiroroku.theaurorian.TheAurorian;
 import shiroroku.theaurorian.World.Structure.DarkstoneDungeonStructure;
 import shiroroku.theaurorian.World.Structure.IgnoreBlockStructureProcessor;
 import shiroroku.theaurorian.World.Structure.MoonTempleStructure;
+import shiroroku.theaurorian.World.Structure.RunestoneDungeonStructure;
 import shiroroku.theaurorian.World.Structure.ReplaceAirStructureProcessor;
 import shiroroku.theaurorian.World.Structure.SingleTemplateStructure;
 
@@ -25,6 +26,9 @@ public class StructureRegistry {
 
     public static final RegistryObject<StructureType<MoonTempleStructure>> MOON_TEMPLE_TYPE = STRUCTURE_TYPES.register("moon_temple", () -> () -> MoonTempleStructure.CODEC);
     public static final RegistryObject<StructurePieceType> MOON_TEMPLE_PIECE = PIECE_TYPES.register("moon_temple", () -> MoonTempleStructure.MoonTemplePiece::load);
+
+    public static final RegistryObject<StructureType<RunestoneDungeonStructure>> RUNESTONE_DUNGEON_TYPE = STRUCTURE_TYPES.register("runestone_dungeon", () -> () -> RunestoneDungeonStructure.CODEC);
+    public static final RegistryObject<StructurePieceType> RUNESTONE_DUNGEON_PIECE = PIECE_TYPES.register("runestone_dungeon", () -> RunestoneDungeonStructure.RunestoneDungeonPiece::load);
 
     public static final RegistryObject<StructureType<SingleTemplateStructure>> SINGLE_TEMPLATE_TYPE = STRUCTURE_TYPES.register("single_template", () -> () -> SingleTemplateStructure.CODEC);
     public static final RegistryObject<StructurePieceType> SINGLE_TEMPLATE_PIECE = PIECE_TYPES.register("single_template", () -> SingleTemplateStructure.SingleTemplatePiece::load);

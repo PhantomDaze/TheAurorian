@@ -149,11 +149,9 @@ class PortContentCategoriesTest {
             assertMinNbt(structures.resolve("weepingwillow"), 5);
 
             Set<String> defs = ContentTestSupport.jsonStems(MAIN, MAIN, "data/" + MODID + "/worldgen/structure");
-            Set<String> sets = ContentTestSupport.jsonStems(MAIN, MAIN, "data/" + MODID + "/worldgen/structure_set");
             assertTrue(defs.containsAll(REQUIRED_STRUCTURES), "missing structure defs " + diff(REQUIRED_STRUCTURES, defs));
-            assertTrue(sets.containsAll(REQUIRED_STRUCTURES), "missing structure sets " + diff(REQUIRED_STRUCTURES, sets));
-
-            // structure_set -> structure
+            Set<String> setMembers = new HashSet<>();
+            // A structure set may group multiple structures, such as major_dungeons.
             Path setDir = MAIN.resolve("data/" + MODID + "/worldgen/structure_set");
             try (Stream<Path> stream = Files.list(setDir)) {
                 stream.filter(p -> p.toString().endsWith(".json")).forEach(path -> {
@@ -162,6 +160,7 @@ class PortContentCategoriesTest {
                         for (JsonElement el : obj.getAsJsonArray("structures")) {
                             String sid = el.getAsJsonObject().get("structure").getAsString();
                             String name = sid.substring(sid.indexOf(':') + 1);
+                            setMembers.add(name);
                             assertTrue(defs.contains(name), path.getFileName() + " -> missing " + sid);
                         }
                     } catch (IOException e) {
@@ -169,6 +168,8 @@ class PortContentCategoriesTest {
                     }
                 });
             }
+            assertTrue(setMembers.containsAll(REQUIRED_STRUCTURES),
+                    "missing structure set members " + diff(REQUIRED_STRUCTURES, setMembers));
 
             // single_template NBT
             Path defDir = MAIN.resolve("data/" + MODID + "/worldgen/structure");
@@ -246,6 +247,46 @@ class PortContentCategoriesTest {
             }
             assertTrue(Files.isRegularFile(MAIN.resolve("data/" + MODID + "/worldgen/noise_settings/the_aurorian.json")));
         }
+
+        @Test
+        void surfaceRuleKeepsLandGrassAndWaterMaterialsSeparate() throws Exception {
+            JsonObject noise = ContentTestSupport.readObject(
+                    MAIN.resolve("data/" + MODID + "/worldgen/noise_settings/the_aurorian.json"));
+            assertEquals(63, noise.get("sea_level").getAsInt(), "surface fix must not change sea level");
+
+            JsonObject surface = noise.getAsJsonObject("surface_rule");
+            String encoded = surface.toString();
+            assertFalse(encoded.contains("\"absolute\":55"),
+                    "moon_sand must not use the old global y=55 band");
+            assertTrue(encoded.contains("theaurorian:moon_sand"),
+                    "riverbed surface must contain moon_sand");
+            assertTrue(encoded.contains("minecraft:above_preliminary_surface"),
+                    "surface materials must be protected from cave floors");
+            assertTrue(encoded.contains("theaurorian:aurorian_dirt"), "surface rules must contain aurorian_dirt");
+            assertTrue(encoded.contains("theaurorian:aurorian_grass"), "land surface must contain aurorian_grass");
+            assertTrue(encoded.contains("theaurorian:aurorian_grass_light"),
+                    "weeping willow land surface must contain aurorian_grass_light");
+
+            List<SurfaceBlockPath> blocks = new java.util.ArrayList<>();
+            collectSurfaceBlocks(surface, false, Set.of(), blocks);
+            SurfaceBlockPath moonSand = blocks.stream()
+                    .filter(path -> path.name().equals("theaurorian:moon_sand"))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError("moon_sand result missing from surface rule"));
+            assertTrue(moonSand.preliminarySurface(), "moon_sand must be above the preliminary surface");
+            assertTrue(moonSand.waterOffsets().isEmpty(),
+                    "moon_sand must be the fallback (no water guard) reached only when water offset=0 is false");
+
+            for (SurfaceBlockPath path : blocks) {
+                if (path.name().equals("theaurorian:aurorian_grass")
+                        || path.name().equals("theaurorian:aurorian_grass_light")
+                        || path.name().equals("theaurorian:aurorian_dirt")) {
+                    assertTrue(path.preliminarySurface(), path.name() + " must be above the preliminary surface");
+                    assertTrue(path.waterOffsets().isEmpty() || path.waterOffsets().equals(Set.of(0)),
+                            path.name() + " must only sit under a water offset=0 land guard");
+                }
+            }
+        }
     }
 
     @Nested
@@ -262,6 +303,13 @@ class PortContentCategoriesTest {
             assertTrue(Files.isRegularFile(recipes.resolve("moonlight_forge/keepers_bow.json")));
             assertTrue(Files.isRegularFile(recipes.resolve("moonlight_forge/queens_chipper.json")));
             assertTrue(Files.isRegularFile(recipes.resolve("moonlight_forge/moon_shield.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smelting/moon_sand.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("blasting/moon_sand.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smoking/cooked_aurorian_pork.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("campfire/cooked_aurorian_pork.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("blasting/aurorian_stone.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smelting/silentwood_charcoal.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smelting/weeping_willow_charcoal.json")));
 
             int mf = 0, scrapper = 0;
             try (Stream<Path> stream = Files.walk(recipes)) {
@@ -491,6 +539,52 @@ class PortContentCategoriesTest {
 
     private static String stringOrNull(JsonObject o, String key) {
         return o.has(key) && o.get(key).isJsonPrimitive() ? o.get(key).getAsString() : null;
+    }
+
+    private record SurfaceBlockPath(String name, boolean preliminarySurface, Set<Integer> waterOffsets) {}
+
+    private static void collectSurfaceBlocks(JsonElement node, boolean preliminarySurface,
+                                             Set<Integer> waterOffsets, List<SurfaceBlockPath> out) {
+        if (node == null || node.isJsonNull()) {
+            return;
+        }
+        if (node.isJsonArray()) {
+            for (JsonElement child : node.getAsJsonArray()) {
+                collectSurfaceBlocks(child, preliminarySurface, waterOffsets, out);
+            }
+            return;
+        }
+        if (!node.isJsonObject()) {
+            return;
+        }
+        JsonObject object = node.getAsJsonObject();
+        String type = stringOrNull(object, "type");
+        if ("minecraft:block".equals(type)) {
+            JsonObject state = object.getAsJsonObject("result_state");
+            if (state != null && state.has("Name")) {
+                out.add(new SurfaceBlockPath(state.get("Name").getAsString(), preliminarySurface, waterOffsets));
+            }
+            return;
+        }
+        if ("minecraft:sequence".equals(type)) {
+            collectSurfaceBlocks(object.get("sequence"), preliminarySurface, waterOffsets, out);
+            return;
+        }
+        if ("minecraft:condition".equals(type)) {
+            JsonObject condition = object.getAsJsonObject("if_true");
+            boolean nextPreliminary = preliminarySurface;
+            Set<Integer> nextWaterOffsets = waterOffsets;
+            if (condition != null) {
+                if ("minecraft:above_preliminary_surface".equals(stringOrNull(condition, "type"))) {
+                    nextPreliminary = true;
+                }
+                if ("minecraft:water".equals(stringOrNull(condition, "type")) && condition.has("offset")) {
+                    nextWaterOffsets = new HashSet<>(waterOffsets);
+                    nextWaterOffsets.add(condition.get("offset").getAsInt());
+                }
+            }
+            collectSurfaceBlocks(object.get("then_run"), nextPreliminary, nextWaterOffsets, out);
+        }
     }
 
     private static Set<String> diff(Set<String> need, Set<String> have) {

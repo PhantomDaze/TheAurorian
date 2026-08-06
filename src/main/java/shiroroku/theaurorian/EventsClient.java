@@ -35,6 +35,7 @@ import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestBlockRenderer
 import shiroroku.theaurorian.Items.BaseAurorianTea;
 import shiroroku.theaurorian.Items.Loot.UmbraPickaxe;
 import shiroroku.theaurorian.Items.Spectral.SpectralArmorLayer;
+import shiroroku.theaurorian.Particles.AurorianSlimeParticle;
 import shiroroku.theaurorian.Particles.WeepingWillowDripParticle;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
@@ -137,6 +138,7 @@ public class EventsClient {
     @SubscribeEvent
     public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
         event.register(ParticleRegistry.WEEPING_WILLOW_DRIP.get(), WeepingWillowDripParticle.Provider::new);
+        event.register(ParticleRegistry.AURORIAN_SLIME.get(), AurorianSlimeParticle.Provider::new);
     }
 
     @SuppressWarnings("deprecation")

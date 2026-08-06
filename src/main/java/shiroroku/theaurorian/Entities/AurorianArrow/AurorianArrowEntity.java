@@ -34,6 +34,16 @@ public class AurorianArrowEntity extends AbstractArrow {
         this.setBaseDamage(damage);
     }
 
+    /** Per-arrow launch-speed adjustment used by the upstream projectile tuning. */
+    public float getShootVelocityMultiplier() {
+        return 1.0F;
+    }
+
+    @Override
+    public void shoot(double pX, double pY, double pZ, float pVelocity, float pInaccuracy) {
+        super.shoot(pX, pY, pZ, pVelocity * getShootVelocityMultiplier(), pInaccuracy);
+    }
+
     @Override
     public void tick() {
         super.tick();

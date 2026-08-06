@@ -7,20 +7,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -30,11 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Darkstone dungeon, replicating the 1.12 char-map generator (5x5x2 floors plus
- * entrance, stairs and boss room). Templates come from
- * {@code data/theaurorian/structures/darkstone/*.nbt} (already ID-remapped).
- */
+/** Darkstone dungeon, replicating the 1.12 char-map generator. */
 public class DarkstoneDungeonStructure extends Structure {
 
     public static final Codec<DarkstoneDungeonStructure> CODEC = RecordCodecBuilder.<DarkstoneDungeonStructure>mapCodec(instance ->
@@ -68,8 +61,8 @@ public class DarkstoneDungeonStructure extends Structure {
         }
         BlockPos center = new BlockPos(context.chunkPos().getMinBlockX() + 8, 0, context.chunkPos().getMinBlockZ() + 8);
         List<Slot> slots = computeSlots(context, center);
-        BlockPos origin = slots.get(0).pos;
-        return Optional.of(new GenerationStub(origin, builder -> builder.addPiece(new DarkstoneDungeonPiece(context.structureTemplateManager(), origin, context.seed(), slots))));
+        return Optional.of(new GenerationStub(slots.get(0).pos,
+                builder -> builder.addPiece(new DarkstoneDungeonPiece(context.structureTemplateManager(), slots.get(0).pos, context.seed(), slots))));
     }
 
     @Override
@@ -82,8 +75,18 @@ public class DarkstoneDungeonStructure extends Structure {
     }
 
     private static int surfaceY(GenerationContext context, int x, int z) {
-        int h = context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
-        return Math.max(h - 1, MIN_HEIGHT);
+        int height = context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+        return Math.max(height - 1, MIN_HEIGHT);
+    }
+
+    private static int sourceSurfaceY(GenerationContext context, int anchorX, int anchorZ, int sourceOffsetX, int sourceOffsetZ) {
+        int anchorChunkX = Math.floorDiv(anchorX - 8, 16);
+        int anchorChunkZ = Math.floorDiv(anchorZ - 8, 16);
+        int sourceChunkX = anchorChunkX - sourceOffsetX;
+        int sourceChunkZ = anchorChunkZ - sourceOffsetZ;
+        int probeX = sourceChunkX * 16 + sourceOffsetX * 16 + 24;
+        int probeZ = sourceChunkZ * 16 + sourceOffsetZ * 16 + 16;
+        return surfaceY(context, probeX, probeZ);
     }
 
     private static List<Slot> computeSlots(GenerationContext context, BlockPos center) {
@@ -92,121 +95,119 @@ public class DarkstoneDungeonStructure extends Structure {
         int ax = center.getX();
         int az = center.getZ();
 
-        // Entrance (chunk offset 0,0) and stairs (1,0)
-        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_entrance"), Rotation.NONE, new BlockPos(ax, surfaceY(context, ax, az), az), null));
-        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_stairs"), Rotation.NONE, new BlockPos(ax + 16, surfaceY(context, ax + 16, az) - FLOOR_HEIGHT, az), null));
+        int entranceY = sourceSurfaceY(context, ax, az, 0, 0);
+        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_entrance"), Rotation.NONE,
+                new BlockPos(ax, entranceY, az), null));
+        int stairsY = sourceSurfaceY(context, ax, az, 1, 0);
+        slots.add(new Slot(new ResourceLocation("theaurorian:darkstone/darkstone_stairs"), Rotation.NONE,
+                new BlockPos(ax - 16, stairsY - FLOOR_HEIGHT, az), null));
 
-        // Map floors
         for (int floor = 0; floor < MAP_FLOORS; floor++) {
-            String[][] map = mapForHeight(center.getY() - (FLOOR_HEIGHT * (floor + 1)));
             for (int ix = 0; ix < MAP_LENGTH; ix++) {
                 for (int iz = 0; iz < MAP_WIDTH; iz++) {
-                    char c = map[floor][ix].charAt(iz);
-                    if (c == ' ') continue;
-                    int ox = -ix + MAP_OFFSET_X;
-                    int oz = iz + MAP_OFFSET_Z;
-                    int px = ax + ox * 16;
-                    int pz = az + oz * 16;
-                    int py = surfaceY(context, px, pz) - (FLOOR_HEIGHT * (floor + 1));
+                    int sourceOffsetX = -ix + MAP_OFFSET_X;
+                    int sourceOffsetZ = iz + MAP_OFFSET_Z;
+                    int sourceY = sourceSurfaceY(context, ax, az, sourceOffsetX, sourceOffsetZ);
+                    int py = sourceY - FLOOR_HEIGHT * (floor + 1);
+                    char c = mapForHeight(py)[floor][ix].charAt(iz);
+                    if (c == ' ') {
+                        continue;
+                    }
+                    int px = ax - sourceOffsetX * 16;
+                    int pz = az - sourceOffsetZ * 16;
                     buildSlot(slots, c, px, py, pz, floor, random);
                 }
             }
         }
 
-        // Boss room
         addBossRoom(slots, context, ax, az, 0, 0, "darkstone/darkstone_bossroom_back");
         addBossRoom(slots, context, ax, az, 0, 1, "darkstone/darkstone_bossroom_backleft");
         addBossRoom(slots, context, ax, az, 0, -1, "darkstone/darkstone_bossroom_backright");
         addBossRoom(slots, context, ax, az, 1, 0, "darkstone/darkstone_bossroom_front");
         addBossRoom(slots, context, ax, az, 1, 1, "darkstone/darkstone_bossroom_frontleft");
         addBossRoom(slots, context, ax, az, 1, -1, "darkstone/darkstone_bossroom_frontright");
-
         return slots;
     }
 
-    private static void addBossRoom(List<Slot> slots, GenerationContext context, int ax, int az, int dx, int dz, String name) {
-        int px = ax + dx * 16;
-        int pz = az + dz * 16;
-        int py = surfaceY(context, px, pz) - FLOOR_HEIGHT * 2;
-        slots.add(new Slot(new ResourceLocation("theaurorian:" + name), Rotation.NONE, new BlockPos(px, py, pz), "theaurorian:chests/darkstone/high"));
+    private static void addBossRoom(List<Slot> slots, GenerationContext context, int ax, int az, int sourceOffsetX, int sourceOffsetZ, String name) {
+        int px = ax - sourceOffsetX * 16;
+        int pz = az - sourceOffsetZ * 16;
+        int py = sourceSurfaceY(context, ax, az, sourceOffsetX, sourceOffsetZ) - FLOOR_HEIGHT * 2;
+        slots.add(new Slot(new ResourceLocation("theaurorian:" + name), Rotation.NONE, new BlockPos(px, py, pz),
+                "theaurorian:chests/darkstone/high"));
     }
 
     private static void buildSlot(List<Slot> slots, char c, int px, int py, int pz, int floor, RandomSource random) {
         String loot = floor == 0 ? "theaurorian:chests/darkstone/low" : "theaurorian:chests/darkstone/med";
         ResourceLocation template;
         Rotation rotation = Rotation.NONE;
-        int offx = 0;
-        int offz = 0;
-        int offy = 0;
-
+        int offX = 0;
+        int offZ = 0;
+        int offY = 0;
         String slotLoot = null;
         switch (c) {
             case 'K' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_cross"); slotLoot = loot; }
             case 'E' -> template = new ResourceLocation("theaurorian:darkstone/darkstone_corner");
-            case 'F' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_corner"); rotation = Rotation.COUNTERCLOCKWISE_90; offz = 15; }
-            case 'G' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_corner"); rotation = Rotation.CLOCKWISE_90; offx = 15; }
-            case 'H' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_corner"); rotation = Rotation.CLOCKWISE_180; offx = 15; offz = 15; }
+            case 'F' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_corner"); rotation = Rotation.COUNTERCLOCKWISE_90; offZ = 15; }
+            case 'G' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_corner"); rotation = Rotation.CLOCKWISE_90; offX = 15; }
+            case 'H' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_corner"); rotation = Rotation.CLOCKWISE_180; offX = 15; offZ = 15; }
             case 'I' -> {
                 boolean straight = random.nextBoolean();
-                template = straight ? new ResourceLocation("theaurorian:darkstone/darkstone_straight") : new ResourceLocation("theaurorian:darkstone/darkstone_straight_b");
+                template = new ResourceLocation("theaurorian:darkstone/" + (straight ? "darkstone_straight" : "darkstone_straight_b"));
                 if (straight) slotLoot = loot;
             }
             case 'J' -> {
                 boolean straight = random.nextBoolean();
-                template = straight ? new ResourceLocation("theaurorian:darkstone/darkstone_straight") : new ResourceLocation("theaurorian:darkstone/darkstone_straight_b");
+                template = new ResourceLocation("theaurorian:darkstone/" + (straight ? "darkstone_straight" : "darkstone_straight_b"));
                 rotation = Rotation.COUNTERCLOCKWISE_90;
-                offz = 15;
+                offZ = 15;
                 if (straight) slotLoot = loot;
             }
             case 'A' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); slotLoot = loot; }
-            case 'B' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); rotation = Rotation.CLOCKWISE_90; offx = 15; slotLoot = loot; }
-            case 'C' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); rotation = Rotation.COUNTERCLOCKWISE_90; offz = 15; slotLoot = loot; }
-            case 'D' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); rotation = Rotation.CLOCKWISE_180; offx = 15; offz = 15; slotLoot = loot; }
+            case 'B' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); rotation = Rotation.CLOCKWISE_90; offX = 15; slotLoot = loot; }
+            case 'C' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); rotation = Rotation.COUNTERCLOCKWISE_90; offZ = 15; slotLoot = loot; }
+            case 'D' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_end"); rotation = Rotation.CLOCKWISE_180; offX = 15; offZ = 15; slotLoot = loot; }
             case 'L' -> template = new ResourceLocation("theaurorian:darkstone/darkstone_t");
-            case 'M' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_t"); rotation = Rotation.CLOCKWISE_90; offx = 15; }
-            case 'N' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_t"); rotation = Rotation.CLOCKWISE_180; offx = 15; offz = 15; }
-            case 'O' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_t"); rotation = Rotation.COUNTERCLOCKWISE_90; offz = 15; }
-            case 'P' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); offy = -FLOOR_HEIGHT; }
-            case 'Q' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); rotation = Rotation.COUNTERCLOCKWISE_90; offz = 15; offy = -FLOOR_HEIGHT; }
-            case 'R' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); rotation = Rotation.CLOCKWISE_90; offx = 15; offy = -FLOOR_HEIGHT; }
-            case 'S' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); rotation = Rotation.CLOCKWISE_180; offx = 15; offz = 15; offy = -FLOOR_HEIGHT; }
+            case 'M' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_t"); rotation = Rotation.CLOCKWISE_90; offX = 15; }
+            case 'N' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_t"); rotation = Rotation.CLOCKWISE_180; offX = 15; offZ = 15; }
+            case 'O' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_t"); rotation = Rotation.COUNTERCLOCKWISE_90; offZ = 15; }
+            case 'P' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); offY = -FLOOR_HEIGHT; }
+            case 'Q' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); rotation = Rotation.COUNTERCLOCKWISE_90; offZ = 15; offY = -FLOOR_HEIGHT; }
+            case 'R' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); rotation = Rotation.CLOCKWISE_90; offX = 15; offY = -FLOOR_HEIGHT; }
+            case 'S' -> { template = new ResourceLocation("theaurorian:darkstone/darkstone_stairs"); rotation = Rotation.CLOCKWISE_180; offX = 15; offZ = 15; offY = -FLOOR_HEIGHT; }
             default -> { return; }
         }
-
-        slots.add(new Slot(template, rotation, new BlockPos(px + offx, py + offy, pz + offz), slotLoot));
+        slots.add(new Slot(template, rotation, new BlockPos(px + offX, py + offY, pz + offZ), slotLoot));
     }
 
-    private static BoundingBox boundingBoxOf(List<Slot> slots) {
+    private static BoundingBox boundingBoxOf(StructureTemplateManager manager, List<Slot> slots) {
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
-        for (Slot s : slots) {
-            minX = Math.min(minX, s.pos.getX());
-            minY = Math.min(minY, s.pos.getY());
-            minZ = Math.min(minZ, s.pos.getZ());
-            maxX = Math.max(maxX, s.pos.getX() + 16);
-            maxY = Math.max(maxY, s.pos.getY() + 16);
-            maxZ = Math.max(maxZ, s.pos.getZ() + 16);
+        for (Slot slot : slots) {
+            StructureTemplate template = manager.get(slot.templateId).orElse(null);
+            BoundingBox box = template == null
+                    ? new BoundingBox(slot.pos.getX(), slot.pos.getY(), slot.pos.getZ(), slot.pos.getX() + 16, slot.pos.getY() + 16, slot.pos.getZ() + 16)
+                    : template.getBoundingBox(new StructurePlaceSettings().setRotation(slot.rotation), slot.pos);
+            minX = Math.min(minX, box.minX());
+            minY = Math.min(minY, box.minY());
+            minZ = Math.min(minZ, box.minZ());
+            maxX = Math.max(maxX, box.maxX());
+            maxY = Math.max(maxY, box.maxY());
+            maxZ = Math.max(maxZ, box.maxZ());
         }
         return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     public static class DarkstoneDungeonPiece extends StructurePiece {
-
         private final long seed;
         private final List<Slot> slots;
 
         public DarkstoneDungeonPiece(StructureTemplateManager manager, BlockPos origin, long seed, List<Slot> slots) {
-            super(StructureRegistry.DARKSTONE_DUNGEON_PIECE.get(), 0, boundingBoxOf(slots));
+            super(StructureRegistry.DARKSTONE_DUNGEON_PIECE.get(), 0, boundingBoxOf(manager, slots));
             this.seed = seed;
             this.slots = slots;
-            loadTemplates(manager);
-        }
-
-        private void loadTemplates(StructureTemplateManager manager) {
-            for (Slot s : slots) {
-                if (s.template == null) {
-                    s.template = manager.get(s.templateId).orElse(null);
-                }
+            for (Slot slot : slots) {
+                slot.template = manager.get(slot.templateId).orElse(null);
             }
         }
 
@@ -215,9 +216,9 @@ public class DarkstoneDungeonStructure extends Structure {
             List<Slot> slots = new ArrayList<>();
             for (int i = 0; tag.contains("slot" + i); i++) {
                 CompoundTag st = tag.getCompound("slot" + i);
-                BlockPos pos = new BlockPos(st.getInt("posX"), st.getInt("posY"), st.getInt("posZ"));
-                String loot = st.contains("loot") ? st.getString("loot") : null;
-                slots.add(new Slot(new ResourceLocation(st.getString("template")), Rotation.valueOf(st.getString("rot")), pos, loot));
+                slots.add(new Slot(new ResourceLocation(st.getString("template")), Rotation.valueOf(st.getString("rot")),
+                        new BlockPos(st.getInt("posX"), st.getInt("posY"), st.getInt("posZ")),
+                        st.contains("loot") ? st.getString("loot") : null));
             }
             return new DarkstoneDungeonPiece(context.structureTemplateManager(), slots.get(0).pos, seed, slots);
         }
@@ -226,15 +227,15 @@ public class DarkstoneDungeonStructure extends Structure {
         protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
             tag.putLong("seed", seed);
             for (int i = 0; i < slots.size(); i++) {
-                Slot s = slots.get(i);
+                Slot slot = slots.get(i);
                 CompoundTag st = new CompoundTag();
-                st.putString("template", s.templateId.toString());
-                st.putString("rot", s.rotation.name());
-                st.putInt("posX", s.pos.getX());
-                st.putInt("posY", s.pos.getY());
-                st.putInt("posZ", s.pos.getZ());
-                if (s.loot != null) {
-                    st.putString("loot", s.loot);
+                st.putString("template", slot.templateId.toString());
+                st.putString("rot", slot.rotation.name());
+                st.putInt("posX", slot.pos.getX());
+                st.putInt("posY", slot.pos.getY());
+                st.putInt("posZ", slot.pos.getZ());
+                if (slot.loot != null) {
+                    st.putString("loot", slot.loot);
                 }
                 tag.put("slot" + i, st);
             }
@@ -242,20 +243,47 @@ public class DarkstoneDungeonStructure extends Structure {
 
         @Override
         public void postProcess(WorldGenLevel level, net.minecraft.world.level.StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos) {
-            StructurePlaceSettings settings = new StructurePlaceSettings().setRandom(random)
-                    .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
-                    .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE);
-            for (Slot s : slots) {
-                if (s.template == null || !new ChunkPos(s.pos).equals(chunkPos)) {
+            for (Slot slot : slots) {
+                if (slot.template == null) {
                     continue;
                 }
-                settings.setRotation(s.rotation);
-                s.template.placeInWorld(level, s.pos, s.pos, settings, random, 2);
-                if (s.loot != null) {
-                    for (StructureTemplate.StructureBlockInfo chest : s.template.filterBlocks(s.pos, settings, Blocks.CHEST)) {
-                        if (level.getBlockEntity(chest.pos) instanceof ChestBlockEntity chestEntity) {
-                            chestEntity.setLootTable(new ResourceLocation(s.loot), random.nextLong());
-                        }
+                StructurePlaceSettings settings = new StructurePlaceSettings()
+                        .setRotation(slot.rotation)
+                        .setRandom(random)
+                        .setBoundingBox(box)
+                        .setKeepLiquids(false)
+                        .addProcessor(IgnoreBlockStructureProcessor.AURORIAN_STONE_CLEAR_FLUID);
+                if (!slot.template.getBoundingBox(settings, slot.pos).intersects(box)) {
+                    continue;
+                }
+                slot.template.placeInWorld(level, slot.pos, slot.pos, settings, random, 2);
+                if (slot.loot != null) {
+                    populateChests(level, slot, settings, random, box);
+                }
+            }
+        }
+
+        private void populateChests(WorldGenLevel level, Slot slot, StructurePlaceSettings settings, RandomSource random, BoundingBox box) {
+            ResourceLocation loot = new ResourceLocation(slot.loot);
+            for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.STRUCTURE_BLOCK)) {
+                if (!box.isInside(info.pos)) {
+                    continue;
+                }
+                String metadata = info.nbt != null ? info.nbt.getString("metadata") : "";
+                if (!metadata.isEmpty() && !metadata.startsWith("chest")) {
+                    continue;
+                }
+                level.setBlock(info.pos, Blocks.AIR.defaultBlockState(), 3);
+                if (level.getBlockEntity(info.pos.below()) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(loot, random.nextLong());
+                } else if (level.getBlockEntity(info.pos) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(loot, random.nextLong());
+                }
+            }
+            for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.CHEST)) {
+                if (box.isInside(info.pos)) {
+                    if (level.getBlockEntity(info.pos) instanceof ChestBlockEntity chest) {
+                        chest.setLootTable(loot, random.nextLong());
                     }
                 }
             }

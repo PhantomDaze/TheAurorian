@@ -26,6 +26,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
+import shiroroku.theaurorian.Config.CommonConfig;
 import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
@@ -111,11 +112,12 @@ public class MoonAcolyteEntity extends Monster {
             return false;
         }
         List<MoonAcolyteEntity> nearby = level.getEntitiesOfClass(MoonAcolyteEntity.class, new AABB(pos).inflate(64, 30, 64), e -> e.isAlive());
-        return nearby.size() <= 4;
+        int max = 4 * CommonConfig.moon_temple_mob_density.get();
+        return max > 0 && nearby.size() <= max;
     }
 
     @Override
     public int getMaxSpawnClusterSize() {
-        return this.maxNearby;
+        return 4 * CommonConfig.moon_temple_mob_density.get();
     }
 }
