@@ -264,6 +264,17 @@ class DatapackSmokeTest {
     }
 
     @Test
+    void moonSandRecipesProduceMoonGlass() throws Exception {
+        for (String kind : new String[]{"smelting", "blasting"}) {
+            JsonObject recipe = readObject(MAIN.resolve("data/theaurorian/recipe/" + kind + "/moon_sand.json"));
+            assertEquals("minecraft:" + kind, recipe.get("type").getAsString());
+            assertEquals("theaurorian:moon_sand",
+                    recipe.getAsJsonObject("ingredient").get("item").getAsString());
+            assertEquals("theaurorian:moon_glass",
+                    recipe.getAsJsonObject("result").get("id").getAsString(), kind + " result");
+        }
+    }
+    @Test
     void criticalMoonlightForgeRecipesExist() {
         Path mf = MAIN.resolve("data/theaurorian/recipe/moonlight_forge");
         assertTrue(Files.isRegularFile(mf.resolve("keepers_bow.json")));

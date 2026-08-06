@@ -306,6 +306,13 @@ class PortContentCategoriesTest {
             assertTrue(Files.isRegularFile(recipes.resolve("moonlight_forge/keepers_bow.json")));
             assertTrue(Files.isRegularFile(recipes.resolve("moonlight_forge/queens_chipper.json")));
             assertTrue(Files.isRegularFile(recipes.resolve("moonlight_forge/moon_shield.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smelting/moon_sand.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("blasting/moon_sand.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smoking/cooked_aurorian_pork.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("campfire/cooked_aurorian_pork.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("blasting/aurorian_stone.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smelting/silentwood_charcoal.json")));
+            assertTrue(Files.isRegularFile(recipes.resolve("smelting/weeping_willow_charcoal.json")));
 
             int mf = 0, scrapper = 0;
             try (Stream<Path> stream = Files.walk(recipes)) {

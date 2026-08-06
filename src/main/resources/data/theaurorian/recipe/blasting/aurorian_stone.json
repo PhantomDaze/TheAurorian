@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "theaurorian:aurorian_cobblestone"
+  },
+  "result": {
+    "id": "theaurorian:aurorian_stone"
+  }
+}

@@ -782,6 +782,22 @@ def cat_recipes(blocks: set[str], items: set[str]) -> None:
         if not (mf / name).exists():
             err(cat, f"missing moonlight_forge recipe: {name}")
 
+    required_furnace_recipes = {
+        "smelting/moon_sand.json",
+        "blasting/moon_sand.json",
+        "smoking/cooked_aurorian_pork.json",
+        "campfire/cooked_aurorian_pork.json",
+        "blasting/aurorian_stone.json",
+        "smelting/silentwood_charcoal.json",
+        "smelting/weeping_willow_charcoal.json",
+    }
+    missing_furnace = sorted(
+        name for name in required_furnace_recipes
+        if not (recipes_dir / name).is_file()
+    )
+    if missing_furnace:
+        err(cat, f"missing furnace-family recipes: {missing_furnace}")
+
     # chest loot
     chests = MAIN / "data" / MODID / "loot_table" / "chests"
     required_dirs = {"runestone": 3, "darkstone": 3, "moontemple": 3, "ruins": 1}
