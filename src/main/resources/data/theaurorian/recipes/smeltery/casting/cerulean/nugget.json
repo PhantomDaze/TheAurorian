@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": { "tag": "tconstruct:casts/single_use/nugget" },
+  "cast_consumed": true,
+  "fluid": { "fluid": "theaurorian:molten_cerulean", "amount": 111 },
+  "result": "theaurorian:cerulean_nugget",
+  "cooling_time": 30
+}

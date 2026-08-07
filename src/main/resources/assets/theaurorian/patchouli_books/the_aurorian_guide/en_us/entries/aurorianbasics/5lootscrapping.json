@@ -1,0 +1,41 @@
+{
+    "name": "Loot Scrapping",
+    "icon": "theaurorian:aurorian_steel_ingot",
+    "category": "1aurorianbasics",
+    "sortnum": "5",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "title": "Loot Scrapping",
+            "item": "theaurorian:aurorian_steel_ingot",
+            "text": "Aurorian loot can be smelted into scrap, which can then be used to repair tools, craft other special tools, or craft a powerful type of steel: $(#008cff)Aurorian Steel$()! You can also use the Scrapper that gives double the scrap!"
+        },
+        {
+            "type": "smelting",
+            "recipe": "theaurorian:moonlight_forge/aurorianite_sword",
+            "recipe2": "theaurorian:moonlight_forge/crystalline_shield"
+        },
+        {
+            "type": "crafting",
+            "recipe2": "theaurorian:shaped/aurorianite_ingot",
+            "text": "Each type of scrap can be turned into their own Ingot."
+        },
+        {
+            "type": "crafting",
+            "recipe": "theaurorian:shaped/crystalline_ingot",
+            "recipe2": "theaurorian:shaped/umbra_ingot"
+        },
+        {
+            "type": "crafting",
+            "recipe": "theaurorian:shapeless/aurorian_steel_ingot",
+            "text": "$(#008cff)Aurorian Steel$() is the strongest metal in The Aurorian and can be made into new armor and tools. Check it out in the $(#008cff)Magical Items$() category for more info."
+        },
+        {
+            "type": "spotlight",
+            "title": "What now?",
+            "item": "theaurorian:moonlight_forge",
+            "text": "These ingots can then be used to forge new tools in the $(#008cff)Moonlight Forge$()! More info in the $(#008cff)Moonlight Forge$() chapter."
+        }
+    ]
+}

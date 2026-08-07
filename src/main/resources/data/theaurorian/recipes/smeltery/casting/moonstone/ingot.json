@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": { "tag": "tconstruct:casts/single_use/ingot" },
+  "cast_consumed": true,
+  "fluid": { "fluid": "theaurorian:molten_moonstone", "amount": 1000 },
+  "result": "theaurorian:moonstone_ingot",
+  "cooling_time": 60
+}

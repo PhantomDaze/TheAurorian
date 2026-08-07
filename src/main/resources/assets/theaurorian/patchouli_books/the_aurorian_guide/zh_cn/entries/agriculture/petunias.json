@@ -1,0 +1,19 @@
+{
+    "name": "牵牛花",
+    "icon": "theaurorian:petunia",
+    "category": "4agriculture",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:petunia",
+            "text": "$(#008cff)牵牛花$()可以使用镰来采集。不能被种植。"
+        },
+        {
+            "type": "crafting",
+            "name": "牵牛花茶",
+            "recipe": "theaurorian:shapeless/petunia_tea",
+            "text": "$(#008cff)牵牛花$()也可以用于制作牵牛花茶，饮用牵牛花茶后可以获得一小段时间的力量效果。"
+        }
+    ]
+}

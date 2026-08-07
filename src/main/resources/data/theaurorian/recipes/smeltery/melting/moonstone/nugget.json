@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "forge:nuggets/moonstone" },
+  "result": { "amount": 111, "fluid": "theaurorian:molten_moonstone" },
+  "temperature": 800,
+  "time": 17
+}

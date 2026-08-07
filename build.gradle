@@ -31,6 +31,16 @@ minecraft {
         }
 
         client {
+            // Diagnostics for the random SIGKILL (exit 137): heap dump + GC log + JVM error file.
+            // NOTE: no mixin.debug.* flags on purpose - they perturb mixin application order and
+            // trigger spurious injector failures in co-installed optimization mods (Canary/C2ME/ModernFix).
+            def runDir = file('run').absolutePath
+            jvmArg '-Xmx6G'
+            jvmArg '-XX:+HeapDumpOnOutOfMemoryError'
+            jvmArg "-XX:HeapDumpPath=${runDir}/hs_err_pid%p.hprof"
+            jvmArg "-XX:ErrorFile=${runDir}/hs_err_pid%p.log"
+            jvmArg "-Xlog:gc*:file=${runDir}/gc.log:time,uptime,level,tags"
+            property 'forge.logging.markers', 'REGISTRIES,SCAN'
         }
 
         server {
@@ -69,12 +79,20 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
     maven {
-        // JEI
+        // JEI, CraftTweaker, Patchouli
         url = "https://maven.blamejared.com"
+    }
+    maven {
+        // TConstruct, Mantle
+        url = "https://dvs1.progwml6.com/files/maven"
     }
     maven {
         // CurseForge
         url = "https://cursemaven.com"
+    }
+    flatDir {
+        // c2meF (C2ME Forge port) is Modrinth-only; pinned locally so fg.deobf can remap it
+        dirs 'libs'
     }
 }
 
@@ -91,6 +109,31 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    // Tinkers' Construct (optional soft dependency)
+    compileOnly fg.deobf("slimeknights.tconstruct:TConstruct:${tconstruct_version}")
+    compileOnly fg.deobf("slimeknights.mantle:Mantle:${mantle_version}")
+    // Runtime (test client): the dev client is Mojang-mapped, so production jars must be
+    // added via fg.deobf (ForgeGradle remaps them) instead of dropping them into run/mods.
+    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${tconstruct_version}")
+    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mantle_version}")
+
+    // CraftTweaker (optional soft dependency)
+    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.20.1:${crafttweaker_version}")
+    annotationProcessor "com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:${crafttweaker_annotation_version}"
+    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.20.1:${crafttweaker_version}")
+
+    // Patchouli (optional soft dependency)
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+    // ---- Test client optimization mods (dev runtime only, never bundled into the mod) ----
+    // Sodium/Embeddium removed - its Window/context mixins caused window close + hang on
+    // this virtualized NVIDIA desktop. Vanilla rendering is used instead.
+    // Lithium -> Canary (active Forge port)
+    runtimeOnly fg.deobf("curse.maven:canary-665658:5089991")
+    // C2ME -> c2meF (active Forge port, Modrinth-only; local flatDir jar remapped by fg.deobf)
+    runtimeOnly fg.deobf("c2mef:c2mef:0.2.0")
 
     // Mixin
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

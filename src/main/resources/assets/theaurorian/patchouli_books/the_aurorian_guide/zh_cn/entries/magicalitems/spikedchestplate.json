@@ -1,0 +1,13 @@
+{
+    "name": "尖钉胸甲",
+    "icon": "theaurorian:spiked_chestplate",
+    "category": "3magicalitems",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:spiked_chestplate",
+            "text": "$(#008cff)尖钉胸甲$()会给予缓慢的效果，并会在穿戴者蹲下时获得荆棘。"
+        }
+    ]
+}

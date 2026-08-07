@@ -1,0 +1,19 @@
+{
+    "name": "粘性尖钉",
+    "icon": "theaurorian:sticky_spiker",
+    "category": "3magicalitems",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:sticky_spiker",
+            "text": "$(#008cff)粘性尖钉$()会使碰触者中毒。"
+        },
+        {
+            "type": "crafting",
+            "name": "粘性尖钉",
+            "recipe": "theaurorian:shapeless/sticky_spiker",
+            "text": "$(#008cff)粘性尖钉$()既可以在地牢中被发现也可以被合成。"
+        }
+    ]
+}

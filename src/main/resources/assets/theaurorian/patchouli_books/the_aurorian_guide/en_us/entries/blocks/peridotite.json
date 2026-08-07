@@ -1,0 +1,19 @@
+{
+    "name": "Aurorian Peridotite",
+    "icon": "theaurorian:peridotite",
+    "category": "5blocks",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:peridotite",
+            "text": "A type of greenish rock that can be found underground. Mostly used for decoration."
+        },
+        {
+            "type": "crafting",
+            "name": "",
+            "recipe": "theaurorian:shaped/world_deco/peridotite_smooth",
+            "recipe2": "theaurorian:shaped/world_deco/peridotite_smooth_stairs"
+        }
+    ]
+}

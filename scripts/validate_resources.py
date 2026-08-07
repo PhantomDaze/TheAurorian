@@ -71,12 +71,21 @@ def parse_block_ids() -> set[str]:
     text = read_text(JAVA / "Registry" / "BlockRegistry.java")
     ids = set(re.findall(r'regBlockItem\w*\(\s*\w+\s*,\s*"([a-z0-9_]+)"', text))
     ids |= set(re.findall(r'(?:BLOCKS\w*)\.register\("([a-z0-9_]+)"', text))
+    # fluid blocks are registered in FluidRegistry.java via BlockRegistry.BLOCKS
+    if (JAVA / "Registry" / "FluidRegistry.java").exists():
+        fluid_text = read_text(JAVA / "Registry" / "FluidRegistry.java")
+        ids |= set(re.findall(r'BLOCKS\.register\("([a-z0-9_]+)"', fluid_text))
     return ids
 
 
 def parse_item_ids() -> set[str]:
     text = read_text(JAVA / "Registry" / "ItemRegistry.java")
-    return set(re.findall(r'\.register\("([a-z0-9_]+)"', text))
+    ids = set(re.findall(r'\.register\("([a-z0-9_]+)"', text))
+    # fluid buckets are registered in FluidRegistry.java via ItemRegistry.ITEMS
+    if (JAVA / "Registry" / "FluidRegistry.java").exists():
+        fluid_text = read_text(JAVA / "Registry" / "FluidRegistry.java")
+        ids |= set(re.findall(r'ITEMS\.register\("([a-z0-9_]+)"', fluid_text))
+    return ids
 
 
 def parse_entity_ids() -> list[str]:

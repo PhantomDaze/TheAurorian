@@ -1,0 +1,11 @@
+{
+  "default": [
+    { "level": 1, "name": "tconstruct:cheap" },
+    { "level": 1, "name": "theaurorian:aurorian_empowered" }
+  ],
+  "perStat": {
+    "tconstruct:armor": [
+      { "level": 1, "name": "tconstruct:cheap" }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": { "item": "theaurorian:silentwood_stick" },
+  "value": 1,
+  "needed": 2,
+  "material": "theaurorian:silentwood"
+}

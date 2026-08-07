@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "forge:ingots/cerulean" },
+  "result": { "amount": 1000, "fluid": "theaurorian:molten_cerulean" },
+  "temperature": 800,
+  "time": 60
+}
