@@ -37,7 +37,9 @@ public class StrangeMeat extends BaseAurorianItem {
             p.addEffect(new MobEffectInstance(effects.get(p.getRandom().nextInt(effects.size())), 6000));
             p.broadcastBreakEvent(pLivingEntity.getUsedItemHand());
         });
-        ((Player)pLivingEntity).getFoodData().eat(pStack.getItem(), pStack, pLivingEntity);
+        if (pLivingEntity instanceof Player player) {
+            player.getFoodData().eat(pStack.getItem(), pStack, pLivingEntity);
+        }
         return pStack;
     }
 
