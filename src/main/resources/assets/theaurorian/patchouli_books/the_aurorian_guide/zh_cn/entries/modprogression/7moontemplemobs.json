@@ -13,7 +13,7 @@
         {
             "type": "entity",
             "entity": "theaurorian:crystalline_sprite",
-            "text": "$(#008cff)月凝晶魂$()会在空中向玩家发射火焰。"
+            "text": "$(#008cff)月凝晶魂$()会在空中向玩家发射光束。"
         },
         {
             "type": "text",

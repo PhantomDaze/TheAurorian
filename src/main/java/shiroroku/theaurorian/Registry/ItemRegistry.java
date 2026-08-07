@@ -189,6 +189,7 @@ public class ItemRegistry {
     public static final RegistryObject<Item> crystalline_pickaxe = ITEMS_GEN_HANDHELD.register("crystalline_pickaxe", () -> new CrystallinePickaxe(MaterialTiers.CRYSTALLINE, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> crystalline_shield = ITEMS_GEN_SHIELD.register("crystalline_shield", () -> new CrystallineShield(MaterialTiers.CRYSTALLINE, defaultProp().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> crystalline_sword = ITEMS.register("crystalline_sword", () -> new CrystallineSword(MaterialTiers.CRYSTALLINE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> crystalline_sprite = ITEMS_GEN.register("crystalline_sprite", basicItem());
 
     // Trinkets
     public static final RegistryObject<Item> amulet_of_chroma = ITEMS_GEN.register("amulet_of_chroma", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Arrays.asList(
