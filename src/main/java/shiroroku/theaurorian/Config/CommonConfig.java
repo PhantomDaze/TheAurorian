@@ -38,6 +38,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> runestone_dungeon_mob_density;
     public static final ForgeConfigSpec.ConfigValue<Integer> moon_temple_mob_density;
     public static final ForgeConfigSpec.ConfigValue<Integer> darkstone_dungeon_mob_density;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> enable_tconstruct_compat;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -83,6 +84,9 @@ public class CommonConfig {
         enable_umbra_tower = builder.define("enable_umbra_tower", true);
         enable_runestone_dungeon = builder.define("enable_runestone_dungeon", true);
         runestone_dungeon_floors = builder.comment("Number of intermediate floors; odd values are rounded up.").defineInRange("runestone_dungeon_floors", 4, 2, 32);
+        builder.pop();
+        builder.push("Compatibility").comment("Optional mod integrations. The mod always runs without these mods installed; these toggles only matter when the corresponding mod is present.");
+        enable_tconstruct_compat = builder.comment("Set to false to disable the Tinkers' Construct integration (materials, molten fluids and custom traits).").define("enable_tconstruct_compat", true);
         builder.pop();
         builder.pop();
         config = builder.build();

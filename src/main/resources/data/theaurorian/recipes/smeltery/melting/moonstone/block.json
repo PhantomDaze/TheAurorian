@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "forge:storage_blocks/moonstone" },
+  "result": { "amount": 9000, "fluid": "theaurorian:molten_moonstone" },
+  "temperature": 800,
+  "time": 150
+}

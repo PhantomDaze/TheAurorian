@@ -7,12 +7,14 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import shiroroku.theaurorian.Compat.TinkersConstruct.TinkersCompat;
 import shiroroku.theaurorian.Config.ClientConfig;
 import shiroroku.theaurorian.Config.CommonConfig;
 import shiroroku.theaurorian.Registry.*;
@@ -36,6 +38,7 @@ public class TheAurorian {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.config);
         BlockRegistry.register(bus);
         ItemRegistry.register(bus);
+        FluidRegistry.register(bus);
         BlockEntityRegistry.BLOCK_ENTITIES.register(bus);
         MenuRegistry.MENUS.register(bus);
         RecipeRegistry.TYPES.register(bus);
@@ -47,6 +50,10 @@ public class TheAurorian {
         FeatureRegistry.register(bus);
         SoundRegistry.register(bus);
         ParticleRegistry.register(bus);
+
+        if (ModList.get().isLoaded("tconstruct")) {
+            TinkersCompat.register(bus);
+        }
     }
 
 }

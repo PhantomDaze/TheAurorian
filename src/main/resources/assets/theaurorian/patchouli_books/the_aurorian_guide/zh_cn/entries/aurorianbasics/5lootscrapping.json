@@ -1,0 +1,42 @@
+{
+    "name": "碎片化",
+    "icon": "theaurorian:aurorian_steel_ingot",
+    "category": "1aurorianbasics",
+    "sortnum": "5",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "title": "碎片化",
+            "item": "theaurorian:aurorian_steel_ingot",
+            "text": "极光幽境的许多材料都可以被熔炼为碎片。碎片可以被用于修复工具、制作其它种类的工具以及合成一种特殊的钢：$(#008cff)极光钢$()！你也可以使用粉碎器以获得双倍的碎片！"
+        },
+        {
+            "type": "smelting",
+            "recipe": "theaurorian:moonlight_forge/aurorianite_sword",
+            "recipe2": "theaurorian:moonlight_forge/crystalline_shield"
+        },
+        {
+            "type": "crafting",
+            "recipe2": "theaurorian:shaped/aurorianite_ingot",
+            "text": "所有种类的碎片都可被转为它们对应的锭。"
+        },
+        {
+            "type": "crafting",
+            "recipe": "theaurorian:shaped/crystalline_ingot",
+            "recipe2": "theaurorian:shaped/umbra_ingot"
+        },
+        {
+            "type": "crafting",
+            "recipe": "theaurorian:shapeless/aurorian_steel_ingot",
+            "text": "$(#008cff)极光钢$()是极光幽境中最强大的材料，它可以被制成工具和盔甲。你可以在$(#008cff)魔法物品$()部分中查看更多的信息。"
+
+        },
+        {
+            "type": "spotlight",
+            "title": "然后呢？",
+            "item": "theaurorian:moonlight_forge",
+            "text": "这些锭可以在$(#008cff)月光融锻台$()中被制成工具！在$(#008cff)月光融锻台$()一章中查看更多信息。"
+        }
+    ]
+}

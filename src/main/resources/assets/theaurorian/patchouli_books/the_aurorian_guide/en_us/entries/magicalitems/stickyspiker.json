@@ -1,0 +1,19 @@
+{
+    "name": "Sticky Spiker",
+    "icon": "theaurorian:sticky_spiker",
+    "category": "3magicalitems",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:sticky_spiker",
+            "text": "$(#008cff)Sticky Spiker$() will poison any entity hit with it!"
+        },
+        {
+            "type": "crafting",
+            "name": "Sticky Spiker",
+            "recipe": "theaurorian:shapeless/sticky_spiker",
+            "text": "$(#008cff)Sticky Spiker$() can be crafted or found in dungeons."
+        }
+    ]
+}

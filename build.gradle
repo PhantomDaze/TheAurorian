@@ -69,8 +69,12 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
     maven {
-        // JEI
+        // JEI, CraftTweaker, Patchouli
         url = "https://maven.blamejared.com"
+    }
+    maven {
+        // TConstruct, Mantle
+        url = "https://dvs1.progwml6.com/files/maven"
     }
     maven {
         // CurseForge
@@ -88,6 +92,21 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    // Tinkers' Construct (optional soft dependency)
+    compileOnly fg.deobf("slimeknights.tconstruct:TConstruct:${tconstruct_version}")
+    compileOnly fg.deobf("slimeknights.mantle:Mantle:${mantle_version}")
+    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${tconstruct_version}")
+    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mantle_version}")
+
+    // CraftTweaker (optional soft dependency)
+    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:${crafttweaker_version}")
+    annotationProcessor "com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:${crafttweaker_annotation_version}"
+    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:${crafttweaker_version}")
+
+    // Patchouli (optional soft dependency)
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
     // Client-only QoL mods: compileOnly so dedicated / GameTest servers do not load them.
     // Add back as runtimeOnly when launching the client run configuration if needed.

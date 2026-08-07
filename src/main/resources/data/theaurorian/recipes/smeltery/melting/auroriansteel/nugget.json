@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "forge:nuggets/aurorian_steel" },
+  "result": { "amount": 111, "fluid": "theaurorian:molten_aurorian_steel" },
+  "temperature": 800,
+  "time": 17
+}

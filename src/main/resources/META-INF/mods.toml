@@ -25,6 +25,35 @@ versionRange = "[1.19.2-5.1.4.1,)"
 ordering = "NONE"
 side = "BOTH"
 
+# Optional integrations: TConstruct, CraftTweaker, Patchouli (and TConstruct's library Mantle)
+[[dependencies.${mod_id}]]
+modId = "tconstruct"
+mandatory = false
+versionRange = "[3.8.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "mantle"
+mandatory = false
+versionRange = "[1.10.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "crafttweaker"
+mandatory = false
+versionRange = "[10.0.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "patchouli"
+mandatory = false
+versionRange = "[1.19.2-76,)"
+ordering = "NONE"
+side = "BOTH"
+
 [[dependencies.${mod_id}]]
 modId = "minecraft"
 mandatory = true

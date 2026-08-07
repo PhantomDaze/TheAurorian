@@ -1,0 +1,19 @@
+{
+    "name": "谧木工作台",
+    "icon": "theaurorian:silentwood_crafting_table",
+    "category": "5blocks",
+    "readbydefault": true,
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:silentwood_crafting_table",
+            "text": "与普通的工作台别无二致。可以被转为原版的工作台。"
+        },
+        {
+            "type": "crafting",
+            "name": "",
+            "recipe": "theaurorian:shaped/silentwood_crafting_table",
+            "recipe2": "theaurorian:shaped/silentwood_crafting_table"
+        }
+    ]
+}

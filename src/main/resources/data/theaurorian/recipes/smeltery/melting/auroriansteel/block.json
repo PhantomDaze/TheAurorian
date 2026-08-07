@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "forge:storage_blocks/aurorian_steel" },
+  "result": { "amount": 9000, "fluid": "theaurorian:molten_aurorian_steel" },
+  "temperature": 800,
+  "time": 150
+}

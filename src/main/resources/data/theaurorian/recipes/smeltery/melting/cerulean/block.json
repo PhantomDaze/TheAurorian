@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "forge:storage_blocks/cerulean" },
+  "result": { "amount": 9000, "fluid": "theaurorian:molten_cerulean" },
+  "temperature": 800,
+  "time": 150
+}

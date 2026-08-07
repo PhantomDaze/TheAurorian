@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {"item": "minecraft:book"},
+        {"item": "minecraft:lapis_lazuli"},
+        {"tag": "minecraft:saplings"}
+    ],
+    "result": {
+        "item": "patchouli:guide_book",
+        "nbt": {"patchouli:book": "theaurorian:the_aurorian_guide"}
+    },
+    "conditions": [{"type": "forge:mod_loaded", "modid": "patchouli"}]
+}

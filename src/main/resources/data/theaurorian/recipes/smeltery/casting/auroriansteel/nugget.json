@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": { "tag": "tconstruct:casts/single_use/nugget" },
+  "cast_consumed": true,
+  "fluid": { "fluid": "theaurorian:molten_aurorian_steel", "amount": 111 },
+  "result": "theaurorian:aurorian_steel_nugget",
+  "cooling_time": 30
+}

@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:material_melting",
+  "input": "theaurorian:moonstone",
+  "temperature": 800,
+  "result": { "fluid": "theaurorian:molten_moonstone", "amount": 1000 }
+}
