@@ -2,7 +2,7 @@
     "name": "Aurorian Portal",
     "icon": "theaurorian:aurorian_portal",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "1",
+    "sortnum": 1,
     "pages": [
         {
             "type": "text",

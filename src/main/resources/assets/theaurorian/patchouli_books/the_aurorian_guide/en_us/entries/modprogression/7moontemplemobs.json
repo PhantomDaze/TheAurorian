@@ -2,7 +2,7 @@
     "name": "Moon Temple Mobs",
     "icon": "theaurorian:boss_spawner",
     "category": "theaurorian:2modprogression",
-    "sortnum": "7",
+    "sortnum": 7,
     "pages": [
         {
             "type": "entity",

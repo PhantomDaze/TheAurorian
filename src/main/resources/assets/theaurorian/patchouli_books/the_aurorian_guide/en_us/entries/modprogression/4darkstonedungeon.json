@@ -2,7 +2,7 @@
     "name": "Darkstone Dungeon",
     "icon": "theaurorian:darkstone_key",
     "category": "theaurorian:2modprogression",
-    "sortnum": "4",
+    "sortnum": 4,
     "pages": [
         {
             "type": "image",

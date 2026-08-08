@@ -2,7 +2,7 @@
     "name": "Runestone Dungeon Mobs",
     "icon": "theaurorian:boss_spawner",
     "category": "theaurorian:2modprogression",
-    "sortnum": "3",
+    "sortnum": 3,
     "pages": [
         {
             "type": "entity",

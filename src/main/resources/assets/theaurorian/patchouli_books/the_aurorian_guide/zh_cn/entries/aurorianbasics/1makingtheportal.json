@@ -2,7 +2,7 @@
     "name": "极光幽境传送门",
     "icon": "theaurorian:aurorian_portal",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "1",
+    "sortnum": 1,
     "pages": [
         {
             "type": "text",

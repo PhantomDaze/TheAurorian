@@ -2,7 +2,7 @@
     "name": "开锁器",
     "icon": "theaurorian:lockpicks",
     "category": "theaurorian:2modprogression",
-    "sortnum": "1",
+    "sortnum": 1,
     "pages": [
         {
             "type": "crafting",

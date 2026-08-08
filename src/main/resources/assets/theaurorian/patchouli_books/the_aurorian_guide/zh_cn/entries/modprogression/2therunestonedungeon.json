@@ -2,7 +2,7 @@
     "name": "符石地牢",
     "icon": "theaurorian:runestone_key",
     "category": "theaurorian:2modprogression",
-    "sortnum": "2",
+    "sortnum": 2,
     "pages": [
         {
             "type": "image",

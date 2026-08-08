@@ -2,7 +2,7 @@
     "name": "Loot Scrapping",
     "icon": "theaurorian:aurorian_steel_ingot",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "5",
+    "sortnum": 5,
     "pages": [
         {
             "type": "spotlight",

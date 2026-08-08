@@ -2,7 +2,7 @@
     "name": "粉碎器",
     "icon": "theaurorian:scrapper",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "7",
+    "sortnum": 7,
     "pages": [
         {
             "type": "spotlight",

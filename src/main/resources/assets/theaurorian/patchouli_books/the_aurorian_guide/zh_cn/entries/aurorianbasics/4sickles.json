@@ -2,7 +2,7 @@
     "name": "镰",
     "icon": "theaurorian:aurorian_stone_sickle",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "4",
+    "sortnum": 4,
     "pages": [
         {
             "type": "spotlight",

@@ -2,7 +2,7 @@
     "name": "暗石地牢",
     "icon": "theaurorian:darkstone_key",
     "category": "theaurorian:2modprogression",
-    "sortnum": "4",
+    "sortnum": 4,
     "pages": [
         {
             "type": "image",

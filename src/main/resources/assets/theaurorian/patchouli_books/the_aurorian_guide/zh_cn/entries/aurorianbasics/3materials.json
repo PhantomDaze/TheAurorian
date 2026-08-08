@@ -2,7 +2,7 @@
     "name": "极光幽境的材料",
     "icon": "theaurorian:silentwood_stick",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "3",
+    "sortnum": 3,
     "pages": [
         {
             "type": "spotlight",

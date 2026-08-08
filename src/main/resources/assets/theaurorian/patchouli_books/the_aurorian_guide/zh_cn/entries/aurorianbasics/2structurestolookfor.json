@@ -2,7 +2,7 @@
     "name": "应当寻找的结构",
     "icon": "theaurorian:runestone",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "2",
+    "sortnum": 2,
     "pages": [
         {
             "type": "text",

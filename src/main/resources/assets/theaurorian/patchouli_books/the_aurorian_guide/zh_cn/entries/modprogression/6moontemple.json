@@ -2,7 +2,7 @@
     "name": "月宫",
     "icon": "theaurorian:moon_temple_key",
     "category": "theaurorian:2modprogression",
-    "sortnum": "6",
+    "sortnum": 6,
     "pages": [
         {
             "type": "image",

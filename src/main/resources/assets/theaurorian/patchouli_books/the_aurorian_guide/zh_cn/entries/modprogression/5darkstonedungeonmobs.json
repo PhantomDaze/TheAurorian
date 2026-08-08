@@ -2,7 +2,7 @@
     "name": "暗石地牢中的生物",
     "icon": "theaurorian:boss_spawner",
     "category": "theaurorian:2modprogression",
-    "sortnum": "5",
+    "sortnum": 5,
     "pages": [
         {
             "type": "entity",

@@ -2,7 +2,7 @@
     "name": "Scrapper",
     "icon": "theaurorian:scrapper",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "7",
+    "sortnum": 7,
     "pages": [
         {
             "type": "spotlight",

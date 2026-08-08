@@ -2,7 +2,7 @@
     "name": "Moonlight Forge",
     "icon": "theaurorian:moonlight_forge",
     "category": "theaurorian:1aurorianbasics",
-    "sortnum": "6",
+    "sortnum": 6,
     "pages": [
         {
             "type": "spotlight",
