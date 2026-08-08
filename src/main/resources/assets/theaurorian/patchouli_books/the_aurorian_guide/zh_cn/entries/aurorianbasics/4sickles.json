@@ -1,9 +1,8 @@
 {
     "name": "镰",
     "icon": "theaurorian:aurorian_stone_sickle",
-    "category": "1aurorianbasics",
+    "category": "theaurorian:1aurorianbasics",
     "sortnum": "4",
-    "readbydefault": true,
     "pages": [
         {
             "type": "spotlight",
@@ -16,5 +15,6 @@
             "recipe": "theaurorian:shaped/silentwood/silentwood_sickle",
             "recipe2": "theaurorian:shaped/aurorian_stone/aurorian_stone_sickle"
         }
-    ]
+    ],
+    "read_by_default": true
 }

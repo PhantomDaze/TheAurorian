@@ -1,8 +1,7 @@
 {
     "name": "Dungeon Locator",
     "icon": "theaurorian:dungeon_locator",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
@@ -14,5 +13,6 @@
             "name": "Dungeon Locator",
             "recipe": "theaurorian:shaped/dungeon_locator"
         }
-    ]
+    ],
+    "read_by_default": true
 }

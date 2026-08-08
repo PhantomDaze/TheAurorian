@@ -1,8 +1,7 @@
 {
     "name": "维基",
     "icon": "theaurorian:patchouli_books/the_aurorian_guide/en_us/entries/contact/github.png",
-    "category": "contact",
-    "readbydefault": true,
+    "category": "theaurorian:contact",
     "pages": [
         {
             "type": "link",
@@ -10,5 +9,6 @@
             "text": "源码存储仓库，同时也放有维基指导！",
             "url": "https://github.com/shiroroku/TheAurorian/wiki"
         }
-    ]
+    ],
+    "read_by_default": true
 }

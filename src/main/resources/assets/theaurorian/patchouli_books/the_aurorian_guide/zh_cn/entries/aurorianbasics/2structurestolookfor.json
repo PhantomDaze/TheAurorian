@@ -1,9 +1,8 @@
 {
     "name": "应当寻找的结构",
     "icon": "theaurorian:runestone",
-    "category": "1aurorianbasics",
+    "category": "theaurorian:1aurorianbasics",
     "sortnum": "2",
-    "readbydefault": true,
     "pages": [
         {
             "type": "text",
@@ -51,5 +50,6 @@
             "item": "theaurorian:lockpicks",
             "text": "更多有关地牢的信息请见$(#008cff)进程发展$()部分。"
         }
-    ]
+    ],
+    "read_by_default": true
 }

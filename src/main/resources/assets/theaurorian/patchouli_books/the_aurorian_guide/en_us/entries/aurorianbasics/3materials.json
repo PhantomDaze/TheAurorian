@@ -1,9 +1,8 @@
 {
     "name": "Aurorian Materials",
     "icon": "theaurorian:silentwood_stick",
-    "category": "1aurorianbasics",
+    "category": "theaurorian:1aurorianbasics",
     "sortnum": "3",
-    "readbydefault": true,
     "pages": [
         {
             "type": "spotlight",
@@ -89,5 +88,6 @@
                 "theaurorian:patchouli_books/the_aurorian_guide/en_us/entries/aurorianbasics/geode.png"
             ]
         }
-    ]
+    ],
+    "read_by_default": true
 }

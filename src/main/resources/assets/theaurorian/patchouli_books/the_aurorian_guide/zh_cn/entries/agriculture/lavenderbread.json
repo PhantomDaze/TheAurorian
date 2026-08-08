@@ -1,8 +1,7 @@
 {
     "name": "薰衣草面包",
     "icon": "theaurorian:lavender_bread",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -14,5 +13,6 @@
             "name": "薰衣草面包",
             "recipe": "theaurorian:shaped/lavender_bread"
         }
-    ]
+    ],
+    "read_by_default": true
 }

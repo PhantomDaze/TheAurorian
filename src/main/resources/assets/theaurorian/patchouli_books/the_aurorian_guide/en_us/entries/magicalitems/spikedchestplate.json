@@ -1,13 +1,13 @@
 {
     "name": "Spiked Chestplate",
     "icon": "theaurorian:spiked_chestplate",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:spiked_chestplate",
             "text": "$(#008cff)The Spiked Chestplate$() gives the wearer slowness and thorns when they crouch!"
         }
-    ]
+    ],
+    "read_by_default": true
 }

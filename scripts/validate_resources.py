@@ -961,6 +961,67 @@ def cat_registry_tags(blocks: set[str], items: set[str]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# L — Patchouli guide integrity
+# ---------------------------------------------------------------------------
+def cat_patchouli_guide() -> None:
+    cat = "L-patchouli"
+    assets_root = MAIN / "assets" / MODID / "patchouli_books" / "the_aurorian_guide"
+    data_book = MAIN / "data" / MODID / "patchouli_books" / "the_aurorian_guide" / "book.json"
+    asset_book = assets_root / "book.json"
+
+    if not data_book.exists():
+        err(cat, "missing data Patchouli book.json")
+    else:
+        book = load_json(data_book)
+        if isinstance(book, dict) and book.get("use_resource_pack") is not True:
+            err(cat, "Patchouli book.json must set use_resource_pack=true")
+    if asset_book.exists():
+        err(cat, "duplicate Patchouli book.json remains under assets")
+
+    languages = []
+    for language in ("en_us", "zh_cn"):
+        language_root = assets_root / language
+        entry_root = language_root / "entries"
+        if not entry_root.exists():
+            err(cat, f"missing Patchouli entries for {language}")
+            continue
+        languages.append(language)
+        for path in entry_root.rglob("*.json"):
+            data = load_json(path)
+            if not isinstance(data, dict):
+                continue
+            category = data.get("category")
+            if not isinstance(category, str) or not category.startswith(f"{MODID}:"):
+                err(cat, f"entry category is not namespaced: {path.relative_to(ROOT)}")
+            if "readbydefault" in data:
+                err(cat, f"legacy readbydefault field: {path.relative_to(ROOT)}")
+            if "read_by_default" not in data:
+                warn(cat, f"entry has no read_by_default: {path.relative_to(ROOT)}")
+
+    if len(languages) == 2:
+        sets = {
+            language: {p.relative_to(assets_root / language / "entries") for p in (assets_root / language / "entries").rglob("*.json")}
+            for language in languages
+        }
+        for missing in sorted(sets["en_us"] - sets["zh_cn"]):
+            err(cat, f"zh_cn missing entry: {missing}")
+        for extra in sorted(sets["zh_cn"] - sets["en_us"]):
+            warn(cat, f"zh_cn has no en_us entry: {extra}")
+
+    categories = set()
+    for language in languages:
+        for path in (assets_root / language / "categories").glob("*.json"):
+            data = load_json(path)
+            if isinstance(data, dict):
+                categories.add(f"{MODID}:{path.stem}")
+    for language in languages:
+        for path in (assets_root / language / "entries").rglob("*.json"):
+            data = load_json(path)
+            if isinstance(data, dict) and data.get("category") not in categories:
+                err(cat, f"entry references missing category: {path.relative_to(ROOT)}")
+
+
+# ---------------------------------------------------------------------------
 # K — global JSON parse + pack meta
 # ---------------------------------------------------------------------------
 def cat_json_parse() -> None:
@@ -996,6 +1057,7 @@ def main() -> int:
     cat_mirror(langs)
     cat_audio()
     cat_registry_tags(blocks, items)
+    cat_patchouli_guide()
     cat_json_parse()
 
     print("\n-- stats --")

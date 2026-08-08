@@ -1,9 +1,8 @@
 {
     "name": "Aurorian Portal",
     "icon": "theaurorian:aurorian_portal",
-    "category": "1aurorianbasics",
+    "category": "theaurorian:1aurorianbasics",
     "sortnum": "1",
-    "readbydefault": true,
     "pages": [
         {
             "type": "text",
@@ -58,5 +57,6 @@
             "type": "text",
             "text": "$(#008cff)$(o)Now you finished the portal, step on in and explore the dimension!"
         }
-    ]
+    ],
+    "read_by_default": true
 }

@@ -1,8 +1,7 @@
 {
     "name": "Aurorian Furnace",
     "icon": "theaurorian:aurorian_furnace",
-    "category": "5blocks",
-    "readbydefault": true,
+    "category": "theaurorian:5blocks",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shaped/aurorian_furnace",
             "recipe2": "theaurorian:shaped/chimney"
         }
-    ]
+    ],
+    "read_by_default": true
 }

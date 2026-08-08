@@ -1,13 +1,13 @@
 {
     "name": "Dungeon Stone",
     "icon": "theaurorian:runestone_gate_keyhole",
-    "category": "5blocks",
-    "readbydefault": true,
+    "category": "theaurorian:5blocks",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:runestone",
             "text": "An unbreakable stone that makes up dungeons."
         }
-    ]
+    ],
+    "read_by_default": true
 }

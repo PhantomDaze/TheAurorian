@@ -1,13 +1,13 @@
 {
-    "name": "Queens Chipper",
+    "name": "女王镐",
     "icon": "theaurorian:queens_chipper",
     "category": "theaurorian:3magicalitems",
+    "read_by_default": true,
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:queens_chipper",
-            "text": "$(#008cff)The Queens Chipper$() is a pickaxe that can chip away and harvest Aurorian Dungeon Bricks!"
+            "text": "$(#008cff)女王镐$()可以破坏并采集极光地牢砖块。"
         }
-    ],
-    "read_by_default": true
+    ]
 }

@@ -1,9 +1,10 @@
 {
     "name": "patchouli.theaurorian.guide.name",
     "landing_text": "patchouli.theaurorian.guide.desc",
-    "version": 18,
+    "version": 20,
     "model": "theaurorian:theaurorianguide",
     "creative_tab": "theaurorian:main",
     "show_progress": false,
-    "nameplate_color": "008cff"
+    "nameplate_color": "008cff",
+    "use_resource_pack": true
 }

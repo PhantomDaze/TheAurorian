@@ -1,9 +1,8 @@
 {
     "name": "暗石地牢中的生物",
     "icon": "theaurorian:boss_spawner",
-    "category": "2modprogression",
+    "category": "theaurorian:2modprogression",
     "sortnum": "5",
-    "readbydefault": true,
     "pages": [
         {
             "type": "entity",
@@ -15,5 +14,6 @@
             "entity": "theaurorian:dungeon_spider",
             "text": "$(#8800ff)蛛母$()是$(#008cff)暗石地牢$()的 BOSS。它会向你吐丝，又或者悬挂在高处并生成幼蛛！"
         }
-    ]
+    ],
+    "read_by_default": true
 }

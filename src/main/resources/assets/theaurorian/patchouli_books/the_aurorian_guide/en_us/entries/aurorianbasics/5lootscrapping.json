@@ -1,9 +1,8 @@
 {
     "name": "Loot Scrapping",
     "icon": "theaurorian:aurorian_steel_ingot",
-    "category": "1aurorianbasics",
+    "category": "theaurorian:1aurorianbasics",
     "sortnum": "5",
-    "readbydefault": true,
     "pages": [
         {
             "type": "spotlight",
@@ -37,5 +36,6 @@
             "item": "theaurorian:moonlight_forge",
             "text": "These ingots can then be used to forge new tools in the $(#008cff)Moonlight Forge$()! More info in the $(#008cff)Moonlight Forge$() chapter."
         }
-    ]
+    ],
+    "read_by_default": true
 }

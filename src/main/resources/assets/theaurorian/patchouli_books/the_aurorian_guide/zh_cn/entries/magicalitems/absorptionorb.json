@@ -1,13 +1,13 @@
 {
     "name": "修损宝珠",
     "icon": "theaurorian:absorption_orb",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:absorption_orb",
             "text": "$(#008cff)修损宝珠$()可以在在副手时恢复你主手物品的耐久度！"
         }
-    ]
+    ],
+    "read_by_default": true
 }

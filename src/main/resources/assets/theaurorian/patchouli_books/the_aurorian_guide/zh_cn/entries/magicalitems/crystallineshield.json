@@ -1,13 +1,13 @@
 {
     "name": "月凝晶盾牌",
     "icon": "theaurorian:crystalline_shield",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:crystalline_shield",
             "text": "$(#008cff)月凝晶盾牌$()在抵挡掉攻击时可以修复你主手的物品！"
         }
-    ]
+    ],
+    "read_by_default": true
 }

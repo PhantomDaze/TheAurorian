@@ -1,8 +1,7 @@
 {
     "name": "Aurorian Pork",
     "icon": "theaurorian:cooked_aurorian_pork",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "smelting",
@@ -12,12 +11,13 @@
         {
             "type": "entity",
             "entity": "theaurorian:aurorian_pig",
-            "scale": 0.50
+            "scale": 0.5
         },
         {
             "type": "crafting",
             "name": "Aurorian Pork",
             "recipe": "theaurorian:shapeless/aurorian_bacon"
         }
-    ]
+    ],
+    "read_by_default": true
 }

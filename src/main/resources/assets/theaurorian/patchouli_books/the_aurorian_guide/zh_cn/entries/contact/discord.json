@@ -1,8 +1,7 @@
 {
     "name": "Discord",
     "icon": "theaurorian:patchouli_books/the_aurorian_guide/en_us/entries/contact/discord.png",
-    "category": "contact",
-    "readbydefault": true,
+    "category": "theaurorian:contact",
     "pages": [
         {
             "type": "link",
@@ -10,5 +9,6 @@
             "text": "可以在此关注模组开发动态、分享自己遇到的问题或提供帮助与建议的社区。♥",
             "url": "https://discord.com/invite/2ZB6MKaTbx"
         }
-    ]
+    ],
+    "read_by_default": true
 }

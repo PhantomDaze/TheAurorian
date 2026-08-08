@@ -1,13 +1,13 @@
 {
     "name": "Orb Of Absorption",
     "icon": "theaurorian:absorption_orb",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:absorption_orb",
             "text": "$(#008cff)The Orb Of Absorption$() can heal any item in your main hand when it's in your offhand!"
         }
-    ]
+    ],
+    "read_by_default": true
 }

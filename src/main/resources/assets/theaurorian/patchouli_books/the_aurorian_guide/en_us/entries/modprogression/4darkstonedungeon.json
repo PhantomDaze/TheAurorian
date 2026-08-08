@@ -1,9 +1,8 @@
 {
     "name": "Darkstone Dungeon",
     "icon": "theaurorian:darkstone_key",
-    "category": "2modprogression",
+    "category": "theaurorian:2modprogression",
     "sortnum": "4",
-    "readbydefault": true,
     "pages": [
         {
             "type": "image",
@@ -28,5 +27,6 @@
             "item": "theaurorian:dark_amulet",
             "text": "$(#8800ff)The Spider Mother$() drops $(#008cff)The Dark Amulet$() which is used to gain access to the next dungeon; $(#008cff)The Moontemple$()."
         }
-    ]
+    ],
+    "read_by_default": true
 }

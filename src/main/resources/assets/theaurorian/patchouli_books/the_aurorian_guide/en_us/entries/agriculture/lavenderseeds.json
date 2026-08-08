@@ -1,8 +1,7 @@
 {
     "name": "Lavender Seeds",
     "icon": "theaurorian:lavender_seeds",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shapeless/lavender_tea",
             "text": "$(#008cff)Lavender Seeds$() can also be made into tea that gives a short speed buff."
         }
-    ]
+    ],
+    "read_by_default": true
 }

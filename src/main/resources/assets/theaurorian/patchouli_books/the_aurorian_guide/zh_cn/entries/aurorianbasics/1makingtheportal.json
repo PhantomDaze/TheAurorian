@@ -1,9 +1,8 @@
 {
     "name": "极光幽境传送门",
     "icon": "theaurorian:aurorian_portal",
-    "category": "1aurorianbasics",
+    "category": "theaurorian:1aurorianbasics",
     "sortnum": "1",
-    "readbydefault": true,
     "pages": [
         {
             "type": "text",
@@ -58,5 +57,6 @@
             "type": "text",
             "text": "$(#008cff)$(o)现在你已经建造好传送门了，踏入传送门并开始探索崭新的维度吧！"
         }
-    ]
+    ],
+    "read_by_default": true
 }

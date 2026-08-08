@@ -1,8 +1,7 @@
 {
     "name": "极光钢工具",
     "icon": "theaurorian:aurorian_steel_ingot",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shapeless/aurorian_steel_ingot",
             "text": "它们会选择自己的第一个附魔并在能升级时随着时间的推移逐渐升级！"
         }
-    ]
+    ],
+    "read_by_default": true
 }

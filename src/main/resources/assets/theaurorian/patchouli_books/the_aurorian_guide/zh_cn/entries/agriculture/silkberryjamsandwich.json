@@ -1,8 +1,7 @@
 {
     "name": "桑葚酱三明治",
     "icon": "theaurorian:silkberry_jam_sandwich",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -14,5 +13,6 @@
             "name": "桑葚酱三明治",
             "recipe": "theaurorian:shapeless/silkberry_jam_sandwich"
         }
-    ]
+    ],
+    "read_by_default": true
 }

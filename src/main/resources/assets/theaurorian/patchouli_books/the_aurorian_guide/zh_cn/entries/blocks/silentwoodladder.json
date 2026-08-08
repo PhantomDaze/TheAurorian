@@ -1,8 +1,7 @@
 {
     "name": "谧木梯子",
     "icon": "theaurorian:silentwood_ladder",
-    "category": "5blocks",
-    "readbydefault": true,
+    "category": "theaurorian:5blocks",
     "pages": [
         {
             "type": "spotlight",
@@ -13,5 +12,6 @@
             "type": "crafting",
             "recipe": "theaurorian:shaped/silentwood/silentwood_ladder"
         }
-    ]
+    ],
+    "read_by_default": true
 }
