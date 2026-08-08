@@ -27,7 +27,8 @@ public class DungeonKeeperRenderer extends HumanoidMobRenderer<AbstractSkeleton,
 
     @Override
     protected void scale(AbstractSkeleton pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
-        pMatrixStack.scale(1.3F, 1.3F, 1.3F);
+        // The enlarged hitbox is independent from this visual model scale.
+        pMatrixStack.scale(2.0F, 2.0F, 2.0F);
         super.scale(pLivingEntity, pMatrixStack, pPartialTickTime);
     }
 
