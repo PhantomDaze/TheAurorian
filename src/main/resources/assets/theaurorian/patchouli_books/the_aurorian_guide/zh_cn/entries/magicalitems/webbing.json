@@ -1,0 +1,13 @@
+{
+    "name": "蛛网弹",
+    "icon": "theaurorian:webbing",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:webbing",
+            "text": "$(#008cff)蛛网弹$()可以投掷，使命中的实体大幅减速。"
+        }
+    ],
+    "read_by_default": true
+}

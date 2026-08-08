@@ -1,13 +1,13 @@
 {
     "name": "本影盾牌",
     "icon": "theaurorian:umbra_shield",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:umbra_shield",
-            "text": "$(#008cff)本影盾牌$()会在你阻挡攻击时点燃你正对着的实体。按住 Shift 键以阻挡攻击。处于阻挡状态下过长时间会导致盾牌过载，你将必须在下次使用之前等待一点时间。"
+            "text": "$(#008cff)本影盾牌$()会在你阻挡攻击时点燃正前方的实体。按住 Shift 键可以正常阻挡。连续阻挡 6 秒后盾牌会过热，并需要冷却 6 秒才能再次使用。"
         }
-    ]
+    ],
+    "read_by_default": true
 }
