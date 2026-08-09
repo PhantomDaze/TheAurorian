@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Moon Temple: floating island temple with a spiral path to the surface.
@@ -205,6 +207,7 @@ public class MoonTempleStructure extends Structure {
             if (slot.template == null) {
                 return;
             }
+            Set<BlockPos> looted = new HashSet<>();
             for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.STRUCTURE_BLOCK)) {
                 if (!box.isInside(info.pos())) {
                     continue;
@@ -224,12 +227,14 @@ public class MoonTempleStructure extends Structure {
                 BlockEntity blockEntity = level.getBlockEntity(info.pos().below());
                 if (blockEntity instanceof ChestBlockEntity chest) {
                     chest.setLootTable(lootTable, random.nextLong());
+                    looted.add(info.pos().below());
                 } else if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
                     chest.setLootTable(lootTable, random.nextLong());
+                    looted.add(info.pos());
                 }
             }
             for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.CHEST)) {
-                if (box.isInside(info.pos()) && level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                if (box.isInside(info.pos()) && !looted.contains(info.pos()) && level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
                     chest.setLootTable(new ResourceLocation("theaurorian:chests/moontemple/med"), random.nextLong());
                 }
             }
