@@ -67,6 +67,9 @@ public class DarkstoneDungeonStructure extends Structure {
             return Optional.empty();
         }
         BlockPos center = new BlockPos(context.chunkPos().getMinBlockX() + 8, 0, context.chunkPos().getMinBlockZ() + 8);
+        if (StructurePlacementChecks.isWaterCovered(context, center.getX(), center.getZ())) {
+            return Optional.empty();
+        }
         List<Slot> slots = computeSlots(context, center);
         BlockPos origin = slots.get(0).pos;
         return Optional.of(new GenerationStub(origin, builder -> builder.addPiece(new DarkstoneDungeonPiece(context.structureTemplateManager(), origin, context.seed(), slots))));
