@@ -1,0 +1,13 @@
+{
+    "name": "本影剑",
+    "icon": "theaurorian:umbra_greatsword",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:umbra_greatsword",
+            "text": "$(#008cff)本影剑$()会给予玩家持续 6 秒的伤害吸收、抗性提升、虚弱和缓慢 II 效果。当你处于胶着状态且十分需要额外生命值时相当有用！$(br2)如果副手持有盾牌或其它物品，需要潜行并激活本影剑。"
+        }
+    ],
+    "read_by_default": true
+}

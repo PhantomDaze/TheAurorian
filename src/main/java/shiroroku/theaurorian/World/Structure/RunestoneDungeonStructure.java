@@ -301,6 +301,8 @@ public class RunestoneDungeonStructure extends Structure {
                     chest.setLootTable(lootKey, random.nextLong());
                 }
             }
+            // Join adjacent single chests into large (double) chests (template states are single).
+            StructureChests.connectChests(level, StructureChests.templateBox(slot.template, slot.rotation, slot.pos));
         }
     }
 

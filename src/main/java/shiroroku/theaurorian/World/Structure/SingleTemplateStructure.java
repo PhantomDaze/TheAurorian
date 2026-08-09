@@ -192,6 +192,8 @@ public class SingleTemplateStructure extends Structure {
                     chest.setLootTable(lootKey, random.nextLong());
                 }
             }
+            // Join adjacent single chests into large (double) chests (template states are single).
+            StructureChests.connectChests(level, StructureChests.templateBox(loaded, rotation, this.pos));
         }
     }
 }

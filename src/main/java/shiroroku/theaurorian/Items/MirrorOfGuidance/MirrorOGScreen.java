@@ -95,8 +95,10 @@ public class MirrorOGScreen extends Screen {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, (float) (1.5 - Rand.nextDouble() * 0.5f), 1F));
         }
 
-        // Game tint
-        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
+        // Game tint — use the transparent gradient, NOT renderBackground: 1.21's renderBackground
+        // applies processBlurEffect (GUI blur) + the dark menu texture, which blurs the world
+        // behind this see-through mirror. The mirror glass should stay readable.
+        this.renderTransparentBackground(graphics);
 
         // Setup
         RenderSystem.enableBlend();

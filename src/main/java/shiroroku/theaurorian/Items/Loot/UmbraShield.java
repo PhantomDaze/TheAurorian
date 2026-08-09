@@ -16,12 +16,18 @@ import shiroroku.theaurorian.Items.BaseAurorianShield;
 
 public class UmbraShield extends BaseAurorianShield {
 
+    private static final int OVERHEAT_TICKS = 120;
+    private static final int COOLDOWN_TICKS = 120;
+
     public UmbraShield(Tier pTier, Properties pProperties) {
         super(pTier, pProperties);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+        if (pPlayer.getCooldowns().isOnCooldown(this)) {
+            return InteractionResultHolder.fail(pPlayer.getItemInHand(pHand));
+        }
         pPlayer.getItemInHand(pHand).hurtAndBreak(1, pPlayer, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
         return super.use(pLevel, pPlayer, pHand);
     }
@@ -29,6 +35,15 @@ public class UmbraShield extends BaseAurorianShield {
     @SuppressWarnings("deprecation")
     @Override
     public void onUseTick(Level pLevel, LivingEntity entity, ItemStack pStack, int pRemainingUseDuration) {
+        int usedTicks = getUseDuration(pStack, entity) - pRemainingUseDuration;
+        if (usedTicks >= OVERHEAT_TICKS) {
+            entity.stopUsingItem();
+            if (entity instanceof Player player && !pLevel.isClientSide) {
+                player.getCooldowns().addCooldown(this, COOLDOWN_TICKS);
+            }
+            return;
+        }
+
         if (entity.tickCount % 2 == 0) {
             pLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 0.5F, 0.6F);
         }
@@ -36,7 +51,7 @@ public class UmbraShield extends BaseAurorianShield {
         Vec3 lookv = entity.getLookAngle();
         pLevel.getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(), entity, entity.getBoundingBox().inflate(0.7).move(lookv.x, lookv.y, lookv.z)).forEach((e) -> e.igniteForSeconds(1));
 
-        //todo check if this syncs correctly
+        // TODO: check if this syncs correctly.
         for (int i = 0; i < 5; i++) {
             double spread = 0.5;
             double velocity = 0.2;

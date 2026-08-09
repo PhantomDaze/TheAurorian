@@ -1,0 +1,17 @@
+{
+    "name": "Weeping Willow Sap",
+    "icon": "theaurorian:weeping_willow_sap",
+    "category": "theaurorian:4agriculture",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:weeping_willow_sap",
+            "text": "$(#008cff)Weeping Willow Sap$() can be obtained from Weeping Willow Trees. They can be burned for fuel or eaten to replace poison effects with slowness."
+        },
+        {
+            "type": "text",
+            "text": "When replacing poison effect it will keep duration and amplifier but pass it onto slowness."
+        }
+    ],
+    "read_by_default": true
+}

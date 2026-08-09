@@ -1,0 +1,17 @@
+{
+    "name": "Aurorian Slime Boots",
+    "icon": "theaurorian:slime_boots",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:slime_boots",
+            "text": "$(#008cff)Aurorian Slime Boots$() lets you jump extra high when you jump while crouching! They also negate fall damage and by default have a 5 second slime jump cooldown."
+        },
+        {
+            "type": "crafting",
+            "recipe": "theaurorian:shaped/slime_boots"
+        }
+    ],
+    "read_by_default": true
+}

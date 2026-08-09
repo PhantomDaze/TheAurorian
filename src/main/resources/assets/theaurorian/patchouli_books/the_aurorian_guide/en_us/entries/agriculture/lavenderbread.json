@@ -1,0 +1,18 @@
+{
+    "name": "Lavender Bread",
+    "icon": "theaurorian:lavender_bread",
+    "category": "theaurorian:4agriculture",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:lavender_bread",
+            "text": "$(#008cff)Lavender Bread$() is a simple food made with $(#008cff)Lavender$(). Not as good as vanilla bread by itself."
+        },
+        {
+            "type": "crafting",
+            "name": "Lavender Bread",
+            "recipe": "theaurorian:shaped/lavender_bread"
+        }
+    ],
+    "read_by_default": true
+}

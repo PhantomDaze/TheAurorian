@@ -1,0 +1,13 @@
+{
+    "name": "Urns",
+    "icon": "theaurorian:urn",
+    "category": "theaurorian:5blocks",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:urn",
+            "text": "An urn that's found in caves, they drop valuable loot when broke! Not silktouchable."
+        }
+    ],
+    "read_by_default": true
+}

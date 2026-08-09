@@ -1,0 +1,19 @@
+{
+    "name": "Silentwood Bow",
+    "icon": "theaurorian:silentwood_bow",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:silentwood_bow",
+            "text": "$(#008cff)The Silentwood Bow$() is The Aurorian variant of the Bow.$(br2)The Aurorian also has an Arrow variant, $(#008cff)The Cerulean Arrow$() that does more damage and is faster than vanilla arrows!"
+        },
+        {
+            "type": "crafting",
+            "name": "Silentwood Bow",
+            "recipe": "theaurorian:shaped/silentwood/silentwood_bow",
+            "recipe2": "theaurorian:shaped/cerulean_arrow"
+        }
+    ],
+    "read_by_default": true
+}

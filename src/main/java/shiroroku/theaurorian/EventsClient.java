@@ -24,6 +24,7 @@ import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import shiroroku.theaurorian.Blocks.SilentwoodChest.SilentwoodChestClientExt;
 import shiroroku.theaurorian.Renderers.AurorianDimensionSpecialEffects;
@@ -44,6 +45,7 @@ import shiroroku.theaurorian.Particles.AurorianSlimeParticle;
 import shiroroku.theaurorian.Particles.WeepingWillowDripParticle;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
 import shiroroku.theaurorian.Registry.BlockRegistry;
+import shiroroku.theaurorian.Registry.FluidRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.Registry.MenuRegistry;
 import shiroroku.theaurorian.Registry.ParticleRegistry;
@@ -178,11 +180,30 @@ public class EventsClient {
                 new AurorianDimensionSpecialEffects());
     }
 
+    private static IClientFluidTypeExtensions fluidExtensions(String name) {
+        return new IClientFluidTypeExtensions() {
+            @Override
+            public ResourceLocation getStillTexture() {
+                return ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "block/molten_" + name);
+            }
+
+            @Override
+            public ResourceLocation getFlowingTexture() {
+                return ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "block/molten_" + name + "_flow");
+            }
+        };
+    }
+
     /**
      * Replaces removed Item#initializeClient. Silentwood chest item uses BEWLR.
+     * FluidType#initializeClient is also deprecated for removal, so the molten metal
+     * still/flowing sprites are registered here as well.
      */
     @SubscribeEvent
     public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerItem(SilentwoodChestClientExt.INSTANCE, BlockRegistry.silentwood_chest.get().asItem());
+        event.registerFluidType(fluidExtensions("cerulean"), FluidRegistry.molten_cerulean_type.get());
+        event.registerFluidType(fluidExtensions("moonstone"), FluidRegistry.molten_moonstone_type.get());
+        event.registerFluidType(fluidExtensions("aurorian_steel"), FluidRegistry.molten_aurorian_steel_type.get());
     }
 }

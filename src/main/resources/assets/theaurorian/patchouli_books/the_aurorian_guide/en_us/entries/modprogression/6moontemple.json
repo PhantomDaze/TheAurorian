@@ -1,0 +1,36 @@
+{
+    "name": "Moon temple",
+    "icon": "theaurorian:moon_temple_key",
+    "category": "theaurorian:2modprogression",
+    "sortnum": 6,
+    "pages": [
+        {
+            "type": "image",
+            "title": "Moon temple",
+            "text": "",
+            "images": [
+                "theaurorian:patchouli_books/the_aurorian_guide/en_us/entries/aurorianbasics/moontemple.png"
+            ]
+        },
+        {
+            "type": "text",
+            "text": "$(#008cff)The Moon temple$() can be found floating in the sky, they always spawn along the X and Z axis, same as the $(#008cff)The Runestone Dungeon$(). It has a small path leading up to the entrance and is home to $(#8800ff)The Moon Queen$()!$(br2)Around the temple you can find floating islands that contain $(#008cff)Moongems$() that are important for many recipes."
+        },
+        {
+            "type": "crafting",
+            "title": "Moon Temple Key",
+            "recipe": "theaurorian:shapeless/moon_temple_key"
+        },
+        {
+            "type": "text",
+            "text": "The $(#8800ff)Moon Queen$() drops the $(#008cff)Dark Amulet$() used to access this dungeon. The complete Dark Amulet description is in the dungeon loot section below.$(br2)$(#008cff)The Moontemple$() interior has two towers. At the top of each tower you can find a $(#008cff)Moon Temple Cell Key Fragment$()."
+        },
+        {
+            "type": "crafting",
+            "title": "Moon Temple Cell Key",
+            "recipe": "theaurorian:shapeless/moon_temple_interior_key",
+            "text": "After clearing each side and obtaining both fragments, you can craft the key with a $(#008cff)Moongem$(). Now you can access the boss room!"
+        }
+    ],
+    "read_by_default": true
+}

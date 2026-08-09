@@ -1,0 +1,19 @@
+{
+    "name": "Silentwood Crafting Table",
+    "icon": "theaurorian:silentwood_crafting_table",
+    "category": "theaurorian:5blocks",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:silentwood_crafting_table",
+            "text": "Just like a regular crafting table. Can be turned into a vanilla crafting table."
+        },
+        {
+            "type": "crafting",
+            "name": "",
+            "recipe": "theaurorian:shaped/silentwood_crafting_table",
+            "recipe2": "theaurorian:shaped/silentwood_crafting_table"
+        }
+    ],
+    "read_by_default": true
+}

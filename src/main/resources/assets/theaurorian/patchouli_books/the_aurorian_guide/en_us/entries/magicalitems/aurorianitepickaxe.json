@@ -1,0 +1,13 @@
+{
+    "name": "Aurorianite Pickaxe",
+    "icon": "theaurorian:aurorianite_pickaxe",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:aurorianite_pickaxe",
+            "text": "$(#008cff)The Aurorianite Pickaxe$() has the ability to mine faster once you mine an ore! It's mostly compatible with other mods, depends on if the mods maker adds their ore to the ore dictionary."
+        }
+    ],
+    "read_by_default": true
+}

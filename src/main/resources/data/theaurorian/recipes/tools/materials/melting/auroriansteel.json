@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:material_melting",
+  "input": "theaurorian:auroriansteel",
+  "temperature": 800,
+  "result": { "fluid": "theaurorian:molten_aurorian_steel", "amount": 1000 }
+}

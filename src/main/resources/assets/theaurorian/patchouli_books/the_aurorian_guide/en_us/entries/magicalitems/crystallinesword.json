@@ -1,0 +1,13 @@
+{
+    "name": "Crystalline Sword",
+    "icon": "theaurorian:crystalline_sword",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:crystalline_sword",
+            "text": "$(#008cff)Crystalline Sword$() lets you charge up and fire a Crystalline Beam!"
+        }
+    ],
+    "read_by_default": true
+}

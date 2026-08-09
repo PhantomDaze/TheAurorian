@@ -1,0 +1,17 @@
+{
+    "name": "Silentwood Ladder",
+    "icon": "theaurorian:silentwood_ladder",
+    "category": "theaurorian:5blocks",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:silentwood_ladder",
+            "text": "Just like a regular ladder!"
+        },
+        {
+            "type": "crafting",
+            "recipe": "theaurorian:shaped/silentwood/silentwood_ladder"
+        }
+    ],
+    "read_by_default": true
+}

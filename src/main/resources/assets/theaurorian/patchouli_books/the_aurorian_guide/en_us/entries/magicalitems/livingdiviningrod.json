@@ -1,0 +1,13 @@
+{
+    "name": "Living Divining Rod",
+    "icon": "theaurorian:living_divining_rod",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:living_divining_rod",
+            "text": "$(#008cff)Living Divining Rod$() will glow a nearby entity when used!"
+        }
+    ],
+    "read_by_default": true
+}

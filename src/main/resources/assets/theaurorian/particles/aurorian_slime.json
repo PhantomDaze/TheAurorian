@@ -1,5 +1,3 @@
 {
-  "textures": [
-    "minecraft:item/slime_ball"
-  ]
+  "textures": ["theaurorian:aurorian_slime_ball"]
 }

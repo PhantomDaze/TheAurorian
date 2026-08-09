@@ -1,0 +1,13 @@
+{
+    "name": "Umbra Shield",
+    "icon": "theaurorian:umbra_shield",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:umbra_shield",
+            "text": "$(#008cff)The Umbra Shield$() will light entities that are directly in front of you on fire when blocking! Holding shift lets you block normally. Blocking continuously for 6 seconds overheats the shield; it then needs 6 seconds to cool down before you can use it again."
+        }
+    ],
+    "read_by_default": true
+}

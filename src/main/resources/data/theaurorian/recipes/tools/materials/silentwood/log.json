@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": { "item": "theaurorian:silentwood_log" },
+  "value": 4,
+  "needed": 1,
+  "material": "theaurorian:silentwood",
+  "leftover": { "item": "theaurorian:silentwood_planks" }
+}

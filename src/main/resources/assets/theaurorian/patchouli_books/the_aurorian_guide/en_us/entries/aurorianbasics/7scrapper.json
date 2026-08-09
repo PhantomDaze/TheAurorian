@@ -1,0 +1,21 @@
+{
+    "name": "Scrapper",
+    "icon": "theaurorian:scrapper",
+    "category": "theaurorian:1aurorianbasics",
+    "sortnum": 7,
+    "pages": [
+        {
+            "type": "spotlight",
+            "title": "More Scrap!",
+            "item": "theaurorian:scrapper",
+            "text": "The $(#008cff)Scrapper$() will grind down tools to get more scrap than smelting! It requires $(#008cff)Crystals$() to run.$(br2)It can also grind down other tools like iron and gold to get back more nuggets!"
+        },
+        {
+            "type": "crafting",
+            "name": "",
+            "recipe": "theaurorian:shaped/scrapper",
+            "text": "Check JEI for full list of Scrapper recipes."
+        }
+    ],
+    "read_by_default": true
+}

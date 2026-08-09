@@ -1,0 +1,19 @@
+{
+    "name": "Petunias",
+    "icon": "theaurorian:petunia",
+    "category": "theaurorian:4agriculture",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:petunia",
+            "text": "$(#008cff)Petunia$() is harvested using a Sickle, and cannot be farmed."
+        },
+        {
+            "type": "crafting",
+            "name": "Petunia Tea",
+            "recipe": "theaurorian:shapeless/petunia_tea",
+            "text": "$(#008cff)Petunias$() can also be made into tea that gives a short strength buff."
+        }
+    ],
+    "read_by_default": true
+}

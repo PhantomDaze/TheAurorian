@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": { "tag": "c:ingots/aurorian_steel" },
+  "result": { "amount": 1000, "fluid": "theaurorian:molten_aurorian_steel" },
+  "temperature": 800,
+  "time": 60
+}

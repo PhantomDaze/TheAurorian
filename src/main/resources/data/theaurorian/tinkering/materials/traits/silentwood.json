@@ -1,0 +1,6 @@
+{
+  "default": [
+    { "level": 1, "name": "tconstruct:cultivated" },
+    { "level": 1, "name": "theaurorian:aurorian_empowered" }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Aurorianite Axe",
+    "icon": "theaurorian:aurorianite_axe",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:aurorianite_axe",
+            "text": "$(#008cff)The Aurorianite Axe$() has the ability to chop whole trees down, also can be used as a weapon!"
+        }
+    ],
+    "read_by_default": true
+}

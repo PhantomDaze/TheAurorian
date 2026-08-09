@@ -97,8 +97,7 @@ protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.moonstone_ore.get());
         this.tag(BlockTags.PLANKS).add(BlockRegistry.silentwood_planks.get());
         this.tag(BlockTags.PLANKS).add(BlockRegistry.weeping_willow_planks.get());
-        this.tag(BlockTags.REPLACEABLE).add(BlockRegistry.aurorian_tallgrass.get());
-        this.tag(BlockTags.REPLACEABLE).add(BlockRegistry.lavender_block.get());
+        this.tag(BlockTags.REPLACEABLE).add(BlockRegistry.aurorian_tallgrass.get(), BlockRegistry.aurorian_tallgrass_light.get(), BlockRegistry.bright_bulb.get(), BlockRegistry.lavender_block.get(), BlockRegistry.petunia.get(), BlockRegistry.silkberry_block.get());
         this.tag(BlockTags.SAPLINGS).add(BlockRegistry.silentwood_sapling.get());
         this.tag(BlockTags.SAPLINGS).add(BlockRegistry.weeping_willow_sapling.get());
         this.tag(BlockTags.SLABS).add(BlockRegistry.aurorian_cobblestone_slab.get());

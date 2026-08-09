@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class TheAurorian {
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.config);
         BlockRegistry.register(bus);
         ItemRegistry.register(bus);
+        FluidRegistry.register(bus);
         MaterialTiers.ARMOR_MATERIALS.register(bus);
         BlockEntityRegistry.BLOCK_ENTITIES.register(bus);
         MenuRegistry.MENUS.register(bus);
@@ -45,5 +47,18 @@ public class TheAurorian {
         ParticleRegistry.register(bus);
         CreativeTabRegistry.register(bus);
         bus.addListener(RegisterCapabilitiesEvent.class, CapabilityRegistry::registerCapabilities);
+
+        // Tinkers' Construct integration (parked until a 1.21.1 build of TConstruct exists).
+        // The compat package is excluded from the default build, so register it via reflection
+        // only when TConstruct is actually installed AND the class made it into the jar.
+        if (ModList.get().isLoaded("tconstruct")) {
+            try {
+                Class.forName("shiroroku.theaurorian.Compat.TinkersConstruct.TinkersCompat")
+                        .getMethod("register", IEventBus.class)
+                        .invoke(null, bus);
+            } catch (ReflectiveOperationException e) {
+                LOGGER.warn("TConstruct is present but the Aurorian compat could not be loaded", e);
+            }
+        }
     }
 }

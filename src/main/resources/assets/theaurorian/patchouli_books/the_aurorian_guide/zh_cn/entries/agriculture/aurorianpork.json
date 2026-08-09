@@ -1,0 +1,23 @@
+{
+    "name": "极光猪排",
+    "icon": "theaurorian:cooked_aurorian_pork",
+    "category": "theaurorian:4agriculture",
+    "pages": [
+        {
+            "type": "smelting",
+            "recipe": "theaurorian:smelting/cooked_aurorian_pork",
+            "text": "$(#008cff)极光猪排$()是$(#008cff)极光猪$()的掉落物，它可以被制成$(#008cff)极光培根$()！"
+        },
+        {
+            "type": "entity",
+            "entity": "theaurorian:aurorian_pig",
+            "scale": 0.5
+        },
+        {
+            "type": "crafting",
+            "name": "Aurorian Pork",
+            "recipe": "theaurorian:shapeless/aurorian_bacon"
+        }
+    ],
+    "read_by_default": true
+}

@@ -86,6 +86,7 @@ protected void generate() {
             this.dropSelf(BlockRegistry.mushroom_small.get());
             this.dropSelf(BlockRegistry.moonlight_forge.get());
             this.dropSelf(BlockRegistry.moon_temple_bars.get());
+            this.dropSelf(BlockRegistry.moon_temple_stairs.get());
             this.dropSelf(BlockRegistry.umbra_stone_roof_stairs.get());
             this.dropSelf(BlockRegistry.peridotite_smooth_stairs.get());
             this.dropSelf(BlockRegistry.aurorian_stone_brick_stairs.get());

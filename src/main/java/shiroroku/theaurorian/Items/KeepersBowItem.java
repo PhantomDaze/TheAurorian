@@ -7,9 +7,9 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,31 +23,33 @@ public class KeepersBowItem extends BaseAurorianBow {
         super(properties);
     }
 
-    // Keep vanilla bow use duration (72000). A short duration (e.g. 40) ends the
-    // use animation and restarts while the player still holds right-click, which
-    // makes the pull model loop back to the undrawn frame after a full draw.
+    // Keep vanilla bow use duration (72000). The use tick is restarted after a
+    // full draw so holding right-click continues to fire volleys automatically.
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+    public void onUseTick(Level level, LivingEntity entityLiving, ItemStack stack, int remainingUseDuration) {
         if (!(entityLiving instanceof Player player)) {
             return;
         }
+
+        int charge = this.getUseDuration(stack, entityLiving) - remainingUseDuration;
+        if (charge < BowItem.MAX_DRAW_DURATION) {
+            return;
+        }
+
+        float power = getPowerForTime(charge);
+        if (power < 1.0F) {
+            return;
+        }
+
         ItemStack projectile = player.getProjectile(stack);
         if (projectile.isEmpty()) {
             return;
         }
-        int charge = this.getUseDuration(stack, entityLiving) - timeLeft;
-        charge = EventHooks.onArrowLoose(stack, level, player, charge, !projectile.isEmpty());
-        if (charge < 0) {
-            return;
-        }
-        float power = getPowerForTime(charge);
-        if (power < 0.1F) {
-            return;
-        }
+
+        // The item description promises three arrows after every full draw.
         List<ItemStack> drawn = draw(stack, projectile, player);
         if (level instanceof ServerLevel serverLevel && !drawn.isEmpty()) {
-            // Triple-shot: fire three times with high inaccuracy (spread)
             for (int i = 0; i < 3; i++) {
                 this.shoot(serverLevel, player, player.getUsedItemHand(), stack, drawn, power * 3.0F, 6.0F, power == 1.0F, null);
             }
@@ -56,6 +58,17 @@ public class KeepersBowItem extends BaseAurorianBow {
                 SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F,
                 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + power * 0.5F);
         player.awardStat(Stats.ITEM_USED.get(this));
+
+        // A normal stop does not call releaseUsing, so the volley is not fired twice.
+        player.stopUsingItem();
+        if (player.getAbilities().instabuild || !player.getProjectile(stack).isEmpty()) {
+            player.startUsingItem(player.getUsedItemHand());
+        }
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+        // Volleys are emitted by onUseTick; releasing before a full draw does nothing.
     }
 
     @Override

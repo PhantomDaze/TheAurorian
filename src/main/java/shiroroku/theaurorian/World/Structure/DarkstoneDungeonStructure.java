@@ -318,6 +318,8 @@ public class DarkstoneDungeonStructure extends Structure {
                     chestEntity.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, ResourceLocation.parse(slot.loot)), random.nextLong());
                 }
             }
+            // Join adjacent single chests into large (double) chests (template states are single).
+            StructureChests.connectChests(level, StructureChests.templateBox(slot.template, slot.rotation, slot.pos));
         }
     }
 

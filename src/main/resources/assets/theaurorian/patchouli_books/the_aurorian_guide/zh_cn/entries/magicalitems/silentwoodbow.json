@@ -1,0 +1,19 @@
+{
+    "name": "谧木弓",
+    "icon": "theaurorian:silentwood_bow",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:silentwood_bow",
+            "text": "$(#008cff)谧木弓$()是极光幽境中弓的变种。$(br2)极光幽境中还有箭的变种：$(#008cff)晶蓝箭$()，飞得比原版的箭更快，并能造成更高的伤害！"
+        },
+        {
+            "type": "crafting",
+            "name": "谧木弓",
+            "recipe": "theaurorian:shaped/silentwood/silentwood_bow",
+            "recipe2": "theaurorian:shaped/cerulean_arrow"
+        }
+    ],
+    "read_by_default": true
+}

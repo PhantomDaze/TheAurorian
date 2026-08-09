@@ -1,0 +1,19 @@
+{
+    "name": "Aurorian Furnace",
+    "icon": "theaurorian:aurorian_furnace",
+    "category": "theaurorian:5blocks",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:aurorian_furnace",
+            "text": "Works the same as vanilla furnace, but you can stack chimneys on top to speed up the smelting speed!$(br2)Speed and max chimneys can be changed in the config file. Chimneys can also have blocks placed between them to allow for stuff like seemless roofing."
+        },
+        {
+            "type": "crafting",
+            "name": "",
+            "recipe": "theaurorian:shaped/aurorian_furnace",
+            "recipe2": "theaurorian:shaped/chimney"
+        }
+    ],
+    "read_by_default": true
+}

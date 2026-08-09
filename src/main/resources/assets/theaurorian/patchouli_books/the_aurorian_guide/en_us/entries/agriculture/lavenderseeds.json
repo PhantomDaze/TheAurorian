@@ -1,0 +1,19 @@
+{
+    "name": "Lavender Seeds",
+    "icon": "theaurorian:lavender_seeds",
+    "category": "theaurorian:4agriculture",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:lavender_seeds",
+            "text": "$(#008cff)Lavender Seeds$() are got by putting $(#008cff)Lavender$() in a crafting table. Can be planted to farm more lavender."
+        },
+        {
+            "type": "crafting",
+            "name": "Lavender Seed Tea",
+            "recipe": "theaurorian:shapeless/lavender_tea",
+            "text": "$(#008cff)Lavender Seeds$() can also be made into tea that gives a short speed buff."
+        }
+    ],
+    "read_by_default": true
+}

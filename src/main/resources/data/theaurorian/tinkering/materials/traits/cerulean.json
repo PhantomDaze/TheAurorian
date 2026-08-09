@@ -1,0 +1,11 @@
+{
+  "default": [
+    { "level": 1, "name": "theaurorian:aurorian_empowered" }
+  ],
+  "perStat": {
+    "tconstruct:armor": [
+      { "level": 1, "name": "tconstruct:featherweight" },
+      { "level": 1, "name": "tconstruct:lightweight" }
+    ]
+  }
+}

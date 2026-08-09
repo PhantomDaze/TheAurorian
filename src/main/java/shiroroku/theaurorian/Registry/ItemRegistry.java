@@ -119,8 +119,8 @@ public class ItemRegistry {
 
     // Phase 1: Throwables & armor registered so darkstone chest loot stays valid;
     // real behaviours land in Phase 8.
-    public static final DeferredHolder<Item, Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final DeferredHolder<Item, Item> webbing = ITEMS_GEN.register("webbing", basicItem(defaultProp()));
+    public static final DeferredHolder<Item, Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", () -> new StickySpikerItem(defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, Item> webbing = ITEMS_GEN.register("webbing", () -> new WebbingItem(defaultProp()));
     public static final DeferredHolder<Item, Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new SpikedChestplate(MaterialTiers.SPIKED_ARMOR, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(MaterialTiers.SPIKED_ARMOR_DURABILITY)).rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, Item> slime_boots = ITEMS_GEN.register("slime_boots", () -> new SlimeBootsItem(MaterialTiers.SLIME_ARMOR, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(MaterialTiers.SLIME_ARMOR_DURABILITY)).rarity(Rarity.EPIC)));
 
@@ -189,6 +189,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, Item> crystalline_pickaxe = ITEMS_GEN_HANDHELD.register("crystalline_pickaxe", () -> new CrystallinePickaxe(MaterialTiers.CRYSTALLINE, 1, -2.8F, defaultProp().rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, Item> crystalline_shield = ITEMS_GEN_SHIELD.register("crystalline_shield", () -> new CrystallineShield(MaterialTiers.CRYSTALLINE, defaultProp().rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, Item> crystalline_sword = ITEMS.register("crystalline_sword", () -> new CrystallineSword(MaterialTiers.CRYSTALLINE, 3, -2.4F, defaultProp().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, Item> crystalline_sprite = ITEMS_GEN.register("crystalline_sprite", basicItem());
 
     // Trinkets
     public static final DeferredHolder<Item, Item> amulet_of_chroma = ITEMS_GEN.register("amulet_of_chroma", () -> new BaseAurorianCurio(defaultProp().rarity(Rarity.EPIC), Arrays.asList(

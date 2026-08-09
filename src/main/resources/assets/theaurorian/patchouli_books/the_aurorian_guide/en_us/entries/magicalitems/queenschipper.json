@@ -1,0 +1,13 @@
+{
+    "name": "Queens Chipper",
+    "icon": "theaurorian:queens_chipper",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:queens_chipper",
+            "text": "$(#008cff)The Queens Chipper$() is a pickaxe that can chip away and harvest Aurorian Dungeon Bricks!"
+        }
+    ],
+    "read_by_default": true
+}

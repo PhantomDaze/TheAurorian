@@ -1,0 +1,13 @@
+{
+    "name": "Moon's Shield",
+    "icon": "theaurorian:moon_shield",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:moon_shield",
+            "text": "$(#008cff)The Moon's Shield$() contains the power of the Moon Queen herself! You can charge at foes and knock them up in the air when blocking."
+        }
+    ],
+    "read_by_default": true
+}

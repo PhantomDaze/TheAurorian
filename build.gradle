@@ -28,6 +28,10 @@ repositories {
         url = 'https://maven.blamejared.com'
     }
     maven {
+        name = 'TinkersConstruct'
+        url = 'https://dvs1.progwml6.com/files/maven'
+    }
+    maven {
         name = 'GeckoLib'
         url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
@@ -114,12 +118,35 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
+    // CraftTweaker (optional soft dependency; 1.21.1 neoforge build exists)
+    compileOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${crafttweaker_version}"
+    annotationProcessor "com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:${crafttweaker_annotation_version}"
+    runtimeOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${crafttweaker_version}"
+
+    // Patchouli (optional soft dependency; 1.21.1 neoforge build exists)
+    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+    runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+
     // Geckolib optional runtime (not required for content; kept for future meshes)
     localRuntime "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     // Gson comes transitively from Minecraft via neoForge.unitTest { enable() }
+}
+
+// Tinkers' Construct has no stable 1.21.1 release yet. Keep Compat/TinkersConstruct out of the
+// build (it references TConstruct 3.x APIs) until a real version is pinned in gradle.properties.
+def tconstructEnabled = project.tconstruct_version != null && !project.tconstruct_version.isEmpty()
+if (!tconstructEnabled) {
+    sourceSets.main.java.exclude 'shiroroku/theaurorian/Compat/TinkersConstruct/**'
+} else {
+    dependencies {
+        compileOnly "slimeknights.tconstruct:TConstruct:${project.tconstruct_version}"
+        compileOnly "slimeknights.mantle:Mantle:${project.mantle_version}"
+        runtimeOnly "slimeknights.tconstruct:TConstruct:${project.tconstruct_version}"
+        runtimeOnly "slimeknights.mantle:Mantle:${project.mantle_version}"
+    }
 }
 
 var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {

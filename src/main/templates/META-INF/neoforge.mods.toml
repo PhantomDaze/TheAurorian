@@ -38,3 +38,34 @@ type = "required"
 versionRange = "[9.0.0+1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
+
+# Optional integrations: CraftTweaker and Patchouli both ship 1.21.1 NeoForge builds.
+# TConstruct has no stable 1.21.1 release yet — the range below is for the 3.x API used by
+# Compat/TinkersConstruct, and should be raised to the 4.x range when it ships.
+[[dependencies.${mod_id}]]
+modId = "crafttweaker"
+type = "optional"
+versionRange = "[21.0.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "patchouli"
+type = "optional"
+versionRange = "[1.21.1-90,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "tconstruct"
+type = "optional"
+versionRange = "[3.8.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "mantle"
+type = "optional"
+versionRange = "[1.10.0,)"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,13 @@
+{
+    "name": "Webbing",
+    "icon": "theaurorian:webbing",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:webbing",
+            "text": "$(#008cff)Webbing$() can be thrown to heavily slow any entity it hits."
+        }
+    ],
+    "read_by_default": true
+}

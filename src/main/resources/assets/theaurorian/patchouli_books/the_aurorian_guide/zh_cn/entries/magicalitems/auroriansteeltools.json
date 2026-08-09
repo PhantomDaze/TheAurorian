@@ -1,0 +1,19 @@
+{
+    "name": "极光钢工具",
+    "icon": "theaurorian:aurorian_steel_ingot",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:aurorian_steel_sword",
+            "text": "$(#008cff)极光钢$()是极光幽境每一方面的材料融合在一起制得的金属。这些工具能升级它们的附魔！"
+        },
+        {
+            "type": "crafting",
+            "name": "极光钢",
+            "recipe": "theaurorian:shapeless/aurorian_steel_ingot",
+            "text": "它们会选择自己的第一个附魔并在能升级时随着时间的推移逐渐升级！"
+        }
+    ],
+    "read_by_default": true
+}
