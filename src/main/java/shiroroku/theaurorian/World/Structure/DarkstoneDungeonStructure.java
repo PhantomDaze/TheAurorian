@@ -129,21 +129,23 @@ public class DarkstoneDungeonStructure extends Structure {
             }
         }
 
-        // Boss room
-        addBossRoom(slots, context, ax, az, 0, 0, "darkstone/darkstone_bossroom_back");
-        addBossRoom(slots, context, ax, az, 0, 1, "darkstone/darkstone_bossroom_backleft");
-        addBossRoom(slots, context, ax, az, 0, -1, "darkstone/darkstone_bossroom_backright");
-        addBossRoom(slots, context, ax, az, 1, 0, "darkstone/darkstone_bossroom_front");
-        addBossRoom(slots, context, ax, az, 1, 1, "darkstone/darkstone_bossroom_frontleft");
-        addBossRoom(slots, context, ax, az, 1, -1, "darkstone/darkstone_bossroom_frontright");
+        // Boss room: all six quarter pieces share one floor level so the walls,
+        // floor and ceiling align. Using per-piece surface probes left adjacent
+        // pieces at different heights on uneven terrain, splitting the room.
+        int bossRoomY = sourceSurfaceY(context, ax, az, 0, 0) - FLOOR_HEIGHT * 2;
+        addBossRoom(slots, ax, az, 0, 0, "darkstone/darkstone_bossroom_back", bossRoomY);
+        addBossRoom(slots, ax, az, 0, 1, "darkstone/darkstone_bossroom_backleft", bossRoomY);
+        addBossRoom(slots, ax, az, 0, -1, "darkstone/darkstone_bossroom_backright", bossRoomY);
+        addBossRoom(slots, ax, az, 1, 0, "darkstone/darkstone_bossroom_front", bossRoomY);
+        addBossRoom(slots, ax, az, 1, 1, "darkstone/darkstone_bossroom_frontleft", bossRoomY);
+        addBossRoom(slots, ax, az, 1, -1, "darkstone/darkstone_bossroom_frontright", bossRoomY);
 
         return slots;
     }
 
-    private static void addBossRoom(List<Slot> slots, GenerationContext context, int ax, int az, int sourceOffsetX, int sourceOffsetZ, String name) {
+    private static void addBossRoom(List<Slot> slots, int ax, int az, int sourceOffsetX, int sourceOffsetZ, String name, int py) {
         int px = ax - sourceOffsetX * 16;
         int pz = az - sourceOffsetZ * 16;
-        int py = sourceSurfaceY(context, ax, az, sourceOffsetX, sourceOffsetZ) - FLOOR_HEIGHT * 2;
         slots.add(new Slot(new ResourceLocation("theaurorian:" + name), Rotation.NONE, new BlockPos(px, py, pz), "theaurorian:chests/darkstone/high"));
     }
 
