@@ -1,8 +1,7 @@
 {
     "name": "谧木弓",
     "icon": "theaurorian:silentwood_bow",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shaped/silentwood/silentwood_bow",
             "recipe2": "theaurorian:shaped/cerulean_arrow"
         }
-    ]
+    ],
+    "read_by_default": true
 }

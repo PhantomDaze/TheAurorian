@@ -1,8 +1,7 @@
 {
     "name": "Weeping Willow Sap",
     "icon": "theaurorian:weeping_willow_sap",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -13,5 +12,6 @@
             "type": "text",
             "text": "When replacing poison effect it will keep duration and amplifier but pass it onto slowness."
         }
-    ]
+    ],
+    "read_by_default": true
 }

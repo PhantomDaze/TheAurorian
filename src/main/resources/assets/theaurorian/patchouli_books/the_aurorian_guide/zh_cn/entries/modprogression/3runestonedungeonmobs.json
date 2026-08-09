@@ -1,9 +1,8 @@
 {
     "name": "符石地牢中的生物",
     "icon": "theaurorian:boss_spawner",
-    "category": "2modprogression",
-    "sortnum": "3",
-    "readbydefault": true,
+    "category": "theaurorian:2modprogression",
+    "sortnum": 3,
     "pages": [
         {
             "type": "entity",
@@ -24,5 +23,6 @@
             "name": "地牢守卫",
             "entity": "theaurorian:dungeon_keeper"
         }
-    ]
+    ],
+    "read_by_default": true
 }

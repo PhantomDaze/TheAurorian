@@ -24,8 +24,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import shiroroku.theaurorian.Registry.StructureRegistry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /** Moon Temple: floating island temple with a spiral path to the surface. */
 public class MoonTempleStructure extends Structure {
@@ -185,6 +187,7 @@ public class MoonTempleStructure extends Structure {
             if (slot.template == null) {
                 return;
             }
+            Set<BlockPos> looted = new HashSet<>();
             for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.STRUCTURE_BLOCK)) {
                 if (!box.isInside(info.pos)) {
                     continue;
@@ -192,7 +195,8 @@ public class MoonTempleStructure extends Structure {
                 String metadata = info.nbt != null ? info.nbt.getString("metadata") : "";
                 String loot = switch (metadata) {
                     case "chest_low" -> "theaurorian:chests/moontemple/low";
-                    case "chest_med", "chest", "chest_high" -> "theaurorian:chests/moontemple/med";
+                    case "chest_med" -> "theaurorian:chests/moontemple/med";
+                    case "chest_high" -> "theaurorian:chests/moontemple/high";
                     default -> null;
                 };
                 if (loot == null) {
@@ -202,8 +206,15 @@ public class MoonTempleStructure extends Structure {
                 BlockEntity below = level.getBlockEntity(info.pos.below());
                 if (below instanceof ChestBlockEntity chest) {
                     chest.setLootTable(new ResourceLocation(loot), random.nextLong());
+                    looted.add(info.pos.below());
                 } else if (level.getBlockEntity(info.pos) instanceof ChestBlockEntity chest) {
                     chest.setLootTable(new ResourceLocation(loot), random.nextLong());
+                    looted.add(info.pos);
+                }
+            }
+            for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.CHEST)) {
+                if (box.isInside(info.pos) && !looted.contains(info.pos) && level.getBlockEntity(info.pos) instanceof ChestBlockEntity chest) {
+                    chest.setLootTable(new ResourceLocation("theaurorian:chests/moontemple/med"), random.nextLong());
                 }
             }
         }

@@ -1,9 +1,8 @@
 {
     "name": "碎片化",
     "icon": "theaurorian:aurorian_steel_ingot",
-    "category": "1aurorianbasics",
-    "sortnum": "5",
-    "readbydefault": true,
+    "category": "theaurorian:1aurorianbasics",
+    "sortnum": 5,
     "pages": [
         {
             "type": "spotlight",
@@ -30,7 +29,6 @@
             "type": "crafting",
             "recipe": "theaurorian:shapeless/aurorian_steel_ingot",
             "text": "$(#008cff)极光钢$()是极光幽境中最强大的材料，它可以被制成工具和盔甲。你可以在$(#008cff)魔法物品$()部分中查看更多的信息。"
-
         },
         {
             "type": "spotlight",
@@ -38,5 +36,6 @@
             "item": "theaurorian:moonlight_forge",
             "text": "这些锭可以在$(#008cff)月光融锻台$()中被制成工具！在$(#008cff)月光融锻台$()一章中查看更多信息。"
         }
-    ]
+    ],
+    "read_by_default": true
 }

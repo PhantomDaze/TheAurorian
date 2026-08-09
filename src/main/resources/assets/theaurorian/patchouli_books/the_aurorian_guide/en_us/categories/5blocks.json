@@ -2,5 +2,5 @@
     "name": "Blocks",
     "description": "This section contains special Aurorian blocks!",
     "icon": "theaurorian:silentwood_crafting_table",
-    "sortnum": "5"
+    "sortnum": 5
 }

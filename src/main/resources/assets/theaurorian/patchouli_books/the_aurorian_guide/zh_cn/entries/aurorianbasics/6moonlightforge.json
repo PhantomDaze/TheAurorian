@@ -1,9 +1,8 @@
 {
     "name": "月光融锻台",
     "icon": "theaurorian:moonlight_forge",
-    "category": "1aurorianbasics",
-    "sortnum": "6",
-    "readbydefault": true,
+    "category": "theaurorian:1aurorianbasics",
+    "sortnum": 6,
     "pages": [
         {
             "type": "spotlight",
@@ -27,5 +26,6 @@
             "item": "minecraft:redstone",
             "text": "如果你的电脑性能不佳，你可以通过给予月光融锻台一个红石信号来让它停止工作。当被给予了一个红石信号时，它不会检查月光的可见情况，也不会进行任何工作。"
         }
-    ]
+    ],
+    "read_by_default": true
 }

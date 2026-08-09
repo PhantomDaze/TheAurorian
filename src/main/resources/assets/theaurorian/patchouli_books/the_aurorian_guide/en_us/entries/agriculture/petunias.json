@@ -1,8 +1,7 @@
 {
     "name": "Petunias",
     "icon": "theaurorian:petunia",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shapeless/petunia_tea",
             "text": "$(#008cff)Petunias$() can also be made into tea that gives a short strength buff."
         }
-    ]
+    ],
+    "read_by_default": true
 }

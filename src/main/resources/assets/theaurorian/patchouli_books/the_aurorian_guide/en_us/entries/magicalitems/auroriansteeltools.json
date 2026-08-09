@@ -1,8 +1,7 @@
 {
     "name": "Aurorian Steel Tools",
     "icon": "theaurorian:aurorian_steel_ingot",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shapeless/aurorian_steel_ingot",
             "text": "They will choose the first enchantment they see, and if the enchantment has higher levels, it will upgrade it to the next level! Also cost of leveling up goes up each time."
         }
-    ]
+    ],
+    "read_by_default": true
 }

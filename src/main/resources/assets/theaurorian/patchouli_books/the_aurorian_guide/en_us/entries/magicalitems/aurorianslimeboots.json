@@ -1,8 +1,7 @@
 {
     "name": "Aurorian Slime Boots",
     "icon": "theaurorian:slime_boots",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
@@ -13,5 +12,6 @@
             "type": "crafting",
             "recipe": "theaurorian:shaped/slime_boots"
         }
-    ]
+    ],
+    "read_by_default": true
 }

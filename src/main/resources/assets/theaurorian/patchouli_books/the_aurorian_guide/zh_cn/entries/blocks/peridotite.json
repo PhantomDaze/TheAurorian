@@ -1,8 +1,7 @@
 {
     "name": "极光橄榄岩",
     "icon": "theaurorian:peridotite",
-    "category": "5blocks",
-    "readbydefault": true,
+    "category": "theaurorian:5blocks",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shaped/world_deco/peridotite_smooth",
             "recipe2": "theaurorian:shaped/world_deco/peridotite_smooth_stairs"
         }
-    ]
+    ],
+    "read_by_default": true
 }

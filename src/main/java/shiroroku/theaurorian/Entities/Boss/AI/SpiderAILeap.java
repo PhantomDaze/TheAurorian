@@ -58,4 +58,11 @@ public class SpiderAILeap extends Goal {
         }
         this.entity.hasImpulse = true;
     }
+
+    @Override
+    public void tick() {
+        if (this.target != null) {
+            this.entity.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+        }
+    }
 }

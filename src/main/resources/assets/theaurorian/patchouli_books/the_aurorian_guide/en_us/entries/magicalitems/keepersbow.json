@@ -1,13 +1,13 @@
 {
     "name": "Keeper's Bow",
     "icon": "theaurorian:keepers_bow",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:keepers_bow",
-            "text": "$(#008cff)The Keeper's Bow$() shoots 3 arrows in a spread when fully drawn!"
+            "text": "$(#008cff)The Keeper's Bow$() automatically shoots 3 arrows in a spread whenever it reaches full draw. Keep holding right-click to draw and fire another volley each time."
         }
-    ]
+    ],
+    "read_by_default": true
 }

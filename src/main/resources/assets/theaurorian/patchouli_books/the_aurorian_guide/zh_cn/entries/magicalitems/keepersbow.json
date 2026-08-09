@@ -1,0 +1,13 @@
+{
+    "name": "守卫之弓",
+    "icon": "theaurorian:keepers_bow",
+    "category": "theaurorian:3magicalitems",
+    "pages": [
+        {
+            "type": "spotlight",
+            "item": "theaurorian:keepers_bow",
+            "text": "$(#008cff)守卫之弓$()需要完全拉满后才会自动射出三支散射箭。只要持续按住右键，就会在每次重新拉满后再次射击。"
+        }
+    ],
+    "read_by_default": true
+}

@@ -117,8 +117,8 @@ public class ItemRegistry {
 
     // Phase 1: Throwables & armor registered so darkstone chest loot stays valid;
     // real behaviours land in Phase 8.
-    public static final RegistryObject<Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", basicItem(defaultProp().rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> webbing = ITEMS_GEN.register("webbing", basicItem(defaultProp()));
+    public static final RegistryObject<Item> sticky_spiker = ITEMS_GEN_HANDHELD.register("sticky_spiker", () -> new StickySpikerItem(defaultProp().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> webbing = ITEMS_GEN.register("webbing", () -> new WebbingItem(defaultProp()));
     public static final RegistryObject<Item> spiked_chestplate = ITEMS_GEN.register("spiked_chestplate", () -> new SpikedChestplate(MaterialTiers.SPIKED_ARMOR, defaultProp().rarity(Rarity.RARE)));
     public static final RegistryObject<Item> slime_boots = ITEMS_GEN.register("slime_boots", () -> new SlimeBootsItem(MaterialTiers.SLIME_ARMOR, defaultProp().rarity(Rarity.EPIC)));
 

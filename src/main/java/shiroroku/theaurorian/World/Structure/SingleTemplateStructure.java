@@ -55,6 +55,9 @@ public class SingleTemplateStructure extends Structure {
             return Optional.empty();
         }
         BlockPos center = new BlockPos(context.chunkPos().getMinBlockX() + 8, 0, context.chunkPos().getMinBlockZ() + 8);
+        if (StructurePlacementChecks.isWaterCovered(context, center.getX(), center.getZ())) {
+            return Optional.empty();
+        }
         int y = context.chunkGenerator().getBaseHeight(center.getX(), center.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
         if (template.getPath().contains("umbratower") && !template.getPath().contains("terrain")) {
             y += 3;

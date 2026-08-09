@@ -1,8 +1,7 @@
 {
     "name": "桑葚",
     "icon": "theaurorian:silkberry",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -20,8 +19,7 @@
             "name": "桑葚酱",
             "recipe": "theaurorian:shapeless/silkberry_jam",
             "text": "$(#008cff)桑葚酱$()自身并没有什么可圈可点的地方，但是将其与$(#008cff)薰衣草面包$()搭配后，制作出的$(#008cff)桑葚酱三明治$()相当不错！"
-
-
         }
-    ]
+    ],
+    "read_by_default": true
 }

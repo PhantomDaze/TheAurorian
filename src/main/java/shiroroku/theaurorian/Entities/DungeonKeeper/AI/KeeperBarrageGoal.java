@@ -15,7 +15,7 @@ public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowA
     private int attackTime = 0;
 
     public KeeperBarrageGoal(DungeonKeeperEntity pMob) {
-        super(pMob, 0.25D, 2, 40.0F);
+        super(pMob, 0.25D, 10, 40.0F);
         keeper = pMob;
     }
 
@@ -61,7 +61,7 @@ public class KeeperBarrageGoal<T extends DungeonKeeperEntity> extends RangedBowA
 
             if(attackTime <= 0){
                 keeper.stopUsingItem();
-                attackTime = 2;
+                attackTime = 3;
                 keeper.performRangedAttack(target, 0.5f);
                 this.keeper.startUsingItem(ProjectileUtil.getWeaponHoldingHand(keeper, item -> item instanceof BowItem));
             }

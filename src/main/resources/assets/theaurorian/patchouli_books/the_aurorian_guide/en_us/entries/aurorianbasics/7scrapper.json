@@ -1,9 +1,8 @@
 {
     "name": "Scrapper",
     "icon": "theaurorian:scrapper",
-    "category": "1aurorianbasics",
-    "sortnum": "7",
-    "readbydefault": true,
+    "category": "theaurorian:1aurorianbasics",
+    "sortnum": 7,
     "pages": [
         {
             "type": "spotlight",
@@ -17,5 +16,6 @@
             "recipe": "theaurorian:shaped/scrapper",
             "text": "Check JEI for full list of Scrapper recipes."
         }
-    ]
+    ],
+    "read_by_default": true
 }

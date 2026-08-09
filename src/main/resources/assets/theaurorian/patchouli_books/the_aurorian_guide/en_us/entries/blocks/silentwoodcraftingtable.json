@@ -1,8 +1,7 @@
 {
     "name": "Silentwood Crafting Table",
     "icon": "theaurorian:silentwood_crafting_table",
-    "category": "5blocks",
-    "readbydefault": true,
+    "category": "theaurorian:5blocks",
     "pages": [
         {
             "type": "spotlight",
@@ -15,5 +14,6 @@
             "recipe": "theaurorian:shaped/silentwood_crafting_table",
             "recipe2": "theaurorian:shaped/silentwood_crafting_table"
         }
-    ]
+    ],
+    "read_by_default": true
 }

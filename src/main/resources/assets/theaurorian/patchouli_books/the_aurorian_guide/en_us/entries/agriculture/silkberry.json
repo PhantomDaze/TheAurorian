@@ -1,8 +1,7 @@
 {
     "name": "Silkberries",
     "icon": "theaurorian:silkberry",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "spotlight",
@@ -21,5 +20,6 @@
             "recipe": "theaurorian:shapeless/silkberry_jam",
             "text": "$(#008cff)Silkberry Jam$() isn't very good by itself, but can be made into $(#008cff)Silkberry Jam Sandwiches$() with $(#008cff)Lavender Bread$()!"
         }
-    ]
+    ],
+    "read_by_default": true
 }

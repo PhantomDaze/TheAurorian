@@ -7,12 +7,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.ForgeEventFactory;
 
 /**
  * Keeper boss bow. A fully pulled shot fires three arrows with high spread.
@@ -23,27 +23,40 @@ public class KeepersBowItem extends BaseAurorianBow {
         super(pProperties);
     }
 
-    // Keep vanilla bow use duration (72000). A short duration (e.g. 40) ends the
-    // use animation and restarts while the player still holds right-click, which
-    // makes the pull model loop back to the undrawn frame after a full draw.
+    // Keep vanilla bow use duration (72000). The use tick is restarted after a
+    // full draw so holding right-click continues to fire volleys automatically.
+
+    @Override
+    public void onUseTick(Level pLevel, LivingEntity pEntityLiving, ItemStack pStack, int pRemainingUseDuration) {
+        if (!(pEntityLiving instanceof Player player)) {
+            return;
+        }
+
+        int charge = this.getUseDuration(pStack) - pRemainingUseDuration;
+        if (charge < BowItem.MAX_DRAW_DURATION) {
+            return;
+        }
+
+        float power = getPowerForTime(charge);
+        if (power < 1.0F) {
+            return;
+        }
+
+        // The item description promises three arrows after every full draw.
+        for (int arrow = 0; arrow < 3; arrow++) {
+            this.fireArrow(pStack, pLevel, player, power);
+        }
+
+        // A normal stop does not call releaseUsing, so the volley is not fired twice.
+        player.stopUsingItem();
+        if (player.getAbilities().instabuild || !player.getProjectile(pStack).isEmpty()) {
+            player.startUsingItem(player.getUsedItemHand());
+        }
+    }
 
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
-        if (pEntityLiving instanceof Player player) {
-            int i = this.getUseDuration(pStack) - pTimeLeft;
-            i = ForgeEventFactory.onArrowLoose(pStack, pLevel, player, i, !player.getProjectile(pStack).isEmpty() || player.getAbilities().instabuild);
-            if (i < 0) {
-                return;
-            }
-            // getPowerForTime is charge-ticks/20 (full power at 20t), independent of use duration
-            float f = getPowerForTime(i);
-            if (f < 0.1D) {
-                return;
-            }
-            for (int arrow = 0; arrow < 3; arrow++) {
-                this.fireArrow(pStack, pLevel, player, f);
-            }
-        }
+        // Volleys are emitted by onUseTick; releasing before a full draw does nothing.
     }
 
     private void fireArrow(ItemStack pStack, Level pLevel, Player player, float f) {

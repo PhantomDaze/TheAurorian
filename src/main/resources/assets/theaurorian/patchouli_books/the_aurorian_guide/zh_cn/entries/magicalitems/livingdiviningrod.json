@@ -1,13 +1,13 @@
 {
     "name": "生体卜窥权杖",
     "icon": "theaurorian:living_divining_rod",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:living_divining_rod",
             "text": "$(#008cff)生体卜窥权杖$()会使附近的一个实体发光！"
         }
-    ]
+    ],
+    "read_by_default": true
 }

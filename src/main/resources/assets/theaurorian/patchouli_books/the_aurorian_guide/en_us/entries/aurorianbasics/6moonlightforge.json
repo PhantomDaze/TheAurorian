@@ -1,9 +1,8 @@
 {
     "name": "Moonlight Forge",
     "icon": "theaurorian:moonlight_forge",
-    "category": "1aurorianbasics",
-    "sortnum": "6",
-    "readbydefault": true,
+    "category": "theaurorian:1aurorianbasics",
+    "sortnum": 6,
     "pages": [
         {
             "type": "spotlight",
@@ -27,5 +26,6 @@
             "item": "minecraft:redstone",
             "text": "If you're concerned with performance, the forge can be disabled by giving it a redstone signal. When powered it will not perform any moonlight checks or do crafting."
         }
-    ]
+    ],
+    "read_by_default": true
 }

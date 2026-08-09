@@ -1,13 +1,13 @@
 {
     "name": "Crystalline Pickaxe",
     "icon": "theaurorian:crystalline_pickaxe",
-    "category": "3magicalitems",
-    "readbydefault": true,
+    "category": "theaurorian:3magicalitems",
     "pages": [
         {
             "type": "spotlight",
             "item": "theaurorian:crystalline_pickaxe",
             "text": "$(#008cff)Crystalline Pickaxe$() smelts ores and drops a few nuggets while mining!"
         }
-    ]
+    ],
+    "read_by_default": true
 }

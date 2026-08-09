@@ -57,6 +57,9 @@ public class RunestoneDungeonStructure extends Structure {
         ChunkPos home = context.chunkPos();
         int x = home.getMinBlockX() + 8;
         int z = home.getMinBlockZ() + 8;
+        if (StructurePlacementChecks.isWaterCovered(context, x, z)) {
+            return Optional.empty();
+        }
         int y0 = surfaceY(context, x + 15, z + 16);
         int floors = Math.max(2, CommonConfig.runestone_dungeon_floors.get());
         if ((floors & 1) != 0) {

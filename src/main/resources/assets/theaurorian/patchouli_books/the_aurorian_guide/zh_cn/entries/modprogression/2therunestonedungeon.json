@@ -1,9 +1,8 @@
 {
     "name": "符石地牢",
     "icon": "theaurorian:runestone_key",
-    "category": "2modprogression",
-    "sortnum": "2",
-    "readbydefault": true,
+    "category": "theaurorian:2modprogression",
+    "sortnum": 2,
     "pages": [
         {
             "type": "image",
@@ -23,5 +22,6 @@
             "item": "theaurorian:runestone_key",
             "text": "可用于开启$(#008cff)符石大门$()，只能以战利品形式获得。"
         }
-    ]
+    ],
+    "read_by_default": true
 }

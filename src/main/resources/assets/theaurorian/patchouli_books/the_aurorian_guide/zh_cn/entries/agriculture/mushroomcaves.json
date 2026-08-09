@@ -1,8 +1,7 @@
 {
     "name": "蘑菇洞穴",
     "icon": "theaurorian:mushroom_small",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "image",
@@ -23,5 +22,6 @@
             "recipe": "theaurorian:shapeless/silkshroom_stew",
             "text": "$(#008cff)深蓝蘑菇$()也可以被作为食物食用，当然这需要搭配着$(#008cff)桑葚$()完成。"
         }
-    ]
+    ],
+    "read_by_default": true
 }

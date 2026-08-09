@@ -1,8 +1,7 @@
 {
     "name": "Mushroom Caves",
     "icon": "theaurorian:mushroom_small",
-    "category": "4agriculture",
-    "readbydefault": true,
+    "category": "theaurorian:4agriculture",
     "pages": [
         {
             "type": "image",
@@ -23,5 +22,6 @@
             "recipe": "theaurorian:shapeless/silkshroom_stew",
             "text": "$(#008cff)Indigo Mushrooms$() can also be used for food if you have some $(#008cff)Silkberries$() lying around."
         }
-    ]
+    ],
+    "read_by_default": true
 }

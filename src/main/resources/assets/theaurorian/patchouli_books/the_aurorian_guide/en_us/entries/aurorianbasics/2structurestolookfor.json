@@ -1,9 +1,8 @@
 {
     "name": "Structures to Look For",
     "icon": "theaurorian:runestone",
-    "category": "1aurorianbasics",
-    "sortnum": "2",
-    "readbydefault": true,
+    "category": "theaurorian:1aurorianbasics",
+    "sortnum": 2,
     "pages": [
         {
             "type": "text",
@@ -60,5 +59,6 @@
             "item": "theaurorian:lockpicks",
             "text": "More info about dungeons and how to get through them is located in the $(#008cff)Mod Progression$() section."
         }
-    ]
+    ],
+    "read_by_default": true
 }
