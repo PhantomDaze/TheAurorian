@@ -16,6 +16,13 @@ public class WeepingWillowLeavesBlock extends LeavesBlock {
 
     public WeepingWillowLeavesBlock(Properties pProperties) {
         super(pProperties);
+        // The willow templates were authored in 1.12 with the old check_decay/decayable leaf
+        // properties, which no longer exist on modern leaves. Those drop to the default state
+        // (persistent=false, distance=7) when loaded, so every generated leaf is eligible for
+        // decay - vanilla random ticks and fast-leaf-decay mods strip the whole forest. Default
+        // the leaves to persistent so generated trees are stable. Player-placed leaves are already
+        // persistent via LeavesBlock#getStateForPlacement.
+        this.registerDefaultState(this.defaultBlockState().setValue(PERSISTENT, true));
     }
 
     @Override
