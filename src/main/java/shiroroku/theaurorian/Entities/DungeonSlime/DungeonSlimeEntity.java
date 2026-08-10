@@ -31,6 +31,13 @@ public class DungeonSlimeEntity extends Slime {
 
     public static final int BASE_MAX_NEARBY = 5;
 
+    /**
+     * Forge patches {@link Slime#getDimensions} to multiply the EntityType base size by
+     * 0.255 * getSize() (vanilla's own SLIME type registers 2.04 so size 1 ends up ~0.52).
+     * This base size yields a 0.5 x 0.5 collision box, matching the rendered 8px outer cube.
+     */
+    public static final float BASE_SIZE = 0.5F / 0.255F;
+
     public DungeonSlimeEntity(EntityType<? extends Slime> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
