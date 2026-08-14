@@ -31,6 +31,13 @@ public class DungeonSlimeEntity extends Slime {
 
     public static final int BASE_MAX_NEARBY = 5;
 
+    /**
+     * Forge 对 {@link Slime#getDimensions} 打了补丁,会用 0.255 * getSize() 再次缩放
+     * EntityType 的基础尺寸(原版 SLIME 注册的是 2.04,所以 size 1 最终是 ~0.52)。
+     * 用这个基础尺寸可以让 size-1 的史莱姆得到 0.5 x 0.5 的碰撞箱,和渲染的 8px 外壳对齐。
+     */
+    public static final float BASE_SIZE = 0.5F / 0.255F;
+
     public DungeonSlimeEntity(EntityType<? extends Slime> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
