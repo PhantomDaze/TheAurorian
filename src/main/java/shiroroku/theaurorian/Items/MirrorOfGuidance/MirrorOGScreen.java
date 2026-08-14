@@ -65,6 +65,14 @@ public class MirrorOGScreen extends Screen {
         setSelectedNode(null);
     }
 
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        // No-op: 1.21's default renderBackground runs processBlurEffect (the GUI blur) plus the dark
+        // menu texture. render() draws the mirror content first and super.render() at the end calls
+        // this again — re-blurring the whole mirror and treating it as the background. The mirror
+        // draws its own see-through background (renderTransparentBackground) instead.
+    }
+
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
@@ -97,7 +105,9 @@ public class MirrorOGScreen extends Screen {
 
         // Game tint — use the transparent gradient, NOT renderBackground: 1.21's renderBackground
         // applies processBlurEffect (GUI blur) + the dark menu texture, which blurs the world
-        // behind this see-through mirror. The mirror glass should stay readable.
+        // behind this see-through mirror. The mirror glass should stay readable. renderBackground
+        // is also overridden below to a no-op, so the super.render() at the end of this method
+        // cannot re-run the blur after our content is already drawn.
         this.renderTransparentBackground(graphics);
 
         // Setup
