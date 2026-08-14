@@ -218,7 +218,8 @@ public class MoonTempleStructure extends Structure {
                 String loot = switch (data) {
                     case "chest_low" -> "theaurorian:chests/moontemple/low";
                     case "chest_med" -> "theaurorian:chests/moontemple/med";
-                    case "chest", "chest_high" -> "theaurorian:chests/moontemple/med";
+                    case "chest" -> "theaurorian:chests/moontemple/med";
+                    case "chest_high" -> "theaurorian:chests/moontemple/high";
                     default -> null;
                 };
                 if (loot == null) {
