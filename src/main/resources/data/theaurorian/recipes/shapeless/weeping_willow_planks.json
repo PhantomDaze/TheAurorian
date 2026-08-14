@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "theaurorian:weeping_willow_log"
+    }
+  ],
+  "result": {
+    "item": "theaurorian:weeping_willow_planks",
+    "count": 4
+  }
+}
