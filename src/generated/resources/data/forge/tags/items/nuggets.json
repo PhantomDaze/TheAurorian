@@ -1,8 +1,8 @@
 {
   "values": [
-    "theaurorian:aurorian_coal_nugget",
-    "theaurorian:cerulean_nugget",
-    "theaurorian:moonstone_nugget",
-    "theaurorian:aurorian_steel_nugget"
+    "#forge:nuggets/aurorian_steel",
+    "#forge:nuggets/cerulean",
+    "#forge:nuggets/moonstone",
+    "theaurorian:aurorian_coal_nugget"
   ]
 }

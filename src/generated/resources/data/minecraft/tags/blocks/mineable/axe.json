@@ -8,8 +8,14 @@
     "theaurorian:silentwood_slab",
     "theaurorian:silentwood_stairs",
     "theaurorian:silentwood_ladder",
+    "theaurorian:silentwood_sapling",
+    "theaurorian:silentwood_torch",
     "theaurorian:weeping_willow_log",
     "theaurorian:weeping_willow_planks",
-    "theaurorian:weeping_willow_stairs"
+    "theaurorian:weeping_willow_stairs",
+    "theaurorian:weeping_willow_sapling",
+    "theaurorian:mushroom_small",
+    "theaurorian:mushroom",
+    "theaurorian:mushroom_stem"
   ]
 }

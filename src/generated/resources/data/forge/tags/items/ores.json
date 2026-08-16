@@ -1,8 +1,8 @@
 {
   "values": [
+    "#forge:ores/cerulean",
+    "#forge:ores/moonstone",
     "theaurorian:geode",
-    "theaurorian:aurorian_coal_ore",
-    "#theaurorian:cerulean_ore",
-    "#theaurorian:moonstone_ore"
+    "theaurorian:aurorian_coal_ore"
   ]
 }

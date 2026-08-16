@@ -1,10 +1,10 @@
 {
   "values": [
-    "theaurorian:aurorian_steel_ingot",
-    "theaurorian:aurorianite_ingot",
-    "theaurorian:cerulean_ingot",
-    "theaurorian:crystalline_ingot",
-    "theaurorian:moonstone_ingot",
-    "theaurorian:umbra_ingot"
+    "#forge:ingots/aurorian_steel",
+    "#forge:ingots/aurorianite",
+    "#forge:ingots/cerulean",
+    "#forge:ingots/crystalline",
+    "#forge:ingots/moonstone",
+    "#forge:ingots/umbra"
   ]
 }
