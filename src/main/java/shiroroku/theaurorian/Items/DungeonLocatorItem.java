@@ -1,18 +1,15 @@
 package shiroroku.theaurorian.Items;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +20,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
+import shiroroku.theaurorian.Network.LocatorNetwork;
 import shiroroku.theaurorian.TheAurorian;
 
 import java.util.List;
@@ -64,7 +62,10 @@ public class DungeonLocatorItem extends Item {
                 if (found != null) {
                     stack.hurtAndBreak(1, pPlayer, (p) -> p.broadcastBreakEvent(pHand));
                     pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.NEUTRAL, 0.5F, 0.4F / (pLevel.getRandom().nextFloat() * 0.4F + 0.8F));
-                    spawnDirectionParticles(pLevel, pPlayer, found.getFirst());
+                    // 地牢坐标发给客户端，由客户端生成方向粒子（服务端 addParticle 不生效）
+                    LocatorNetwork.CHANNEL.send(
+                            net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> (net.minecraft.server.level.ServerPlayer) pPlayer),
+                            new LocatorNetwork.DungeonDirectionMessage(found.getFirst()));
                 } else {
                     pPlayer.displayClientMessage(Component.translatable("string.theaurorian.locator_none"), true);
                 }
@@ -73,12 +74,17 @@ public class DungeonLocatorItem extends Item {
         return InteractionResultHolder.sidedSuccess(stack, pLevel.isClientSide);
     }
 
+    /**
+     * findNearestMapStructure 的半径参数单位是「结构 spacing 格点的环状搜索最大半径」，
+     * 不是 block。三个地牢共用 structure_set（spacing=32 chunk），按稀疏度给几个格点
+     * 即可覆盖数千米范围，无需乘 16。
+     */
     private static int searchRadius(String dungeon) {
         return switch (dungeon) {
-            case "Darkstone" -> 6 * 4;   // density*6 upstream
-            case "Moontemple" -> 4 * 4;  // density*4 upstream
-            default -> 2 * 4;            // density*2 upstream
-        } * 16;
+            case "Darkstone" -> 6;   // density*6 upstream
+            case "Moontemple" -> 4;  // density*4 upstream
+            default -> 2;            // density*2 upstream
+        };
     }
 
     private static ResourceKey<Structure> structureKey(String dungeon) {
@@ -88,30 +94,6 @@ public class DungeonLocatorItem extends Item {
             default -> "runestone_dungeon";
         };
         return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(TheAurorian.MODID, id));
-    }
-
-    private static void spawnDirectionParticles(Level level, Player player, BlockPos dungeon) {
-        if (!level.isClientSide) {
-            return;
-        }
-        double lookx = 0.25D + -Mth.sin((float) Math.toRadians(player.getYHeadRot())) * Mth.cos((float) Math.toRadians(player.getXRot()));
-        double looky = 0.25D + -Mth.sin((float) Math.toRadians(player.getXRot()));
-        double lookz = 0.25D + Mth.cos((float) Math.toRadians(player.getYHeadRot())) * Mth.cos((float) Math.toRadians(player.getXRot()));
-
-        double y = player.getY() + 1 + level.getRandom().nextDouble() * 6.0D / 16.0D;
-        double speed = 0.01D;
-        double targetx = player.getX() - dungeon.getX();
-        double targetz = player.getZ() - dungeon.getZ();
-        double partx = targetx * -speed;
-        double partz = targetz * -speed;
-        partx = Mth.clamp(partx, -0.5D, 0.5D);
-        partz = Mth.clamp(partz, -0.5D, 0.5D);
-        double randx = level.getRandom().nextDouble() / 8;
-        double randz = level.getRandom().nextDouble() / 8;
-
-        for (int i = 0; i < 2; i++) {
-            level.addParticle(ParticleTypes.CLOUD, player.getX() + lookx, y + looky, player.getZ() + lookz, partx + randx, 0.25D, partz + randz);
-        }
     }
 
     private static String getSelectedDungeon(ItemStack stack) {
