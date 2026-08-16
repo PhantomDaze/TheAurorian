@@ -126,13 +126,15 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.silentwood_log.get());
             this.dropSelf(BlockRegistry.silentwood_sapling.get());
             this.dropSelf(BlockRegistry.silentwood_stairs.get());
-            this.add(BlockRegistry.weeping_willow_leaves.get(), block -> LootTable.lootTable()
-                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                            .add(applyExplosionCondition(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(BlockRegistry.weeping_willow_leaves.get()))))
-                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+            this.add(BlockRegistry.weeping_willow_leaves.get(), block -> createSelfDropDispatchTable(BlockRegistry.weeping_willow_leaves.get(), HAS_SHEARS_OR_SILK_TOUCH,
+                    applyExplosionCondition(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.weeping_willow_sap.get()))
+                            .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05F, 0.0625F, 0.083333336F, 0.1F)))
+                    .withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1.0F))
                             .when(HAS_NO_SHEARS_OR_SILK_TOUCH)
-                            .add(applyExplosionDecay(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.weeping_willow_sap.get()))
-                                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05F, 0.0625F, 0.083333336F, 0.1F)))));
+                            .add(applyExplosionDecay(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.silentwood_stick.get())
+                                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+                                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F)))));
             this.dropSelf(BlockRegistry.weeping_willow_log.get());
             this.dropSelf(BlockRegistry.weeping_willow_sapling.get());
             this.dropSelf(BlockRegistry.weeping_willow_stairs.get());
@@ -219,7 +221,12 @@ public class DataGenBlocksLoot extends LootTableProvider {
         }
 
         private Function<Block, LootTable.Builder> dropWithSickleOrShears(ItemLike drops) {
-            return block -> LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_SHEARS).add(LootItem.lootTableItem(drops)));
+            // 剪刀/镰刀：原样采集草方块本身（并掉落其材料产物）；其他工具不掉落。
+            return block -> LootTable.lootTable()
+                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_SHEARS_OR_SILK_TOUCH)
+                            .add(applyExplosionCondition(block, LootItem.lootTableItem(block))))
+                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_SHEARS)
+                            .add(LootItem.lootTableItem(drops)));
         }
     }
 }

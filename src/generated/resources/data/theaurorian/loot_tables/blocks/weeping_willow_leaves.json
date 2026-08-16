@@ -5,13 +5,58 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "conditions": [
+          "type": "minecraft:alternatives",
+          "children": [
             {
-              "condition": "minecraft:survives_explosion"
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:alternative",
+                  "terms": [
+                    {
+                      "condition": "minecraft:match_tool",
+                      "predicate": {
+                        "tag": "forge:shears"
+                      }
+                    },
+                    {
+                      "condition": "minecraft:match_tool",
+                      "predicate": {
+                        "enchantments": [
+                          {
+                            "enchantment": "minecraft:silk_touch",
+                            "levels": {
+                              "min": 1
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "name": "theaurorian:weeping_willow_leaves"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion"
+                },
+                {
+                  "chances": [
+                    0.05,
+                    0.0625,
+                    0.083333336,
+                    0.1
+                  ],
+                  "condition": "minecraft:table_bonus",
+                  "enchantment": "minecraft:fortune"
+                }
+              ],
+              "name": "theaurorian:weeping_willow_sap"
             }
-          ],
-          "name": "theaurorian:weeping_willow_leaves"
+          ]
         }
       ],
       "rolls": 1.0
@@ -53,9 +98,10 @@
           "conditions": [
             {
               "chances": [
-                0.05,
-                0.0625,
-                0.083333336,
+                0.02,
+                0.022222223,
+                0.025,
+                0.033333335,
                 0.1
               ],
               "condition": "minecraft:table_bonus",
@@ -64,10 +110,19 @@
           ],
           "functions": [
             {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "theaurorian:weeping_willow_sap"
+          "name": "theaurorian:silentwood_stick"
         }
       ],
       "rolls": 1.0
