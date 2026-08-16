@@ -1020,16 +1020,16 @@ def cat_registry_tags(blocks: set[str], items: set[str]) -> None:
     if len(tag_files) < 40:
         err(cat, f"expected >= 40 generated tag files, found {len(tag_files)}")
 
-    # shears tag should include sickle if present
-    shears = GEN / "data" / "c" / "tags" / "item" / "shears.json"
+    # shears tag should include sickle if present (NeoForge 1.21.1: c:tools/shear)
+    shears = GEN / "data" / "c" / "tags" / "item" / "tools" / "shear.json"
     if shears.exists():
         data = load_json(shears)
         if isinstance(data, dict):
             values = data.get("values") or []
             if not any("sickle" in str(v) for v in values):
-                warn(cat, "c:shears tag has no sickle entry")
+                warn(cat, "c:tools/shear tag has no sickle entry")
     else:
-        warn(cat, "generated c:shears tag missing (run runData?)")
+        warn(cat, "generated c:tools/shear tag missing (run runData?)")
 
     # block loot tables for a sample of blocks
     block_loot_dir = GEN / "data" / MODID / "loot_table" / "blocks"
