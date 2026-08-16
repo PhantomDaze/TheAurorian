@@ -32,6 +32,17 @@ public class DataGenItemsTags extends TagsProvider<Item> {
     public static final TagKey<Item> SPECTRAL_ARMOR = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "spectral_armor"));
     public static final TagKey<Item> TEA = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "tea"));
 
+    // Forge 命名空间下 mod 自定义材料的 ingots/nuggets/storage_blocks 子 tag（统一由 DataGen 生成）
+    public static final TagKey<Item> INGOTS_AURORIAN_STEEL = ItemTags.create(new ResourceLocation("forge", "ingots/aurorian_steel"));
+    public static final TagKey<Item> INGOTS_CERULEAN = ItemTags.create(new ResourceLocation("forge", "ingots/cerulean"));
+    public static final TagKey<Item> INGOTS_MOONSTONE = ItemTags.create(new ResourceLocation("forge", "ingots/moonstone"));
+    public static final TagKey<Item> NUGGETS_AURORIAN_STEEL = ItemTags.create(new ResourceLocation("forge", "nuggets/aurorian_steel"));
+    public static final TagKey<Item> NUGGETS_CERULEAN = ItemTags.create(new ResourceLocation("forge", "nuggets/cerulean"));
+    public static final TagKey<Item> NUGGETS_MOONSTONE = ItemTags.create(new ResourceLocation("forge", "nuggets/moonstone"));
+    public static final TagKey<Item> STORAGE_BLOCKS_AURORIAN_STEEL = ItemTags.create(new ResourceLocation("forge", "storage_blocks/aurorian_steel"));
+    public static final TagKey<Item> STORAGE_BLOCKS_CERULEAN = ItemTags.create(new ResourceLocation("forge", "storage_blocks/cerulean"));
+    public static final TagKey<Item> STORAGE_BLOCKS_MOONSTONE = ItemTags.create(new ResourceLocation("forge", "storage_blocks/moonstone"));
+
     @SuppressWarnings("deprecation")
     protected DataGenItemsTags(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
         super(pGenerator, Registry.ITEM, TheAurorian.MODID, existingFileHelper);
@@ -86,6 +97,58 @@ public class DataGenItemsTags extends TagsProvider<Item> {
         this.tag(Tags.Items.NUGGETS).add(ItemRegistry.aurorian_steel_nugget.get());
         this.tag(Tags.Items.ORES).add(BlockRegistry.geode.get().asItem(), BlockRegistry.aurorian_coal_ore.get().asItem());
         this.tag(Tags.Items.ORES).addTags(CERULEAN_ORE, MOONSTONE_ORE);
+        // 矿石产出地层（物品端）
+        this.tag(Tags.Items.ORE_BEARING_GROUND_STONE).add(BlockRegistry.aurorian_stone.get().asItem());
+        this.tag(Tags.Items.ORE_BEARING_GROUND_DEEPSLATE).add(BlockRegistry.aurorian_deepslate.get().asItem());
+        this.tag(Tags.Items.ORES_IN_GROUND_STONE).add(
+                BlockRegistry.aurorian_coal_ore.get().asItem(),
+                BlockRegistry.cerulean_ore.get().asItem(),
+                BlockRegistry.moonstone_ore.get().asItem(),
+                BlockRegistry.geode.get().asItem());
+        this.tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE).add(
+                BlockRegistry.deepslate_cerulean_ore.get().asItem(),
+                BlockRegistry.deepslate_moonstone_ore.get().asItem());
+        // Forge 自定义材料子 tag（替代手写 JSON）
+        this.tag(INGOTS_AURORIAN_STEEL).add(ItemRegistry.aurorian_steel_ingot.get());
+        this.tag(INGOTS_CERULEAN).add(ItemRegistry.cerulean_ingot.get());
+        this.tag(INGOTS_MOONSTONE).add(ItemRegistry.moonstone_ingot.get());
+        this.tag(NUGGETS_AURORIAN_STEEL).add(ItemRegistry.aurorian_steel_nugget.get());
+        this.tag(NUGGETS_CERULEAN).add(ItemRegistry.cerulean_nugget.get());
+        this.tag(NUGGETS_MOONSTONE).add(ItemRegistry.moonstone_nugget.get());
+        this.tag(STORAGE_BLOCKS_AURORIAN_STEEL).add(BlockRegistry.aurorian_steel_block.get().asItem());
+        this.tag(STORAGE_BLOCKS_CERULEAN).add(BlockRegistry.cerulean_block.get().asItem());
+        this.tag(STORAGE_BLOCKS_MOONSTONE).add(BlockRegistry.moonstone_block.get().asItem());
+        this.tag(Tags.Items.STORAGE_BLOCKS).add(
+                BlockRegistry.aurorian_coal_block.get().asItem(),
+                BlockRegistry.aurorian_steel_block.get().asItem(),
+                BlockRegistry.cerulean_block.get().asItem(),
+                BlockRegistry.moonstone_block.get().asItem());
+        this.tag(Tags.Items.STORAGE_BLOCKS_COAL).add(BlockRegistry.aurorian_coal_block.get().asItem());
+        this.tag(Tags.Items.STORAGE_BLOCKS_IRON).add(BlockRegistry.aurorian_steel_block.get().asItem());
+        // 石/圆石/沙/玻璃
+        this.tag(Tags.Items.STONE).add(BlockRegistry.aurorian_stone.get().asItem(), BlockRegistry.peridotite.get().asItem());
+        this.tag(Tags.Items.COBBLESTONE).add(BlockRegistry.aurorian_cobblestone.get().asItem());
+        this.tag(Tags.Items.COBBLESTONE_NORMAL).add(BlockRegistry.aurorian_cobblestone.get().asItem());
+        this.tag(Tags.Items.COBBLESTONE_DEEPSLATE).add(BlockRegistry.aurorian_deepslate.get().asItem());
+        this.tag(Tags.Items.SAND).add(BlockRegistry.moon_sand.get().asItem());
+        this.tag(Tags.Items.GLASS).add(BlockRegistry.aurorian_glass.get().asItem(), BlockRegistry.moon_glass.get().asItem());
+        this.tag(Tags.Items.GLASS_COLORLESS).add(BlockRegistry.aurorian_glass.get().asItem(), BlockRegistry.moon_glass.get().asItem());
+        this.tag(Tags.Items.GLASS_PANES).add(BlockRegistry.aurorian_glass_pane.get().asItem(), BlockRegistry.moon_glass_pane.get().asItem());
+        this.tag(Tags.Items.GLASS_PANES_COLORLESS).add(BlockRegistry.aurorian_glass_pane.get().asItem(), BlockRegistry.moon_glass_pane.get().asItem());
+        // 种子（Forge）+ 原版 SAPLINGS/LEAVES/FLOWERS 物品端
+        this.tag(Tags.Items.SEEDS).add(ItemRegistry.lavender_seeds.get(), ItemRegistry.silkberry_seeds.get());
+        this.tag(ItemTags.SAPLINGS).add(
+                BlockRegistry.silentwood_sapling.get().asItem(),
+                BlockRegistry.weeping_willow_sapling.get().asItem(),
+                BlockRegistry.mushroom_small.get().asItem());
+        this.tag(ItemTags.LEAVES).add(
+                BlockRegistry.silentwood_leaves.get().asItem(),
+                BlockRegistry.weeping_willow_leaves.get().asItem());
+        this.tag(ItemTags.FLOWERS).add(
+                BlockRegistry.bright_bulb.get().asItem(),
+                BlockRegistry.petunia.get().asItem());
+        // 木棍总称
+        this.tag(Tags.Items.RODS).add(ItemRegistry.silentwood_stick.get());
         this.tag(Tags.Items.RODS_WOODEN).add(ItemRegistry.silentwood_stick.get());
         this.tag(Tags.Items.SHEARS).add(ItemRegistry.aurorian_stone_sickle.get());
         this.tag(Tags.Items.SHEARS).add(ItemRegistry.moonstone_sickle.get());

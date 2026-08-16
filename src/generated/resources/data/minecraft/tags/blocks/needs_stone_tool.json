@@ -2,6 +2,11 @@
   "values": [
     "theaurorian:cerulean_ore",
     "theaurorian:geode",
-    "theaurorian:moonstone_ore"
+    "theaurorian:moonstone_ore",
+    "theaurorian:deepslate_cerulean_ore",
+    "theaurorian:deepslate_moonstone_ore",
+    "theaurorian:umbra_stone",
+    "theaurorian:peridotite",
+    "theaurorian:aurorian_steel_block"
   ]
 }

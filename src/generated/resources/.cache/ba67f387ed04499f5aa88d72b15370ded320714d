@@ -1,4 +1,4 @@
-// 1.19.2	2026-08-01T08:07:33.604445169	Item Models: theaurorian
+// 1.19.2	2026-08-16T09:06:41.196975452	Item Models: theaurorian
 a95bbdcaf10620b09f246c54e853176b212124ff assets/theaurorian/models/item/absorption_orb.json
 62c111d018dba8b55fb88600325394b94342d085 assets/theaurorian/models/item/amulet_of_chroma.json
 a178fdd548fd537c98a6c0fe556c7104a08583a8 assets/theaurorian/models/item/aurorian_bacon.json
@@ -46,6 +46,7 @@ f77e16da83f24755ad5ca82b60b538bdd16e73bf assets/theaurorian/models/item/cooked_a
 6d952b0e3bc0b43ae96bceff36645d16b0bb5553 assets/theaurorian/models/item/crystalline_scrap.json
 c8075fb0e11b586646bdf0a5c143ac0e017e76a6 assets/theaurorian/models/item/crystalline_shield.json
 3dfd8e891750c020cb35f345f9ed7625b29f4cfc assets/theaurorian/models/item/crystalline_shield_blocking.json
+c50a99d809d8b894cf63a68fb8c19dcbac99b79b assets/theaurorian/models/item/crystalline_sprite.json
 9cdea7e95dd806bf1108b3c7414694a3282c5dca assets/theaurorian/models/item/cup.json
 617ba2ff5fd8b1905c2559faa5ab92ed5575f5db assets/theaurorian/models/item/dark_amulet.json
 940f20081be56c8317f653ab905adae7134124aa assets/theaurorian/models/item/darkstone_key.json

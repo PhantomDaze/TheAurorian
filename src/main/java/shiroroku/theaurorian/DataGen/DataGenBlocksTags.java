@@ -31,12 +31,32 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(BlockTags.DEEPSLATE_ORE_REPLACEABLES).add(BlockRegistry.aurorian_deepslate.get());
         this.tag(BlockTags.DIRT).add(BlockRegistry.aurorian_dirt.get());
         this.tag(BlockTags.DIRT).add(BlockRegistry.aurorian_grass.get());
+        // 地牢核心方块不可被世界生成覆盖、不可被龙/凋灵破坏
+        this.tag(BlockTags.FEATURES_CANNOT_REPLACE).add(
+                BlockRegistry.runestone.get(),
+                BlockRegistry.runestone_smooth.get(),
+                BlockRegistry.runestone_bars.get(),
+                BlockRegistry.darkstone.get(),
+                BlockRegistry.moon_temple_bricks.get(),
+                BlockRegistry.moon_temple_bricks_smooth.get(),
+                BlockRegistry.moon_temple_bars.get(),
+                BlockRegistry.umbra_stone.get());
+        this.tag(BlockTags.DRAGON_IMMUNE).add(
+                BlockRegistry.runestone.get(),
+                BlockRegistry.runestone_smooth.get(),
+                BlockRegistry.runestone_bars.get());
+        this.tag(BlockTags.WITHER_IMMUNE).add(
+                BlockRegistry.runestone.get(),
+                BlockRegistry.runestone_smooth.get(),
+                BlockRegistry.runestone_bars.get());
         this.tag(BlockTags.FLOWERS).add(BlockRegistry.bright_bulb.get());
         this.tag(BlockTags.FLOWERS).add(BlockRegistry.petunia.get());
         this.tag(BlockTags.LEAVES).add(BlockRegistry.silentwood_leaves.get());
         this.tag(BlockTags.LEAVES).add(BlockRegistry.weeping_willow_leaves.get());
         this.tag(BlockTags.LOGS_THAT_BURN).add(BlockRegistry.silentwood_log.get());
         this.tag(BlockTags.LOGS_THAT_BURN).add(BlockRegistry.weeping_willow_log.get());
+        // 蘑菇可种植其上
+        this.tag(BlockTags.MUSHROOM_GROW_BLOCK).add(BlockRegistry.mushroom.get(), BlockRegistry.mushroom_stem.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_chest.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_crafting_table.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_fence.get());
@@ -45,6 +65,24 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_slab.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_stairs.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_ladder.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_leaves.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.silentwood_sapling.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_leaves.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_sapling.get());
+        // 菌类方块按木头/菌柄处理，用斧加速
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.mushroom.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.mushroom_stem.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.mushroom_small.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(BlockRegistry.mushroom_small.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(
+                BlockRegistry.aurorian_tallgrass.get(),
+                BlockRegistry.aurorian_tallgrass_light.get(),
+                BlockRegistry.bright_bulb.get(),
+                BlockRegistry.lavender_block.get(),
+                BlockRegistry.petunia.get(),
+                BlockRegistry.silkberry_block.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(BlockRegistry.silentwood_leaves.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(BlockRegistry.weeping_willow_leaves.get());
         this.tag(BlockTags.CLIMBABLE).add(BlockRegistry.silentwood_ladder.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_log.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(BlockRegistry.weeping_willow_planks.get());
@@ -85,13 +123,65 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.moonlight_forge.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.moonstone_ore.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.scrapper.get());
+        // Runestone 系列（不可破坏墙体，但仍归镐）
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                BlockRegistry.runestone.get(),
+                BlockRegistry.runestone_smooth.get(),
+                BlockRegistry.runestone_bars.get(),
+                BlockRegistry.runestone_gate.get(),
+                BlockRegistry.runestone_gate_keyhole.get(),
+                BlockRegistry.runestone_gate_loot_keyhole.get(),
+                BlockRegistry.runestone_lamp.get(),
+                BlockRegistry.runestone_stairs.get());
+        // Darkstone 系列
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                BlockRegistry.darkstone.get(),
+                BlockRegistry.darkstone_chipped.get(),
+                BlockRegistry.darkstone_gate.get(),
+                BlockRegistry.darkstone_gate_keyhole.get(),
+                BlockRegistry.darkstone_lamp.get(),
+                BlockRegistry.darkstone_pillar.get(),
+                BlockRegistry.darkstone_stairs.get());
+        // Moon Temple 系列
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                BlockRegistry.moon_temple_bricks.get(),
+                BlockRegistry.moon_temple_bricks_smooth.get(),
+                BlockRegistry.moon_temple_bars.get(),
+                BlockRegistry.moon_temple_gate.get(),
+                BlockRegistry.moon_temple_gate_keyhole.get(),
+                BlockRegistry.moon_temple_interior_gate.get(),
+                BlockRegistry.moon_temple_interior_gate_keyhole.get(),
+                BlockRegistry.moon_temple_lamp.get(),
+                BlockRegistry.moon_temple_stairs.get());
+        // 玻璃/玻璃板（vanilla 玻璃归镐）
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                BlockRegistry.aurorian_glass.get(),
+                BlockRegistry.moon_glass.get(),
+                BlockRegistry.aurorian_glass_pane.get(),
+                BlockRegistry.moon_glass_pane.get());
+        // 晶体/宝石/晶体蘑菇
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                BlockRegistry.crystal.get(),
+                BlockRegistry.mushroom_crystal.get());
+        // 陶罐（玻璃属性，归镐）
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegistry.urn.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(BlockRegistry.aurorian_dirt.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(BlockRegistry.aurorian_grass.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(BlockRegistry.aurorian_farm_tile.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(BlockRegistry.moon_sand.get());
+        // 草地方块（复制自 GRASS_BLOCK）归铲
+        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(BlockRegistry.aurorian_grass_light.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.cerulean_ore.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.geode.get());
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.moonstone_ore.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.deepslate_cerulean_ore.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.deepslate_moonstone_ore.get());
+        // 高强度石质方块（strength 5）需石镐
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.umbra_stone.get());
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.peridotite.get());
+        // 钢块复制自铁块，需石镐
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(BlockRegistry.aurorian_steel_block.get());
+        this.tag(BlockTags.CROPS).add(BlockRegistry.lavender_crop.get(), BlockRegistry.silkberry_crop.get());
         this.tag(BlockTags.PLANKS).add(BlockRegistry.silentwood_planks.get());
         this.tag(BlockTags.PLANKS).add(BlockRegistry.weeping_willow_planks.get());
         this.tag(BlockTags.REPLACEABLE_PLANTS).add(
@@ -167,5 +257,42 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(Tags.Blocks.ORES).addTag(CERULEAN_ORE);
         this.tag(Tags.Blocks.ORES).addTag(MOONSTONE_ORE);
         this.tag(Tags.Blocks.ORES_COAL).add(BlockRegistry.aurorian_coal_ore.get());
+        // 矿石产出地层（与原版铁/煤矿同义）
+        this.tag(Tags.Blocks.ORE_BEARING_GROUND_STONE).add(BlockRegistry.aurorian_stone.get());
+        this.tag(Tags.Blocks.ORE_BEARING_GROUND_DEEPSLATE).add(BlockRegistry.aurorian_deepslate.get());
+        this.tag(Tags.Blocks.ORES_IN_GROUND_STONE).add(
+                BlockRegistry.aurorian_coal_ore.get(),
+                BlockRegistry.cerulean_ore.get(),
+                BlockRegistry.moonstone_ore.get(),
+                BlockRegistry.geode.get());
+        this.tag(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE).add(
+                BlockRegistry.deepslate_cerulean_ore.get(),
+                BlockRegistry.deepslate_moonstone_ore.get());
+        // 矿石产出密度
+        this.tag(Tags.Blocks.ORE_RATES_SINGULAR).add(
+                BlockRegistry.cerulean_ore.get(),
+                BlockRegistry.deepslate_cerulean_ore.get(),
+                BlockRegistry.moonstone_ore.get(),
+                BlockRegistry.deepslate_moonstone_ore.get());
+        // 石质类别
+        this.tag(Tags.Blocks.STONE).add(BlockRegistry.aurorian_stone.get(), BlockRegistry.peridotite.get());
+        this.tag(Tags.Blocks.COBBLESTONE).add(BlockRegistry.aurorian_cobblestone.get());
+        this.tag(Tags.Blocks.COBBLESTONE_NORMAL).add(BlockRegistry.aurorian_cobblestone.get());
+        this.tag(Tags.Blocks.COBBLESTONE_DEEPSLATE).add(BlockRegistry.aurorian_deepslate.get());
+        // 沙子
+        this.tag(Tags.Blocks.SAND).add(BlockRegistry.moon_sand.get());
+        // 玻璃/玻璃板
+        this.tag(Tags.Blocks.GLASS).add(BlockRegistry.aurorian_glass.get(), BlockRegistry.moon_glass.get());
+        this.tag(Tags.Blocks.GLASS_COLORLESS).add(BlockRegistry.aurorian_glass.get(), BlockRegistry.moon_glass.get());
+        this.tag(Tags.Blocks.GLASS_PANES).add(BlockRegistry.aurorian_glass_pane.get(), BlockRegistry.moon_glass_pane.get());
+        this.tag(Tags.Blocks.GLASS_PANES_COLORLESS).add(BlockRegistry.aurorian_glass_pane.get(), BlockRegistry.moon_glass_pane.get());
+        // 储物方块
+        this.tag(Tags.Blocks.STORAGE_BLOCKS).add(
+                BlockRegistry.aurorian_coal_block.get(),
+                BlockRegistry.aurorian_steel_block.get(),
+                BlockRegistry.cerulean_block.get(),
+                BlockRegistry.moonstone_block.get());
+        this.tag(Tags.Blocks.STORAGE_BLOCKS_COAL).add(BlockRegistry.aurorian_coal_block.get());
+        this.tag(Tags.Blocks.STORAGE_BLOCKS_IRON).add(BlockRegistry.aurorian_steel_block.get());
     }
 }
