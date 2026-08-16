@@ -78,8 +78,8 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.add(BlockRegistry.moon_glass.get(), b -> createSilkTouchOnlyTable(b));
             this.add(BlockRegistry.aurorian_glass_pane.get(), b -> createSilkTouchOnlyTable(b));
             this.add(BlockRegistry.moon_glass_pane.get(), b -> createSilkTouchOnlyTable(b));
-            this.add(BlockRegistry.aurorian_tallgrass.get(), dropWithSickleOrShears(ItemRegistry.plant_fiber.get()));
-            this.add(BlockRegistry.aurorian_tallgrass_light.get(), dropWithSickleOrShears(ItemRegistry.plant_fiber.get()));
+            this.add(BlockRegistry.aurorian_tallgrass.get(), dropGrassLike(BlockRegistry.aurorian_tallgrass.get(), ItemRegistry.plant_fiber.get()));
+            this.add(BlockRegistry.aurorian_tallgrass_light.get(), dropGrassLike(BlockRegistry.aurorian_tallgrass_light.get(), ItemRegistry.plant_fiber.get()));
             this.add(BlockRegistry.bright_bulb.get(), dropWithSickleOrShears(BlockRegistry.bright_bulb.get()));
             this.add(BlockRegistry.geode.get(), block -> createOreDrop(block, BlockRegistry.crystal.get().asItem()));
             this.add(BlockRegistry.lavender_block.get(), dropWithSickleOrShears(ItemRegistry.lavender.get()));
@@ -127,13 +127,15 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.silentwood_log.get());
             this.dropSelf(BlockRegistry.silentwood_sapling.get());
             this.dropSelf(BlockRegistry.silentwood_stairs.get());
-            this.add(BlockRegistry.weeping_willow_leaves.get(), block -> LootTable.lootTable()
-                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                            .add(applyExplosionCondition(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(BlockRegistry.weeping_willow_leaves.get()))))
-                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+            this.add(BlockRegistry.weeping_willow_leaves.get(), block -> createSelfDropDispatchTable(BlockRegistry.weeping_willow_leaves.get(), HAS_SHEARS_OR_SILK_TOUCH,
+                    applyExplosionCondition(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.weeping_willow_sap.get()))
+                            .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05F, 0.0625F, 0.083333336F, 0.1F)))
+                    .withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1.0F))
                             .when(HAS_NO_SHEARS_OR_SILK_TOUCH)
-                            .add(applyExplosionDecay(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.weeping_willow_sap.get()))
-                                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05F, 0.0625F, 0.083333336F, 0.1F)))));
+                            .add(applyExplosionDecay(BlockRegistry.weeping_willow_leaves.get(), LootItem.lootTableItem(ItemRegistry.silentwood_stick.get())
+                                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+                                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F)))));
             this.dropSelf(BlockRegistry.weeping_willow_log.get());
             this.dropSelf(BlockRegistry.weeping_willow_sapling.get());
             this.dropSelf(BlockRegistry.weeping_willow_stairs.get());
@@ -221,6 +223,19 @@ public class DataGenBlocksLoot extends LootTableProvider {
 
         private Function<Block, LootTable.Builder> dropWithSickleOrShears(ItemLike drops) {
             return block -> LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_SHEARS).add(LootItem.lootTableItem(drops)));
+        }
+
+        // 草类（aurorian_tallgrass 等）：剪刀/精准采集原样掉草自身；否则按原版概率掉纤维（带时运加成）
+        private Function<Block, LootTable.Builder> dropGrassLike(Block self, ItemLike drops) {
+            return block -> LootTable.lootTable()
+                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                            .when(HAS_SHEARS_OR_SILK_TOUCH)
+                            .add(LootItem.lootTableItem(self)))
+                    .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                            .when(HAS_NO_SHEARS_OR_SILK_TOUCH)
+                            .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.125F))
+                            .add(applyExplosionDecay(self, LootItem.lootTableItem(drops)
+                                    .apply(net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2)))));
         }
     }
 }
