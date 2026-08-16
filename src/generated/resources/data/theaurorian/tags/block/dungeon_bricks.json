@@ -8,10 +8,6 @@
     "theaurorian:darkstone_pillar",
     "theaurorian:darkstone_stairs",
     "theaurorian:moon_temple_bars",
-    "theaurorian:umbra_stone",
-    "theaurorian:umbra_stone_cracked",
-    "theaurorian:umbra_stone_roof_tiles",
-    "theaurorian:umbra_stone_roof_stairs",
     "theaurorian:moon_temple_bricks",
     "theaurorian:moon_temple_bricks_smooth",
     "theaurorian:moon_temple_gate",
@@ -19,6 +15,7 @@
     "theaurorian:moon_temple_interior_gate",
     "theaurorian:moon_temple_interior_gate_keyhole",
     "theaurorian:moon_temple_lamp",
+    "theaurorian:moon_temple_stairs",
     "theaurorian:runestone",
     "theaurorian:runestone_bars",
     "theaurorian:runestone_gate",
@@ -26,6 +23,10 @@
     "theaurorian:runestone_gate_loot_keyhole",
     "theaurorian:runestone_lamp",
     "theaurorian:runestone_smooth",
-    "theaurorian:runestone_stairs"
+    "theaurorian:runestone_stairs",
+    "theaurorian:umbra_stone",
+    "theaurorian:umbra_stone_cracked",
+    "theaurorian:umbra_stone_roof_tiles",
+    "theaurorian:umbra_stone_roof_stairs"
   ]
 }

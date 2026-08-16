@@ -124,5 +124,59 @@ public class DataGenItemsTags extends ItemTagsProvider {
         this.tag(ItemTags.SWORDS).add(ItemRegistry.moonstone_sword.get());
         this.tag(ItemTags.SWORDS).add(ItemRegistry.silentwood_sword.get());
         this.tag(ItemTags.SWORDS).add(ItemRegistry.umbra_greatsword.get());
+
+        // --- Wood family item tags (mirror block tags for crafting compat) ---
+        this.tag(ItemTags.PLANKS).add(BlockRegistry.silentwood_planks.get().asItem(), BlockRegistry.weeping_willow_planks.get().asItem());
+        this.tag(ItemTags.LOGS_THAT_BURN).add(BlockRegistry.silentwood_log.get().asItem(), BlockRegistry.weeping_willow_log.get().asItem());
+        this.tag(ItemTags.LEAVES).add(BlockRegistry.silentwood_leaves.get().asItem(), BlockRegistry.weeping_willow_leaves.get().asItem());
+        this.tag(ItemTags.SAPLINGS).add(BlockRegistry.silentwood_sapling.get().asItem(), BlockRegistry.weeping_willow_sapling.get().asItem());
+        this.tag(ItemTags.WOODEN_SLABS).add(BlockRegistry.silentwood_slab.get().asItem());
+        this.tag(ItemTags.WOODEN_STAIRS).add(BlockRegistry.silentwood_stairs.get().asItem(), BlockRegistry.weeping_willow_stairs.get().asItem());
+        this.tag(ItemTags.WOODEN_FENCES).add(BlockRegistry.silentwood_fence.get().asItem());
+        this.tag(ItemTags.FENCES).add(BlockRegistry.silentwood_fence.get().asItem());
+
+        // --- Stone / sand / dirt block items ---
+        this.tag(Tags.Items.STONES).add(BlockRegistry.aurorian_stone.get().asItem(), BlockRegistry.aurorian_deepslate.get().asItem(), BlockRegistry.aurorian_stone_brick.get().asItem(), BlockRegistry.peridotite.get().asItem(), BlockRegistry.peridotite_smooth.get().asItem(), BlockRegistry.umbra_stone.get().asItem(), BlockRegistry.umbra_stone_cracked.get().asItem());
+        this.tag(Tags.Items.COBBLESTONES).add(BlockRegistry.aurorian_cobblestone.get().asItem());
+        this.tag(Tags.Items.COBBLESTONES_NORMAL).add(BlockRegistry.aurorian_cobblestone.get().asItem());
+        this.tag(Tags.Items.SANDS).add(BlockRegistry.moon_sand.get().asItem());
+        this.tag(Tags.Items.SANDS_COLORLESS).add(BlockRegistry.moon_sand.get().asItem());
+        this.tag(ItemTags.SAND).add(BlockRegistry.moon_sand.get().asItem());
+        this.tag(ItemTags.DIRT).add(BlockRegistry.aurorian_dirt.get().asItem(), BlockRegistry.aurorian_grass.get().asItem(), BlockRegistry.aurorian_grass_light.get().asItem());
+
+        // --- Glass block items ---
+        this.tag(Tags.Items.GLASS_BLOCKS).add(BlockRegistry.aurorian_glass.get().asItem(), BlockRegistry.moon_glass.get().asItem());
+        this.tag(Tags.Items.GLASS_BLOCKS_COLORLESS).add(BlockRegistry.aurorian_glass.get().asItem(), BlockRegistry.moon_glass.get().asItem());
+        this.tag(Tags.Items.GLASS_PANES).add(BlockRegistry.aurorian_glass_pane.get().asItem(), BlockRegistry.moon_glass_pane.get().asItem());
+        this.tag(Tags.Items.GLASS_PANES_COLORLESS).add(BlockRegistry.aurorian_glass_pane.get().asItem(), BlockRegistry.moon_glass_pane.get().asItem());
+
+        // --- Storage block items ---
+        this.tag(Tags.Items.STORAGE_BLOCKS).add(BlockRegistry.aurorian_coal_block.get().asItem(), BlockRegistry.aurorian_steel_block.get().asItem(), BlockRegistry.cerulean_block.get().asItem(), BlockRegistry.moonstone_block.get().asItem());
+        this.tag(Tags.Items.STORAGE_BLOCKS_COAL).add(BlockRegistry.aurorian_coal_block.get().asItem());
+
+        // --- Ore item categorisation ---
+        this.tag(ItemTags.COAL_ORES).add(BlockRegistry.aurorian_coal_ore.get().asItem());
+        this.tag(Tags.Items.ORES_IN_GROUND_STONE).add(BlockRegistry.aurorian_coal_ore.get().asItem(), BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.geode.get().asItem(), BlockRegistry.moonstone_ore.get().asItem());
+        this.tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE).add(BlockRegistry.deepslate_cerulean_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem());
+        this.tag(Tags.Items.ORE_RATES_SINGULAR).add(BlockRegistry.aurorian_coal_ore.get().asItem(), BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.deepslate_cerulean_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem(), BlockRegistry.geode.get().asItem(), BlockRegistry.moonstone_ore.get().asItem());
+
+        // --- Crops / seeds / mushrooms ---
+        this.tag(Tags.Items.CROPS).add(ItemRegistry.lavender.get(), ItemRegistry.silkberry.get());
+        this.tag(Tags.Items.SEEDS).add(ItemRegistry.lavender_seeds.get(), ItemRegistry.silkberry_seeds.get());
+        this.tag(ItemTags.VILLAGER_PLANTABLE_SEEDS).add(ItemRegistry.lavender_seeds.get(), ItemRegistry.silkberry_seeds.get());
+        this.tag(Tags.Items.MUSHROOMS).add(BlockRegistry.mushroom.get().asItem(), BlockRegistry.mushroom_stem.get().asItem(), BlockRegistry.mushroom_crystal.get().asItem(), BlockRegistry.mushroom_small.get().asItem());
+
+        // --- Foods ---
+        this.tag(Tags.Items.FOODS).add(ItemRegistry.lavender_bread.get(), ItemRegistry.silkberry.get(), ItemRegistry.silkberry_jam.get(), ItemRegistry.silkberry_jam_sandwich.get(), ItemRegistry.strange_meat.get(), ItemRegistry.aurorian_pork.get(), ItemRegistry.aurorian_bacon.get(), ItemRegistry.cooked_aurorian_pork.get(), ItemRegistry.aurorian_slime_ball.get(), ItemRegistry.silkshroom_stew.get(), ItemRegistry.soulless_flesh.get(), ItemRegistry.bright_bulb_tea.get(), ItemRegistry.lavender_tea.get(), ItemRegistry.petunia_tea.get(), ItemRegistry.silkberry_tea.get());
+        this.tag(Tags.Items.FOODS_BERRY).add(ItemRegistry.silkberry.get());
+
+        // --- Tool subclass tags (c:tools is already covered via #minecraft:swords/axes/... but these lists are hand-written) ---
+        this.tag(Tags.Items.MELEE_WEAPON_TOOLS).add(ItemRegistry.aurorian_steel_sword.get(), ItemRegistry.aurorian_stone_sword.get(), ItemRegistry.aurorianite_sword.get(), ItemRegistry.crystalline_sword.get(), ItemRegistry.moonstone_sword.get(), ItemRegistry.silentwood_sword.get(), ItemRegistry.umbra_greatsword.get(), ItemRegistry.queens_chipper.get());
+        this.tag(Tags.Items.MELEE_WEAPON_TOOLS).add(ItemRegistry.aurorian_steel_axe.get(), ItemRegistry.aurorian_stone_axe.get(), ItemRegistry.aurorianite_axe.get(), ItemRegistry.moonstone_axe.get(), ItemRegistry.silentwood_axe.get());
+        this.tag(Tags.Items.MINING_TOOL_TOOLS).add(ItemRegistry.aurorian_steel_pickaxe.get(), ItemRegistry.aurorian_stone_pickaxe.get(), ItemRegistry.aurorianite_pickaxe.get(), ItemRegistry.crystalline_pickaxe.get(), ItemRegistry.moonstone_pickaxe.get(), ItemRegistry.silentwood_pickaxe.get(), ItemRegistry.umbra_pickaxe.get());
+        this.tag(Tags.Items.MINING_TOOL_TOOLS).add(ItemRegistry.aurorian_steel_shovel.get(), ItemRegistry.aurorian_stone_shovel.get(), ItemRegistry.moonstone_shovel.get(), ItemRegistry.silentwood_shovel.get(), ItemRegistry.aurorianite_shovel.get());
+        this.tag(Tags.Items.MINING_TOOL_TOOLS).add(ItemRegistry.aurorian_steel_hoe.get(), ItemRegistry.aurorian_stone_hoe.get(), ItemRegistry.moonstone_hoe.get(), ItemRegistry.silentwood_hoe.get());
+        this.tag(Tags.Items.MINING_TOOL_TOOLS).add(ItemRegistry.aurorian_steel_axe.get(), ItemRegistry.aurorian_stone_axe.get(), ItemRegistry.aurorianite_axe.get(), ItemRegistry.moonstone_axe.get(), ItemRegistry.silentwood_axe.get());
+        this.tag(Tags.Items.RANGED_WEAPON_TOOLS).add(ItemRegistry.silentwood_bow.get(), ItemRegistry.keepers_bow.get());
     }
 }
