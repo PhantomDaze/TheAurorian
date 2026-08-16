@@ -25,7 +25,8 @@ public class CrystallineBeamEntity extends Projectile {
     public CrystallineBeamEntity(Level pLevel, Entity owner) {
         super(EntityRegistry.crystalline_beam.get(), pLevel);
         setOwner(owner);
-        setPos(owner.getX(), owner.getEyeY() - 0.3, owner.getZ());
+        // 起点取实体包围盒中心（高度的一半），避免从脚部或头顶发射
+        setPos(owner.getX(), owner.getY() + owner.getBbHeight() * 0.5, owner.getZ());
     }
 
     public CrystallineBeamEntity(EntityType<? extends CrystallineBeamEntity> pEntityType, Level pLevel) {
