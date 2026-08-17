@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import shiroroku.theaurorian.Compat.TinkersConstruct.TinkersCompat;
 import shiroroku.theaurorian.Config.ClientConfig;
 import shiroroku.theaurorian.Config.CommonConfig;
+import shiroroku.theaurorian.Network.LocatorNetwork;
 import shiroroku.theaurorian.Registry.*;
 
 @Mod(TheAurorian.MODID)
@@ -50,6 +51,8 @@ public class TheAurorian {
         FeatureRegistry.register(bus);
         SoundRegistry.register(bus);
         ParticleRegistry.register(bus);
+
+        LocatorNetwork.register();
 
         if (ModList.get().isLoaded("tconstruct")) {
             TinkersCompat.register(bus);
