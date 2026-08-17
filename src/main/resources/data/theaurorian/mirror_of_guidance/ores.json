@@ -1,7 +1,7 @@
 {
   "icon": "theaurorian:cerulean_ore",
-  "x": 40,
-  "y": 40,
+  "x": 160,
+  "y": -40,
   "children": [
     "theaurorian:ore_cerulean",
     "theaurorian:ore_moonstone",
