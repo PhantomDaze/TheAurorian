@@ -78,11 +78,12 @@ public class CrystallineSpriteEntity extends Monster implements RangedAttackMob 
         CrystallineBeamEntity beam = new CrystallineBeamEntity(this.level, this);
         beam.setDamage(CommonConfig.crystalline_sprite_beam_damage.get().floatValue());
         double d0 = target.getX() - this.getX();
+        // 瞄准目标胸部高度（minY + height/3）；beam 无重力直线弹道，
+        // 不需要原版箭的 d3*0.2 抛物补偿，否则会打到目标头顶的空气
         double d1 = target.getBoundingBox().minY + target.getBbHeight() / 3.0F - beam.getY();
         double d2 = target.getZ() - this.getZ();
-        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
         // upstream EntityArrow.shoot velocity 1.6 * CrystallineBeam arrowVelocity 0.5 = 0.8
-        Vec3 dir = new Vec3(d0, d1 + d3 * 0.2, d2).normalize();
+        Vec3 dir = new Vec3(d0, d1, d2).normalize();
         beam.setDeltaMovement(dir.x * 0.8, dir.y * 0.8, dir.z * 0.8);
         this.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F / (this.random.nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(beam);
