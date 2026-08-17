@@ -1,5 +1,6 @@
 package shiroroku.theaurorian.Util;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
@@ -26,10 +27,16 @@ public class RenderUtil {
         pPoseStack.pushPose();
         pPoseStack.translate(x, y, 100);
         pPoseStack.scale(16f, -16f, 16f);
-        itemRenderer.renderStatic(new ItemStack(item), net.minecraft.world.item.ItemDisplayContext.GUI,
-                0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY,
-                pPoseStack, buffers, null, 0);
-        buffers.endBatch();
+        // renderStatic 绕过 GuiGraphics，需显式设置 GUI 平面光照，否则物品会偏暗
+        Lighting.setupForFlatItems();
+        try {
+            itemRenderer.renderStatic(new ItemStack(item), net.minecraft.world.item.ItemDisplayContext.GUI,
+                    0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY,
+                    pPoseStack, buffers, null, 0);
+            buffers.endBatch();
+        } finally {
+            Lighting.setupFor3DItems();
+        }
         pPoseStack.popPose();
     }
 
