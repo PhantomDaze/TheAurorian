@@ -103,6 +103,28 @@ public class DungeonKeeperEntity extends AbstractSkeleton {
         return flag;
     }
 
+    /**
+     * 守卫身高 4.2 格，vanilla AbstractSkeleton 的箭起点（getEyeY-0.1）会落在
+     * 不自然的位置（实测从腿部射出）。这里显式把箭起点设为头部，再按原版
+     * 弹道逻辑射向目标。
+     */
+    @Override
+    public void performRangedAttack(LivingEntity target, float distanceFactor) {
+        ItemStack bow = this.getItemInHand(net.minecraft.world.entity.projectile.ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.world.item.BowItem));
+        ItemStack arrowItem = this.getProjectile(bow);
+        net.minecraft.world.entity.projectile.AbstractArrow arrow = this.getArrow(arrowItem, distanceFactor, bow);
+        // 起点定在头部（实体顶部下方 0.5 格），而非默认的眼高
+        arrow.setPos(this.getX(), this.getY() + this.getBbHeight() - 0.5, this.getZ());
+
+        double d0 = target.getX() - this.getX();
+        double d1 = target.getY(0.3333333333333333) - arrow.getY();
+        double d2 = target.getZ() - this.getZ();
+        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+        arrow.shoot(d0, d1 + d3 * 0.20000000298023224, d2, 1.6F, (float) (14 - this.level().getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level().addFreshEntity(arrow);
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
