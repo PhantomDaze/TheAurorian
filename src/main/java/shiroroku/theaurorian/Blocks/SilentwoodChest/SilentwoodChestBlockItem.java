@@ -5,7 +5,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.Nullable;
 import shiroroku.theaurorian.Util.TooltipUtil;
 
 import java.util.List;
@@ -21,6 +23,12 @@ public class SilentwoodChestBlockItem extends BlockItem {
 
     public SilentwoodChestBlockItem(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
+    }
+
+    @Override
+    public int getBurnTime(ItemStack pStack, @Nullable RecipeType<?> pRecipeType) {
+        // 静木箱可燃：300 tick（对齐其它静木制品）
+        return 300;
     }
 
     @Override

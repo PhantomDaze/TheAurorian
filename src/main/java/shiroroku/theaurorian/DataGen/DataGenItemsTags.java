@@ -32,6 +32,8 @@ public class DataGenItemsTags extends ItemTagsProvider {
     public static final TagKey<Item> KEYS = ItemTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "keys"));
     public static final TagKey<Item> LIGHTNING_IMMUNE = ItemTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "lightning_immune"));
     public static final TagKey<Item> MOONSTONE_ORE = ItemTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "moonstone_ore"));
+    public static final TagKey<Item> ORES_CERULEAN = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/cerulean"));
+    public static final TagKey<Item> ORES_MOONSTONE = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/moonstone"));
     public static final TagKey<Item> PORTAL_LIGHTERS = ItemTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "portal_lighters"));
     public static final TagKey<Item> SCRAP = ItemTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "scrap"));
     public static final TagKey<Item> SPECTRAL_ARMOR = ItemTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "spectral_armor"));
@@ -158,6 +160,11 @@ public class DataGenItemsTags extends ItemTagsProvider {
         this.tag(ItemTags.COAL_ORES).add(BlockRegistry.aurorian_coal_ore.get().asItem());
         this.tag(Tags.Items.ORES_IN_GROUND_STONE).add(BlockRegistry.aurorian_coal_ore.get().asItem(), BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.geode.get().asItem(), BlockRegistry.moonstone_ore.get().asItem());
         this.tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE).add(BlockRegistry.deepslate_cerulean_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem());
+        // c:ores/<material> 物品标签（1.21.1 目录为 tags/item）
+        this.tag(Tags.Items.ORES_COAL).add(BlockRegistry.aurorian_coal_ore.get().asItem());
+        this.tag(ORES_CERULEAN).add(BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.deepslate_cerulean_ore.get().asItem());
+        this.tag(ORES_MOONSTONE).add(BlockRegistry.moonstone_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem());
+        this.tag(Tags.Items.ORES).addTags(ORES_CERULEAN, ORES_MOONSTONE);
         this.tag(Tags.Items.ORE_RATES_SINGULAR).add(BlockRegistry.aurorian_coal_ore.get().asItem(), BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.deepslate_cerulean_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem(), BlockRegistry.geode.get().asItem(), BlockRegistry.moonstone_ore.get().asItem());
 
         // --- Crops / seeds / mushrooms ---

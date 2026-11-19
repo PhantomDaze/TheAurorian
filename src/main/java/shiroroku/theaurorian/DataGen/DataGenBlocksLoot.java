@@ -171,6 +171,9 @@ protected void generate() {
             this.dropSelf(BlockRegistry.silentwood_fence.get());
             this.dropSelf(BlockRegistry.silentwood_torch.get());
             this.dropSelf(BlockRegistry.moon_torch.get());
+            // 墙火把无独立物品，掉落对应的站立火把
+            this.dropOther(BlockRegistry.silentwood_wall_torch.get(), BlockRegistry.silentwood_torch.get());
+            this.dropOther(BlockRegistry.moon_wall_torch.get(), BlockRegistry.moon_torch.get());
             this.dropSelf(BlockRegistry.silentwood_ladder.get());
             this.add(BlockRegistry.lavender_crop.get(), this.createCropDrops(BlockRegistry.lavender_crop.get(), ItemRegistry.lavender_seeds.get(), ItemRegistry.lavender.get(),
                     LootItemBlockStatePropertyCondition.hasBlockStateProperties(BlockRegistry.lavender_crop.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));

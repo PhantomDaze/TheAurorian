@@ -1,3 +1,6 @@
 {
-  "parent": "theaurorian:block/moon_torch"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "theaurorian:block/moon_torch"
+  }
 }

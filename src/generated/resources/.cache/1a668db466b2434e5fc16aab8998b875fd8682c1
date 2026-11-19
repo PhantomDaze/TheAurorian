@@ -1,4 +1,4 @@
-// 1.21.1	2026-08-16T08:36:53.012118383	Tags for minecraft:item mod id theaurorian
+// 1.21.1	2026-11-15T02:58:12.470684077	Tags for minecraft:item mod id theaurorian
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/c/tags/item/chests.json
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/c/tags/item/chests/wooden.json
 d23573054707f31ae5709bf0e3ab483a495e8a96 data/c/tags/item/cobblestones.json
@@ -15,7 +15,10 @@ e8df99c609753393c136a4997eec07869451f9de data/c/tags/item/ingots.json
 927eb23713bc0f4273853244083e574c20106460 data/c/tags/item/mushrooms.json
 1a12463eaa53c90c3cea33a4c8082a5e5aba4c3b data/c/tags/item/nuggets.json
 fa7a27222e2a01bebd8844dd60c87375e2ab84f1 data/c/tags/item/ore_rates/singular.json
-f6e1a78b078631f32c5563e4fbaf4743292194a6 data/c/tags/item/ores.json
+2667be8e3ff7c21c8f0481c55d24032a693ab6cc data/c/tags/item/ores.json
+aa10960d590cbb00738b837fc1795e3ba65b39e3 data/c/tags/item/ores/cerulean.json
+fae13353da6edb331f10f01e307c666030c75191 data/c/tags/item/ores/coal.json
+1b4df3617da1989dcf76114e0af4220d14d1b449 data/c/tags/item/ores/moonstone.json
 24b31196b99c9097e3fe14cc95494a809b2fece2 data/c/tags/item/ores_in_ground/deepslate.json
 fefbea7e1cf3532be865b90dfddf68e6f8fb8dde data/c/tags/item/ores_in_ground/stone.json
 7d30cac774d61a4d85a3e6edaf2817b87432f42f data/c/tags/item/rods/wooden.json

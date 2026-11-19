@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -37,6 +38,7 @@ import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.TheAurorian;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -85,6 +87,13 @@ public class MoonAcolyteEntity extends Monster {
         ((java.util.function.Consumer<net.minecraft.world.item.ItemStack>)(s -> { if (this.level() instanceof ServerLevel _sl) { Holder<Enchantment> _h = _sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.KNOCKBACK); s.enchant(_h, 2); } })).accept(sword);
         this.setItemInHand(InteractionHand.MAIN_HAND, sword);
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+        // 同 UndeadKnight：父类不会自动调用 populateDefaultEquipmentSlots
+        this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData);
     }
 
     public void setArmsRaised(boolean armsRaised) {

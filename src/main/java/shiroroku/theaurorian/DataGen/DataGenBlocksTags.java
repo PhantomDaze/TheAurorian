@@ -22,6 +22,8 @@ public class DataGenBlocksTags extends BlockTagsProvider {
     public static final TagKey<Block> DUNGEON_GATES = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "dungeon_gates"));
     public static final TagKey<Block> AURORIAN_STONES = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "aurorian_stones"));
     public static final TagKey<Block> MOONSTONE_ORE = BlockTags.create(ResourceLocation.fromNamespaceAndPath(TheAurorian.MODID, "moonstone_ore"));
+    public static final TagKey<Block> ORES_CERULEAN = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/cerulean"));
+    public static final TagKey<Block> ORES_MOONSTONE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/moonstone"));
 
     protected DataGenBlocksTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, TheAurorian.MODID, existingFileHelper);
@@ -170,6 +172,11 @@ public class DataGenBlocksTags extends BlockTagsProvider {
         this.tag(Tags.Blocks.ORES).addTag(CERULEAN_ORE);
         this.tag(Tags.Blocks.ORES).addTag(MOONSTONE_ORE);
         this.tag(Tags.Blocks.ORES_COAL).add(BlockRegistry.aurorian_coal_ore.get());
+        // c:ores/<material> 子标签（统一命名空间），并挂到 c:ores 父标签
+        this.tag(ORES_CERULEAN).add(BlockRegistry.cerulean_ore.get(), BlockRegistry.deepslate_cerulean_ore.get());
+        this.tag(ORES_MOONSTONE).add(BlockRegistry.moonstone_ore.get(), BlockRegistry.deepslate_moonstone_ore.get());
+        this.tag(Tags.Blocks.ORES).addTag(ORES_CERULEAN);
+        this.tag(Tags.Blocks.ORES).addTag(ORES_MOONSTONE);
         this.tag(Tags.Blocks.ORES_IN_GROUND_STONE).add(BlockRegistry.aurorian_coal_ore.get());
         this.tag(Tags.Blocks.ORES_IN_GROUND_STONE).add(BlockRegistry.cerulean_ore.get());
         this.tag(Tags.Blocks.ORES_IN_GROUND_STONE).add(BlockRegistry.geode.get());

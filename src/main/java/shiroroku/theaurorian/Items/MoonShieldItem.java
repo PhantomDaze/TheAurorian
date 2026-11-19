@@ -6,8 +6,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -47,13 +47,10 @@ public class MoonShieldItem extends BaseAurorianShield {
                 if (player.getCooldowns().isOnCooldown(stack.getItem()) && player.getDeltaMovement().x() <= 1.5 && player.getDeltaMovement().z() <= 1.5) {
                     List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, new AABB(player.getX() - 2.5, player.getY() - 1, player.getZ() - 2.5, player.getX() + 2.5, player.getY() + 1, player.getZ() + 2.5));
                     for (LivingEntity e : entities) {
-                        if (!(e instanceof EnderDragon) && !(e instanceof WitherBoss) && e != player) {
-                            if (e instanceof Player && !player.canHarmPlayer((Player) e)) {
-                                return;
-                            }
+                        // 只对敌对生物生效，避免被无关生物/其它玩家刷掉冷却
+                        if (e instanceof Monster && !(e instanceof WitherBoss) && e != player) {
                             e.setDeltaMovement(e.getDeltaMovement().add(0, 1, 0));
                             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ANVIL_PLACE, SoundSource.PLAYERS, 1F, 1.5F);
-                            player.getCooldowns().addCooldown(stack.getItem(), 0);
                             return;
                         }
                     }

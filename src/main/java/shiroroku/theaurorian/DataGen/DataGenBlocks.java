@@ -94,8 +94,8 @@ public class DataGenBlocks extends BlockStateProvider {
         stairsBlock(BlockRegistry.weeping_willow_stairs.get(), blockTexture(BlockRegistry.weeping_willow_planks.get()));
         wallBlock(BlockRegistry.aurorian_cobblestone_wall.get(), blockTexture(BlockRegistry.aurorian_cobblestone.get()));
         wallBlock(BlockRegistry.aurorian_deepslate_wall.get(), blockTexture(BlockRegistry.aurorian_deepslate.get()));
-        torchBlock(BlockRegistry.silentwood_torch.get(), blockTexture(BlockRegistry.silentwood_torch.get()));
-        torchBlock(BlockRegistry.moon_torch.get(), blockTexture(BlockRegistry.moon_torch.get()));
+        torchBlock(BlockRegistry.silentwood_torch.get(), BlockRegistry.silentwood_wall_torch.get(), blockTexture(BlockRegistry.silentwood_torch.get()));
+        torchBlock(BlockRegistry.moon_torch.get(), BlockRegistry.moon_wall_torch.get(), blockTexture(BlockRegistry.moon_torch.get()));
         ladderBlock(BlockRegistry.silentwood_ladder.get(), blockTexture(BlockRegistry.silentwood_ladder.get()));
     }
 
@@ -108,10 +108,25 @@ public class DataGenBlocks extends BlockStateProvider {
         }
     }
 
-    private void torchBlock(Block parent, ResourceLocation texture) {
-        ModelFile torch = models().torch(BuiltInRegistries.BLOCK.getKey(parent).getPath(), texture).renderType("cutout");
-        getVariantBuilder(parent).partialState().modelForState().modelFile(torch).addModel();
-        itemModels().getBuilder(BuiltInRegistries.BLOCK.getKey(parent).getPath()).parent(torch);
+    private void torchBlock(Block standing, Block wall, ResourceLocation texture) {
+        ResourceLocation standingLocation = BuiltInRegistries.BLOCK.getKey(standing);
+        ModelFile torch = models().torch(standingLocation.getPath(), texture).renderType("cutout");
+        getVariantBuilder(standing).partialState().modelForState().modelFile(torch).addModel();
+        // 手持/物品栏模型用平面贴图（对齐上游 1.12.2），而不是继承 3D 方块模型
+        itemModels().getBuilder(standingLocation.getPath()).parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated"))).texture("layer0", texture);
+
+        // 墙火把：模型与旋转照抄原版 1.21.1 wall_torch.json（east 无旋转、north 270、south 90、west 180）
+        ResourceLocation wallLocation = BuiltInRegistries.BLOCK.getKey(wall);
+        ModelFile wallTorch = models().withExistingParent(wallLocation.getPath(), mcLoc("block/template_torch_wall")).texture("torch", texture).renderType("cutout");
+        getVariantBuilder(wall).forAllStates(state -> {
+            int yRot = switch (state.getValue(WallTorchBlock.FACING)) {
+                case EAST -> 0;
+                case SOUTH -> 90;
+                case WEST -> 180;
+                default -> 270; // NORTH
+            };
+            return ConfiguredModel.builder().modelFile(wallTorch).rotationY(yRot).build();
+        });
     }
 
     private void ladderBlock(Block parent, ResourceLocation texture) {

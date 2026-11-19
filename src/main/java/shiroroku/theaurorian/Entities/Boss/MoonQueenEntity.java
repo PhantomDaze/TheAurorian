@@ -147,7 +147,7 @@ public class MoonQueenEntity extends Monster {
             }
         }
 
-        this.level().setBlock(this.blockPosition(), Blocks.CHEST.defaultBlockState(), 2);
+        this.level().setBlock(this.blockPosition(), BlockRegistry.silentwood_chest.get().defaultBlockState(), 2);
         BlockEntity te = this.level().getBlockEntity(this.blockPosition());
         if (te instanceof ChestBlockEntity chest) {
             chest.setLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, net.minecraft.resources.ResourceLocation.parse(CHEST_LOOT)), this.random.nextLong());

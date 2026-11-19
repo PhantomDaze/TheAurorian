@@ -66,6 +66,8 @@ public class EventsClient {
             ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_glass_pane.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_torch.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_torch.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_wall_torch.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_wall_torch.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_ladder.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockRegistry.aurorian_tallgrass_light.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockRegistry.urn.get(), RenderType.cutout());

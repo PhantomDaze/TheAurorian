@@ -14,12 +14,12 @@ public final class CapabilityRegistry {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 BlockEntityRegistry.moonlight_forge.get(),
-                (be, side) -> be instanceof AbstractInventoryBlockEntity inv ? inv.getItemHandler() : null
+                (be, side) -> be instanceof AbstractInventoryBlockEntity inv ? inv.getItemHandler(side) : null
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 BlockEntityRegistry.scrapper.get(),
-                (be, side) -> be instanceof AbstractInventoryBlockEntity inv ? inv.getItemHandler() : null
+                (be, side) -> be instanceof AbstractInventoryBlockEntity inv ? inv.getItemHandler(side) : null
         );
     }
 }
