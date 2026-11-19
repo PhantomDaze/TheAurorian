@@ -1,6 +1,7 @@
 package shiroroku.theaurorian.Blocks.Scrapper;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -38,6 +39,26 @@ public class ScrapperBlockEntity extends AbstractCrafterBlockEntity {
                 };
             }
         };
+    }
+
+    // 熔炉式分面：上=输入、下=输出、其余=水晶/燃料
+    @Override
+    protected int[] getSlotsForFace(Direction side) {
+        return switch (side) {
+            case UP -> new int[]{1};
+            case DOWN -> new int[]{2};
+            default -> new int[]{0};
+        };
+    }
+
+    @Override
+    protected boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) {
+        return slot != 2 && getItemHandler().isItemValid(slot, stack);
+    }
+
+    @Override
+    protected boolean canTakeItemThroughFace(int slot, Direction side) {
+        return slot == 2;
     }
 
     @Override

@@ -18,12 +18,14 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.StructureRegistry;
 
 import java.util.ArrayList;
@@ -306,12 +308,14 @@ public class DarkstoneDungeonStructure extends Structure {
                     chest.setLootTable(lootTable, random.nextLong());
                 }
             }
-            for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, Blocks.CHEST)) {
-                if (!box.isInside(info.pos())) {
-                    continue;
-                }
-                if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
-                    chest.setLootTable(lootTable, random.nextLong());
+            for (Block chestBlock : new Block[]{Blocks.CHEST, BlockRegistry.silentwood_chest.get()}) {
+                for (StructureTemplate.StructureBlockInfo info : slot.template.filterBlocks(slot.pos, settings, chestBlock)) {
+                    if (!box.isInside(info.pos())) {
+                        continue;
+                    }
+                    if (level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                        chest.setLootTable(lootTable, random.nextLong());
+                    }
                 }
             }
         }

@@ -155,9 +155,7 @@ public class DataGenItemsTags extends ItemTagsProvider {
         this.tag(Tags.Items.GLASS_PANES).add(BlockRegistry.aurorian_glass_pane.get().asItem(), BlockRegistry.moon_glass_pane.get().asItem());
         // 存储 block 物品
         this.tag(Tags.Items.STORAGE_BLOCKS_COAL).add(BlockRegistry.aurorian_coal_block.get().asItem());
-        // 矿石子标签 + 产出地层（item 侧，forge 命名空间）
-        this.tag(ORES_CERULEAN).add(BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.deepslate_cerulean_ore.get().asItem());
-        this.tag(ORES_MOONSTONE).add(BlockRegistry.moonstone_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem());
+        // 产出地层（item 侧，forge 命名空间）
         this.tag(Tags.Items.ORES_IN_GROUND_STONE).add(BlockRegistry.aurorian_coal_ore.get().asItem(), BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.moonstone_ore.get().asItem());
         this.tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE).add(BlockRegistry.deepslate_cerulean_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem());
         // 种子（forge:seeds/<crop>，便于动物繁殖/合成识别）

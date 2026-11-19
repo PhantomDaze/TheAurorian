@@ -1,6 +1,7 @@
 package shiroroku.theaurorian.Entities.UndeadKnight;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -26,9 +29,12 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
+
+import javax.annotation.Nullable;
 
 public class UndeadKnightEntity extends Monster {
 
@@ -64,15 +70,24 @@ public class UndeadKnightEntity extends Monster {
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistry.aurorian_stone_sword.get()));
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ItemRegistry.knight_helmet.get()));
         this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ItemRegistry.knight_chestplate.get()));
         this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ItemRegistry.knight_leggings.get()));
         this.setItemSlot(EquipmentSlot.FEET, new ItemStack(ItemRegistry.knight_boots.get()));
+        // 主手武器不掉，盔甲用原版默认掉率
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
         this.setDropChance(EquipmentSlot.OFFHAND, 0.0F);
-        this.setDropChance(EquipmentSlot.HEAD, 0.0F);
-        this.setDropChance(EquipmentSlot.CHEST, 0.0F);
-        this.setDropChance(EquipmentSlot.LEGS, 0.0F);
-        this.setDropChance(EquipmentSlot.FEET, 0.0F);
+        this.setDropChance(EquipmentSlot.HEAD, 0.085F);
+        this.setDropChance(EquipmentSlot.CHEST, 0.085F);
+        this.setDropChance(EquipmentSlot.LEGS, 0.085F);
+        this.setDropChance(EquipmentSlot.FEET, 0.085F);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag tag) {
+        // Mob.finalizeSpawn 不会调用 populateDefaultEquipmentSlots，必须自己调
+        this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, tag);
     }
 
     @Override

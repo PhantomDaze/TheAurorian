@@ -110,6 +110,9 @@ public class DataGenBlocksLoot extends LootTableProvider {
             this.dropSelf(BlockRegistry.silentwood_fence.get());
             this.dropSelf(BlockRegistry.silentwood_torch.get());
             this.dropSelf(BlockRegistry.moon_torch.get());
+            // 墙火把掉落站立火把物品
+            this.dropOther(BlockRegistry.silentwood_wall_torch.get(), BlockRegistry.silentwood_torch.get());
+            this.dropOther(BlockRegistry.moon_wall_torch.get(), BlockRegistry.moon_torch.get());
             this.dropSelf(BlockRegistry.silentwood_ladder.get());
             this.add(BlockRegistry.lavender_crop.get(), this.createCropDrops(BlockRegistry.lavender_crop.get(), ItemRegistry.lavender_seeds.get(), ItemRegistry.lavender.get(),
                     LootItemBlockStatePropertyCondition.hasBlockStateProperties(BlockRegistry.lavender_crop.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));
@@ -183,6 +186,7 @@ public class DataGenBlocksLoot extends LootTableProvider {
             gen.add(BlockRegistry.mushroom_stem.get());
             gen.add(BlockRegistry.moon_sand.get());
             gen.add(BlockRegistry.moon_torch.get());
+            gen.add(BlockRegistry.moon_wall_torch.get());
             gen.add(BlockRegistry.moonlight_forge.get());
             gen.add(BlockRegistry.moon_temple_bars.get());
             gen.add(BlockRegistry.peridotite.get());
@@ -201,6 +205,7 @@ public class DataGenBlocksLoot extends LootTableProvider {
             gen.add(BlockRegistry.silentwood_slab.get());
             gen.add(BlockRegistry.silentwood_stairs.get());
             gen.add(BlockRegistry.silentwood_torch.get());
+            gen.add(BlockRegistry.silentwood_wall_torch.get());
             gen.add(BlockRegistry.silentwood_ladder.get());
             gen.add(BlockRegistry.silkberry_block.get());
             gen.add(BlockRegistry.lavender_crop.get());

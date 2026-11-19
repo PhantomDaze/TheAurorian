@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.StructureRegistry;
 import shiroroku.theaurorian.TheAurorian;
 
@@ -144,9 +146,11 @@ public class SingleTemplateStructure extends Structure {
                     chest.setLootTable(lootTable, random.nextLong());
                 }
             }
-            for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, Blocks.CHEST)) {
-                if (box.isInside(info.pos()) && level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
-                    chest.setLootTable(lootTable, random.nextLong());
+            for (Block chestBlock : new Block[]{Blocks.CHEST, BlockRegistry.silentwood_chest.get()}) {
+                for (StructureTemplate.StructureBlockInfo info : loaded.filterBlocks(this.pos, settings, chestBlock)) {
+                    if (box.isInside(info.pos()) && level.getBlockEntity(info.pos()) instanceof ChestBlockEntity chest) {
+                        chest.setLootTable(lootTable, random.nextLong());
+                    }
                 }
             }
         }

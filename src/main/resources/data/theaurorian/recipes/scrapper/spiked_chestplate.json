@@ -1,0 +1,10 @@
+{
+  "type": "theaurorian:scrapper",
+  "input": {
+    "item": "theaurorian:spiked_chestplate"
+  },
+  "output": {
+    "item": "theaurorian:umbra_scrap",
+    "count": 9
+  }
+}

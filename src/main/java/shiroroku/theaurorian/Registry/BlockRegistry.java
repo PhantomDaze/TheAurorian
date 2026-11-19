@@ -1,11 +1,13 @@
 package shiroroku.theaurorian.Registry;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -127,7 +129,7 @@ public class BlockRegistry {
     public static final RegistryObject<Block> moonlight_forge = regBlockItem(BLOCKS, "moonlight_forge", () -> new MoonlightForgeBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
     public static final RegistryObject<Block> scrapper = regBlockItem(BLOCKS, "scrapper", () -> new ScrapperBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
     public static final RegistryObject<Block> silentwood_chest = regBlockItemCustom(BLOCKS, "silentwood_chest", () -> new SilentwoodChestBlock(BlockBehaviour.Properties.copy(Blocks.CHEST)), SilentwoodChestBlockItem::new);
-    public static final RegistryObject<Block> silentwood_crafting_table = regBlockItem(BLOCKS, "silentwood_crafting_table", () -> new SilentwoodCraftingTableBlock(BlockBehaviour.Properties.copy(Blocks.CRAFTING_TABLE)));
+    public static final RegistryObject<Block> silentwood_crafting_table = regBlockItemWithBurntime(BLOCKS, "silentwood_crafting_table", () -> new SilentwoodCraftingTableBlock(BlockBehaviour.Properties.copy(Blocks.CRAFTING_TABLE)), 300);
 
     // Other
     public static final RegistryObject<Block> aurorian_portal = regBlockItem(BLOCKS, "aurorian_portal", () -> new AurorianPortal(BlockBehaviour.Properties.copy(Blocks.NETHER_PORTAL)));
@@ -153,7 +155,7 @@ public class BlockRegistry {
     public static final RegistryObject<Block> mushroom_stem = regBlockItem(BLOCKS, "mushroom_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.MUSHROOM_STEM).strength(1.0F).sound(SoundType.SLIME_BLOCK)));
 
     // Phase 1: Material storage blocks
-    public static final RegistryObject<Block> aurorian_coal_block = regBlockItem(BLOCKS_GEN, "aurorian_coal_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK)));
+    public static final RegistryObject<Block> aurorian_coal_block = regBlockItemWithBurntime(BLOCKS_GEN, "aurorian_coal_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK)), 16000);
     public static final RegistryObject<Block> aurorian_steel_block = regBlockItem(BLOCKS_GEN, "aurorian_steel_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final RegistryObject<Block> cerulean_block = regBlockItem(BLOCKS_GEN, "cerulean_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final RegistryObject<Block> moonstone_block = regBlockItem(BLOCKS_GEN, "moonstone_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
@@ -165,9 +167,32 @@ public class BlockRegistry {
     public static final RegistryObject<Block> moon_glass_pane = regBlockItem(BLOCKS, "moon_glass_pane", () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.GLASS_PANE)));
 
     // Phase 1: Torches + ladder
-    public static final RegistryObject<Block> silentwood_torch = regBlockItem(BLOCKS, "silentwood_torch", () -> new AurorianTorchBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).lightLevel((state) -> 15)));
-    public static final RegistryObject<Block> moon_torch = regBlockItem(BLOCKS, "moon_torch", () -> new AurorianTorchBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).lightLevel((state) -> 15)));
-    public static final RegistryObject<Block> silentwood_ladder = regBlockItem(BLOCKS, "silentwood_ladder", () -> new LadderBlock(BlockBehaviour.Properties.copy(Blocks.LADDER)));
+    // 墙火把只注册 Block（无 BlockItem），站立火把的物品负责两种放置方式。
+    public static final RegistryObject<Block> silentwood_wall_torch = regBlockOnly(BLOCKS, "silentwood_wall_torch", () -> new AurorianWallTorchBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).lightLevel((state) -> 15)));
+    public static final RegistryObject<Block> moon_wall_torch = regBlockOnly(BLOCKS, "moon_wall_torch", () -> new AurorianWallTorchBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).lightLevel((state) -> 15)));
+    public static final RegistryObject<Block> silentwood_torch = regBlockItemCustom(BLOCKS, "silentwood_torch", () -> new AurorianTorchBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).lightLevel((state) -> 15)), (block, props) -> new StandingAndWallBlockItem(block, silentwood_wall_torch.get(), props, Direction.DOWN) {
+        @Override
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+            return 100;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+            super.appendHoverText(pStack, pLevel, TooltipUtil.tryAddDesc(pStack, pTooltipComponents), pIsAdvanced);
+        }
+    });
+    public static final RegistryObject<Block> moon_torch = regBlockItemCustom(BLOCKS, "moon_torch", () -> new AurorianTorchBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).lightLevel((state) -> 15)), (block, props) -> new StandingAndWallBlockItem(block, moon_wall_torch.get(), props, Direction.DOWN) {
+        @Override
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+            return 100;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+            super.appendHoverText(pStack, pLevel, TooltipUtil.tryAddDesc(pStack, pTooltipComponents), pIsAdvanced);
+        }
+    });
+    public static final RegistryObject<Block> silentwood_ladder = regBlockItemWithBurntime(BLOCKS, "silentwood_ladder", () -> new LadderBlock(BlockBehaviour.Properties.copy(Blocks.LADDER)), 300);
 
     // Phase 1: Moonsand + Peridotite
     public static final RegistryObject<Block> moon_sand = regBlockItem(BLOCKS_GEN, "moon_sand", () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
@@ -206,6 +231,13 @@ public class BlockRegistry {
      */
     private static <I extends Block> RegistryObject<I> regBlockItem(DeferredRegister<Block> registry, final String id, final Supplier<? extends I> supplier) {
         return regBlockItemWithBurntime(registry, id, supplier, 0);
+    }
+
+    /**
+     * 只注册方块、不注册 BlockItem（用于墙火把这类没有独立物品的方块）。
+     */
+    private static <I extends Block> RegistryObject<I> regBlockOnly(DeferredRegister<Block> registry, final String id, final Supplier<? extends I> supplier) {
+        return registry.register(id, supplier);
     }
 
     /**
