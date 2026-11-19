@@ -5,7 +5,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -248,17 +250,33 @@ public class AurorianGameTests {
     @GameTest(template = EMPTY7, batch = "entities", timeoutTicks = 60)
     public static void entities_undeadKnightWearsGear(GameTestHelper helper) {
         var knight = helper.spawn(EntityRegistry.undead_knight.get(), new BlockPos(3, 1, 3));
-        // finalizeSpawn may equip; force equip path by checking if empty then calling spawn logic already ran
-        boolean anyGear = !knight.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).isEmpty()
-                || !knight.getMainHandItem().isEmpty()
-                || !knight.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).isEmpty();
-        // If natural spawn equipment didn't run (STRUCTURE vs EVENT), equip check via class finalize is still valid if present
-        if (!anyGear) {
-            // At minimum entity is alive with combat attrs
-            GameTestUtil.assertTrue(helper, knight.getMaxHealth() > 0, "knight alive");
-        } else {
-            GameTestUtil.assertTrue(helper, anyGear, "knight should wear gear");
-        }
+        // GameTestHelper.spawn 只做 EntityType#create + addFreshEntity，不会触发 finalizeSpawn；
+        // 真实生成路径会调用它。这里显式调用，确保覆盖 populateDefaultEquipmentSlots 的装备逻辑。
+        // 1.20.1（Forge 47）的 finalizeSpawn 比 1.21 多一个 CompoundTag 参数。
+        knight.finalizeSpawn(helper.getLevel(),
+                helper.getLevel().getCurrentDifficultyAt(knight.blockPosition()),
+                MobSpawnType.STRUCTURE, null, null);
+
+        // 强断言：四个护甲槽 + 主手都必须被 populateDefaultEquipmentSlots 正确填充。
+        // 原实现空装备也会 succeed，无法防回归；现在任一为空或物品错误都会 fail。
+        ItemStack head = knight.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack chest = knight.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack legs = knight.getItemBySlot(EquipmentSlot.LEGS);
+        ItemStack feet = knight.getItemBySlot(EquipmentSlot.FEET);
+        ItemStack mainHand = knight.getMainHandItem();
+
+        GameTestUtil.assertTrue(helper, !head.isEmpty(), "knight HEAD must not be empty");
+        GameTestUtil.assertTrue(helper, head.is(ItemRegistry.knight_helmet.get()),
+                "knight HEAD should be theaurorian:knight_helmet, got " + head);
+        GameTestUtil.assertTrue(helper, chest.is(ItemRegistry.knight_chestplate.get()),
+                "knight CHEST should be theaurorian:knight_chestplate, got " + chest);
+        GameTestUtil.assertTrue(helper, legs.is(ItemRegistry.knight_leggings.get()),
+                "knight LEGS should be theaurorian:knight_leggings, got " + legs);
+        GameTestUtil.assertTrue(helper, feet.is(ItemRegistry.knight_boots.get()),
+                "knight FEET should be theaurorian:knight_boots, got " + feet);
+        GameTestUtil.assertTrue(helper, !mainHand.isEmpty(), "knight main hand must not be empty");
+        GameTestUtil.assertTrue(helper, mainHand.is(ItemRegistry.aurorian_stone_sword.get()),
+                "knight main hand should be theaurorian:aurorian_stone_sword, got " + mainHand);
         helper.succeed();
     }
 
