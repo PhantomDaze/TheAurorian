@@ -69,7 +69,7 @@ def read_text(path: Path) -> str:
 
 def parse_block_ids() -> set[str]:
     text = read_text(JAVA / "Registry" / "BlockRegistry.java")
-    ids = set(re.findall(r'regBlockItem\w*\(\s*\w+\s*,\s*"([a-z0-9_]+)"', text))
+    ids = set(re.findall(r'regBlock\w*\(\s*\w+\s*,\s*"([a-z0-9_]+)"', text))
     ids |= set(re.findall(r'(?:BLOCKS\w*)\.register\("([a-z0-9_]+)"', text))
     # fluid blocks are registered in FluidRegistry.java via BlockRegistry.BLOCKS
     if (JAVA / "Registry" / "FluidRegistry.java").exists():
@@ -464,6 +464,59 @@ def cat_structures() -> None:
             # Runestone must use custom type (not leftover jigsaw)
             if path.stem == "runestone_dungeon" and data.get("type") != f"{MODID}:runestone_dungeon":
                 err(cat, f"runestone_dungeon type should be {MODID}:runestone_dungeon, got {data.get('type')}")
+
+    # Spawner / boss_spawner NBT shape gate (1.18+)
+    _validate_structure_spawners(cat, struct_root)
+
+
+def _validate_structure_spawners(cat: str, struct_root: Path) -> None:
+    """Byte/scan level checks for legacy spawner + boss keys inside structure NBTs."""
+    legacy_mob = 0
+    legacy_contained = 0
+    legacy_entity_weight = 0
+    spawners_seen = 0
+    boss_ok = 0
+    for nbt in struct_root.rglob("*.nbt"):
+        # Skip gametest fixtures if any
+        if "gametest" in nbt.parts:
+            continue
+        raw = nbt.read_bytes()
+        try:
+            data = gzip.decompress(raw) if raw[:2] == b"\x1f\x8b" else raw
+        except Exception:  # noqa: BLE001
+            continue
+        # 方块实体的注册 id 是 minecraft:mob_spawner；写成方块名 minecraft:spawner
+        # 会让游戏创建空刷怪笼。只匹配字符串标签 id 的值，避免命中 palette 的 Name。
+        bad_spawner_id = (
+            b"\x08\x00\x02id"
+            + len("minecraft:spawner").to_bytes(2, "big")
+            + b"minecraft:spawner"
+        )
+        if bad_spawner_id in data:
+            legacy_mob += 1
+            err(cat, f"spawner block entity id uses 'minecraft:spawner' (should be 'minecraft:mob_spawner') in {nbt.relative_to(ROOT)}")
+        if b"containedboss" in data:
+            legacy_contained += 1
+            err(cat, f"legacy containedboss in {nbt.relative_to(ROOT)}")
+        # SpawnPotentials with capital Entity/Weight (1.12–1.16)
+        if b"SpawnPotentials" in data and b"Entity" in data and b"Weight" in data:
+            # Heuristic: modern shape uses weight/data; still flag if both legacy keys present
+            # Avoid false positive on unrelated Entity keys by requiring SpawnData nearby too
+            if b"SpawnData" in data:
+                legacy_entity_weight += 1
+                err(cat, f"legacy SpawnPotentials Entity/Weight likely in {nbt.relative_to(ROOT)}")
+        if b"SpawnData" in data or b"minecraft:spawner" in data:
+            spawners_seen += 1
+        if b"boss_spawner" in data and b"boss" in data:
+            boss_ok += 1
+    stats["structure_spawners"] = str(spawners_seen)
+    stats["structure_boss_spawners"] = str(boss_ok)
+    if spawners_seen == 0:
+        warn(cat, "no SpawnData/spawner markers found in structure NBTs")
+    if legacy_mob or legacy_contained or legacy_entity_weight:
+        stats["structure_spawner_legacy"] = (
+            f"mob_spawner={legacy_mob},containedboss={legacy_contained},EntityWeight={legacy_entity_weight}"
+        )
 
 
 def _surface_rule_blocks(
