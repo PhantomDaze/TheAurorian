@@ -82,7 +82,7 @@ public class DisturbedHollowEntity extends Monster {
 
     @SuppressWarnings("deprecation")
     public static boolean checkSpawn(EntityType<DisturbedHollowEntity> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        return pos.getY() <= 65 && checkMobSpawnRules(type, level, spawnType, pos, random);
+        return pos.getY() <= 65 && !level.canSeeSky(pos) && checkMobSpawnRules(type, level, spawnType, pos, random);
     }
 
     @Override

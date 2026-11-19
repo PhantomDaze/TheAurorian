@@ -24,8 +24,14 @@ public class BaseAurorianTea extends BaseAurorianItem {
         return UseAnim.DRINK;
     }
 
+    @Override
+    public int getUseDuration(ItemStack pStack) {
+        // 对齐上游 1.12.2：16 tick = 0.8s（移植默认是 32）
+        return 16;
+    }
+
     public static FoodProperties.Builder foodProperties() {
-        return new FoodProperties.Builder().nutrition(0).fast().saturationMod(0);
+        return new FoodProperties.Builder().nutrition(0).fast().saturationMod(0).alwaysEat();
     }
 
     public static Properties properties() {

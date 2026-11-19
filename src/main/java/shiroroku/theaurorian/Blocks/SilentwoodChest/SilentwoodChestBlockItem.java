@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -24,6 +25,11 @@ public class SilentwoodChestBlockItem extends BlockItem {
 
     public SilentwoodChestBlockItem(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
+    }
+
+    @Override
+    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+        return 300;
     }
 
     @Override

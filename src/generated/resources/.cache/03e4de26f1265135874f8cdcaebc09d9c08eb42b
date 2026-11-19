@@ -1,4 +1,4 @@
-// 1.19.2	2026-08-16T09:06:41.19540533	Tags for minecraft:item
+// 1.19.2	2026-11-15T03:16:23.569597742	Tags for minecraft:item
 d849c1e4280da3e4a9a65504bb810da8b9655df0 data/forge/tags/items/armors/boots.json
 f7d44669971eeced6f05917f1db315ace689c6b6 data/forge/tags/items/armors/chestplates.json
 84e3942f69f9c083562172fe3b20e7e9ae307151 data/forge/tags/items/armors/helmets.json
@@ -23,7 +23,10 @@ eb651d6b18539a772f73a5ff9dd02e7b7972ce4f data/forge/tags/items/ingots/moonstone.
 fa8413efdcaab20d07840d8ce6076026b161f43d data/forge/tags/items/nuggets/moonstone.json
 17c0cce815d32f9b3c26aec5bbf37e02a0472a4c data/forge/tags/items/ore_bearing_ground/deepslate.json
 96cf934ecdc65dccadd44b604209a8d364e54ec0 data/forge/tags/items/ore_bearing_ground/stone.json
-f6e1a78b078631f32c5563e4fbaf4743292194a6 data/forge/tags/items/ores.json
+bb13ef9d7a3e087bcb1ad2513ec28a6b50bae2af data/forge/tags/items/ores.json
+aa10960d590cbb00738b837fc1795e3ba65b39e3 data/forge/tags/items/ores/cerulean.json
+fae13353da6edb331f10f01e307c666030c75191 data/forge/tags/items/ores/coal.json
+1b4df3617da1989dcf76114e0af4220d14d1b449 data/forge/tags/items/ores/moonstone.json
 24b31196b99c9097e3fe14cc95494a809b2fece2 data/forge/tags/items/ores_in_ground/deepslate.json
 3d75e54eee23e209ca7a0c9fffa7b778afba3b86 data/forge/tags/items/ores_in_ground/stone.json
 7d30cac774d61a4d85a3e6edaf2817b87432f42f data/forge/tags/items/rods.json

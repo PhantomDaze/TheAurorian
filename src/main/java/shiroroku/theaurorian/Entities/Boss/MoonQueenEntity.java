@@ -27,7 +27,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.world.level.block.Blocks;
 import shiroroku.theaurorian.Entities.Boss.AI.MoonQueenAICharge;
 import shiroroku.theaurorian.Entities.Boss.AI.MoonQueenAISideStrafe;
 import shiroroku.theaurorian.Registry.BlockRegistry;
@@ -141,7 +140,7 @@ public class MoonQueenEntity extends Monster {
             }
         }
 
-        this.level.setBlock(this.blockPosition(), Blocks.CHEST.defaultBlockState(), 2);
+        this.level.setBlock(this.blockPosition(), BlockRegistry.silentwood_chest.get().defaultBlockState(), 2);
         BlockEntity te = this.level.getBlockEntity(this.blockPosition());
         if (te instanceof ChestBlockEntity chest) {
             chest.setLootTable(new net.minecraft.resources.ResourceLocation(CHEST_LOOT), this.random.nextLong());

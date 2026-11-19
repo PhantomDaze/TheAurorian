@@ -7,6 +7,8 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -38,6 +40,7 @@ import shiroroku.theaurorian.Items.Spectral.SpectralArmorLayer;
 import shiroroku.theaurorian.Particles.AurorianSlimeParticle;
 import shiroroku.theaurorian.Particles.WeepingWillowDripParticle;
 import shiroroku.theaurorian.Registry.BlockEntityRegistry;
+import shiroroku.theaurorian.Registry.BlockRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.Registry.MenuRegistry;
 import shiroroku.theaurorian.Registry.ParticleRegistry;
@@ -52,6 +55,8 @@ public class EventsClient {
     public static void onClientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             // Render layers: set via model JSON "render_type" (see DataGenBlocks)
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.silentwood_wall_torch.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockRegistry.moon_wall_torch.get(), RenderType.cutout());
 
             // ITEM PROPERTIES
             ItemRegistry.ITEMS_GEN_SHIELD.getEntries().stream().map(Supplier::get).forEach((shield) -> ItemProperties.register(shield, new ResourceLocation("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F));

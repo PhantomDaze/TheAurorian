@@ -20,6 +20,9 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
     public static final TagKey<Block> DUNGEON_GATES = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "dungeon_gates"));
     public static final TagKey<Block> AURORIAN_STONES = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "aurorian_stones"));
     public static final TagKey<Block> MOONSTONE_ORE = BlockTags.create(new ResourceLocation(TheAurorian.MODID, "moonstone_ore"));
+    // Forge 分类矿石子 tag（1.19.2 缺失）
+    public static final TagKey<Block> ORES_CERULEAN = BlockTags.create(new ResourceLocation("forge", "ores/cerulean"));
+    public static final TagKey<Block> ORES_MOONSTONE = BlockTags.create(new ResourceLocation("forge", "ores/moonstone"));
 
     @SuppressWarnings("deprecation")
     protected DataGenBlocksTags(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
@@ -256,6 +259,10 @@ public class DataGenBlocksTags extends TagsProvider<Block> {
         this.tag(Tags.Blocks.ORES).add(BlockRegistry.geode.get());
         this.tag(Tags.Blocks.ORES).addTag(CERULEAN_ORE);
         this.tag(Tags.Blocks.ORES).addTag(MOONSTONE_ORE);
+        this.tag(ORES_CERULEAN).add(BlockRegistry.cerulean_ore.get(), BlockRegistry.deepslate_cerulean_ore.get());
+        this.tag(ORES_MOONSTONE).add(BlockRegistry.moonstone_ore.get(), BlockRegistry.deepslate_moonstone_ore.get());
+        this.tag(Tags.Blocks.ORES).addTag(ORES_CERULEAN);
+        this.tag(Tags.Blocks.ORES).addTag(ORES_MOONSTONE);
         this.tag(Tags.Blocks.ORES_COAL).add(BlockRegistry.aurorian_coal_ore.get());
         // 矿石产出地层（与原版铁/煤矿同义）
         this.tag(Tags.Blocks.ORE_BEARING_GROUND_STONE).add(BlockRegistry.aurorian_stone.get());

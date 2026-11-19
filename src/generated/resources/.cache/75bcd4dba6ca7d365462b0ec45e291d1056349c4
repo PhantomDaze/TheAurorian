@@ -1,4 +1,4 @@
-// 1.19.2	2026-08-16T09:43:33.85713961	Tags for minecraft:block
+// 1.19.2	2026-11-15T03:16:23.570592416	Tags for minecraft:block
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/forge/tags/blocks/chests.json
 4052cba1a2dd4624005126892af9d93ccbc0a53d data/forge/tags/blocks/chests/wooden.json
 d23573054707f31ae5709bf0e3ab483a495e8a96 data/forge/tags/blocks/cobblestone.json
@@ -12,8 +12,10 @@ d23573054707f31ae5709bf0e3ab483a495e8a96 data/forge/tags/blocks/cobblestone/norm
 17c0cce815d32f9b3c26aec5bbf37e02a0472a4c data/forge/tags/blocks/ore_bearing_ground/deepslate.json
 96cf934ecdc65dccadd44b604209a8d364e54ec0 data/forge/tags/blocks/ore_bearing_ground/stone.json
 18663f63cb92a2bc25d22fcba1627cd0930832f6 data/forge/tags/blocks/ore_rates/singular.json
-90508d9d9a6debf79466d4cfabfd60aec5edb69c data/forge/tags/blocks/ores.json
+8075cffe622fc36eea8fdb524316aedd32b832f2 data/forge/tags/blocks/ores.json
+aa10960d590cbb00738b837fc1795e3ba65b39e3 data/forge/tags/blocks/ores/cerulean.json
 fae13353da6edb331f10f01e307c666030c75191 data/forge/tags/blocks/ores/coal.json
+1b4df3617da1989dcf76114e0af4220d14d1b449 data/forge/tags/blocks/ores/moonstone.json
 24b31196b99c9097e3fe14cc95494a809b2fece2 data/forge/tags/blocks/ores_in_ground/deepslate.json
 3d75e54eee23e209ca7a0c9fffa7b778afba3b86 data/forge/tags/blocks/ores_in_ground/stone.json
 1d64c65f0f52f80881047b68a9ef678d1d57e3d0 data/forge/tags/blocks/sand.json

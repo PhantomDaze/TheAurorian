@@ -27,6 +27,9 @@ public class DataGenItemsTags extends TagsProvider<Item> {
     public static final TagKey<Item> KEYS = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "keys"));
     public static final TagKey<Item> LIGHTNING_IMMUNE = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "lightning_immune"));
     public static final TagKey<Item> MOONSTONE_ORE = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "moonstone_ore"));
+    // Forge 分类矿石子 tag（1.19.2 缺失）
+    public static final TagKey<Item> ORES_CERULEAN = ItemTags.create(new ResourceLocation("forge", "ores/cerulean"));
+    public static final TagKey<Item> ORES_MOONSTONE = ItemTags.create(new ResourceLocation("forge", "ores/moonstone"));
     public static final TagKey<Item> PORTAL_LIGHTERS = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "portal_lighters"));
     public static final TagKey<Item> SCRAP = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "scrap"));
     public static final TagKey<Item> SPECTRAL_ARMOR = ItemTags.create(new ResourceLocation(TheAurorian.MODID, "spectral_armor"));
@@ -97,6 +100,11 @@ public class DataGenItemsTags extends TagsProvider<Item> {
         this.tag(Tags.Items.NUGGETS).add(ItemRegistry.aurorian_steel_nugget.get());
         this.tag(Tags.Items.ORES).add(BlockRegistry.geode.get().asItem(), BlockRegistry.aurorian_coal_ore.get().asItem());
         this.tag(Tags.Items.ORES).addTags(CERULEAN_ORE, MOONSTONE_ORE);
+        // forge:ores/<type> 子 tag（item 侧；每项只 add 一次，避免生成物重复）
+        this.tag(ORES_CERULEAN).add(BlockRegistry.cerulean_ore.get().asItem(), BlockRegistry.deepslate_cerulean_ore.get().asItem());
+        this.tag(ORES_MOONSTONE).add(BlockRegistry.moonstone_ore.get().asItem(), BlockRegistry.deepslate_moonstone_ore.get().asItem());
+        this.tag(Tags.Items.ORES).addTags(ORES_CERULEAN, ORES_MOONSTONE);
+        this.tag(Tags.Items.ORES_COAL).add(BlockRegistry.aurorian_coal_ore.get().asItem());
         // 矿石产出地层（物品端）
         this.tag(Tags.Items.ORE_BEARING_GROUND_STONE).add(BlockRegistry.aurorian_stone.get().asItem());
         this.tag(Tags.Items.ORE_BEARING_GROUND_DEEPSLATE).add(BlockRegistry.aurorian_deepslate.get().asItem());

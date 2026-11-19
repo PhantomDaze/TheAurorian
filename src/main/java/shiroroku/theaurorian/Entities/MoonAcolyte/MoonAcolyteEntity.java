@@ -1,6 +1,7 @@
 package shiroroku.theaurorian.Entities.MoonAcolyte;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -32,6 +34,7 @@ import shiroroku.theaurorian.Registry.EntityRegistry;
 import shiroroku.theaurorian.Registry.ItemRegistry;
 import shiroroku.theaurorian.TheAurorian;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class MoonAcolyteEntity extends Monster {
@@ -79,6 +82,13 @@ public class MoonAcolyteEntity extends Monster {
         sword.enchant(Enchantments.KNOCKBACK, 2);
         this.setItemInHand(InteractionHand.MAIN_HAND, sword);
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag tag) {
+        // 同 UndeadKnight：父类不会自动调用 populateDefaultEquipmentSlots
+        this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, tag);
     }
 
     public void setArmsRaised(boolean armsRaised) {

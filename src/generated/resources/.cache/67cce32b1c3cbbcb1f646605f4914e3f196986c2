@@ -1,4 +1,4 @@
-// 1.19.2	2026-08-16T11:24:29.927176022	LootTables
+// 1.19.2	2026-11-15T03:16:23.570030672	LootTables
 b91ae03273a0b13caaead43ed7656a81a2239729 data/theaurorian/loot_tables/blocks/aurorian_coal_block.json
 a51a687ced84a16c646af8c74ece31bba237c0c8 data/theaurorian/loot_tables/blocks/aurorian_coal_ore.json
 3454003c9e54aba310c93ea27e5ec39d993ff312 data/theaurorian/loot_tables/blocks/aurorian_cobblestone.json
@@ -54,6 +54,7 @@ ede7409ca4d470c0b81138083117f66f21921e4a data/theaurorian/loot_tables/blocks/moo
 2721e1273de2378517124c233379f3144ca2bc56 data/theaurorian/loot_tables/blocks/moon_temple_interior_gate_keyhole.json
 0625847fa8af47876c3bd8cf2b3fb8d5bc33fb46 data/theaurorian/loot_tables/blocks/moon_temple_lamp.json
 da568f20b4fb9397adb0afcdc732d3da49ae3eca data/theaurorian/loot_tables/blocks/moon_torch.json
+da568f20b4fb9397adb0afcdc732d3da49ae3eca data/theaurorian/loot_tables/blocks/moon_wall_torch.json
 23f6d4e375186cc4df88bed2010299fed43e311d data/theaurorian/loot_tables/blocks/moonlight_forge.json
 6984dc87641d23dd2d970e6f22b5df70c964bcda data/theaurorian/loot_tables/blocks/moonstone_block.json
 efb5fb282d359dcf547f0b781bd6e79ccf7ae90a data/theaurorian/loot_tables/blocks/moonstone_ore.json
@@ -85,6 +86,7 @@ dd1dabb6afa17a361772de4bfeb784152416f388 data/theaurorian/loot_tables/blocks/sil
 5b5ad4f6cb8743c240dcb97c87cc123152a76104 data/theaurorian/loot_tables/blocks/silentwood_slab.json
 3d985697d2ab4813a41759485c1ba4e8a0732bfd data/theaurorian/loot_tables/blocks/silentwood_stairs.json
 b4d286b9d84fcbc3cb4e4e569e85c0fd60d010a4 data/theaurorian/loot_tables/blocks/silentwood_torch.json
+b4d286b9d84fcbc3cb4e4e569e85c0fd60d010a4 data/theaurorian/loot_tables/blocks/silentwood_wall_torch.json
 485ea5d502cac9516f9639f762b2da826ad4b207 data/theaurorian/loot_tables/blocks/silkberry_block.json
 af1473b3a31a557ec133972233cb616c72e038db data/theaurorian/loot_tables/blocks/silkberry_crop.json
 3ecdee40aa34beb38f8bba9d465d3dcd1e85dba8 data/theaurorian/loot_tables/blocks/umbra_stone.json
