@@ -69,7 +69,7 @@ def read_text(path: Path) -> str:
 
 def parse_block_ids() -> set[str]:
     text = read_text(JAVA / "Registry" / "BlockRegistry.java")
-    ids = set(re.findall(r'regBlockItem\w*\(\s*\w+\s*,\s*"([a-z0-9_]+)"', text))
+    ids = set(re.findall(r'regBlock\w*\(\s*\w+\s*,\s*"([a-z0-9_]+)"', text))
     ids |= set(re.findall(r'(?:BLOCKS\w*)\.register\("([a-z0-9_]+)"', text))
     # fluid blocks are registered in FluidRegistry.java via BlockRegistry.BLOCKS
     if (JAVA / "Registry" / "FluidRegistry.java").exists():
@@ -487,9 +487,16 @@ def _validate_structure_spawners(cat: str, struct_root: Path) -> None:
             data = gzip.decompress(raw) if raw[:2] == b"\x1f\x8b" else raw
         except Exception:  # noqa: BLE001
             continue
-        if b"minecraft:mob_spawner" in data:
+        # 方块实体的注册 id 是 minecraft:mob_spawner；写成方块名 minecraft:spawner
+        # 会让游戏创建空刷怪笼。只匹配字符串标签 id 的值，避免命中 palette 的 Name。
+        bad_spawner_id = (
+            b"\x08\x00\x02id"
+            + len("minecraft:spawner").to_bytes(2, "big")
+            + b"minecraft:spawner"
+        )
+        if bad_spawner_id in data:
             legacy_mob += 1
-            err(cat, f"legacy minecraft:mob_spawner in {nbt.relative_to(ROOT)}")
+            err(cat, f"spawner block entity id uses 'minecraft:spawner' (should be 'minecraft:mob_spawner') in {nbt.relative_to(ROOT)}")
         if b"containedboss" in data:
             legacy_contained += 1
             err(cat, f"legacy containedboss in {nbt.relative_to(ROOT)}")
