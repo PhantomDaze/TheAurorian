@@ -136,7 +136,37 @@ class PortContentCategoriesTest {
     }
 
     @Nested
-    @DisplayName("D — Structures")
+    @DisplayName("D — Client entity models")
+    class ClientEntityModels {
+        @Test
+        void entityRenderersDoNotUseVanillaModelLayers() throws Exception {
+            Path entitiesRoot = JAVA.resolve("Entities");
+            try (Stream<Path> stream = Files.walk(entitiesRoot)) {
+                List<Path> javaFiles = stream.filter(path -> path.toString().endsWith(".java")).toList();
+                for (Path path : javaFiles) {
+                    String source = Files.readString(path, StandardCharsets.UTF_8);
+                    assertFalse(source.contains("ModelLayers."), "vanilla model layer in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.PigModel"), "vanilla pig model in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.RabbitModel"), "vanilla rabbit model in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.SheepModel"), "vanilla sheep model in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.SheepFurModel"), "vanilla sheep fur model in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.SkeletonModel"), "vanilla skeleton model in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.SpiderModel"), "vanilla spider model in " + path);
+                    assertFalse(source.contains("net.minecraft.client.model.SlimeModel"), "vanilla slime model in " + path);
+                    assertFalse(source.contains("textures/entity/sheep/"), "vanilla sheep texture in " + path);
+                }
+            }
+
+            String clientRegistry = Files.readString(JAVA.resolve("Registry/EntityClientRegistry.java"), StandardCharsets.UTF_8);
+            for (String model : List.of("HollowModel", "UndeadKnightModel", "MoonQueenModel", "DungeonSpiderModel",
+                    "DungeonKeeperModel", "MoonAcolyteModel", "SpiritModel", "DisturbedHollowModel")) {
+                assertTrue(clientRegistry.contains(model + ".MODEL_LAYER_LOCATION"), "unregistered model layer " + model);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("E — Structures")
     class Structures {
         @Test
         void nbtFoldersAndDefinitions() throws Exception {

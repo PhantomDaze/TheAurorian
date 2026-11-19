@@ -1,39 +1,40 @@
 package shiroroku.theaurorian.Entities.DungeonKeeper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.SkeletonModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
+import shiroroku.theaurorian.Entities.AurorianHumanoidModel;
+import shiroroku.theaurorian.Entities.AurorianSkeletonModel;
 import shiroroku.theaurorian.TheAurorian;
 
-public class DungeonKeeperRenderer extends HumanoidMobRenderer<AbstractSkeleton, DungeonKeeperModel> {
+public class DungeonKeeperRenderer extends HumanoidMobRenderer<DungeonKeeperEntity, DungeonKeeperModel> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/dungeon_keeper/dungeon_keeper.png");
 
-    public DungeonKeeperRenderer(EntityRendererProvider.Context ctx) {
-        this(ctx, ModelLayers.STRAY, ModelLayers.STRAY_INNER_ARMOR, ModelLayers.STRAY_OUTER_ARMOR);
-    }
-
-    public DungeonKeeperRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation model, ModelLayerLocation p_174384_, ModelLayerLocation p_174385_) {
-        super(pContext, new DungeonKeeperModel(pContext.bakeLayer(model)), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new SkeletonModel<>(pContext.bakeLayer(p_174384_)), new SkeletonModel<>(pContext.bakeLayer(p_174385_)), pContext.getModelManager()));
-        this.addLayer(new DungeonKeeperLayer<>(this, pContext.getModelSet()));
-    }
-
-    @Override
-    protected void scale(AbstractSkeleton pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
-        // The enlarged hitbox is independent from this visual model scale.
-        pMatrixStack.scale(2.0F, 2.0F, 2.0F);
-        super.scale(pLivingEntity, pMatrixStack, pPartialTickTime);
+    public DungeonKeeperRenderer(EntityRendererProvider.Context context) {
+        super(context, new DungeonKeeperModel(context.bakeLayer(DungeonKeeperModel.MODEL_LAYER_LOCATION)), 0.5F);
+        this.addLayer(new HumanoidArmorLayer<>(this,
+                new AurorianHumanoidModel<>(context.bakeLayer(DungeonKeeperModel.INNER_ARMOR_LAYER)),
+                new AurorianHumanoidModel<>(context.bakeLayer(DungeonKeeperModel.OUTER_ARMOR_LAYER)),
+                context.getModelManager()));
+        this.addLayer(new DungeonKeeperLayer(this, context.getModelSet()));
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AbstractSkeleton dungeonSlimeEntity) {
+    protected void scale(DungeonKeeperEntity entity, PoseStack poseStack, float partialTick) {
+        poseStack.scale(2.0F, 2.0F, 2.0F);
+        super.scale(entity, poseStack, partialTick);
+    }
+
+    @Override
+    protected boolean isShaking(DungeonKeeperEntity entity) {
+        return entity.isShaking();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(DungeonKeeperEntity entity) {
         return TEXTURE;
     }
 }

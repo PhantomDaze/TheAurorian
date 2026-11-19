@@ -1,37 +1,33 @@
 package shiroroku.theaurorian.Entities.UndeadKnight;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
+import shiroroku.theaurorian.Entities.AurorianHumanoidModel;
 import shiroroku.theaurorian.TheAurorian;
 
-public class UndeadKnightRenderer extends HumanoidMobRenderer<UndeadKnightEntity, HumanoidModel<UndeadKnightEntity>> {
+public class UndeadKnightRenderer extends HumanoidMobRenderer<UndeadKnightEntity, UndeadKnightModel> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(TheAurorian.MODID, "textures/entity/undead_knight.png");
 
     public UndeadKnightRenderer(EntityRendererProvider.Context context) {
-        this(context, ModelLayers.ZOMBIE, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);
-    }
-
-    public UndeadKnightRenderer(EntityRendererProvider.Context context, ModelLayerLocation model, ModelLayerLocation innerArmor, ModelLayerLocation outerArmor) {
-        super(context, new HumanoidModel<>(context.bakeLayer(model)), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel<>(context.bakeLayer(innerArmor)), new HumanoidModel<>(context.bakeLayer(outerArmor)), context.getModelManager()));
-    }
-
-    @Override
-    protected void scale(UndeadKnightEntity pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
-        pMatrixStack.scale(1.3F, 1.3F, 1.3F);
-        super.scale(pLivingEntity, pMatrixStack, pPartialTickTime);
+        super(context, new UndeadKnightModel(context.bakeLayer(UndeadKnightModel.MODEL_LAYER_LOCATION)), 0.5F);
+        this.addLayer(new HumanoidArmorLayer<>(this,
+                new AurorianHumanoidModel<>(context.bakeLayer(UndeadKnightModel.INNER_ARMOR_LAYER)),
+                new AurorianHumanoidModel<>(context.bakeLayer(UndeadKnightModel.OUTER_ARMOR_LAYER)),
+                context.getModelManager()));
     }
 
     @Override
-    public ResourceLocation getTextureLocation(UndeadKnightEntity pEntity) {
+    protected void scale(UndeadKnightEntity entity, PoseStack poseStack, float partialTick) {
+        poseStack.scale(1.3F, 1.3F, 1.3F);
+        super.scale(entity, poseStack, partialTick);
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(UndeadKnightEntity entity) {
         return TEXTURE;
     }
 }
-
