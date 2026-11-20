@@ -118,3 +118,7 @@ run/
 !gradle-wrapper.jar
 /upstream/
 /libs/
+
+# Python bytecode
+__pycache__/
+*.pyc
