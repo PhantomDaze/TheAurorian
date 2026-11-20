@@ -119,3 +119,7 @@ run/
 /upstream/
 /.claude/
 /libs/
+
+# Python bytecode
+__pycache__/
+*.pyc
